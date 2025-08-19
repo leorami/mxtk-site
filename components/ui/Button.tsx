@@ -1,0 +1,1 @@
+export default function Button({children,onClick}:{children:React.ReactNode;onClick?:()=>void}){return <button onClick={onClick} className='rounded-2xl bg-brand-teal px-3 py-2 text-white'>{children}</button>}

@@ -1,0 +1,1 @@
+import Badge from './ui/Badge';export default function DataSourceBadge({ source, preview=false }:{source?:string; preview?:boolean}){ if (preview) return <Badge>Preview data</Badge>; if (!source) return null; return <Badge>Source: {source}</Badge>; }

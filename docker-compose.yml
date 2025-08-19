@@ -1,0 +1,31 @@
+version: '3.9'
+services:
+  web:
+    build:
+      context: .
+      target: dev
+    image: mxtk-site:dev
+    container_name: mxtk-site-dev
+    command: npm run dev -- -p 2000 -H 0.0.0.0
+    ports:
+      - "2000:2000"
+    environment:
+      - NODE_ENV=development
+      - HOST=0.0.0.0
+    volumes:
+      - .:/app
+      - /app/node_modules
+    restart: unless-stopped
+
+  web-prod:
+    build:
+      context: .
+      target: runner
+    image: mxtk-site:prod
+    container_name: mxtk-site-prod
+    ports:
+      - "2001:2000"
+    environment:
+      - NODE_ENV=production
+      - HOST=0.0.0.0
+    restart: unless-stopped

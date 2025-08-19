@@ -1,0 +1,6 @@
+import './globals.css'
+import SiteHeader from '@/components/SiteHeader'
+import SiteFooter from '@/components/SiteFooter'
+import CookieConsent from '@/components/CookieConsent'
+export const metadata={title:'MXTK — Mineral Token',description:'Digitizing verified mineral interests with transparency-first web3 plumbing.'}
+export default function RootLayout({children}:{children:React.ReactNode}){return(<html lang="en"><body><SiteHeader/><main className="min-h-[70vh]">{children}</main><SiteFooter/><CookieConsent/></body></html>)}

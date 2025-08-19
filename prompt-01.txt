@@ -1,0 +1,109 @@
+“Stand up and deploy MXTK site from zip”
+
+You are my senior Next.js engineer in a repo called mxtk-site.
+
+## Context
+- I have already placed a file named: mxtk_site_scaffold_updated_v3.zip in the **root** of this folder.
+- This zip contains a Next.js 14 (App Router) scaffold with Light theme default, Dark toggle, and all MXTK marketing routes.
+- Goal: unpack, run locally, build, commit, push to GitHub, then deploy to Vercel. After deploy, give me a short go-live checklist and TODOs.
+
+## Acceptance Criteria
+- `npm run dev` serves http://localhost:3000 with no errors.
+- `npm run build` succeeds.
+- Production deploy URL returns 200 for `/` and these routes:
+  /owners, /institutions, /transparency, /whitepaper, /roadmap,
+  /elite-drop (+ /elite-drop/nominate), /media, /legal/{terms,privacy,disclosures}.
+- Light theme is default; theme toggle persists between refreshes.
+- Header shows the logo from `/public/logo.png`.
+- Transparency hub includes the expected sections (proofs table, oracle log, ops cost estimator, OTC aggregates, on-chain addresses including Timelock placeholder, risk factors).
+- Cookie consent shows on first load.
+
+## Do This Step-by-Step
+
+### 1) Unpack the zip **into the repo root**
+- Unzip `mxtk_site_scaffold_updated_v3.zip` **to the current directory** (not a subfolder).
+- If the unzip creates a subfolder (e.g., `mxtk_site_scaffold_updated_v3/`), **move its contents up** to the repo root and remove the empty folder.
+- Confirm the root now contains:
+  - package.json, next.config.mjs, tailwind.config.ts, postcss.config.js, tsconfig.json
+  - `/app`, `/components`, `/lib`, `/public`, `/README.md`
+
+### 2) Housekeeping
+- Create a `.gitignore` with:
+
+node_modules
+.next
+.vercel
+.DS_Store
+.env*
+
+- Ensure Node >= 18 (prefer 20). If needed, create `.nvmrc` with `v20` and use it.
+
+### 3) Install and run
+- Install deps with one of:
+- `npm install`  (preferred unless a lockfile dictates otherwise)
+- or `pnpm install` / `yarn`
+- Start dev: `npm run dev`
+- Open http://localhost:3000 and click through all routes to verify.
+
+### 4) Build
+- `npm run build` and surface any issues.
+- If TypeScript/ESLint errors appear, apply minimal safe fixes and re-run the build.
+
+### 5) Initialize git and create GitHub repo
+- `git init && git add -A && git commit -m "init: MXTK site scaffold"`
+- If the GitHub CLI is available and authenticated:
+
+gh repo create mxtk-site –source=. –public –push
+
+- If not authenticated, pause and tell me to authenticate or create the repo manually, then continue with `git remote add origin` and `git push -u origin main`.
+
+### 6) Deploy to Vercel (preferred)
+- If Vercel CLI is available:
+
+npm i -g vercel
+vercel
+vercel –prod
+
+- Framework: Next.js (auto)
+- Build command: default
+- Output dir: `.vercel/output` (auto)
+- If not using CLI, instruct me to import the repo at https://vercel.com/new and finish setup. Resume once deployed.
+
+### 7) Verify production
+- Return the live URL(s).
+- Programmatically verify HTTP 200 for `/` and `/transparency`.
+
+### 8) Output a concise **Go-Live Checklist** and TODO list
+Cover:
+- ✅ Deployed URL and build status
+- ✅ Node version used
+- 🔁 TODOs before public launch:
+- Replace placeholder proofs/oracle/OTC/addresses in `lib/placeholders.ts` with live data (IPFS CIDs, hashes, explorer links).
+- Swap `/public/logo.png` if we have a final brand asset (SVG/transparent PNG).
+- Add analytics later (Plausible or other); current cookie banner text is fine as a placeholder.
+- Connect the custom domain `mineral-token.com` in Vercel → Project → Settings → Domains.
+- Optional: add custom 404 and media kit assets under `/public`.
+- 🧪 Manual QA:
+- Theme toggle persists after refresh.
+- Mobile nav behavior on small screens.
+- External links (IPFS/explorer) open in new tabs.
+
+## Notes / Options
+- If you detect a nested folder after unzip, fix it automatically.
+- Prefer npm unless you see a pnpm/yarn lockfile.
+- Don’t add any env vars yet. Analytics and forms will come later.
+- Keep all changes in a single initial commit unless you have to patch build errors, then commit those fixes separately with clear messages.
+
+Proceed with the steps above and report back at each checkpoint.
+
+
+⸻
+
+Please provide a directory for “supporting materials” to drop in for your incorporation as they become available.
+
+We'll need:
+	•	Logo: replace /public/logo.png with your final transparent PNG or SVG.
+	•	Proof docs (IPFS CIDs & hashes): update lib/placeholders.ts.
+	•	On-chain addresses: replace placeholders in lib/placeholders.ts (token, pool, LP locker, multisig, timelock).
+	•	Legal copy: edit pages under app/(marketing)/legal/*.
+	•	Press/media: drop assets in /public/media/ and link them from app/(marketing)/media/page.tsx.

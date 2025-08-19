@@ -1,0 +1,1 @@
+export default function DisclosuresPage(){return(<div className='mx-auto max-w-3xl px-4 py-10 space-y-3'><h1 className='text-2xl font-semibold'>Disclosures</h1><p className='text-muted'>Preview text — legal copy forthcoming.</p></div>)}

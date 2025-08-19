@@ -1,0 +1,38 @@
+You are my senior Next.js engineer in the mxtk-site repo.
+
+Goal: Add Basic Auth for Preview/Dev via middleware.ts, keep Production open, commit, and redeploy.
+
+Steps:
+1) Create a file at `middleware.ts` in the repo root with exactly this content:
+
+<PASTE THE FILE CONTENT FROM THE CODE BLOCK I PROVIDED>
+
+2) Create `.env.local` (not committed) if running locally with:
+   BASIC_AUTH_ENABLED=1
+   BASIC_USER=leo
+   BASIC_PASS=choose-a-strong-pass
+
+3) If using Vercel CLI, add Preview env vars:
+   vercel env add BASIC_AUTH_ENABLED preview
+   vercel env add BASIC_USER preview
+   vercel env add BASIC_PASS preview
+   # then paste values interactively
+
+4) Build & test locally:
+   npm run build
+   npm run dev
+   # Visit http://localhost:3000 — expect a browser Basic Auth prompt (enter the creds above)
+
+5) Commit and push:
+   git add middleware.ts
+   git commit -m "feat: add Basic Auth middleware for preview/dev"
+   git push
+
+6) Redeploy on Vercel:
+   vercel && vercel --prod
+   # Or push to GitHub if Vercel is integrated for auto-deploys.
+
+7) Report back with:
+   - The Preview URL and confirmation that it prompts for Basic Auth
+   - The Production URL and confirmation that it does NOT prompt
+   - Any adjustments you had to make to the matcher exclusions

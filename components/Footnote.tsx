@@ -1,0 +1,1 @@
+export default function Footnote({children}:{children:React.ReactNode}){return <p className='mt-3 text-xs text-muted'>{children}</p>}

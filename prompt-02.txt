@@ -1,0 +1,185 @@
+“Vercel hardening + deploy and domain steps”
+
+You are my senior Next.js engineer working inside the mxtk-site repo.
+
+### Goals
+1) Keep everything from the scaffold as-is.
+2) Add Vercel-friendly hardening and staging hygiene:
+   - Production-only security headers
+   - robots for previews vs production
+   - sitemap scaffold
+   - optional Plausible analytics hook
+   - not-found page
+   - optional redirect from www → apex
+3) Build, deploy to Vercel, and return a go-live report + smoke tests.
+4) Prepare for a future custom domain (mineral-token.com).
+
+### 0) Confirm we’re in repo root
+- Confirm files exist: package.json, next.config.mjs, /app, /components, /public, /lib.
+
+### 1) Node & ignore files
+- Create `.nvmrc` with `v20`.
+- Ensure `.gitignore` includes:
+
+node_modules
+.next
+.vercel
+.DS_Store
+.env*
+
+### 2) Add production-only security headers in next.config.mjs
+Modify the exported config to include `headers()` and `redirects()` while preserving existing settings:
+
+```js
+// next.config.mjs
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+experimental: { appDir: true },
+async headers() {
+  if (process.env.NODE_ENV !== 'production') return []
+  return [
+    {
+      source: '/:path*',
+      headers: [
+        { key: 'X-Frame-Options', value: 'SAMEORIGIN' },
+        { key: 'X-Content-Type-Options', value: 'nosniff' },
+        { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
+        { key: 'Permissions-Policy', value: "camera=(), microphone=(), geolocation=()" },
+        // Light CSP tuned for marketing site; adjust when adding 3p scripts:
+        { key: 'Content-Security-Policy', value:
+          "default-src 'self'; img-src 'self' data: https:; " +
+          "script-src 'self' 'unsafe-inline' 'unsafe-eval' plausible.io vercel.live; " +
+          "style-src 'self' 'unsafe-inline'; connect-src 'self' https:; frame-ancestors 'self';"
+        }
+      ]
+    }
+  ]
+},
+async redirects() {
+  // Optional: redirect www.mineral-token.com -> mineral-token.com when the domain is added.
+  return [
+    {
+      source: '/:path*',
+      has: [{ type: 'host', value: 'www.mineral-token.com' }],
+      destination: 'https://mineral-token.com/:path*',
+      permanent: true,
+    }
+  ]
+}
+}
+export default nextConfig
+
+3) robots for previews vs production
+
+Create app/robots.ts:
+
+// app/robots.ts
+export default function robots() {
+  const isProd = process.env.VERCEL_ENV === 'production'
+  return {
+    rules: [{ userAgent: '*', disallow: isProd ? [] : ['/'] }],
+    sitemap: isProd ? 'https://mineral-token.com/sitemap.xml' : undefined,
+  }
+}
+
+4) Sitemap scaffold
+
+Create app/sitemap.ts:
+
+// app/sitemap.ts
+export default function sitemap() {
+  const base = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
+  const routes = ['', '/owners', '/institutions', '/transparency', '/whitepaper', '/roadmap', '/elite-drop', '/elite-drop/nominate', '/media', '/legal/terms', '/legal/privacy', '/legal/disclosures']
+  return routes.map((r) => ({
+    url: `${base}${r || '/'}`,
+    lastModified: new Date(),
+    changeFrequency: 'weekly',
+    priority: r === '' ? 1.0 : 0.7,
+  }))
+}
+
+5) Optional: Plausible analytics hook (no-op until env set)
+	•	Edit app/layout.tsx to include this right inside <body> (or with next/script):
+
+// app/layout.tsx (add near top)
+import Script from 'next/script'
+
+// ...inside RootLayout body:
+{process.env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN && (
+  <Script
+    defer
+    data-domain={process.env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN}
+    src="https://plausible.io/js/script.js"
+  />
+)}
+
+	•	We will set NEXT_PUBLIC_PLAUSIBLE_DOMAIN later in Vercel (e.g., mineral-token.com).
+
+6) Optional: not-found page
+
+Create app/not-found.tsx:
+
+export default function NotFound(){
+  return (
+    <div className="mx-auto max-w-3xl px-4 py-16">
+      <h1 className="text-2xl font-semibold">Page not found</h1>
+      <p className="mt-2 text-muted">The page you’re looking for doesn’t exist.</p>
+    </div>
+  )
+}
+
+7) Install, dev, build
+	•	npm install
+	•	npm run dev and verify http://localhost:3000 works.
+	•	npm run build should succeed.
+
+8) Git + GitHub (if not already)
+
+git init
+git add -A
+git commit -m "init: MXTK site scaffold + vercel hardening"
+# If CLI available:
+gh repo create mxtk-site --source=. --public --push
+
+9) Vercel deploy
+	•	CLI path (preferred):
+
+npm i -g vercel
+vercel        # first deploy (Preview)
+vercel --prod # production deploy
+
+Accept the defaults (Framework: Next.js). No env vars yet.
+
+	•	Dashboard path (alt): import the GitHub repo at https://vercel.com/new and deploy.
+
+10) Post-deploy smoke tests
+	•	Return the production URL.
+	•	Run these checks and paste outputs:
+
+# expect HTTP/2 200
+curl -I https://<your-site>/
+curl -I https://<your-site>/transparency
+
+
+	•	Verify the cookie banner shows on first load and theme toggle persists after refresh.
+
+11) Prepare for the real domain (later)
+	•	In Vercel Project → Settings → Domains: add staging.mineral-token.com first (recommended), then the apex when ready.
+	•	Once DNS is known, create the CNAME for staging to Vercel’s target. After it resolves, switch production to apex.
+	•	(Our redirects() already handles www → apex.)
+
+12) Deliver a final Go-Live Report including:
+	•	✅ Production URL and HTTP status checks
+	•	✅ Node version (from .nvmrc)
+	•	✅ Build output summary
+	•	🔁 TODOs before public launch:
+	•	Replace placeholders in lib/placeholders.ts (proof CIDs/sha256, oracle log, OTC, pool/locker/multisig/timelock addresses).
+	•	Swap /public/logo.png if a different brand asset is finalized.
+	•	Add NEXT_PUBLIC_PLAUSIBLE_DOMAIN in Vercel and confirm events.
+	•	Attach mineral-token.com (and staging. subdomain) to Vercel project once DNS host is known.
+	•	Consider Basic Auth for previews if needed (middleware + env) and a custom 404 design.
+	•	🧪 Manual QA checklist:
+	•	All routes render, no console errors in Production.
+	•	External links (IPFS/explorer) open in new tab.
+	•	Mobile nav and layout look correct on small screens.
+
