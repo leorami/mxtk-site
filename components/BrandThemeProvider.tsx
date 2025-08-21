@@ -1,6 +1,5 @@
 'use client'
 import { themeForPath, type MineralTheme } from '@/lib/brand/theme'
-import { stripBase } from '@/lib/routing/basePath'
 import { usePathname } from 'next/navigation'
 import { createContext, useContext, useEffect, useMemo, useState } from 'react'
 
@@ -15,7 +14,7 @@ export default function BrandThemeProvider({ children }: { children: React.React
     name: 'home', accent: '#E0932B', hoverBg: 'rgba(224,147,43,.14)', photo: '/minerals/photos/amber-crystal.svg'
   }), [])
 
-  const themed = useMemo(() => themeForPath(stripBase(raw)), [raw])
+  const themed = useMemo(() => themeForPath(raw), [raw])
 
   useEffect(() => setMounted(true), [])
 
