@@ -1,8 +1,8 @@
-export default function FAQ(){
+export default function FAQ() {
   const items = [
-    { q:'What backs MXTK?', a:'Evidence of mineral interests (e.g., JORC/NI 43-101/SKR) plus a documented oracle method. MXTK is not pegged to fiat; price governance is published and change-logged.' },
-    { q:'Why Arbitrum?', a:'Low fees and predictable operations for frequent, auditable updates.' },
-    { q:'Is OTC supported?', a:'Yes. Counterparties can transact via KYC/escrow providers (to be announced). The site publishes monthly aggregates without PII.' },
+    { q: 'What backs MXTK?', a: 'Evidence of mineral interests (e.g., JORC/NI 43-101/SKR) plus a documented oracle method. MXTK is not pegged to fiat; price governance is published and change-logged.' },
+    { q: 'Why Arbitrum?', a: 'Low fees and predictable operations for frequent, auditable updates.' },
+    { q: 'Is OTC supported?', a: 'Yes. Counterparties can transact via KYC/escrow providers (to be announced). The site publishes monthly aggregates without PII.' },
   ]
   return (
     <div className="space-y-16">

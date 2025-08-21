@@ -10,7 +10,7 @@ export default function TransparencyPage() {
     <div className="space-y-16">
       {/* Hero */}
       <section className="text-center space-y-6">
-        <h1 className="text-4xl md:text-6xl font-bold tracking-tight" style={{ color: 'var(--mxtk-accent)' }}>
+        <h1 className="text-4xl md:text-6xl font-bold tracking-tight">
           Trust & Transparency
         </h1>
         <p className="text-xl text-muted max-w-3xl mx-auto">
@@ -21,7 +21,7 @@ export default function TransparencyPage() {
       {/* Token Information */}
       <section className="section-amber">
         <Card tint="amber">
-          <h2 className="text-2xl font-semibold mb-6" style={{ color: 'var(--mxtk-accent)' }}>Token Information</h2>
+          <h2 className="text-2xl font-semibold mb-6">Token Information</h2>
           <OnchainSummary />
         </Card>
       </section>
@@ -29,7 +29,7 @@ export default function TransparencyPage() {
       {/* Liquidity Pools */}
       <section className="section-teal">
         <Card tint="teal">
-          <h2 className="text-2xl font-semibold mb-6" style={{ color: 'var(--mxtk-accent)' }}>Liquidity & On-chain Addresses</h2>
+          <h2 className="text-2xl font-semibold mb-6">Liquidity & On-chain Addresses</h2>
           <PoolTable />
         </Card>
       </section>
@@ -37,7 +37,7 @@ export default function TransparencyPage() {
       {/* Attestations & Audits */}
       <section className="section-navy">
         <Card tint="navy">
-          <h2 className="text-2xl font-semibold mb-6" style={{ color: 'var(--mxtk-accent)' }}>Attestations & Audits</h2>
+          <h2 className="text-2xl font-semibold mb-6">Attestations & Audits</h2>
           <ProofTable proofs={PLACEHOLDER_PROOFS} />
         </Card>
       </section>
@@ -45,7 +45,7 @@ export default function TransparencyPage() {
       {/* Additional Resources */}
       <section className="section-amber">
         <Card tint="amber">
-          <h2 className="text-2xl font-semibold mb-6" style={{ color: 'var(--mxtk-accent)' }}>Additional Resources</h2>
+          <h2 className="text-2xl font-semibold mb-6">Additional Resources</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="text-center">
               <div className="text-3xl font-bold mb-2">📄</div>

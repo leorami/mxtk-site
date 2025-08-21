@@ -1,7 +1,7 @@
 import Card from '@/components/ui/Card'
 import Link from 'next/link'
 
-export default function Ecosystem(){
+export default function Ecosystem() {
   return (
     <div className="space-y-16">
       {/* Hero */}
