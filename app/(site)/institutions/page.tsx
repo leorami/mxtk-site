@@ -7,7 +7,7 @@ export default function InstitutionsPage() {
     <div className="space-y-16">
       {/* Hero */}
       <section className="text-center space-y-6">
-        <h1 className="text-4xl md:text-6xl font-bold tracking-tight" style={{ color: 'var(--mxtk-accent)' }}>
+        <h1 className="text-4xl md:text-6xl font-bold tracking-tight">
           For Traders & Institutions
         </h1>
         <p className="text-xl text-muted max-w-3xl mx-auto">
@@ -18,7 +18,7 @@ export default function InstitutionsPage() {
       {/* Token Information */}
       <section className="section-amber">
         <Card tint="amber">
-          <h2 className="text-2xl font-semibold mb-6" style={{ color: 'var(--mxtk-accent)' }}>Token Information</h2>
+          <h2 className="text-2xl font-semibold mb-6">Token Information</h2>
           <OnchainSummary />
         </Card>
       </section>
@@ -26,7 +26,7 @@ export default function InstitutionsPage() {
       {/* Liquidity Pools */}
       <section className="section-teal">
         <Card tint="teal">
-          <h2 className="text-2xl font-semibold mb-6" style={{ color: 'var(--mxtk-accent)' }}>Liquidity & On-chain Addresses</h2>
+          <h2 className="text-2xl font-semibold mb-6">Liquidity & On-chain Addresses</h2>
           <PoolTable />
         </Card>
       </section>
@@ -34,7 +34,7 @@ export default function InstitutionsPage() {
       {/* Infrastructure */}
       <section className="section-navy">
         <Card tint="navy">
-          <h2 className="text-2xl font-semibold mb-6" style={{ color: 'var(--mxtk-accent)' }}>Infrastructure & Security</h2>
+          <h2 className="text-2xl font-semibold mb-6">Infrastructure & Security</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div>
               <h3 className="font-semibold mb-3">Smart Contracts</h3>
@@ -63,7 +63,7 @@ export default function InstitutionsPage() {
       {/* Trading Features */}
       <section className="section-amber">
         <Card tint="amber">
-          <h2 className="text-2xl font-semibold mb-6" style={{ color: 'var(--mxtk-accent)' }}>Trading Features</h2>
+          <h2 className="text-2xl font-semibold mb-6">Trading Features</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="text-center">
               <div className="text-3xl font-bold mb-2">💱</div>
@@ -87,7 +87,7 @@ export default function InstitutionsPage() {
       {/* Compliance */}
       <section className="section-teal">
         <Card tint="teal">
-          <h2 className="text-2xl font-semibold mb-6" style={{ color: 'var(--mxtk-accent)' }}>Compliance & Custody</h2>
+          <h2 className="text-2xl font-semibold mb-6">Compliance & Custody</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div>
               <h3 className="font-semibold mb-3">Regulatory Framework</h3>

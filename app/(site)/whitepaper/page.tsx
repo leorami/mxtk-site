@@ -5,7 +5,7 @@ export default function WhitepaperPage() {
     <div className="space-y-16">
       {/* Hero */}
       <section className="text-center space-y-6">
-        <h1 className="text-4xl md:text-6xl font-bold tracking-tight" style={{ color: 'var(--mxtk-accent)' }}>
+        <h1 className="text-4xl md:text-6xl font-bold tracking-tight">
           Whitepaper
         </h1>
         <p className="text-xl text-muted max-w-3xl mx-auto">
@@ -16,7 +16,7 @@ export default function WhitepaperPage() {
       {/* Design Goals */}
       <section className="section-amber">
         <Card tint="amber">
-          <h2 className="text-2xl font-semibold mb-6" style={{ color: 'var(--mxtk-accent)' }}>Design Goals</h2>
+          <h2 className="text-2xl font-semibold mb-6">Design Goals</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div>
               <h3 className="font-semibold mb-3">Transparency</h3>
@@ -41,7 +41,7 @@ export default function WhitepaperPage() {
       {/* Asset Admission */}
       <section className="section-teal">
         <Card tint="teal">
-          <h2 className="text-2xl font-semibold mb-6" style={{ color: 'var(--mxtk-accent)' }}>Asset Admission</h2>
+          <h2 className="text-2xl font-semibold mb-6">Asset Admission</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="text-center">
               <div className="text-3xl font-bold mb-2">📋</div>
@@ -65,7 +65,7 @@ export default function WhitepaperPage() {
       {/* Oracle Governance */}
       <section className="section-navy">
         <Card tint="navy">
-          <h2 className="text-2xl font-semibold mb-6" style={{ color: 'var(--mxtk-accent)' }}>Oracle Governance</h2>
+          <h2 className="text-2xl font-semibold mb-6">Oracle Governance</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div>
               <h3 className="font-semibold mb-3">Methodology</h3>
@@ -92,7 +92,7 @@ export default function WhitepaperPage() {
       {/* Market Plumbing */}
       <section className="section-amber">
         <Card tint="amber">
-          <h2 className="text-2xl font-semibold mb-6" style={{ color: 'var(--mxtk-accent)' }}>Market Plumbing</h2>
+          <h2 className="text-2xl font-semibold mb-6">Market Plumbing</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="text-center">
               <div className="text-3xl font-bold mb-2">💱</div>

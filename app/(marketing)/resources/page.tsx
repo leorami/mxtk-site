@@ -3,9 +3,12 @@ import Link from 'next/link'
 
 export default function Resources(){
   return (
-    <div className="space-y-8">
-      <h1 className="text-3xl md:text-4xl font-semibold">Resources</h1>
-      <p className="text-[15px] text-muted">Guides, brand assets, downloads, and technical references for owners, institutions, and developers.</p>
+    <div className="space-y-16">
+      {/* Hero */}
+      <section className="text-center space-y-6">
+        <h1 className="text-4xl md:text-6xl font-bold tracking-tight">Resources</h1>
+        <p className="text-xl text-muted max-w-3xl mx-auto">Guides, brand assets, downloads, and technical references for owners, institutions, and developers.</p>
+      </section>
 
       <div className="grid gap-4 md:grid-cols-3">
         <Card embedded tint="navy"><div className="text-sm font-semibold">Brand kit</div><p className="mt-1 text-[13px] text-muted">Logos, colors, and usage guidelines.</p><Link className="btn-link" href="/media">Open media kit</Link></Card>

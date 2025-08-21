@@ -6,7 +6,7 @@ export default function MediaPage() {
     <div className="space-y-16">
       {/* Hero */}
       <section className="text-center space-y-6">
-        <h1 className="text-4xl md:text-6xl font-bold tracking-tight" style={{ color: 'var(--mxtk-accent)' }}>
+        <h1 className="text-4xl md:text-6xl font-bold tracking-tight">
           Media & Press
         </h1>
         <p className="text-xl text-muted max-w-3xl mx-auto">
@@ -17,7 +17,7 @@ export default function MediaPage() {
       {/* Press Kit */}
       <section className="section-amber">
         <Card tint="amber">
-          <h2 className="text-2xl font-semibold mb-6" style={{ color: 'var(--mxtk-accent)' }}>Press Kit</h2>
+          <h2 className="text-2xl font-semibold mb-6">Press Kit</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="text-center">
               <div className="text-3xl font-bold mb-2">🎨</div>
@@ -50,7 +50,7 @@ export default function MediaPage() {
       {/* Contact */}
       <section className="section-teal">
         <Card tint="teal" className="text-center">
-          <h2 className="text-2xl font-semibold mb-4" style={{ color: 'var(--mxtk-accent)' }}>Get in Touch</h2>
+          <h2 className="text-2xl font-semibold mb-4">Get in Touch</h2>
           <p className="text-lg mb-6">
             Ready to cover MXTK? We're here to help with interviews, technical details, and exclusive insights.
           </p>
@@ -74,7 +74,7 @@ export default function MediaPage() {
       {/* Resources */}
       <section className="section-navy">
         <Card tint="navy">
-          <h2 className="text-2xl font-semibold mb-6" style={{ color: 'var(--mxtk-accent)' }}>Additional Resources</h2>
+          <h2 className="text-2xl font-semibold mb-6">Additional Resources</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <h3 className="font-semibold mb-2">Whitepaper</h3>

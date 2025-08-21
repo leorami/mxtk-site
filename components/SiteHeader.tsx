@@ -20,28 +20,13 @@ const TOP_ORDER: Item[] = [
   { href: '/resources', label: 'Resources' },
 ]
 
-const RESOURCES_DROPDOWN: Item[] = [
-  { href: '/resources', label: 'Overview' },
-  { href: '/media', label: 'Media' },
-  { href: '/the-team', label: 'Team' },
-  { href: '/careers', label: 'Careers' },
-  { href: '/contact-us', label: 'Contact' },
-]
+// Resources now navigates to its own page (no dropdown)
 
 export default function SiteHeader() {
   const pathname = usePathname() || '/'
   const [open, setOpen] = useState(false)
-  const [resOpen, setResOpen] = useState(false)
-  const dropdownRef = useRef<HTMLDivElement>(null)
 
-  useEffect(() => {
-    const onClick = (e: MouseEvent) => {
-      if (!dropdownRef.current) return
-      if (!dropdownRef.current.contains(e.target as Node)) setResOpen(false)
-    }
-    window.addEventListener('click', onClick)
-    return () => window.removeEventListener('click', onClick)
-  }, [])
+  useEffect(() => {}, [])
 
   return (
     <header className="sticky top-0 z-50">
@@ -58,39 +43,7 @@ export default function SiteHeader() {
               const t = themeForRoute(href)
               const is = pathname === href || pathname.startsWith(href + '/')
 
-              if (label === 'Resources') {
-                return (
-                  <div key="resources" className="relative" ref={dropdownRef}>
-                    <button
-                      type="button"
-                      aria-expanded={resOpen}
-                      onClick={() => setResOpen(v => !v)}
-                      className="nav-link nav-pill px-3 py-2 rounded-lg transition-colors"
-                      style={{ ['--hover-bg' as any]: t.hoverBg } as CSSProperties}
-                    >
-                      Resources
-                    </button>
-                    {resOpen && (
-                      <div className="absolute right-0 mt-2 w-56 rounded-xl border border-[var(--border-soft)] bg-[var(--surface-2)] shadow-xl py-2">
-                        {RESOURCES_DROPDOWN.map(({ href: h, label: l }) => {
-                          const th = themeForRoute(h)
-                          return (
-                            <Link
-                              key={h}
-                              href={h}
-                              className="block px-3 py-2 rounded-md hover:bg-[var(--hover-bg)]"
-                              style={{ ['--hover-bg' as any]: th.hoverBg } as CSSProperties}
-                              onClick={() => setResOpen(false)}
-                            >
-                              {l}
-                            </Link>
-                          )
-                        })}
-                      </div>
-                    )}
-                  </div>
-                )
-              }
+              // Resources is a normal link now
 
               return (
                 <Link
@@ -135,18 +88,7 @@ export default function SiteHeader() {
                 {label}
               </Link>
             ))}
-            <div className="mt-2 pt-2 border-t border-[var(--border-soft)] text-xs uppercase tracking-wide text-muted">Resources</div>
-            {RESOURCES_DROPDOWN.map(({ href, label }) => (
-              <Link
-                key={href}
-                href={href}
-                className="block px-3 py-2 rounded-lg hover:bg-[var(--hover-bg)]"
-                style={{ ['--hover-bg' as any]: themeForRoute(href).hoverBg } as CSSProperties}
-                onClick={() => setOpen(false)}
-              >
-                {label}
-              </Link>
-            ))}
+            {/* Resources sublinks removed; Resources has its own page */}
             <div className="pt-3"><ThemeSwitch /></div>
           </div>
         </div>

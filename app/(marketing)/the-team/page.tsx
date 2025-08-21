@@ -7,9 +7,12 @@ const members = [
 
 export default function Team() {
     return (
-        <div className="space-y-6">
-            <h1 className="text-3xl md:text-4xl font-semibold">The Team</h1>
-            <p className="text-[15px] text-muted">Operators and advisors focused on verifiable value, governance, and market integrity.</p>
+        <div className="space-y-16">
+            {/* Hero */}
+            <section className="text-center space-y-6">
+                <h1 className="text-4xl md:text-6xl font-bold tracking-tight">The Team</h1>
+                <p className="text-xl text-muted max-w-3xl mx-auto">Operators and advisors focused on verifiable value, governance, and market integrity.</p>
+            </section>
             <div className="grid gap-6 sm:grid-cols-2">
                 {members.map((m, i) => (
                     <div key={i} className="glass p-4 rounded-2xl flex items-center gap-4">

@@ -3,9 +3,12 @@ import Link from 'next/link'
 
 export default function Ecosystem(){
   return (
-    <div className="space-y-8">
-      <h1 className="text-3xl md:text-4xl font-semibold">MXTK Ecosystem</h1>
-      <p className="text-[15px] text-muted">The ecosystem highlights tools and integrations that make MXTK useful—indexers, wallets, data feeds, custody, OTC rails, and developer resources.</p>
+    <div className="space-y-16">
+      {/* Hero */}
+      <section className="text-center space-y-6">
+        <h1 className="text-4xl md:text-6xl font-bold tracking-tight">MXTK Ecosystem</h1>
+        <p className="text-xl text-muted max-w-3xl mx-auto">The ecosystem highlights tools and integrations that make MXTK useful—indexers, wallets, data feeds, custody, OTC rails, and developer resources.</p>
+      </section>
 
       <section className="section section-teal glass-embedded">
         <div className="grid gap-4 md:grid-cols-3">
