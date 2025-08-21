@@ -92,7 +92,7 @@ body.page {
     overflow: hidden;
 }
 
-.page > main {
+.page>main {
     overflow-y: auto;
     flex: 1;
 }
@@ -275,10 +275,10 @@ html.dark .table thead th {
     color: inherit;
 }
 
-/* Themed headings override everything */
-[data-mineral] h1,
-[data-mineral] h2,
-[data-mineral] h3 {
+/* Themed headings override everything with maximum specificity */
+html body [data-mineral] h1,
+html body [data-mineral] h2,
+html body [data-mineral] h3 {
     color: var(--mxtk-accent-text) !important;
 }
 
