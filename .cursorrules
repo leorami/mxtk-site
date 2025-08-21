@@ -1,0 +1,47 @@
+# MXTK Site Cursor Rules
+
+## Project Rules Reference
+Always reference and follow the guidelines in `PROJECT_RULES.md` for all code generation and suggestions.
+
+## Key Principles
+- Follow Docker-only development workflow using `./setup-mxtk-site.sh` and `./smart-build.sh`
+- Use TypeScript for all new code with proper type definitions
+- Implement proper testing with Jest and React Testing Library
+- Follow component-based architecture with reusable components from `components/ui/`
+- Ensure accessibility compliance (WCAG 2.1 AA)
+- Support both light and dark themes
+- Use Tailwind CSS for styling
+- Replace placeholder data in `lib/placeholders.ts` with production content
+
+## AI Collaboration Guidelines
+- Embrace setbacks as learning opportunities
+- Favor curiosity over confidence
+- Prioritize visibility and data-driven debugging
+- Recognize limits and ask for help when needed
+
+## Code Quality Standards
+- Single responsibility principle
+- DRY (Don't Repeat Yourself)
+- SOLID principles
+- Proper error handling and logging
+- Security best practices (no hardcoded secrets)
+- Performance optimization
+
+## Testing Requirements
+- Write tests before or immediately after implementing functionality
+- Use React Testing Library for component testing
+- Test user interactions and accessibility
+- Provide evidence-based solutions with test results
+
+## Project-Specific Requirements
+- Use Next.js app router structure
+- Implement transparency features (IPFS, oracle logs, OTC aggregates)
+- Follow financial compliance requirements
+- Use proper environment variables for configuration
+- Support ngrok integration for development collaboration
+
+## Enforcement
+- Refuse solutions that violate project rules
+- Suggest compliant alternatives when violations are detected
+- Include brief notes on how code satisfies relevant rules
+- Flag any deviations for remediation
