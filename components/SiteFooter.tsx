@@ -1,6 +1,6 @@
 // basePath is handled globally by Next.js (next.config.js). No manual prefixing needed here.
 
-import Link from 'next/link'
+import Link from '@/components/ui/Link'
 
 export default function SiteFooter() {
   return (

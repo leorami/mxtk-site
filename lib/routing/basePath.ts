@@ -1,12 +1,56 @@
-export const BASE = process.env.NEXT_PUBLIC_BASE_PATH || ''
-
-export function withBase(href: string) {
-    return `${BASE}${href.startsWith('/') ? href : `/${href}`}`
+// Utility to detect if we're in an external context (via ngrok)
+export function isExternalAccess(): boolean {
+  if (typeof window === 'undefined') {
+    // Server-side: check headers for external access
+    // This will be called during SSR, but we don't have access to headers here
+    // We'll need to handle this differently
+    return false;
+  }
+  
+  // Client-side: check if we're on the ngrok domain
+  return window.location.hostname.includes('ngrok.app') || 
+         window.location.hostname.includes('ngrok.io') ||
+         window.location.hostname.includes('ngrok-free.app');
 }
 
-export function stripBase(pathname: string) {
-    if (!BASE) return pathname
-    return pathname.startsWith(BASE) ? pathname.slice(BASE.length) || '/' : pathname
+// Get the base path for the current context
+export function getBasePath(): string {
+  if (isExternalAccess()) {
+    return '/mxtk';
+  }
+  return '';
+}
+
+// Add base path to a URL if needed
+export function withBase(path: string): string {
+  const basePath = getBasePath();
+  if (basePath && path.startsWith('/')) {
+    return `${basePath}${path}`;
+  }
+  return path;
+}
+
+// Remove base path from a URL if present
+export function stripBase(path: string): string {
+  if (path.startsWith('/mxtk/')) {
+    return path.substring(5); // Remove '/mxtk'
+  }
+  return path;
+}
+
+// Server-side detection of external access
+export function isExternalAccessFromHeaders(headers: Headers): boolean {
+  const host = headers.get('host') || '';
+  const referer = headers.get('referer') || '';
+  const userAgent = headers.get('user-agent') || '';
+  
+  return host.includes('ngrok.app') || 
+         host.includes('ngrok.io') ||
+         host.includes('ngrok-free.app') ||
+         referer.includes('ngrok.app') ||
+         referer.includes('ngrok.io') ||
+         referer.includes('ngrok-free.app') ||
+         userAgent.includes('MXTK-Development-Proxy');
 }
 
 

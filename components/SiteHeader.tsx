@@ -1,8 +1,9 @@
 'use client'
 
 import { themeForRoute } from '@/lib/brand/theme'
+import { withBase } from '@/lib/routing/basePath'
 import Image from 'next/image'
-import Link from 'next/link'
+import Link from '@/components/ui/Link'
 import { usePathname } from 'next/navigation'
 import { useEffect, useRef, useState, type CSSProperties } from 'react'
 import ThemeSwitch from './ThemeSwitch'
@@ -49,7 +50,7 @@ export default function SiteHeader() {
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4" style={{ height: '76px' }}>
           <div className="flex items-center gap-3">
             <Link href="/" className="flex items-center" aria-label="MXTK Home">
-              <Image className="logo" src="/logo-horizontal.svg" alt="MXTK" width={140} height={32} style={{ height: 'auto', width: 'auto' }} priority />
+              <Image className="logo" src={withBase("/logo-horizontal.svg")} alt="MXTK" width={140} height={32} style={{ height: '32px', width: 'auto' }} priority />
             </Link>
           </div>
 
