@@ -1,24 +1,15 @@
 'use client'
 import { themeForPath, type MineralTheme } from '@/lib/brand/theme'
 import { usePathname } from 'next/navigation'
-import { createContext, useContext, useEffect, useMemo, useState } from 'react'
+import { createContext, useContext, useMemo } from 'react'
 
 const Ctx = createContext<MineralTheme | null>(null)
 export const useBrandTheme = () => useContext(Ctx)!
 
 export default function BrandThemeProvider({ children }: { children: React.ReactNode }) {
   const raw = usePathname() || '/'
-  const [mounted, setMounted] = useState(false)
-
-  const neutral = useMemo<MineralTheme>(() => ({
-    name: 'home', accent: '#E0932B', hoverBg: 'rgba(224,147,43,.14)', photo: '/minerals/photos/amber-crystal.svg'
-  }), [])
-
-  const themed = useMemo(() => themeForPath(raw), [raw])
-
-  useEffect(() => setMounted(true), [])
-
-  const theme = mounted ? themed : neutral
+  
+  const theme = useMemo(() => themeForPath(raw), [raw])
 
   return (
     <Ctx.Provider value={theme}>
