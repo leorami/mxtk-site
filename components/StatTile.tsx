@@ -1,1 +1,26 @@
-import Card from './ui/Card';import DataSourceBadge from './DataSourceBadge';export default function StatTile({label,value,source,preview=false}:{label:string;value:string;source?:string;preview?:boolean}){return(<Card><div className='flex items-center justify-between'><div><div className='text-sm text-muted'>{label}</div><div className='text-2xl font-semibold'>{value}</div></div><DataSourceBadge source={source} preview={preview} /></div></Card>);}
+import Card from './ui/Card'
+import DataSourceBadge from './DataSourceBadge'
+
+export default function StatTile({
+  label,
+  value,
+  source,
+  preview = false
+}: {
+  label: string
+  value: string
+  source?: string
+  preview?: boolean
+}) {
+  return (
+    <Card interactive>
+      <div className='flex items-center justify-between'>
+        <div>
+          <div className='text-sm text-muted'>{label}</div>
+          <div className='text-2xl font-semibold'>{value}</div>
+        </div>
+        <DataSourceBadge source={source} preview={preview} />
+      </div>
+    </Card>
+  )
+}
