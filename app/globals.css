@@ -88,11 +88,13 @@ body.page {
 
 /* Make the content area (between header and footer) the scroll container */
 .page {
+    height: 100vh;
     overflow: hidden;
 }
 
-.page>main {
-    overflow: auto;
+.page > main {
+    overflow-y: auto;
+    flex: 1;
 }
 
 /* Center the first section as the hero across pages */
@@ -111,22 +113,7 @@ h3 {
     color: var(--h-color);
 }
 
-/* Override: Themed headings take precedence with maximum specificity */
-html body main [data-mineral] h1.text-4xl.font-bold.tracking-tight,
-html body main [data-mineral] h1.text-6xl.font-bold.tracking-tight,
-html body main [data-mineral] h1.text-4xl,
-html body main [data-mineral] h1.text-6xl,
-html body main [data-mineral] h1,
-html body main [data-mineral] h2.text-2xl.font-semibold.mb-6,
-html body main [data-mineral] h2.text-2xl.font-semibold,
-html body main [data-mineral] h2.text-2xl,
-html body main [data-mineral] h2,
-html body main [data-mineral] h3.font-semibold.mb-3,
-html body main [data-mineral] h3.font-semibold.mb-2,
-html body main [data-mineral] h3.font-semibold,
-html body main [data-mineral] h3 {
-    color: var(--mxtk-accent-text) !important;
-}
+/* Default heading colors */
 
 p,
 li,
@@ -282,10 +269,17 @@ html.dark .table thead th {
     color: var(--mxtk-accent-text);
 }
 
-/* Prevent tailwind base from forcing black headings */
+/* Prevent tailwind base from forcing black headings (but allow themed overrides) */
 .page h1,
 .page h2 {
     color: inherit;
+}
+
+/* Themed headings override everything */
+[data-mineral] h1,
+[data-mineral] h2,
+[data-mineral] h3 {
+    color: var(--mxtk-accent-text) !important;
 }
 
 /* Mineral sheen for the main content area */
