@@ -20,7 +20,7 @@ export default function EliteDropPage() {
     <div className="space-y-16">
       {/* Hero */}
       <section className="text-center space-y-6">
-        <h1 className="text-4xl md:text-6xl font-bold tracking-tight" style={{ color: 'var(--mxtk-accent)' }}>
+        <h1 className="text-4xl md:text-6xl font-bold tracking-tight">
           MXTK Gives
         </h1>
         <p className="text-xl text-muted max-w-3xl mx-auto">
