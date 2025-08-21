@@ -15,7 +15,11 @@ export default function BrandThemeProvider({ children }: { children: React.React
     <Ctx.Provider value={theme}>
       <div
         suppressHydrationWarning
-        style={{ ['--mxtk-accent' as any]: theme.accent, ['--mxtk-hover-bg' as any]: theme.hoverBg } as React.CSSProperties}
+        style={{ 
+          ['--mxtk-accent' as any]: theme.accent, 
+          ['--mxtk-hover-bg' as any]: theme.hoverBg,
+          ['--mxtk-accent-text' as any]: theme.accent
+        } as React.CSSProperties}
         data-mineral={theme.name}
         data-photo={theme.photo}
       >
