@@ -1,1 +1,0 @@
-export default function OwnersPage(){return(<div className='mx-auto max-w-6xl px-4 py-10 space-y-4'><h1 className='text-2xl font-semibold'>For Mineral Owners</h1><p className='text-muted'>Clear intake flow, accepted standards (JORC/NI 43-101/SKR), confidentiality, contact.</p></div>)}

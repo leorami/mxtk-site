@@ -2,43 +2,531 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ========= MXTK Design Tokens =========
+   Palette derives from logo + mineral tones.
+   Light tokens bias toward warmth (orange/sand) + clarity (quartz/teal).
+   Dark tokens bias toward navy/graphite with teal/orange accents.
+*/
+
 :root {
-  color-scheme: light;
+    /* Brand core */
+    --mxtk-orange: #E0932B;
+    /* logo orange */
+    --mxtk-navy: #0B1C4A;
+    /* logo navy */
+    --mxtk-teal: #0FBF9F;
+    /* accent */
+    --mxtk-copper: #C97E3D;
+    /* secondary accent */
+
+    /* Neutrals / surfaces (light) */
+    --surface-page: #F6F8FC;
+    /* quartz */
+    --surface-card: rgba(255, 255, 255, .78);
+    --surface-card-emb: rgba(255, 255, 255, .88);
+    --surface-section-1: rgba(15, 191, 159, .06);
+    /* teal tint */
+    --surface-section-2: rgba(224, 147, 43, .06);
+    /* amber tint */
+    --surface-section-3: rgba(11, 28, 74, .06);
+    /* navy tint */
+
+    --ink-strong: #0E1116;
+    --ink-muted: #5B6572;
+    --border-soft: #E5E9F0;
+
+    /* Shadows / radii */
+    --radius-xl: 1rem;
+    --radius-2xl: 1.25rem;
+    --shadow-inner-top: 0 1px 0 rgba(255, 255, 255, .35);
+    --shadow-lift: 0 16px 42px -20px rgba(0, 0, 0, .22), 0 8px 18px -10px rgba(0, 0, 0, .14);
+    --shadow-lift-sm: 0 8px 20px -12px rgba(0, 0, 0, .18), 0 4px 10px -6px rgba(0, 0, 0, .12);
+
+    /* Typography */
+    --h-color: var(--mxtk-navy);
+    --link: #0d6bff;
+    --link-hover: #094cc0;
+    --mxtk-accent-text: var(--mxtk-accent);
 }
 
 html.dark {
-  color-scheme: dark;
+    --surface-page: #0B0E12;
+    --surface-card: rgba(18, 22, 28, .66);
+    --surface-card-emb: rgba(18, 22, 28, .72);
+    --surface-section-1: rgba(15, 191, 159, .16);
+    --surface-section-2: rgba(224, 147, 43, .16);
+    --surface-section-3: rgba(11, 28, 74, .20);
+
+    --ink-strong: #E6EAF2;
+    --ink-muted: #9AA3AE;
+    --border-soft: #1E2430;
+    --h-color: #F4F7FD;
+    --link: #7fc4ff;
+    --link-hover: #a8d6ff;
+    --mxtk-accent-text: color-mix(in srgb, var(--mxtk-accent) 58%, #ffffff);
 }
 
-body {
-  @apply bg-bg text-ink dark:bg-dark-bg dark:text-dark-ink;
+/* Mineral "texture" gradient (no heavy images needed) */
+.mineral-sheen {
+    background:
+        radial-gradient(800px 220px at 50% -160px, rgba(15, 191, 159, .10), transparent 60%),
+        linear-gradient(180deg, rgba(255, 255, 255, .35), rgba(255, 255, 255, 0));
 }
 
-.border-border {
-  @apply border-brand-border dark:border-dark-border;
+html.dark .mineral-sheen {
+    background:
+        radial-gradient(800px 220px at 50% -160px, rgba(15, 191, 159, .18), transparent 60%),
+        linear-gradient(180deg, rgba(255, 255, 255, .05), rgba(255, 255, 255, 0));
 }
 
-.bg-surface {
-  background-color: #ffffff;
+/* Page background so glass pops */
+body.page {
+    background:
+        linear-gradient(to bottom, var(--surface-page) 0%, var(--surface-page) 100%);
+    color: var(--ink-strong);
 }
 
-.dark .bg-surface {
-  background-color: #12161C;
+/* Make the content area (between header and footer) the scroll container */
+.page {
+    overflow: hidden;
+}
+
+.page>main {
+    overflow: auto;
+}
+
+/* Center the first section as the hero across pages */
+[data-mineral]>.space-y-16>section:first-child {
+    text-align: center;
+}
+
+[data-mineral]>.space-y-16>section:first-child h1 {
+    color: var(--mxtk-accent-text);
+}
+
+/* Headings / text */
+h1,
+h2,
+h3 {
+    color: var(--h-color);
+}
+
+p,
+li,
+td,
+th {
+    color: var(--ink-strong);
 }
 
 .text-muted {
-  color: #5B6572;
+    color: var(--ink-muted);
 }
 
-.dark .text-muted {
-  color: #9AA3AE;
+/* Links */
+a {
+    color: var(--link);
 }
 
+a:hover {
+    color: var(--link-hover);
+}
+
+/* Glass */
+.glass {
+    border: 1px solid var(--border-soft);
+    border-radius: var(--radius-2xl);
+    backdrop-filter: blur(10px);
+    box-shadow: var(--shadow-inner-top);
+    background: var(--surface-card);
+    transition: transform .2s cubic-bezier(.22, .61, .36, 1), box-shadow .2s;
+}
+
+.glass-embedded {
+    background: var(--surface-card-emb);
+}
+
+.hover-lift:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lift);
+}
+
+/* Section tints for visual grouping */
+.section {
+    border-radius: var(--radius-2xl);
+    padding: 1.25rem;
+}
+
+.section-teal {
+    background: var(--surface-section-1);
+}
+
+.section-amber {
+    background: var(--surface-section-2);
+}
+
+.section-navy {
+    background: var(--surface-section-3);
+}
+
+/* Tables */
 .table {
-  @apply w-full border-collapse;
+    width: 100%;
+    border-collapse: collapse;
 }
 
 .table th,
 .table td {
-  @apply border border-border px-3 py-2;
+    border: 1px solid var(--border-soft);
+    padding: .5rem .75rem;
+}
+
+.table thead th {
+    background: rgba(255, 255, 255, .65);
+}
+
+html.dark .table thead th {
+    background: rgba(255, 255, 255, .06);
+}
+
+/* Inputs (keeps glass vibe) */
+.input,
+.select,
+.textarea {
+    border: 1px solid var(--border-soft);
+    background: var(--surface-card-emb);
+    border-radius: .8rem;
+    padding: .5rem .75rem;
+    transition: box-shadow .2s;
+}
+
+.input:focus,
+.select:focus,
+.textarea:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(224, 147, 43, .35);
+}
+
+/* Header bar: white in light mode, dark translucent in dark mode */
+.brand-header {
+    background: #ffffff;
+    color: #0B0E12;
+    border-bottom: 1px solid var(--border-soft);
+}
+
+.dark .brand-header {
+    background: rgba(11, 14, 18, .92);
+    color: #E6EAF2;
+    backdrop-filter: saturate(1.2) blur(6px);
+}
+
+/* Ensure header nav links (anchors and buttons) inherit header color, not global link blue */
+.brand-header .nav-link,
+.brand-header a.nav-link {
+    color: inherit;
+}
+
+/* Keep the accent line slim and elegant */
+.brand-accent-line {
+    height: 2px;
+    background: linear-gradient(90deg, #0B1C4A, #E0932B, #0FBF9F);
+}
+
+/* Dropdown base colors */
+:root {
+    --surface-2: rgba(255, 255, 255, .9);
+    --border-soft: rgba(0, 0, 0, .08);
+}
+
+.dark {
+    --surface-2: rgba(18, 22, 28, .95);
+    --border-soft: rgba(255, 255, 255, .12);
+}
+
+/* Footer (anchored via sticky layout in layout.tsx) */
+.brand-footer {
+    background: linear-gradient(180deg, #0E1220 0%, #0B0E12 100%);
+    color: rgba(255, 255, 255, .88);
+}
+
+.dark .brand-footer {
+    background: rgba(11, 14, 18, .96);
+}
+
+.brand-footer a {
+    color: rgba(255, 255, 255, .88);
+}
+
+.brand-footer a:hover {
+    color: #fff;
+}
+
+/* Headings & key links derive from page accent */
+[data-mineral] h1,
+[data-mineral] h2 {
+    color: var(--mxtk-accent-text);
+}
+
+[data-mineral] h3 {
+    color: var(--ink-strong);
+}
+
+[data-mineral] a.btn-link {
+    color: var(--mxtk-accent-text);
+}
+
+/* Prevent tailwind base from forcing black headings */
+.page h1,
+.page h2 {
+    color: inherit;
+}
+
+/* Mineral sheen for the main content area */
+.mineral-sheen {
+    background: linear-gradient(180deg, rgba(255, 255, 255, .0), rgba(255, 255, 255, .04));
+}
+
+.dark .mineral-sheen {
+    background: linear-gradient(180deg, rgba(0, 0, 0, .0), rgba(0, 0, 0, .08));
+}
+
+/* Inputs */
+.input {
+    width: 100%;
+    border: 1px solid var(--border-soft);
+    background: rgba(255, 255, 255, .66);
+    border-radius: .9rem;
+    padding: .7rem 1rem;
+    outline: none;
+    transition: border-color .15s, box-shadow .15s;
+}
+
+.dark .input {
+    background: rgba(18, 22, 28, .66);
+}
+
+.input:focus {
+    border-color: var(--mxtk-accent);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--mxtk-accent) 24%, transparent);
+}
+
+/* Buttons (if not present yet) */
+.btn-base {
+    display: inline-flex;
+    align-items: center;
+    gap: .5rem;
+    border-radius: .9rem;
+    padding: .6rem 1rem;
+    font-weight: 600;
+    transition: transform .15s, box-shadow .15s, background-color .15s, color .15s;
+}
+
+.btn-base:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-lift-sm);
+}
+
+.btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: .5rem;
+    border-radius: .9rem;
+    padding: .6rem 1rem;
+    font-weight: 600;
+    transition: transform .15s, box-shadow .15s, background-color .15s, color .15s;
+    background: var(--mxtk-accent);
+    color: #fff;
+}
+
+.btn-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-lift-sm);
+}
+
+.btn-outline {
+    display: inline-flex;
+    align-items: center;
+    gap: .5rem;
+    border-radius: .9rem;
+    padding: .6rem 1rem;
+    font-weight: 600;
+    transition: transform .15s, box-shadow .15s, background-color .15s, color .15s;
+    border: 1px solid var(--mxtk-accent);
+    color: var(--mxtk-accent);
+    background: transparent;
+}
+
+.btn-outline:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-lift-sm);
+    background: var(--mxtk-hover-bg);
+}
+
+.btn-soft {
+    display: inline-flex;
+    align-items: center;
+    gap: .5rem;
+    border-radius: .9rem;
+    padding: .6rem 1rem;
+    font-weight: 600;
+    transition: transform .15s, box-shadow .15s, background-color .15s, color .15s;
+    background: var(--mxtk-hover-bg);
+    color: var(--mxtk-accent);
+}
+
+.btn-soft:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-lift-sm);
+}
+
+.btn-link {
+    display: inline-flex;
+    align-items: center;
+    gap: .5rem;
+    border-radius: .6rem;
+    padding: .3rem .6rem;
+    font-weight: 600;
+    transition: transform .15s, box-shadow .15s, background-color .15s, color .15s;
+    color: var(--mxtk-accent);
+}
+
+.btn-link:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-lift-sm);
+    background: var(--mxtk-hover-bg);
+}
+
+/* Themed table header + card outlines */
+[data-mineral] .table thead th {
+    box-shadow: inset 0 -2px 0 var(--mxtk-accent);
+}
+
+[data-mineral] .glass,
+[data-mineral] .card-outline {
+    border-color: color-mix(in srgb, var(--mxtk-accent) 22%, var(--border-soft));
+}
+
+
+/* Button styles (so CTAs pop) */
+.btn-base {
+    display: inline-flex;
+    align-items: center;
+    gap: .5rem;
+    border-radius: .9rem;
+    padding: .6rem 1rem;
+    font-weight: 600;
+    transition: transform .15s, box-shadow .15s, background-color .15s, color .15s;
+}
+
+.btn-base:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-lift-sm);
+}
+
+.btn-primary {
+    @apply btn-base;
+    background: var(--mxtk-accent);
+    color: #fff;
+}
+
+.btn-primary:hover {
+    filter: brightness(1.06);
+}
+
+.btn-outline {
+    @apply btn-base;
+    border: 1px solid var(--mxtk-accent);
+    color: var(--mxtk-accent);
+    background: transparent;
+}
+
+.btn-outline:hover {
+    background: var(--mxtk-hover-bg);
+}
+
+.btn-soft {
+    @apply btn-base;
+    background: var(--mxtk-hover-bg);
+    color: var(--mxtk-accent);
+}
+
+.btn-link {
+    @apply btn-base;
+    padding: .25rem 0;
+    border-radius: .4rem;
+    color: var(--mxtk-accent);
+}
+
+.btn-link:hover {
+    background: var(--mxtk-hover-bg);
+}
+
+/* Additional utilities */
+@layer components {
+
+    /* Buttons */
+    .btn {
+        @apply inline-flex items-center justify-center rounded-2xl px-4 py-2 text-sm font-medium transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-400/35;
+    }
+
+    .btn-primary {
+        background: var(--mxtk-orange);
+        color: white;
+        box-shadow: var(--shadow-lift-sm);
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-1px);
+        box-shadow: var(--shadow-lift);
+    }
+
+    .btn-secondary {
+        background: var(--surface-card-emb);
+        border: 1px solid var(--border-soft);
+        color: var(--ink-strong);
+    }
+
+    .btn-ghost {
+        border: 1px solid var(--border-soft);
+        background: transparent;
+    }
+
+    .btn-ghost:hover {
+        background: rgba(0, 0, 0, .05);
+    }
+
+    html.dark .btn-ghost:hover {
+        background: rgba(255, 255, 255, .05);
+    }
+
+    /* Nav utilities */
+    .nav-link {
+        @apply text-sm transition-colors duration-150;
+    }
+
+    .nav-pill {
+        @apply rounded-xl px-3 py-1.5;
+    }
+
+    /* Nav hover using CSS var set from route theme */
+    .nav-pill:hover {
+        background: var(--hover-bg);
+    }
+
+    .nav-pill[aria-current="page"] {
+        background: var(--hover-bg);
+    }
+
+    /* Field utilities */
+    .field {
+        @apply flex flex-col gap-1;
+    }
+
+    .label {
+        @apply text-sm font-medium;
+    }
+
+    .hint {
+        @apply text-xs;
+        color: var(--ink-muted);
+    }
 }

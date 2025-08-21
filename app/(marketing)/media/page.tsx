@@ -1,1 +1,0 @@
-export default function MediaPage(){return(<div className='mx-auto max-w-6xl px-4 py-10 space-y-3'><h1 className='text-2xl font-semibold'>Media</h1><p className='text-muted'>Logos and press materials will be published here.</p></div>)}

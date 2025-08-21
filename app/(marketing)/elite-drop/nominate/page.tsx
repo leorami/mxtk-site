@@ -1,1 +1,0 @@
-export default function NominatePage(){return(<div className='mx-auto max-w-3xl px-4 py-10 space-y-3'><h1 className='text-2xl font-semibold'>Nominate a Nonprofit (Preview)</h1><p className='text-muted'>This form is a placeholder. Final terms will include lock period and learning commitments.</p></div>)}
