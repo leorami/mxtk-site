@@ -8,7 +8,7 @@ export const useBrandTheme = () => useContext(Ctx)!
 
 export default function BrandThemeProvider({ children }: { children: React.ReactNode }) {
   const raw = usePathname() || '/'
-  
+
   const theme = useMemo(() => themeForPath(raw), [raw])
 
   return (
