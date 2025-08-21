@@ -9,8 +9,9 @@ export default function Landing() {
                 <div className="grid gap-8 md:grid-cols-2">
                     <div>
                         <p className="text-xs tracking-wider uppercase text-muted">Mineral Token (MXTK)</p>
-                        <h1 className="mt-2 text-4xl md:text-5xl font-semibold tracking-tight">
-                            A transparent way to <span style={{ color: 'var(--mxtk-accent)' }}>digitize verified mineral value</span>
+                        <h1 className="mt-2 text-4xl md:text-5xl font-semibold tracking-tight leading-tight">
+                            <span className="block" style={{ color: 'var(--mxtk-navy)' }}>Tokenize and Monetize</span>
+                            <span className="block" style={{ color: 'var(--mxtk-orange)' }}>Verified Mineral Value</span>
                         </h1>
                         <p className="mt-4 text-[15px] text-muted">
                             MXTK connects evidence (JORC/NI 43-101/SKR), a governed oracle method, and modern market plumbing.
