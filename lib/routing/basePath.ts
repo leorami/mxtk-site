@@ -1,9 +1,8 @@
 // Utility to detect if we're in an external context (via ngrok)
 export function isExternalAccess(): boolean {
   if (typeof window === 'undefined') {
-    // Server-side: check headers for external access
-    // This will be called during SSR, but we don't have access to headers here
-    // We'll need to handle this differently
+    // Server-side: we can't detect external access here
+    // We'll rely on the Nginx proxy to handle this
     return false;
   }
   
@@ -22,7 +21,15 @@ export function getBasePath(): string {
 }
 
 // Add base path to a URL if needed
+// During SSR, always return the path as-is to avoid hydration mismatches
+// The Nginx proxy will handle adding the /mxtk prefix for external access
 export function withBase(path: string): string {
+  // During SSR, return the path as-is
+  if (typeof window === 'undefined') {
+    return path;
+  }
+  
+  // During client-side rendering, add prefix if needed
   const basePath = getBasePath();
   if (basePath && path.startsWith('/')) {
     return `${basePath}${path}`;
