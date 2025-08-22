@@ -21,19 +21,9 @@ export function getBasePath(): string {
 }
 
 // Add base path to a URL if needed
-// During SSR, always return the path as-is to avoid hydration mismatches
+// Always return the path as-is to avoid hydration mismatches
 // The Nginx proxy will handle adding the /mxtk prefix for external access
 export function withBase(path: string): string {
-  // During SSR, return the path as-is
-  if (typeof window === 'undefined') {
-    return path;
-  }
-  
-  // During client-side rendering, add prefix if needed
-  const basePath = getBasePath();
-  if (basePath && path.startsWith('/')) {
-    return `${basePath}${path}`;
-  }
   return path;
 }
 

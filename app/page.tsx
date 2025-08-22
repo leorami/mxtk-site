@@ -1,5 +1,5 @@
 import Card from '@/components/ui/Card'
-import Link from '@/components/ui/Link'
+import Link from 'next/link'
 
 export default function Landing() {
     return (

@@ -271,7 +271,8 @@ html.dark .table thead th {
 
 /* Prevent tailwind base from forcing black headings (but allow themed overrides) */
 .page h1,
-.page h2 {
+.page h2,
+.page h3 {
     color: inherit;
 }
 

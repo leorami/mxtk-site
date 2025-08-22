@@ -56,6 +56,12 @@
 ## 🚀 Pre-Launch TODOs
 
 ### High Priority
+- [ ] **Fix external ngrok access issues** - Critical proxy and hydration problems:
+  - [ ] **Hydration mismatch** - Server/client URL prefix inconsistency causing React errors
+  - [ ] **404 errors for static assets** - `logo-horizontal.svg`, CSS, JS chunks not accessible via ngrok
+  - [ ] **API failures** - Institutions and transparency pages crashing due to API access issues
+  - [ ] **Logo aspect ratio warning** - Fix image sizing in SiteHeader.tsx
+  - [ ] **Resources menu** - Remove dropdown functionality, make it a simple menu item
 - [ ] **Replace placeholder data** in `lib/placeholders.ts`:
   - [ ] Proof CIDs/sha256 hashes (IPFS links)
   - [ ] Oracle log entries
