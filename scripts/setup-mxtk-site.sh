@@ -107,15 +107,15 @@ switch_env() {
     "production") NEW_SUF="prod" ;;
   esac
 
-  [[ -f .env && -n $CUR_SUF ]] && cp .env ".env.$CUR_SUF"
+  [[ -f .env && -n $CUR_SUF ]] && cp .env "config/environments/.env.$CUR_SUF"
 
   rm -f .env
 
-  if [[ -f ".env.$NEW_SUF" ]]; then
-    cp ".env.$NEW_SUF" .env
-    print_status "Restored .env from .env.$NEW_SUF"
-  else
-    local TPL=".env.$NEW_SUF.template"
+  if [[ -f "config/environments/.env.$NEW_SUF" ]]; then
+  cp "config/environments/.env.$NEW_SUF" .env
+  print_status "Restored .env from config/environments/.env.$NEW_SUF"
+else
+  local TPL="config/environments/.env.$NEW_SUF.template"
     if [[ -f $TPL ]]; then
       print_status "Creating .env from $TPL"
       cp "$TPL" .env
@@ -220,14 +220,14 @@ EOF
     fi
     
     # Create environment-specific files if templates exist
-    for template in .env.*.template; do
+    for template in config/environments/.env.*.template; do
         if [[ -f "$template" ]]; then
-            local env_name="${template#.env.}"
+            local env_name="${template#config/environments/.env.}"
             env_name="${env_name%.template}"
-            if [[ ! -f ".env.$env_name" ]]; then
-                print_status "Creating .env.$env_name from template"
-                cp "$template" ".env.$env_name"
-                print_warning "⚠️  Please update .env.$env_name with your actual API keys and tokens"
+            if [[ ! -f "config/environments/.env.$env_name" ]]; then
+                print_status "Creating config/environments/.env.$env_name from template"
+                cp "$template" "config/environments/.env.$env_name"
+                print_warning "⚠️  Please update config/environments/.env.$env_name with your actual API keys and tokens"
             fi
         fi
     done
@@ -336,13 +336,13 @@ start_services() {
             print_subheader "Starting MXTK site development environment..."
             ;;
         "staging")
-            compose_file="docker-compose.staging.yml"
+            compose_file="config/docker/docker-compose.staging.yml"
             port="2001"
             service_name="web-staging"
             print_subheader "Starting MXTK site staging environment..."
             ;;
         "production")
-            compose_file="docker-compose.prod.yml"
+            compose_file="config/docker/docker-compose.prod.yml"
             port="2002"
             service_name="web-prod"
             print_subheader "Starting MXTK site production environment..."
@@ -481,11 +481,11 @@ stop_services() {
             print_subheader "Stopping MXTK site development environment..."
             ;;
         "staging")
-            compose_file="docker-compose.staging.yml"
+            compose_file="config/docker/docker-compose.staging.yml"
             print_subheader "Stopping MXTK site staging environment..."
             ;;
         "production")
-            compose_file="docker-compose.prod.yml"
+            compose_file="config/docker/docker-compose.prod.yml"
             print_subheader "Stopping MXTK site production environment..."
             ;;
     esac
@@ -513,10 +513,10 @@ restart_services() {
             compose_file="docker-compose.yml"
             ;;
         "staging")
-            compose_file="docker-compose.staging.yml"
+            compose_file="config/docker/docker-compose.staging.yml"
             ;;
         "production")
-            compose_file="docker-compose.prod.yml"
+            compose_file="config/docker/docker-compose.prod.yml"
             ;;
     esac
     
@@ -616,14 +616,14 @@ show_status() {
         docker compose ps --filter "name=mxtk-site-dev" --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}" 2>/dev/null || print_warning "Development not running"
     fi
     
-    if [[ -f "docker-compose.staging.yml" ]]; then
+    if [[ -f "config/docker/docker-compose.staging.yml" ]]; then
         print_status "Staging: http://localhost:2001"
-        docker compose -f docker-compose.staging.yml ps --filter "name=mxtk-site-staging" --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}" 2>/dev/null || print_warning "Staging not running"
+        docker compose -f config/docker/docker-compose.staging.yml ps --filter "name=mxtk-site-staging" --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}" 2>/dev/null || print_warning "Staging not running"
     fi
     
-    if [[ -f "docker-compose.prod.yml" ]]; then
+    if [[ -f "config/docker/docker-compose.prod.yml" ]]; then
         print_status "Production: http://localhost:2002"
-        docker compose -f docker-compose.prod.yml ps --filter "name=mxtk-site-prod" --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}" 2>/dev/null || print_warning "Production not running"
+        docker compose -f config/docker/docker-compose.prod.yml ps --filter "name=mxtk-site-prod" --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}" 2>/dev/null || print_warning "Production not running"
     fi
 }
 
@@ -671,11 +671,11 @@ clean_environment() {
     if [[ -f "docker-compose.yml" ]]; then
         docker compose down -v --remove-orphans
     fi
-    if [[ -f "docker-compose.staging.yml" ]]; then
-        docker compose -f docker-compose.staging.yml down -v --remove-orphans
+    if [[ -f "config/docker/docker-compose.staging.yml" ]]; then
+        docker compose -f config/docker/docker-compose.staging.yml down -v --remove-orphans
     fi
-    if [[ -f "docker-compose.prod.yml" ]]; then
-        docker compose -f docker-compose.prod.yml down -v --remove-orphans
+    if [[ -f "config/docker/docker-compose.prod.yml" ]]; then
+        docker compose -f config/docker/docker-compose.prod.yml down -v --remove-orphans
     fi
     
     docker system prune -af

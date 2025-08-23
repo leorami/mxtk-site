@@ -118,6 +118,8 @@
    - **Organized Structure:** Keep root directory organized with only files that absolutely belong there (config files, scripts, documentation).
    - **Clean Development:** Remove temporary files, test files, and unused artifacts immediately after use.
    - **Proper Organization:** Configuration files go in `config/`, scripts in `scripts/`, and testing tools in `tools/` directories.
+   - **Environment Files:** All `.env.*` files are stored in `config/environments/` directory.
+   - **Docker Configs:** Environment-specific Docker compose files are stored in `config/docker/` directory.
 
 4. **Branching & Releases**  
    - Feature branches off `main`; name `feature/<purpose>`.

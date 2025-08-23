@@ -20,7 +20,7 @@ services:
       - NEXT_PUBLIC_ASSET_PREFIX=
       - MXTK_BEHIND_PROXY=true
     env_file:
-      - .env.dev
+      - config/environments/.env.dev
     volumes:
       - .:/app
       - /app/node_modules

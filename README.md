@@ -238,7 +238,15 @@ mxtk-site/
 │   └── test/              # Test suites and utilities
 ├── config/                 # Configuration files
 │   ├── nginx-proxy.conf   # Nginx proxy configuration
-│   └── ngrok.yml          # Ngrok tunnel configuration
+│   ├── ngrok.yml          # Ngrok tunnel configuration
+│   ├── environments/      # Environment-specific configuration
+│   │   ├── .env.dev       # Development environment variables
+│   │   ├── .env.staging   # Staging environment variables
+│   │   ├── .env.prod      # Production environment variables
+│   │   └── *.template     # Environment file templates
+│   └── docker/            # Docker compose configurations
+│       ├── docker-compose.staging.yml
+│       └── docker-compose.prod.yml
 └── docs/                   # Documentation and design assets
 ```
 
