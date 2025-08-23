@@ -106,16 +106,18 @@
 
 2. **Environment & Setup**  
    - **Docker-Only Development:** All development and testing must be performed inside Docker containers to ensure consistent environments.
-   - **Environment Management Script:** Use the `./setup-mxtk-site.sh` script for basic Docker operations (start, stop, restart, reset), environment setup, validation, status, logs, and cleanup.
-   - **Smart Development Workflow:** The `smart-build.sh` script intelligently categorizes file changes: (1) **Instant changes** (JS, CSS, React components) are reflected immediately via bind mounts, (2) **Restart changes** (environment variables, Next.js config) require container restart, (3) **Rebuild changes** (dependencies, Dockerfiles) require full rebuild.
+   - **Environment Management Script:** Use the `./scripts/setup-mxtk-site.sh` script for basic Docker operations (start, stop, restart, reset), environment setup, validation, status, logs, and cleanup.
+   - **Smart Development Workflow:** The `./scripts/smart-build.sh` script intelligently categorizes file changes: (1) **Instant changes** (JS, CSS, React components) are reflected immediately via bind mounts, (2) **Restart changes** (environment variables, Next.js config) require container restart, (3) **Rebuild changes** (dependencies, Dockerfiles) require full rebuild.
    - **Environment Variables:** Store sensitive configuration in `.env` files and exclude them from version control.
-   - **Ngrok Integration:** Use `./setup-mxtk-site.sh share` to connect to shared ngrok networks for development collaboration.
+   - **Ngrok Integration:** Use `./scripts/setup-mxtk-site.sh share` to connect to shared ngrok networks for development collaboration.
+   - **Debug & Testing Tools:** Use `./tools/debug/debug.js` for comprehensive site validation and `./tools/test/` for automated testing.
 
 3. **Root Directory Cleanliness**  
    - **Minimal Root Files:** Only essential project files should be in the root directory. Avoid backup files, temporary files, or development artifacts.
    - **No Backup Pollution:** Never create backup files (e.g., `*.bak`, `*.backup`, `nginx-proxy.conf.backup.*`) in the root directory. Use version control for file history.
    - **Organized Structure:** Keep root directory organized with only files that absolutely belong there (config files, scripts, documentation).
    - **Clean Development:** Remove temporary files, test files, and unused artifacts immediately after use.
+   - **Proper Organization:** Configuration files go in `config/`, scripts in `scripts/`, and testing tools in `tools/` directories.
 
 4. **Branching & Releases**  
    - Feature branches off `main`; name `feature/<purpose>`.

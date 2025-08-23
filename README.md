@@ -1,8 +1,35 @@
-# MXTK Site Update
-- Light default; Dark toggle (persisted).
-- Transparency hub: proofs (IPFS), oracle log, ops cost estimator, OTC aggregates, addresses, risk.
-- Institutions page: Persona (KYC) and BitGo (escrow) placeholders.
-- Replace placeholder data in `lib/placeholders.ts`.
+# MXTK Site - Mineral Token Platform
+
+A comprehensive platform for digitizing verified mineral interests with transparent, governed market plumbing. Built with Next.js, TypeScript, and modern web technologies.
+
+## 🚀 Key Features
+
+- **🎨 Dynamic Theme System**: Path-based mineral themes with automatic color adaptation
+- **🌙 Dark/Light Mode**: Persistent theme toggle with system preference detection
+- **🔍 Transparency Hub**: Live on-chain data, IPFS proofs, oracle logs, and OTC aggregates
+- **🏢 Institutional Tools**: KYC integration, escrow services, and compliance features
+- **📱 Responsive Design**: Mobile-first approach with accessibility compliance
+- **🔧 Development Tools**: Comprehensive debugging, testing, and deployment infrastructure
+
+## 🎯 Recent Major Updates
+
+### Infrastructure & Development
+- **Docker Integration**: Multi-environment setup with ngrok tunneling
+- **Base Path Routing**: Seamless localhost/ngrok compatibility
+- **Debug System**: Advanced error detection and theme validation tools
+- **Testing Framework**: Comprehensive Puppeteer-based testing suite
+
+### Content & Design
+- **Complete Page Redesign**: All marketing pages with production-ready content
+- **Team Integration**: Leadership profiles with actual team member images
+- **Legal Framework**: Comprehensive Terms, Privacy Policy, and Disclosures
+- **MXTK Cares Initiative**: Community-focused programs and nominations
+
+### Technical Improvements
+- **Hydration Fixes**: Resolved server/client rendering mismatches
+- **Theme System**: Path-based mineral themes with consistent styling
+- **Component Library**: Enhanced UI components with proper TypeScript types
+- **Performance Optimization**: Improved loading and rendering efficiency
 
 ## Content status
 Most pages now contain production-sounding copy. Sections labeled **(Sample)** will be replaced with signed docs and
@@ -96,10 +123,16 @@ The updated `PoolTable` component shows:
 ### Quick Start
 ```bash
 # Start the development environment
-./setup-mxtk-site.sh start
+./scripts/setup-mxtk-site.sh start
 
 # Or use the smart build system
-./smart-build.sh apply
+./scripts/smart-build.sh apply
+
+# Run debugging tools
+node tools/debug/debug.js
+
+# Run tests
+node tools/test/simple-test.js
 ```
 
 ### Access Points
@@ -111,25 +144,25 @@ The updated `PoolTable` component shows:
 ### Environment Management
 ```bash
 # Switch environments
-./setup-mxtk-site.sh switch dev|staging|prod
+./scripts/setup-mxtk-site.sh switch dev|staging|prod
 
 # Check status
-./smart-build.sh status
+./scripts/smart-build.sh status
 
 # Apply changes
-./smart-build.sh apply
+./scripts/smart-build.sh apply
 
 # Connect to shared ngrok network (development only)
-./setup-mxtk-site.sh share
+./scripts/setup-mxtk-site.sh share
 
 # Get current ngrok URL only
-./setup-mxtk-site.sh share --currenturl
+./scripts/setup-mxtk-site.sh share --currenturl
 
 # Update ngrok configuration and get URL
-./setup-mxtk-site.sh share --updateurl
+./scripts/setup-mxtk-site.sh share --updateurl
 
 # Setup MXTK proxy route in shared ngrok
-./setup-mxtk-site.sh proxy
+./scripts/setup-mxtk-site.sh proxy
 
 ### Shared Dev Proxy System (Development Only)
 MXTK implements a **completely independent** shared dev proxy system that can work standalone OR integrate cooperatively with other projects:
@@ -137,10 +170,10 @@ MXTK implements a **completely independent** shared dev proxy system that can wo
 #### **Independent Mode** (MXTK's own dev proxy)
 ```bash
 # Setup MXTK's own dev proxy system
-./setup-mxtk-site.sh setup-proxy
+./scripts/setup-mxtk-site.sh setup-proxy
 
 # Start MXTK with shared dev proxy
-./setup-mxtk-site.sh start
+./scripts/setup-mxtk-site.sh start
 
 # Access via: http://localhost:8080
 ```
@@ -148,14 +181,14 @@ MXTK implements a **completely independent** shared dev proxy system that can wo
 #### **Cooperative External Proxy Sharing Mode**
 ```bash
 # Start MXTK
-./setup-mxtk-site.sh start
+./scripts/setup-mxtk-site.sh start
 
 # Integrate with any project (universal approach)
-./setup-mxtk-site.sh integrate-with encast-web ../encast.web
-./setup-mxtk-site.sh integrate-with other-project ../other-project
+./scripts/setup-mxtk-site.sh integrate-with encast-web ../encast.web
+./scripts/setup-mxtk-site.sh integrate-with other-project ../other-project
 
 # Quick integrate with encast-web (if in standard location)
-./setup-mxtk-site.sh integrate-encast
+./scripts/setup-mxtk-site.sh integrate-encast
 
 # Access via: http://localhost:8080/mxtk/
 ```
@@ -169,20 +202,20 @@ MXTK implements a **completely independent** shared dev proxy system that can wo
 6. **✅ Scalable**: Easy to add new project integrations
 
 ### Dev Proxy Command Options
-- `./setup-mxtk-site.sh setup-proxy` - Setup MXTK's own dev proxy system
-- `./setup-mxtk-site.sh stop-proxy` - Stop dev proxy services
-- `./setup-mxtk-site.sh restart-proxy` - Restart dev proxy services
-- `./setup-mxtk-site.sh integrate-with <project> <dir>` - Integrate with any project
-- `./setup-mxtk-site.sh disconnect-from <project> <dir>` - Disconnect from project
-- `./setup-mxtk-site.sh integrate-encast [dir]` - Quick integrate with encast-web
-- `./setup-mxtk-site.sh disconnect-encast [dir]` - Quick disconnect from encast-web
+- `./scripts/setup-mxtk-site.sh setup-proxy` - Setup MXTK's own dev proxy system
+- `./scripts/setup-mxtk-site.sh stop-proxy` - Stop dev proxy services
+- `./scripts/setup-mxtk-site.sh restart-proxy` - Restart dev proxy services
+- `./scripts/setup-mxtk-site.sh integrate-with <project> <dir>` - Integrate with any project
+- `./scripts/setup-mxtk-site.sh disconnect-from <project> <dir>` - Disconnect from project
+- `./scripts/setup-mxtk-site.sh integrate-encast [dir]` - Quick integrate with encast-web
+- `./scripts/setup-mxtk-site.sh disconnect-encast [dir]` - Quick disconnect from encast-web
 
 ### Ngrok Integration (Legacy)
 The legacy ngrok integration is still available for backward compatibility:
 
-- `./setup-mxtk-site.sh share` - Connect to shared network and show status
-- `./setup-mxtk-site.sh share --currenturl` - Get current ngrok URL only (for scripting)
-- `./setup-mxtk-site.sh share --updateurl` - Get ngrok URL and display access information
+- `./scripts/setup-mxtk-site.sh share` - Connect to shared network and show status
+- `./scripts/setup-mxtk-site.sh share --currenturl` - Get current ngrok URL only (for scripting)
+- `./scripts/setup-mxtk-site.sh share --updateurl` - Get ngrok URL and display access information
 
 ### Docker Architecture
 - **Development**: Internal network + optional ngrok-shared network + dev proxy system
@@ -191,6 +224,28 @@ The legacy ngrok integration is still available for backward compatibility:
 - **Dev Proxy**: Port 8080 for shared proxy access
 - **Ngrok**: Port 4040 for tunnel management
 - **Health Checks**: Automatic container health monitoring
+
+### Project Structure
+```
+mxtk-site/
+├── app/                    # Next.js app router pages
+├── components/             # React components and UI library
+├── lib/                    # Utilities, configuration, and business logic
+├── public/                 # Static assets and media files
+├── scripts/                # Development and deployment scripts
+├── tools/                  # Testing and debugging tools
+│   ├── debug/             # Debugging and validation tools
+│   └── test/              # Test suites and utilities
+├── config/                 # Configuration files
+│   ├── nginx-proxy.conf   # Nginx proxy configuration
+│   └── ngrok.yml          # Ngrok tunnel configuration
+└── docs/                   # Documentation and design assets
+```
+
+### Development Tools
+- **Debug System**: `node tools/debug/debug.js` - Comprehensive site validation
+- **Testing Suite**: `node tools/test/simple-test.js` - Basic functionality tests
+- **Puppeteer Tests**: `node tools/test/test-puppeteer.js` - Advanced browser testing
 
 ### Traditional Development
 ```bash
