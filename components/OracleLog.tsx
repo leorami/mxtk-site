@@ -22,7 +22,7 @@ export default function OracleLog({
             <div className='text-sm'>{e.summary}</div>
             {e.cid && (
               <a 
-                className='text-sm underline hover:text-brand-orange transition-colors' 
+                className='text-sm table-link' 
                 href={`https://ipfs.io/ipfs/${e.cid}`} 
                 target='_blank'
                 rel="noopener noreferrer"

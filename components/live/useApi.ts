@@ -1,5 +1,6 @@
 'use client'
 
+import { withBase } from '@/lib/routing/basePath'
 import { useEffect, useState } from 'react'
 
 export function useApi<T = any>(url: string, { refreshMs = 30000 } = {}) {
@@ -10,8 +11,8 @@ export function useApi<T = any>(url: string, { refreshMs = 30000 } = {}) {
     async function load() {
         try {
             setError(null)
-            // Use URL directly since we removed basePath
-            const res = await fetch(url, { cache: 'no-store' })
+            // Use withBase to ensure proper URL prefixing
+            const res = await fetch(withBase(url), { cache: 'no-store' })
             if (!res.ok) throw new Error(await res.text())
             setData(await res.json())
         } catch (e: any) {
