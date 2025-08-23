@@ -555,6 +555,47 @@ determine_action() {
 }
 
 # =============================================================================
+# CONTAINER MANAGEMENT
+# =============================================================================
+
+# Check if containers exist and handle conflicts gracefully
+check_existing_containers() {
+    local action="$1"
+    
+    case "$action" in
+        "RESTART")
+            # For restart, just check if containers are running
+            if ! docker compose ps --services --filter "status=running" | grep -q .; then
+                log "WARN" "No containers are running, starting fresh..."
+                docker compose up -d
+                return
+            fi
+            ;;
+        "REBUILD")
+            # For rebuild, check for container name conflicts
+            local conflicting_containers=()
+            
+            # Check for specific container conflicts
+            if docker ps -a --format "table {{.Names}}" | grep -q "ngrok-external-proxy"; then
+                conflicting_containers+=("ngrok-external-proxy")
+            fi
+            if docker ps -a --format "table {{.Names}}" | grep -q "mxtk-site-dev"; then
+                conflicting_containers+=("mxtk-site-dev")
+            fi
+            if docker ps -a --format "table {{.Names}}" | grep -q "dev-proxy"; then
+                conflicting_containers+=("dev-proxy")
+            fi
+            
+            if [[ ${#conflicting_containers[@]} -gt 0 ]]; then
+                log "INFO" "Found existing containers: ${conflicting_containers[*]}"
+                log "INFO" "Removing existing containers to avoid conflicts..."
+                docker compose down --remove-orphans
+            fi
+            ;;
+    esac
+}
+
+# =============================================================================
 # DOCKER OPERATIONS
 # =============================================================================
 
@@ -568,13 +609,27 @@ execute_action() {
             ;;
         "RESTART")
             log "INFO" "Restarting containers for configuration changes"
+            
+            # Check existing containers first
+            check_existing_containers "RESTART"
+            
+            # Restart existing containers to pick up configuration changes
+            log "DEBUG" "Restarting containers with updated configuration..."
             docker compose restart
+            
             # Save file manifest
             save_file_manifest
             ;;
         "REBUILD")
             log "INFO" "Rebuilding containers for dependency/structure changes"
-            docker compose up --build -d
+            
+            # Check existing containers first
+            check_existing_containers "REBUILD"
+            
+            # Force recreate containers with new build
+            log "DEBUG" "Rebuilding and recreating containers..."
+            docker compose up --build -d --force-recreate
+            
             # Save file manifest
             save_file_manifest
             ;;
@@ -588,6 +643,32 @@ execute_action() {
 # =============================================================================
 # STATUS REPORTING
 # =============================================================================
+
+# Get ngrok URL if available
+get_ngrok_url() {
+    # try the API for 5 s
+    for _ in {1..5}; do
+        url=$(curl -s http://localhost:4040/api/tunnels 2>/dev/null \
+              | grep -o '"public_url":"https:[^"]*"' \
+              | head -n1 | sed -E 's/.*"public_url":"([^"]*)".*/\1/')
+        [[ -n "$url" ]] && { echo "$url"; return; }
+        sleep 1
+    done
+    echo ""
+}
+
+# Display external URLs if ngrok is available
+show_external_urls() {
+    local ngrok_url
+    ngrok_url=$(get_ngrok_url)
+    
+    if [[ -n "$ngrok_url" ]]; then
+        echo -e "${CYAN}External Access:${NC}"
+        echo "  • MXTK Site (ngrok):  $ngrok_url/mxtk"
+        echo "  • Ngrok Dashboard:     http://localhost:4040"
+        echo
+    fi
+}
 
 show_status() {
     local verbose="$1"
@@ -635,6 +716,9 @@ show_status() {
     
     echo
     
+    # Show external URLs if ngrok is available
+    show_external_urls
+    
     # Check recent changes
     local last_check=0
     if [[ -f "$TIMESTAMP_FILE" ]]; then
@@ -672,6 +756,7 @@ show_status() {
     echo "  • Dependency changes require rebuild (npm install + build)"
     echo "  • Use './smart-build.sh check' to verify changes"
     echo "  • Use './smart-build.sh apply' to sync environment"
+    echo "  • Use './setup-mxtk-site.sh share' to enable external access"
 }
 
 # =============================================================================

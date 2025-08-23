@@ -1,0 +1,6 @@
+authtoken: 2ys22TN5DNODqFfkisK86gaBDN1_3cyhFAiU8Zce19LjiRkFg
+tunnels:
+  mxtk-site:
+    proto: http
+    addr: mxtk-site-dev:2000
+    hostname: ramileo.ngrok.app

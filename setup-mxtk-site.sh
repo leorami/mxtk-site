@@ -765,18 +765,16 @@ share_with_ngrok() {
         print_warning "⚠️  ngrok-external-proxy not found (may not be running in encast.web project)"
     fi
     
-    # If update URL is requested, get and display the ngrok URL
-    if [[ "$update_url" == "true" ]]; then
-        local url
-        url=$(get_ngrok_url)
-        if [[ -z "$url" ]]; then
-            print_error "Ngrok did not report a URL within 30 seconds."
-            return 1
-        fi
-        
+    # Always get and display the ngrok URL when sharing
+    print_status "Getting ngrok URL..."
+    local url
+    url=$(get_ngrok_url)
+    if [[ -z "$url" ]]; then
+        print_warning "Ngrok URL not available yet. Please check the ngrok dashboard at http://localhost:4040"
+        print_status "The URL will be available once ngrok establishes the tunnel."
+    else
         print_status "🌍  Ngrok URL → $url"
         print_status "📖 Access MXTK site at: $url/mxtk"
-        print_status "🏠 Local access still available at: http://localhost:2000"
     fi
     
     print_status "🎉 MXTK site is now connected to the shared ngrok network!"
@@ -784,13 +782,11 @@ share_with_ngrok() {
     echo -e "${CYAN}Access Points:${NC}"
     echo "  • MXTK Site (direct): http://localhost:2000"
     echo "  • Ngrok Dashboard:     http://localhost:4040"
-    if [[ "$update_url" == "true" ]]; then
-        local url
-        url=$(get_ngrok_url)
-        if [[ -n "$url" ]]; then
-            echo "  • MXTK Site (ngrok):  $url/mxtk"
-            echo "  • Root redirects to:  $url/mxtk"
-        fi
+    if [[ -n "$url" ]]; then
+        echo "  • MXTK Site (ngrok):  $url/mxtk"
+        echo "  • Root redirects to:  $url/mxtk"
+    else
+        echo "  • MXTK Site (ngrok):  [Check ngrok dashboard for URL]"
     fi
     echo
     echo -e "${YELLOW}Note:${NC} The ngrok tunnel will be available at the URL shown in the ngrok dashboard"
