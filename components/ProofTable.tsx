@@ -16,9 +16,12 @@ export default function ProofTable({
   proofs: Proof[]
 }) {
   return (
-    <Card interactive>
+    <Card tint="navy" embedded>
+      <div className="flex items-center justify-between mb-2">
+        <div className="text-sm font-semibold">Attestations & Audits</div>
+      </div>
       <div className='overflow-x-auto'>
-        <table className='table'>
+        <table className='table text-sm'>
           <thead>
             <tr>
               <th>Title</th>
@@ -33,12 +36,16 @@ export default function ProofTable({
             {proofs.map(p => (
               <tr key={p.id}>
                 <td>{p.title}</td>
-                <td>{p.type}</td>
+                <td>
+                  <span className="rounded-xl border px-2 py-0.5 text-xs">
+                    {p.type}
+                  </span>
+                </td>
                 <td>{p.issuer}</td>
                 <td>{p.effectiveDate}</td>
                 <td>
                   <a 
-                    className='underline hover:text-brand-orange transition-colors' 
+                    className='table-link' 
                     href={`https://ipfs.io/ipfs/${p.cid}`} 
                     target='_blank'
                     rel="noopener noreferrer"
@@ -51,6 +58,9 @@ export default function ProofTable({
             ))}
           </tbody>
         </table>
+      </div>
+      <div className="mt-2 text-xs text-muted">
+        <strong>Type</strong> indicates the document category: <em>audit</em> (financial/technical review), <em>attestation</em> (legal/regulatory), or <em>report</em> (operational/status).
       </div>
     </Card>
   )

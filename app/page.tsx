@@ -1,67 +1,79 @@
+'use client'
+
 import Card from '@/components/ui/Card'
+import { withBase } from '@/lib/routing/basePath'
 import Link from 'next/link'
+import { useEffect, useState } from 'react'
 
-export default function Landing() {
-    return (
-        <div className="space-y-12">
-            {/* Hero */}
-            <section className="glass p-8 rounded-2xl">
-                <div className="grid gap-8 md:grid-cols-2">
-                    <div>
-                        <p className="text-xs tracking-wider uppercase text-muted">Mineral Token (MXTK)</p>
-                        <h1 className="mt-2 text-4xl md:text-5xl font-semibold tracking-tight leading-tight">
-                            <span className="block" style={{ color: 'var(--mxtk-navy)' }}>Tokenize and Monetize</span>
-                            <span className="block" style={{ color: 'var(--mxtk-orange)' }}>Verified Mineral Value</span>
-                        </h1>
-                        <p className="mt-4 text-[15px] text-muted">
-                            MXTK connects evidence (JORC/NI 43-101/SKR), a governed oracle method, and modern market plumbing.
-                            No hype—just clean, auditable links from claims to sources.
-                        </p>
-                        <div className="mt-6 flex flex-wrap gap-3">
-                            <Link className="btn-primary" href="/owners">For Mineral Owners</Link>
-                            <Link className="btn-outline" href="/transparency">Trust & Transparency</Link>
-                            <Link className="btn-soft" href="/ecosystem">See the Ecosystem</Link>
-                        </div>
-                    </div>
-                    <div className="grid gap-3">
-                        <Card embedded tint="navy">
-                            <div className="text-sm font-semibold">Proof at a glance</div>
-                            <div className="mt-2 grid grid-cols-3 gap-3">
-                                <div className="rounded-xl border p-3 card-outline"><div className="text-[12px] text-muted">Attestations</div><div className="text-xl font-semibold">3</div></div>
-                                <div className="rounded-xl border p-3 card-outline"><div className="text-[12px] text-muted">Pools</div><div className="text-xl font-semibold">Auto</div></div>
-                                <div className="rounded-xl border p-3 card-outline"><div className="text-[12px] text-muted">Oracle</div><div className="text-xl font-semibold">v0.1</div></div>
-                            </div>
-                            <div className="mt-2 text-[12px] text-muted">"Auto" uses factory + indexer discovery; metrics switch to live when feeds are connected.</div>
-                        </Card>
-                        <Card embedded tint="teal">
-                            <div className="text-sm font-semibold">Why this matters</div>
-                            <p className="mt-1 text-[13px] text-muted">
-                                When mineral interests become digital, owners unlock financing options and institutions gain clarity.
-                                Our job: make every step verifiable.
-                            </p>
-                            <div className="mt-2"><Link className="btn-link" href="/whitepaper">How MXTK works</Link></div>
-                        </Card>
-                    </div>
-                </div>
-            </section>
+export default function Home() {
+  const [mounted, setMounted] = useState(false)
 
-            {/* Three pillars */}
-            <section className="section section-teal glass-embedded">
-                <div className="grid gap-4 md:grid-cols-3">
-                    <Card embedded><div className="text-sm font-semibold">Evidence-first</div><p className="mt-1 text-[13px] text-muted">JORC/NI 43-101/SKR where available; redactions allowed with hash-addressable proofs on IPFS.</p></Card>
-                    <Card embedded><div className="text-sm font-semibold">Governed pricing</div><p className="mt-1 text-[13px] text-muted">Documented oracle method with public change log and ops budget.</p></Card>
-                    <Card embedded><div className="text-sm font-semibold">Market plumbing</div><p className="mt-1 text-[13px] text-muted">OTC rails, Uniswap v3 planning, LP locks, timelock governance.</p></Card>
-                </div>
-            </section>
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
-            {/* Trust strip */}
-            <section className="glass p-5 rounded-2xl">
-                <div className="grid gap-4 md:grid-cols-3">
-                    <div><div className="text-sm font-semibold">Transparency hub</div><p className="text-[13px] text-muted">All addresses, attestations, oracle updates and risks in one place.</p><Link className="btn-link" href="/transparency">Visit hub</Link></div>
-                    <div><div className="text-sm font-semibold">Ecosystem</div><p className="text-[13px] text-muted">Explainers, integrations, and partners building around MXTK.</p><Link className="btn-link" href="/ecosystem">Explore</Link></div>
-                    <div><div className="text-sm font-semibold">Resources</div><p className="text-[13px] text-muted">Glossary, guides, brand assets, and media kit.</p><Link className="btn-link" href="/resources">Browse</Link></div>
-                </div>
-            </section>
+  return (
+    <div className="space-y-16">
+      {/* Hero */}
+      <section className="text-center space-y-8">
+        <h1 className="text-4xl md:text-6xl font-bold tracking-tight">
+          Tokenize and Monetize<br />
+          <span className="text-accent">Verified Mineral Value</span>
+        </h1>
+        <p className="text-xl text-muted max-w-3xl mx-auto">
+          MXTK offers compliant, confidential tokenization of mineral assets with transparent governance and verifiable on-chain data.
+        </p>
+        <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <Link className="btn-soft" href={mounted ? withBase('/owners') : '/owners'}>Mineral Owners</Link>
+          <Link className="btn-soft" href={mounted ? withBase('/transparency') : '/transparency'}>Trust & Transparency</Link>
+          <Link className="btn-soft" href={mounted ? withBase('/ecosystem') : '/ecosystem'}>See the Ecosystem</Link>
         </div>
-    )
+      </section>
+
+      {/* Key Features */}
+      <section className="section-amber">
+        <Card tint="amber">
+          <div className="grid md:grid-cols-2 gap-8">
+            <div>
+              <h2 className="text-2xl font-semibold mb-4">Compliant Tokenization</h2>
+              <p className="text-muted mb-4">
+                MXTK provides a regulated path for mineral asset owners to tokenize their holdings while maintaining compliance with securities laws and regulatory requirements.
+              </p>
+              <div className="mt-2"><Link className="btn-link" href={mounted ? withBase('/whitepaper') : '/whitepaper'}>How MXTK works</Link></div>
+            </div>
+            <div>
+              <h2 className="text-2xl font-semibold mb-4">Transparent Governance</h2>
+              <p className="text-muted mb-4">
+                Every material statement about MXTK maps to a verifiable source: on-chain data, IPFS documents, or transparent methodologies.
+              </p>
+              <div className="mt-2"><Link className="btn-link" href={mounted ? withBase('/transparency') : '/transparency'}>Visit hub</Link></div>
+            </div>
+          </div>
+        </Card>
+      </section>
+
+      {/* Ecosystem Overview */}
+      <section className="section-teal">
+        <Card tint="teal">
+          <div className="grid md:grid-cols-3 gap-6">
+            <div className="text-center">
+              <h3 className="font-semibold mb-2">Partners & Integrations</h3>
+              <p className="text-muted text-sm">Comprehensive ecosystem supporting MXTK.</p>
+              <Link className="btn-link" href={mounted ? withBase('/ecosystem') : '/ecosystem'}>Explore</Link>
+            </div>
+            <div className="text-center">
+              <h3 className="font-semibold mb-2">Educational Resources</h3>
+              <p className="text-muted text-sm">Learn about tokenization and MXTK.</p>
+              <Link className="btn-link" href={mounted ? withBase('/resources') : '/resources'}>Browse</Link>
+            </div>
+            <div className="text-center">
+              <h3 className="font-semibold mb-2">Live Data</h3>
+              <p className="text-muted text-sm">Real-time metrics and transparency.</p>
+              <Link className="btn-link" href={mounted ? withBase('/transparency') : '/transparency'}>View</Link>
+            </div>
+          </div>
+        </Card>
+      </section>
+    </div>
+  )
 }

@@ -1,8 +1,11 @@
+'use client'
+
 import OnchainSummary from '@/components/live/OnchainSummary'
 import PoolTable from '@/components/live/PoolTable'
 import ProofTable from '@/components/ProofTable'
 import Card from '@/components/ui/Card'
 import { PLACEHOLDER_PROOFS } from '@/lib/placeholders'
+import { withBase } from '@/lib/routing/basePath'
 import Link from 'next/link'
 
 export default function TransparencyPage() {
@@ -51,19 +54,19 @@ export default function TransparencyPage() {
               <div className="text-3xl font-bold mb-2">📄</div>
               <h3 className="font-semibold mb-2">Whitepaper</h3>
               <p className="text-muted text-sm mb-4">Technical documentation and methodology</p>
-              <Link className="btn-soft" href="/whitepaper">Read Whitepaper</Link>
+              <Link className="btn-soft" href={withBase("/whitepaper")}>Read Whitepaper</Link>
             </div>
             <div className="text-center">
               <div className="text-3xl font-bold mb-2">🗺️</div>
               <h3 className="font-semibold mb-2">Roadmap</h3>
               <p className="text-muted text-sm mb-4">Development milestones and timeline</p>
-              <Link className="btn-soft" href="/roadmap">View Roadmap</Link>
+              <Link className="btn-soft" href={withBase("/roadmap")}>View Roadmap</Link>
             </div>
             <div className="text-center">
               <div className="text-3xl font-bold mb-2">📊</div>
               <h3 className="font-semibold mb-2">Live Data</h3>
               <p className="text-muted text-sm mb-4">Real-time on-chain metrics and analytics</p>
-              <Link className="btn-soft" href="/institutions">View Data</Link>
+              <Link className="btn-soft" href={withBase("/institutions")}>View Data</Link>
             </div>
           </div>
         </Card>

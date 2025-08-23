@@ -68,21 +68,21 @@ export default function OwnersPage() {
       <section className="section-navy">
         <Card tint="navy">
           <h2 className="text-2xl font-semibold mb-6">Our Process</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="text-center">
-              <div className="text-3xl font-bold mb-2">1</div>
-              <h3 className="font-semibold mb-2">Discovery</h3>
-              <p className="text-muted text-sm">Initial assessment and preliminary documentation review</p>
+              <div className="text-4xl font-bold mb-4 text-accent">🔍</div>
+              <h3 className="text-xl font-semibold mb-3">Discovery</h3>
+              <p className="text-muted">Initial assessment and preliminary documentation review</p>
             </div>
             <div className="text-center">
-              <div className="text-3xl font-bold mb-2">2</div>
-              <h3 className="font-semibold mb-2">Verification</h3>
-              <p className="text-muted text-sm">Independent review and technical validation</p>
+              <div className="text-4xl font-bold mb-4 text-accent">✅</div>
+              <h3 className="text-xl font-semibold mb-3">Verification</h3>
+              <p className="text-muted">Independent review and technical validation</p>
             </div>
             <div className="text-center">
-              <div className="text-3xl font-bold mb-2">3</div>
-              <h3 className="font-semibold mb-2">Onboarding</h3>
-              <p className="text-muted text-sm">Tokenization and market integration</p>
+              <div className="text-4xl font-bold mb-4 text-accent">🚀</div>
+              <h3 className="text-xl font-semibold mb-3">Onboarding</h3>
+              <p className="text-muted">Tokenization and market integration</p>
             </div>
           </div>
         </Card>

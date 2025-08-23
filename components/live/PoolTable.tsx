@@ -47,7 +47,7 @@ export default function PoolTable() {
                         {data?.pools?.length
                             ? data.pools.map(p => (
                                 <tr key={p.address}>
-                                    <td><a className="underline" target="_blank" href={`https://arbiscan.io/address/${p.address}`}>{p.address.slice(0, 6)}…{p.address.slice(-4)}</a></td>
+                                    <td><a className="table-link" target="_blank" href={`https://arbiscan.io/address/${p.address}`}>{p.address.slice(0, 6)}…{p.address.slice(-4)}</a></td>
                                     <td>
                                         <span className="rounded-xl border px-2 py-0.5 text-xs">
                                             {p.source ?? 'n/a'}
