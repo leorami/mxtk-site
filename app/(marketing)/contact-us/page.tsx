@@ -11,7 +11,7 @@ export default function Contact() {
                 <input className="input" placeholder="Email" />
                 <input className="input md:col-span-2" placeholder="Organization" />
                 <textarea className="input md:col-span-2" placeholder="Message" rows={5} />
-                <button className="btn-primary md:col-span-2" type="button">Send</button>
+                <button className="btn-soft md:col-span-2" type="button">Send</button>
             </form>
             <div className="text-[12px] text-muted">By submitting, you agree to our terms and privacy notice.</div>
         </div>
