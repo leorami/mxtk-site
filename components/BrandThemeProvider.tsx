@@ -22,6 +22,14 @@ function lightenColor(hex: string, percent: number = 58): string {
   return `#${lightR.toString(16).padStart(2, '0')}${lightG.toString(16).padStart(2, '0')}${lightB.toString(16).padStart(2, '0')}`
 }
 
+// Helper function to convert hex to RGB
+function hexToRgb(hex: string): string {
+  const r = parseInt(hex.slice(1, 3), 16)
+  const g = parseInt(hex.slice(3, 5), 16)
+  const b = parseInt(hex.slice(5, 7), 16)
+  return `${r}, ${g}, ${b}`
+}
+
 export default function BrandThemeProvider({ children }: { children: React.ReactNode }) {
   const raw = usePathname() || '/'
   const [mounted, setMounted] = useState(false)
@@ -52,7 +60,8 @@ export default function BrandThemeProvider({ children }: { children: React.React
         style={{ 
           ['--mxtk-accent' as any]: theme.accent, 
           ['--mxtk-hover-bg' as any]: theme.hoverBg,
-          ['--mxtk-accent-text' as any]: accentTextColor
+          ['--mxtk-accent-text' as any]: accentTextColor,
+          ['--mxtk-accent-rgb' as any]: hexToRgb(theme.accent)
         } as React.CSSProperties}
         data-mineral={theme.name}
         data-photo={theme.photo}

@@ -44,8 +44,8 @@
 
     /* Typography */
     --h-color: var(--mxtk-navy);
-    --link: #0d6bff;
-    --link-hover: #094cc0;
+    --link: #2563eb; /* Better blue for light mode */
+    --link-hover: #1d4ed8;
     --mxtk-accent-text: var(--mxtk-accent);
 }
 
@@ -61,8 +61,8 @@ html.dark {
     --ink-muted: #9AA3AE;
     --border-soft: #1E2430;
     --h-color: #F4F7FD;
-    --link: #7fc4ff;
-    --link-hover: #a8d6ff;
+    --link: #E6EAF2; /* Same as ink-strong for maximum contrast in dark mode */
+    --link-hover: #F4F7FD;
     --mxtk-accent-text: color-mix(in srgb, var(--mxtk-accent) 58%, #ffffff);
 }
 
@@ -83,6 +83,13 @@ html.dark .mineral-sheen {
 body.page {
     background:
         linear-gradient(to bottom, var(--surface-page) 0%, var(--surface-page) 100%);
+    color: var(--ink-strong);
+}
+
+/* Enhanced dark mode page background */
+html.dark body.page {
+    background:
+        linear-gradient(135deg, #0B0E12 0%, #1A1F2E 50%, #0B0E12 100%);
     color: var(--ink-strong);
 }
 
@@ -129,10 +136,168 @@ th {
 /* Links */
 a {
     color: var(--link);
+    text-decoration: none;
+    transition: color 0.2s ease;
 }
 
 a:hover {
     color: var(--link-hover);
+}
+
+/* Table links with better contrast */
+.table a,
+table a {
+    color: var(--link);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    text-decoration-thickness: 1px;
+    transition: color 0.2s ease, text-decoration-color 0.2s ease;
+}
+
+.table a:hover,
+table a:hover {
+    color: var(--link-hover);
+    text-decoration-color: var(--link-hover);
+}
+
+/* Dark mode table links with enhanced contrast */
+.dark .table a,
+.dark table a {
+    color: #E6EAF2; /* Same as ink-strong for maximum contrast */
+    text-decoration-color: #E6EAF2;
+}
+
+.dark .table a:hover,
+.dark table a:hover {
+    color: #F4F7FD; /* Even brighter on hover */
+    text-decoration-color: #F4F7FD;
+}
+
+/* Mineral-themed table links */
+[data-mineral] .table a,
+[data-mineral] table a {
+    color: var(--mxtk-accent-text);
+    text-decoration-color: var(--mxtk-accent-text);
+}
+
+[data-mineral] .table a:hover,
+[data-mineral] table a:hover {
+    color: var(--mxtk-accent);
+    text-decoration-color: var(--mxtk-accent);
+}
+
+/* Dark mode mineral-themed table links */
+.dark [data-mineral] .table a,
+.dark [data-mineral] table a {
+    color: #E6EAF2; /* Same as ink-strong for maximum contrast */
+    text-decoration-color: #E6EAF2;
+}
+
+.dark [data-mineral] .table a:hover,
+.dark [data-mineral] table a:hover {
+    color: #F4F7FD; /* Even brighter on hover */
+    text-decoration-color: #F4F7FD;
+}
+
+/* Specific table-link class for better control */
+.table-link {
+    color: var(--link);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    text-decoration-thickness: 1px;
+    transition: color 0.2s ease, text-decoration-color 0.2s ease;
+    font-weight: 500;
+}
+
+.table-link:hover {
+    color: var(--link-hover);
+    text-decoration-color: var(--link-hover);
+}
+
+/* Dark mode table-link */
+.dark .table-link {
+    color: #E6EAF2; /* Same as ink-strong for maximum contrast */
+    text-decoration-color: #E6EAF2;
+}
+
+.dark .table-link:hover {
+    color: #F4F7FD; /* Even brighter on hover */
+    text-decoration-color: #F4F7FD;
+}
+
+/* Mineral-themed table-link */
+[data-mineral] .table-link {
+    color: var(--mxtk-accent-text);
+    text-decoration-color: var(--mxtk-accent-text);
+}
+
+[data-mineral] .table-link:hover {
+    color: var(--mxtk-accent);
+    text-decoration-color: var(--mxtk-accent);
+}
+
+/* Dark mode mineral-themed table-link */
+.dark [data-mineral] .table-link {
+    color: #E6EAF2; /* Same as ink-strong for maximum contrast */
+    text-decoration-color: #E6EAF2;
+}
+
+.dark [data-mineral] .table-link:hover {
+    color: #F4F7FD; /* Even brighter on hover */
+    text-decoration-color: #F4F7FD;
+}
+
+/* General link improvements for better contrast */
+.card a,
+.surface-card a,
+.surface-card-emb a {
+    color: var(--link);
+    transition: color 0.2s ease;
+}
+
+.card a:hover,
+.surface-card a:hover,
+.surface-card-emb a:hover {
+    color: var(--link-hover);
+}
+
+/* Dark mode card links */
+.dark .card a,
+.dark .surface-card a,
+.dark .surface-card-emb a {
+    color: #E6EAF2; /* Same as ink-strong for maximum contrast */
+}
+
+.dark .card a:hover,
+.dark .surface-card a:hover,
+.dark .surface-card-emb a:hover {
+    color: #F4F7FD; /* Even brighter on hover */
+}
+
+/* Mineral-themed card links */
+[data-mineral] .card a,
+[data-mineral] .surface-card a,
+[data-mineral] .surface-card-emb a {
+    color: var(--mxtk-accent-text);
+}
+
+[data-mineral] .card a:hover,
+[data-mineral] .surface-card a:hover,
+[data-mineral] .surface-card-emb a:hover {
+    color: var(--mxtk-accent);
+}
+
+/* Dark mode mineral-themed card links */
+.dark [data-mineral] .card a,
+.dark [data-mineral] .surface-card a,
+.dark [data-mineral] .surface-card-emb a {
+    color: #E6EAF2; /* Same as ink-strong for maximum contrast */
+}
+
+.dark [data-mineral] .card a:hover,
+.dark [data-mineral] .surface-card a:hover,
+.dark [data-mineral] .surface-card-emb a:hover {
+    color: #F4F7FD; /* Even brighter on hover */
 }
 
 /* Glass */
@@ -189,7 +354,30 @@ a:hover {
 }
 
 html.dark .table thead th {
-    background: rgba(255, 255, 255, .06);
+    background: rgba(255, 255, 255, .15);
+    color: #0E1116 !important;
+    font-weight: 600;
+}
+
+/* Enhanced dark mode table contrast */
+.dark .table {
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.dark .table th,
+.dark .table td {
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: #0E1116 !important;
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.dark .table tbody tr:nth-child(even) {
+    background: rgba(255, 255, 255, 0.12);
+}
+
+.dark .table tbody tr:hover {
+    background: rgba(255, 255, 255, 0.18);
 }
 
 /* Inputs (keeps glass vibe) */
@@ -281,6 +469,61 @@ html body [data-mineral] h1,
 html body [data-mineral] h2,
 html body [data-mineral] h3 {
     color: var(--mxtk-accent-text) !important;
+}
+
+/* Themed content sections - cards, tables, and other content areas */
+[data-mineral] .card,
+[data-mineral] .surface-card,
+[data-mineral] .surface-card-emb {
+    border: 1px solid rgba(var(--mxtk-accent-rgb, 224, 147, 43), 0.15);
+    background: rgba(var(--mxtk-accent-rgb, 224, 147, 43), 0.03);
+}
+
+[data-mineral] .table {
+    border: 1px solid rgba(var(--mxtk-accent-rgb, 224, 147, 43), 0.15);
+}
+
+[data-mineral] .table thead th {
+    background: rgba(var(--mxtk-accent-rgb, 224, 147, 43), 0.08);
+    color: var(--mxtk-accent-text) !important;
+    border-bottom: 1px solid rgba(var(--mxtk-accent-rgb, 224, 147, 43), 0.2);
+}
+
+[data-mineral] .table tbody tr:hover {
+    background: rgba(var(--mxtk-accent-rgb, 224, 147, 43), 0.05);
+}
+
+/* Section headers and content areas */
+[data-mineral] section,
+[data-mineral] .section {
+    /* Removed border-left, padding-left, margin-left to eliminate vertical bars */
+}
+
+/* Token information cards */
+[data-mineral] .token-info,
+[data-mineral] .token-details {
+    background: rgba(var(--mxtk-accent-rgb, 224, 147, 43), 0.05);
+    border: 1px solid rgba(var(--mxtk-accent-rgb, 224, 147, 43), 0.15);
+    border-radius: 0.5rem;
+    padding: 1rem;
+}
+
+/* Pool table styling */
+[data-mineral] .pool-table,
+[data-mineral] .liquidity-table {
+    background: rgba(var(--mxtk-accent-rgb, 224, 147, 43), 0.03);
+    border: 1px solid rgba(var(--mxtk-accent-rgb, 224, 147, 43), 0.15);
+    border-radius: 0.5rem;
+}
+
+/* Content blocks with mineral theme */
+[data-mineral] .content-block,
+[data-mineral] .info-block {
+    background: rgba(var(--mxtk-accent-rgb, 224, 147, 43), 0.04);
+    /* Removed border-left to eliminate vertical bars */
+    padding: 1rem;
+    margin: 1rem 0;
+    border-radius: 0.25rem;
 }
 
 /* Mineral sheen for the main content area */
@@ -535,4 +778,576 @@ html body [data-mineral] h3 {
         @apply text-xs;
         color: var(--ink-muted);
     }
+}
+
+/* Enhanced Glass Effects for Cutting-Edge Impression */
+
+/* Universal glass effect for ALL interactive elements */
+.card,
+.surface-card,
+.surface-card-emb,
+.section,
+.section-amber,
+.section-teal,
+.section-navy,
+.content-block,
+.info-block,
+.token-info,
+.token-details,
+.pool-table,
+.liquidity-table,
+.table,
+.btn-primary,
+.btn-outline,
+.btn-soft,
+.btn-link,
+.nav-link,
+.input,
+.select,
+.textarea,
+.glass,
+.card-outline {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 16px;
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.12),
+    0 4px 16px rgba(0, 0, 0, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Reduced hover effects for ALL elements - less dramatic */
+.card:hover,
+.surface-card:hover,
+.surface-card-emb:hover,
+.section:hover,
+.section-amber:hover,
+.section-teal:hover,
+.section-navy:hover,
+.content-block:hover,
+.info-block:hover,
+.token-info:hover,
+.token-details:hover,
+.pool-table:hover,
+.liquidity-table:hover,
+.table:hover,
+.btn-primary:hover,
+.btn-outline:hover,
+.btn-soft:hover,
+.btn-link:hover,
+.nav-link:hover,
+.input:focus,
+.select:focus,
+.textarea:focus,
+.glass:hover,
+.card-outline:hover {
+  transform: translateY(-2px) scale(1.01);
+  box-shadow: 
+    0 12px 32px rgba(0, 0, 0, 0.15),
+    0 6px 16px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.12);
+}
+
+/* Enhanced dark mode glass effects with better contrast */
+.dark .card,
+.dark .surface-card,
+.dark .surface-card-emb,
+.dark .section,
+.dark .section-amber,
+.dark .section-teal,
+.dark .section-navy,
+.dark .content-block,
+.dark .info-block,
+.dark .token-info,
+.dark .token-details,
+.dark .pool-table,
+.dark .liquidity-table,
+.dark .table,
+.dark .btn-primary,
+.dark .btn-outline,
+.dark .btn-soft,
+.dark .btn-link,
+.dark .nav-link,
+.dark .input,
+.dark .select,
+.dark .textarea,
+.dark .glass,
+.dark .card-outline {
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.4),
+    0 4px 16px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+.dark .card:hover,
+.dark .surface-card:hover,
+.dark .surface-card-emb:hover,
+.dark .section:hover,
+.dark .section-amber:hover,
+.dark .section-teal:hover,
+.dark .section-navy:hover,
+.dark .content-block:hover,
+.dark .info-block:hover,
+.dark .token-info:hover,
+.dark .token-details:hover,
+.dark .pool-table:hover,
+.dark .liquidity-table:hover,
+.dark .table:hover,
+.dark .btn-primary:hover,
+.dark .btn-outline:hover,
+.dark .btn-soft:hover,
+.dark .btn-link:hover,
+.dark .nav-link:hover,
+.dark .input:focus,
+.dark .select:focus,
+.dark .textarea:focus,
+.dark .glass:hover,
+.dark .card-outline:hover {
+  transform: translateY(-2px) scale(1.01);
+  box-shadow: 
+    0 12px 32px rgba(0, 0, 0, 0.5),
+    0 6px 16px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Enhanced mineral-themed elements with accent colors */
+[data-mineral] .card,
+[data-mineral] .surface-card,
+[data-mineral] .surface-card-emb,
+[data-mineral] .section,
+[data-mineral] .section-amber,
+[data-mineral] .section-teal,
+[data-mineral] .section-navy,
+[data-mineral] .content-block,
+[data-mineral] .info-block,
+[data-mineral] .token-info,
+[data-mineral] .token-details,
+[data-mineral] .pool-table,
+[data-mineral] .liquidity-table,
+[data-mineral] .table {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(var(--mxtk-accent-rgb, 224, 147, 43), 0.25);
+  box-shadow: 
+    0 8px 32px rgba(var(--mxtk-accent-rgb, 224, 147, 43), 0.15),
+    0 4px 16px rgba(0, 0, 0, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+[data-mineral] .card:hover,
+[data-mineral] .surface-card:hover,
+[data-mineral] .surface-card-emb:hover,
+[data-mineral] .section:hover,
+[data-mineral] .section-amber:hover,
+[data-mineral] .section-teal:hover,
+[data-mineral] .section-navy:hover,
+[data-mineral] .content-block:hover,
+[data-mineral] .info-block:hover,
+[data-mineral] .token-info:hover,
+[data-mineral] .token-details:hover,
+[data-mineral] .pool-table:hover,
+[data-mineral] .liquidity-table:hover,
+[data-mineral] .table:hover {
+  transform: translateY(-2px) scale(1.01);
+  box-shadow: 
+    0 12px 32px rgba(var(--mxtk-accent-rgb, 224, 147, 43), 0.2),
+    0 6px 16px rgba(0, 0, 0, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  border-color: rgba(var(--mxtk-accent-rgb, 224, 147, 43), 0.4);
+  background: rgba(255, 255, 255, 0.15);
+}
+
+/* Dark mode mineral-themed elements with better contrast */
+.dark [data-mineral] .card,
+.dark [data-mineral] .surface-card,
+.dark [data-mineral] .surface-card-emb,
+.dark [data-mineral] .section,
+.dark [data-mineral] .section-amber,
+.dark [data-mineral] .section-teal,
+.dark [data-mineral] .section-navy,
+.dark [data-mineral] .content-block,
+.dark [data-mineral] .info-block,
+.dark [data-mineral] .token-info,
+.dark [data-mineral] .token-details,
+.dark [data-mineral] .pool-table,
+.dark [data-mineral] .liquidity-table,
+.dark [data-mineral] .table {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(var(--mxtk-accent-rgb, 224, 147, 43), 0.25);
+  box-shadow: 
+    0 8px 32px rgba(var(--mxtk-accent-rgb, 224, 147, 43), 0.2),
+    0 4px 16px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+.dark [data-mineral] .card:hover,
+.dark [data-mineral] .surface-card:hover,
+.dark [data-mineral] .surface-card-emb:hover,
+.dark [data-mineral] .section:hover,
+.dark [data-mineral] .section-amber:hover,
+.dark [data-mineral] .section-teal:hover,
+.dark [data-mineral] .section-navy:hover,
+.dark [data-mineral] .content-block:hover,
+.dark [data-mineral] .info-block:hover,
+.dark [data-mineral] .token-info:hover,
+.dark [data-mineral] .token-details:hover,
+.dark [data-mineral] .pool-table:hover,
+.dark [data-mineral] .liquidity-table:hover,
+.dark [data-mineral] .table:hover {
+  transform: translateY(-2px) scale(1.01);
+  box-shadow: 
+    0 12px 32px rgba(var(--mxtk-accent-rgb, 224, 147, 43), 0.25),
+    0 6px 16px rgba(0, 0, 0, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  border-color: rgba(var(--mxtk-accent-rgb, 224, 147, 43), 0.35);
+  background: rgba(255, 255, 255, 0.12);
+}
+
+/* Enhanced table styling with glass effects */
+[data-mineral] .table {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(var(--mxtk-accent-rgb, 224, 147, 43), 0.2);
+  border-radius: 16px;
+  box-shadow: 
+    0 8px 32px rgba(var(--mxtk-accent-rgb, 224, 147, 43), 0.12),
+    0 4px 16px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+}
+
+[data-mineral] .table thead th {
+  background: rgba(var(--mxtk-accent-rgb, 224, 147, 43), 0.15);
+  color: var(--mxtk-accent-text) !important;
+  border-bottom: 1px solid rgba(var(--mxtk-accent-rgb, 224, 147, 43), 0.25);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  padding: 1rem;
+}
+
+[data-mineral] .table tbody tr {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+[data-mineral] .table tbody tr:hover {
+  background: rgba(var(--mxtk-accent-rgb, 224, 147, 43), 0.1);
+  transform: scale(1.005);
+  box-shadow: inset 0 0 0 1px rgba(var(--mxtk-accent-rgb, 224, 147, 43), 0.2);
+}
+
+/* Enhanced button styling with reduced dramatic glass effects */
+.btn-primary,
+.btn-outline,
+.btn-soft,
+.btn-link {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 
+    0 4px 16px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  font-weight: 600;
+  padding: 0.75rem 1.5rem;
+  border-radius: 12px;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+/* Add spacing between text and buttons */
+p + .btn-primary,
+p + .btn-outline,
+p + .btn-soft,
+p + .btn-link,
+h1 + .btn-primary,
+h1 + .btn-outline,
+h1 + .btn-soft,
+h1 + .btn-link,
+h2 + .btn-primary,
+h2 + .btn-outline,
+h2 + .btn-soft,
+h2 + .btn-link,
+h3 + .btn-primary,
+h3 + .btn-outline,
+h3 + .btn-soft,
+h3 + .btn-link {
+  margin-top: 1.5rem;
+}
+
+.btn-primary:hover,
+.btn-outline:hover,
+.btn-soft:hover,
+.btn-link:hover {
+  transform: translateY(-1px) scale(1.02);
+  box-shadow: 
+    0 6px 20px rgba(0, 0, 0, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.15);
+}
+
+/* Enhanced navigation with glass effects and proper dark mode highlighting */
+.nav-link {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 10px;
+  padding: 0.5rem 1rem;
+}
+
+.nav-link:hover {
+  background: var(--hover-bg);
+  transform: translateY(-1px) scale(1.02);
+  box-shadow: 
+    0 4px 12px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+/* Dark mode navigation with lighter hover colors */
+.dark .nav-link:hover {
+  background: rgba(255, 255, 255, 0.25);
+  color: #0E1116;
+  border-color: rgba(255, 255, 255, 0.4);
+  font-weight: 600;
+}
+
+/* Enhanced input fields with glass effects */
+.input,
+.select,
+.textarea {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 
+    0 4px 16px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 12px;
+  padding: 0.75rem 1rem;
+}
+
+.input:focus,
+.select:focus,
+.textarea:focus {
+  transform: translateY(-1px);
+  box-shadow: 
+    0 6px 20px rgba(0, 0, 0, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  border-color: rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.15);
+}
+
+/* Enhanced mineral backdrop with stronger glass effect */
+.mineral-sheen {
+  background: linear-gradient(180deg, 
+    rgba(255, 255, 255, 0.05) 0%, 
+    rgba(255, 255, 255, 0.12) 50%, 
+    rgba(255, 255, 255, 0.05) 100%);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.dark .mineral-sheen {
+  background: linear-gradient(180deg, 
+    rgba(0, 0, 0, 0.05) 0%, 
+    rgba(0, 0, 0, 0.15) 50%, 
+    rgba(0, 0, 0, 0.05) 100%);
+}
+
+/* Special effects for sections and content blocks */
+.section,
+.section-amber,
+.section-teal,
+.section-navy,
+.content-block,
+.info-block {
+  position: relative;
+}
+
+.section::before,
+.section-amber::before,
+.section-teal::before,
+.section-navy::before,
+.content-block::before,
+.info-block::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, 
+    rgba(255, 255, 255, 0.1) 0%, 
+    rgba(255, 255, 255, 0.05) 50%, 
+    rgba(255, 255, 255, 0.1) 100%);
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* Enhanced glass effect for the main page background */
+.page {
+  background: linear-gradient(135deg, 
+    rgba(255, 255, 255, 0.02) 0%, 
+    rgba(255, 255, 255, 0.05) 50%, 
+    rgba(255, 255, 255, 0.02) 100%);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+.dark .page {
+  background: linear-gradient(135deg, 
+    rgba(0, 0, 0, 0.1) 0%, 
+    rgba(0, 0, 0, 0.2) 50%, 
+    rgba(0, 0, 0, 0.1) 100%);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+/* Enhanced header and footer with better dark mode colors */
+.brand-header {
+  background: rgba(255, 255, 255, 0.95);
+  color: #0B0E12;
+  border-bottom: 1px solid var(--border-soft);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+.dark .brand-header {
+  background: rgba(30, 41, 59, 0.95);
+  color: #E6EAF2;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Enhanced footer with better dark mode colors */
+.brand-footer {
+  background: linear-gradient(180deg, rgba(30, 41, 59, 0.95) 0%, rgba(15, 23, 42, 0.95) 100%);
+  color: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.dark .brand-footer {
+  background: linear-gradient(180deg, rgba(15, 23, 42, 0.95) 0%, rgba(2, 6, 23, 0.95) 100%);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+.brand-footer a {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.brand-footer a:hover {
+  color: #fff;
+}
+
+/* Enhanced dark mode text contrast */
+.dark {
+  color: #E6EAF2;
+}
+
+.dark .text-muted {
+  color: rgba(255, 255, 255, 0.7) !important;
+}
+
+.dark h1, .dark h2, .dark h3 {
+  color: #F8FAFC !important;
+}
+
+/* Enhanced navigation highlighting for dark mode */
+.dark .nav-link {
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.dark .nav-link:hover {
+  background: rgba(255, 255, 255, 0.25);
+  color: #0E1116;
+  border-color: rgba(255, 255, 255, 0.4);
+  font-weight: 600;
+}
+
+/* Active page navigation uses the page's theme color */
+.dark .nav-link[aria-current="page"] {
+  background: var(--mxtk-hover-bg);
+  color: var(--mxtk-accent-text);
+  border-color: rgba(var(--mxtk-accent-rgb, 224, 147, 43), 0.4);
+  font-weight: 600;
+  box-shadow: 
+    0 4px 12px rgba(var(--mxtk-accent-rgb, 224, 147, 43), 0.2),
+    inset 0 1px 0 rgba(var(--mxtk-accent-rgb, 224, 147, 43), 0.3);
+}
+
+/* Ensure only the current page gets highlighted, not all pages */
+.dark .nav-link:not([aria-current="page"]):not(:hover) {
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.9);
+  border-color: rgba(255, 255, 255, 0.15);
+  font-weight: normal;
+}
+
+/* Enhanced typography for Ecosystem page and consistency */
+.text-sm {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+.text-base {
+  font-size: 1rem;
+  line-height: 1.5rem;
+}
+
+.text-lg {
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+}
+
+/* Ensure consistent card content sizing */
+.card .text-sm,
+.surface-card .text-sm,
+.surface-card-emb .text-sm {
+  font-size: 0.875rem !important;
+  line-height: 1.25rem !important;
+}
+
+.card .text-base,
+.surface-card .text-base,
+.surface-card-emb .text-base {
+  font-size: 1rem !important;
+  line-height: 1.5rem !important;
+}
+
+/* Enhanced dark mode card content */
+.dark .card,
+.dark .surface-card,
+.dark .surface-card-emb {
+  color: #E6EAF2;
+}
+
+.dark .card .text-muted,
+.dark .surface-card .text-muted,
+.dark .surface-card-emb .text-muted {
+  color: rgba(255, 255, 255, 0.7) !important;
 }
