@@ -1,6 +1,6 @@
 import { env } from '@/lib/env'
 import { erc20Abi } from '@/lib/onchain/abi/erc20'
-import { uniswapV3PoolAbi } from '@/lib/onchain/abi/uniswapV3Pool'
+import { uniswapV4PoolAbi } from '@/lib/onchain/abi/uniswapV3Pool'
 import { publicClient } from '@/lib/onchain/client'
 import { priceFromSqrtPriceX96 } from '@/lib/onchain/math'
 import { discoverPoolsViaFactory } from '@/lib/onchain/poolDiscovery'
@@ -53,11 +53,11 @@ export async function GET(req: Request) {
             const poolAddr = item.address as `0x${string}`
             try {
                 const [token0, token1, fee, liquidity, slot0] = await Promise.all([
-                    client.readContract({ address: poolAddr, abi: uniswapV3PoolAbi, functionName: 'token0' }) as Promise<`0x${string}`>,
-                    client.readContract({ address: poolAddr, abi: uniswapV3PoolAbi, functionName: 'token1' }) as Promise<`0x${string}`>,
-                    client.readContract({ address: poolAddr, abi: uniswapV3PoolAbi, functionName: 'fee' }) as Promise<number>,
-                    client.readContract({ address: poolAddr, abi: uniswapV3PoolAbi, functionName: 'liquidity' }) as Promise<bigint>,
-                    client.readContract({ address: poolAddr, abi: uniswapV3PoolAbi, functionName: 'slot0' }) as any,
+                    client.readContract({ address: poolAddr, abi: uniswapV4PoolAbi, functionName: 'token0' }) as Promise<`0x${string}`>,
+client.readContract({ address: poolAddr, abi: uniswapV4PoolAbi, functionName: 'token1' }) as Promise<`0x${string}`>,
+client.readContract({ address: poolAddr, abi: uniswapV4PoolAbi, functionName: 'fee' }) as Promise<number>,
+client.readContract({ address: poolAddr, abi: uniswapV4PoolAbi, functionName: 'liquidity' }) as Promise<bigint>,
+client.readContract({ address: poolAddr, abi: uniswapV4PoolAbi, functionName: 'slot0' }) as any,
                 ])
 
                 const [sym0, dec0, sym1, dec1] = await Promise.all([

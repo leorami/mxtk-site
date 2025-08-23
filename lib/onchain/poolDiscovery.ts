@@ -1,15 +1,15 @@
 import { DEFAULT_FEE_TIERS, DEFAULT_STABLES } from '@/lib/config/tokens'
 import { env } from '@/lib/env'
 import { publicClient } from '@/lib/onchain/client'
-import { UNISWAP_V3_FACTORY, uniswapV3FactoryAbi } from './abi/uniswapV3Factory'
+import { UNISWAP_V4_FACTORY, uniswapV4FactoryAbi } from './abi/uniswapV3Factory'
 
 // getPool returns address(0) when missing
 async function getPool(tokenA: `0x${string}`, tokenB: `0x${string}`, fee: number) {
     try {
         const client = publicClient()
         const pool = await client.readContract({
-            address: UNISWAP_V3_FACTORY,
-            abi: uniswapV3FactoryAbi,
+            address: UNISWAP_V4_FACTORY,
+abi: uniswapV4FactoryAbi,
             functionName: 'getPool',
             args: [tokenA, tokenB, fee],
         }) as `0x${string}`

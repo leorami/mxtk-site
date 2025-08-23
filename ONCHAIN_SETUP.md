@@ -13,7 +13,7 @@ MXTK_TOKEN_ADDRESS=0x3e4Ffeb394B371AAaa0998488046Ca19d870d9Ba
 MXTK_POOLS=0xPOOLADDRESS1,0xPOOLADDRESS2
 
 # OPTIONAL (highly recommended for 24h volume/TVL/fees)
-UNISWAP_V3_SUBGRAPH_URL_ARBITRUM=https://<thegraph-or-alt>/subgraphs/name/<uniswap-v3-arbitrum>
+UNISWAP_V4_SUBGRAPH_URL_ARBITRUM=https://<thegraph-or-alt>/subgraphs/name/<uniswap-v4-arbitrum>
 
 # UI/dev
 CACHE_TTL_SECONDS=45
@@ -30,13 +30,13 @@ STABLE_SYMBOLS=USDC,USDT
 
 2. **MXTK_TOKEN_ADDRESS**: The MXTK token contract address on Arbitrum
 
-3. **MXTK_POOLS**: Comma-separated list of Uniswap v3 pool addresses where MXTK is traded
+3. **MXTK_POOLS**: Comma-separated list of Uniswap v4 pool addresses where MXTK is traded
 
 ## Optional Setup
 
-1. **UNISWAP_V3_SUBGRAPH_URL_ARBITRUM**: For enhanced metrics (24h volume, TVL, fees)
+1. **UNISWAP_V4_SUBGRAPH_URL_ARBITRUM**: For enhanced metrics (24h volume, TVL, fees)
    - Use The Graph's hosted service or a self-hosted instance
-   - Example: `https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v3`
+   - Example: `https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v4`
 
 ## Testing
 
@@ -48,7 +48,7 @@ STABLE_SYMBOLS=USDC,USDT
 ## Features
 
 - **Token Summary**: Shows MXTK name, symbol, total supply
-- **Pool Table**: Displays Uniswap v3 pools with:
+- **Pool Table**: Displays Uniswap v4 pools with:
   - Pool addresses (linked to Arbiscan)
   - Token pairs and fees
   - Approximate MXTK/USD price (when paired with stables)

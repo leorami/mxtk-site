@@ -22,7 +22,7 @@ export default function Ecosystem() {
               <ul className="space-y-2 text-sm text-muted">
                 <li><strong>Network:</strong> Arbitrum One (Layer 2)</li>
                 <li><strong>Token Address:</strong> <code className="font-mono text-xs">0x3e4Ffeb394b371aaaa0998488046ca19d870d9Ba</code></li>
-                <li><strong>DEX:</strong> Uniswap v3 pools (auto-discovered)</li>
+                <li><strong>DEX:</strong> Uniswap v4 pools (auto-discovered)</li>
                 <li><strong>Security:</strong> LP lock & timelock multisig (planned)</li>
               </ul>
             </div>
@@ -65,7 +65,7 @@ export default function Ecosystem() {
                     rel="noopener noreferrer"
                     className="text-accent hover:underline"
                   >
-                    Uniswap v3 (Arbitrum) - Primary DEX
+                    Uniswap v4 (Arbitrum) - Primary DEX
                   </a>
                 </li>
                 <li>Automated market making with concentrated liquidity</li>
@@ -211,7 +211,7 @@ export default function Ecosystem() {
                 <h3 className="text-lg font-semibold mb-3">Smart Contract ABIs</h3>
                 <ul className="space-y-2 text-sm text-muted">
                   <li>ERC-20 token interface</li>
-                  <li>Uniswap v3 pool interface</li>
+                  <li>Uniswap v4 pool interface</li>
                   <li>Oracle contract interface</li>
                   <li>Governance contract interface</li>
                 </ul>

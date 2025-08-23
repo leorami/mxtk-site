@@ -1,7 +1,7 @@
 import { env } from '@/lib/env'
 
 export async function fetchPoolDailyData(poolAddress: string) {
-    if (!env.UNISWAP_V3_SUBGRAPH_URL_ARBITRUM) return null
+    if (!env.UNISWAP_V4_SUBGRAPH_URL_ARBITRUM) return null
 
     const query = `
     query ($pool: ID!) {
@@ -19,7 +19,7 @@ export async function fetchPoolDailyData(poolAddress: string) {
       }
     }`
 
-    const res = await fetch(env.UNISWAP_V3_SUBGRAPH_URL_ARBITRUM, {
+    const res = await fetch(env.UNISWAP_V4_SUBGRAPH_URL_ARBITRUM, {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
         body: JSON.stringify({ query, variables: { pool: poolAddress.toLowerCase() } }),

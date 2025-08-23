@@ -69,7 +69,7 @@ export default function RoadmapPage() {
             <div>
               <h3 className="font-semibold mb-3">Market Infrastructure</h3>
               <ul className="space-y-2 text-muted">
-                <li>• Uniswap v3 integration</li>
+                <li>• Uniswap v4 integration</li>
                 <li>• Advanced liquidity management</li>
                 <li>• Cross-chain bridge development</li>
                 <li>• Institutional custody solutions</li>

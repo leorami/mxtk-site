@@ -66,8 +66,8 @@ AUTO_DISCOVER_POOLS=1
 # Optional indexer fallback (works out of the box)
 DEXSCREENER_BASE=https://api.dexscreener.com/latest/dex
 
-# Optional Uniswap v3 subgraph for TVL/volume
-# UNISWAP_V3_SUBGRAPH_URL_ARBITRUM=https://api.thegraph.com/subgraphs/name/ianlapham/arbitrum-minimal
+# Optional Uniswap v4 subgraph for TVL/volume
+# UNISWAP_V4_SUBGRAPH_URL_ARBITRUM=https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v4-arbitrum
 
 # Cache and stable token configuration
 CACHE_TTL_SECONDS=45
@@ -89,9 +89,9 @@ STABLE_SYMBOLS=USDC,USDC.e,USDT,DAI
 
 #### How Pool Auto-Discovery Works
 
-The MXTK site automatically discovers Uniswap v3 pools through multiple sources:
+The MXTK site automatically discovers Uniswap v4 pools through multiple sources:
 
-1. **Factory Discovery**: Queries the Uniswap v3 factory contract to find pools between MXTK and configured quote tokens across all fee tiers
+1. **Factory Discovery**: Queries the Uniswap v4 factory contract to find pools between MXTK and configured quote tokens across all fee tiers
 2. **Dexscreener Fallback**: Fetches pools from Dexscreener API as a backup source
 3. **Manual Seeds**: Allows manual pool addresses from environment variables
 4. **Deduplication**: Merges all sources and removes duplicates

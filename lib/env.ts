@@ -12,7 +12,7 @@ export const env = {
     // Optional indexer fallback
     DEXSCREENER_BASE: (process.env.DEXSCREENER_BASE || 'https://api.dexscreener.com/latest/dex').trim(),
 
-    UNISWAP_V3_SUBGRAPH_URL_ARBITRUM: (process.env.UNISWAP_V3_SUBGRAPH_URL_ARBITRUM || '').trim(),
+    UNISWAP_V4_SUBGRAPH_URL_ARBITRUM: (process.env.UNISWAP_V4_SUBGRAPH_URL_ARBITRUM || '').trim(),
 
     STABLE_SYMBOLS: (process.env.STABLE_SYMBOLS || 'USDC,USDC.e,USDT,DAI').split(',').map(s => s.trim().toUpperCase()),
     CACHE_TTL_SECONDS: parseInt(process.env.CACHE_TTL_SECONDS || '45', 10),

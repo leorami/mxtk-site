@@ -97,7 +97,7 @@ export default function WhitepaperPage() {
             <div className="text-center">
               <div className="text-3xl font-bold mb-2">💱</div>
               <h3 className="font-semibold mb-2">DEX Integration</h3>
-              <p className="text-muted text-sm">Uniswap v3 pools with concentrated liquidity and advanced AMM features</p>
+                              <p className="text-muted text-sm">Uniswap v4 pools with concentrated liquidity and advanced AMM features</p>
             </div>
             <div className="text-center">
               <div className="text-3xl font-bold mb-2">🏦</div>

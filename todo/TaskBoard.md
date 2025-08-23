@@ -85,8 +85,6 @@
   - **Fix**: Updated button text
   - **Files**: `app/page.tsx`
 
-## **TODO** - Current Issues
-
 ### CRITICAL Issues
 - [ ] **Ngrok Theme System**: Themes not being applied correctly when accessed through ngrok
   - **Problem**: CSS variables and theme switching not working properly in ngrok environment
@@ -94,9 +92,113 @@
   - **Files**: `components/BrandThemeProvider.tsx`, `components/MineralBackdrop.tsx`, `lib/brand/theme.ts`
 
 ### MEDIUM PRIORITY Issues
-- [ ] **Logo Preload Warning**: Logo showing preload warning in console
+- [x] **Logo Preload Warning**: Logo showing preload warning in console
   - **Fix**: Need to investigate preload link in HTML
   - **Files**: `app/layout.tsx`, `components/SiteHeader.tsx`
+
+## **TODO** - Site Enhancement & Modernization
+
+### CRITICAL - Content Alignment & Trust Building
+- [ ] **Mineral-Token.com Alignment**: Complete alignment with https://mineral-token.com
+  - **Scope**: Content, messaging, branding, and user experience consistency
+  - **Priority**: High - foundational for market positioning
+
+- [ ] **Stablecoin Best Practices**: Implement trust-building features for stablecoin marketplace
+  - **Features**: Transparency dashboards, audit reports, compliance documentation
+  - **Trust Signals**: Real-time reserves, regulatory compliance, security measures
+  - **Files**: New components and pages for trust/transparency features
+
+- [x] **Uniswap v4 Migration**: Update all references from v3 to v4
+  - **Files**: `lib/onchain/abi/`, `components/live/PoolTable.tsx`, `app/(marketing)/ecosystem/page.tsx`, `app/(site)/whitepaper/page.tsx`, `app/(site)/institutions/page.tsx`, `app/(site)/roadmap/page.tsx`, `README.md`, `ONCHAIN_SETUP.md`
+  - **ABI Updates**: Replace v3 factory/pool ABIs with v4 equivalents
+  - **Pool Discovery**: Update pool discovery logic for v4 architecture
+
+### HIGH PRIORITY - Content Management & Resources
+- [ ] **Open Source CMS Integration**: Replace placeholder resources with full blog system
+  - **Technology**: Headless CMS (Strapi, Contentful, or similar)
+  - **Features**: Blog posts, educational content, market updates, team announcements
+  - **Integration**: API-driven content with real-time updates
+  - **Files**: New CMS integration, updated resources page
+
+- [ ] **Enhanced Resources Page**: Transform from placeholders to comprehensive content hub
+  - **Sections**: Educational materials, trading guides, market analysis, regulatory updates
+  - **Interactive Elements**: Calculators, tools, downloadable resources
+  - **Content Strategy**: Regular updates, expert contributions, community content
+
+### HIGH PRIORITY - Visual Enhancement & User Experience
+- [ ] **Background Images & Mineral Photography**: Add vibrant visual elements
+  - **Mineral Photos**: High-quality crystal and mineral photography throughout site
+  - **Background Elements**: Subtle mineral textures and patterns
+  - **Visual Hierarchy**: Strategic use of imagery to guide user attention
+  - **Files**: New image assets, updated components for background integration
+
+- [ ] **Replace Bullet Points**: Modernize content presentation
+  - **Alternatives**: Cards, icons, visual timelines, interactive elements
+  - **Design**: More engaging and less "corporate" feel
+  - **Consistency**: Apply across all pages for unified experience
+  - **Files**: Update all page components to use modern content presentation
+
+- [ ] **Enhanced Imagery**: Comprehensive visual overhaul
+  - **Team Photos**: Professional headshots and team collaboration images
+  - **Process Visuals**: Step-by-step illustrations for complex processes
+  - **Infographics**: Data visualization for market insights and tokenomics
+  - **Files**: New image assets, updated components
+
+### HIGH PRIORITY - Data & API Integration
+- [ ] **"Sizzle" Factor - Enhanced Data Publishing**: Integrate more APIs and real-time data
+  - **Market Data**: Real-time price feeds, volume analytics, market sentiment
+  - **On-Chain Metrics**: TVL, transaction volume, holder statistics, whale tracking
+  - **Social Metrics**: Community growth, social media sentiment, engagement
+  - **Files**: New API integrations, enhanced data components, real-time dashboards
+
+- [ ] **Advanced Analytics Dashboard**: Comprehensive data visualization
+  - **Real-Time Charts**: Price, volume, liquidity, and market depth
+  - **Interactive Elements**: Zoom, time range selection, comparison tools
+  - **Mobile Responsive**: Optimized for all device types
+  - **Files**: New dashboard components, chart libraries, data processing
+
+### MEDIUM PRIORITY - Technical Infrastructure
+- [ ] **CI/CD Pipeline**: Set up continuous integration and deployment
+  - **GitHub Actions**: Automated testing, building, and deployment
+  - **Environment Management**: Staging, production, and rollback capabilities
+  - **Quality Gates**: Automated testing, linting, and security scanning
+  - **Files**: `.github/workflows/`, deployment scripts, environment configs
+
+- [ ] **Production Deployment**: Prepare site for public launch
+  - **Hosting**: Production server setup and configuration
+  - **Domain & SSL**: Proper domain configuration and security certificates
+  - **Performance Optimization**: CDN, caching, and load balancing
+  - **Monitoring**: Uptime monitoring, error tracking, performance metrics
+  - **Files**: Production configs, monitoring setup, deployment documentation
+
+### MEDIUM PRIORITY - Content & Marketing
+- [ ] **SEO Optimization**: Comprehensive search engine optimization
+  - **Meta Tags**: Proper title, description, and Open Graph tags
+  - **Structured Data**: Schema markup for better search results
+  - **Content Strategy**: Keyword optimization and content planning
+  - **Files**: SEO components, meta tag management, sitemap generation
+
+- [ ] **Social Media Integration**: Enhanced social sharing and engagement
+  - **Open Graph**: Rich social media previews
+  - **Social Proof**: Integration with social platforms
+  - **Community Features**: Social sharing, community engagement tools
+  - **Files**: Social media components, sharing functionality
+
+### LOW PRIORITY - Future Enhancements
+- [ ] **Mobile App**: Native mobile application for MXTK
+  - **Platforms**: iOS and Android development
+  - **Features**: Portfolio tracking, trading, notifications
+  - **Integration**: Seamless connection with web platform
+
+- [ ] **Advanced Trading Features**: Enhanced trading interface
+  - **Order Types**: Limit orders, stop losses, advanced trading tools
+  - **Portfolio Management**: Advanced portfolio tracking and analytics
+  - **Risk Management**: Tools for risk assessment and management
+
+- [ ] **Community Platform**: Enhanced community features
+  - **Forums**: Community discussion and support
+  - **Gamification**: Rewards, achievements, community challenges
+  - **Governance**: Community voting and governance tools
 
 ## **ACHIEVEMENTS** - Major Milestones
 

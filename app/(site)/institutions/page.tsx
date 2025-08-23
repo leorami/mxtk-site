@@ -40,7 +40,7 @@ export default function InstitutionsPage() {
               <h3 className="font-semibold mb-3">Smart Contracts</h3>
               <ul className="space-y-2 text-muted">
                 <li>• Token (Arbitrum): 0x3e4Ffeb394B371AAaa0998488046Ca19d870d9Ba</li>
-                <li>• Uniswap v3 Pool: Coming soon</li>
+                <li>• Uniswap v4 Pool: Coming soon</li>
                 <li>• LP Locker: Coming soon</li>
                 <li>• Multisig: 3-of-5 governance</li>
                 <li>• Timelock: 48-hour delay</li>
@@ -68,7 +68,7 @@ export default function InstitutionsPage() {
             <div className="text-center">
               <div className="text-3xl font-bold mb-2">💱</div>
               <h3 className="font-semibold mb-2">DEX Trading</h3>
-              <p className="text-muted text-sm">Uniswap v3 pools with concentrated liquidity and advanced AMM features</p>
+                              <p className="text-muted text-sm">Uniswap v4 pools with concentrated liquidity and advanced AMM features</p>
             </div>
             <div className="text-center">
               <div className="text-3xl font-bold mb-2">🏦</div>
