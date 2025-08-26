@@ -6,5 +6,5 @@ export const uniswapV4FactoryAbi = [
     }
 ] as const
 
-// Arbitrum Uniswap v4 factory
-export const UNISWAP_V4_FACTORY = '0x0227628f3F023bb0B980b67D528571c95c6DaC1c'
+// Arbitrum Uniswap v3 factory (reverted from v4 since MXTK pools exist on v3)
+export const UNISWAP_V4_FACTORY = '0x1F98431c8aD98523631AE4a59f267346ea31F984'
