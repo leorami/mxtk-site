@@ -1,6 +1,8 @@
-authtoken: 2ys22TN5DNODqFfkisK86gaBDN1_3cyhFAiU8Zce19LjiRkFg
+version: "2"
 tunnels:
   mxtk-site:
     proto: http
-    addr: mxtk-site-dev:2000
+    addr: localhost:8080
     hostname: ramileo.ngrok.app
+    bind_tls: true
+    inspect: true

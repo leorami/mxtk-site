@@ -9,12 +9,16 @@
     "docker:dev": "docker compose up --build web",
     "docker:down": "docker compose down",
     "docker:prod:build": "docker build -t mxtk-site:prod --target runner .",
-    "docker:prod:run": "docker run --rm -p 2001:2000 mxtk-site:prod"
+    "docker:prod:run": "docker run --rm -p 2001:2000 mxtk-site:prod",
+    "test:navigation": "node tools/test/nav-regression.mjs",
+    "test:nav:localhost": "BASE_URL=http://localhost:2000 node tools/test/nav-regression.mjs",
+    "test:nav:ngrok": "BASE_URL=https://ramileo.ngrok.app/mxtk node tools/test/nav-regression.mjs",
+    "test:regression": "npm run test:navigation",
+    "test:full": "node tools/debug/navigation-regression.js"
   },
   "dependencies": {
     "classnames": "^2.5.1",
     "next": "^15.0.0",
-    "puppeteer": "^24.17.0",
     "react": "^18.3.0",
     "react-dom": "^18.3.0",
     "viem": "^2.7.9"
@@ -27,6 +31,7 @@
     "eslint": "^9.0.0",
     "eslint-config-next": "^15.0.0",
     "postcss": "^8.4.38",
+    "puppeteer": "^24.17.0",
     "sass": "^1.77.0",
     "tailwindcss": "^3.4.7",
     "typescript": "5.9.2"
