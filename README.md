@@ -14,8 +14,8 @@ A comprehensive platform for digitizing verified mineral interests with transpar
 ## 🎯 Recent Major Updates
 
 ### Infrastructure & Development
-- **Docker Integration**: Multi-environment setup with ngrok tunneling
-- **Base Path Routing**: Seamless localhost/ngrok compatibility
+- **Docker Integration**: Containerized dev with optional shared dev tunnel proxy
+- **Deployment-Agnostic Routing**: Root at localhost/staging/prod, subpath behind proxy (e.g., `/mxtk`)
 - **Debug System**: Advanced error detection and theme validation tools
 - **Testing Framework**: Comprehensive Puppeteer-based testing suite
 
@@ -122,23 +122,24 @@ The updated `PoolTable` component shows:
 
 ### Quick Start
 ```bash
-# Start the development environment
+# Start development (root at http://localhost:2000)
 ./scripts/setup-mxtk-site.sh start
 
-# Or use the smart build system
+# Optional: expose through shared dev tunnel proxy at https://<domain>/mxtk
+./scripts/setup-mxtk-site.sh share
+
+# Smart build (detects what needs restart/rebuild)
 ./scripts/smart-build.sh apply
 
-# Run debugging tools
+# Debugging tools
 node tools/debug/debug.js
 
-# Run tests
-node tools/test/simple-test.js
+# Tests (see section below)
 ```
 
 ### Access Points
-- **Development**: http://localhost:2000
-- **Staging**: http://localhost:2001  
-- **Production**: http://localhost:2002
+- **Development (root)**: http://localhost:2000
+- **Dev Tunnel (subpath)**: https://<ngrok-domain>/mxtk
 - **Ngrok Dashboard**: http://localhost:4040 (development only)
 
 ### Environment Management
@@ -201,13 +202,20 @@ DEV_TUNNEL_PROXY_DIR=/path/to/dev-tunnel-proxy ./scripts/dev-proxy-install.sh
 5. **✅ Flexible**: Supports both standalone and integrated modes
 6. **✅ Scalable**: Easy to add new project integrations
 
-### Dev Proxy Command Options
-- `./scripts/setup-mxtk-site.sh setup-proxy` - Setup MXTK's own dev proxy system
-- `./scripts/setup-mxtk-site.sh stop-proxy` - Stop dev proxy services
-- `./scripts/setup-mxtk-site.sh restart-proxy` - Restart dev proxy services
-- `./scripts/setup-mxtk-site.sh integrate-with <project> <dir>` - Integrate with any project
-- `./scripts/setup-mxtk-site.sh disconnect-from <project> <dir>` - Disconnect from project
-- `./scripts/dev-proxy-install.sh` - Install MXTK config into dev-tunnel-proxy
+### Dev Tunnel Proxy (ngrok)
+We support a shared dev proxy that exposes the app at a subpath (`/mxtk`). The app itself remains root-based.
+
+Common commands:
+```bash
+# Start local app
+./scripts/setup-mxtk-site.sh start
+
+# Install nginx config into external dev-proxy (optional)
+DEV_TUNNEL_PROXY_DIR=/path/to/dev-tunnel-proxy ./scripts/dev-proxy-install.sh
+
+# Share current environment via ngrok
+./scripts/setup-mxtk-site.sh share
+```
 
 ### Ngrok Integration (Legacy)
 The legacy ngrok integration is still available for backward compatibility:
@@ -251,13 +259,37 @@ mxtk-site/
 
 ### Development Tools
 - **Debug System**: `node tools/debug/debug.js` - Comprehensive site validation
-- **Testing Suite**: `node tools/test/simple-test.js` - Basic functionality tests
-- **Puppeteer Tests**: `node tools/test/test-puppeteer.js` - Advanced browser testing
+- **Navigation Regression**: `npm run test:nav:localhost` and `npm run test:nav:ngrok`
+- **Puppeteer Tools**: See `tools/test/` and `tools/debug/`
 
 ### Traditional Development
 ```bash
 pnpm install && pnpm dev
 ```
+
+## Routing and Prefixing (Important)
+
+- Do not use Next.js `basePath` or `assetPrefix`.
+- Use helpers from `lib/routing/basePath.ts`:
+  - `getRelativePath()` for internal navigation
+  - `getPublicPath()` for public assets
+  - `getApiPath()` for API routes
+- These ensure links/assets work both at root and behind `/mxtk` via the proxy.
+
+## Testing
+
+```bash
+# Localhost navigation
+npm run test:nav:localhost
+
+# Ngrok navigation (requires share running)
+npm run test:nav:ngrok
+```
+
+The navigation tests verify:
+- Absolute, prefix-correct links after hydration
+- Header/footer navigation works via real clicks
+- No console/network errors (benign dev warnings filtered)
 
 ## Development Guidelines
 

@@ -1,259 +1,133 @@
 # MXTK Site - Dev Tunnel Proxy Integration
 
-This document outlines the integration of the MXTK site with the generic dev-tunnel-proxy project.
+This document describes the working pattern that lets our Next.js app run:
+- at the domain root in development, staging, and production (e.g., `/` on `localhost`, staging, production), and
+- behind a subpath when accessed through a shared dev tunnel proxy (e.g., `/mxtk` on `https://<ngrok>/mxtk`).
 
-## Changes Made
+The app itself remains deployment-agnostic (no Next.js `basePath` or `assetPrefix`). Prefix management is handled by:
+- client-side helpers for links and assets; and
+- nginx in the proxy layer for SSR-emitted absolute paths and HMR.
 
-### 1. Configuration Files Updated
+---
 
-#### `next.config.js`
-- ✅ **UPDATED**: Removed `basePath` and `assetPrefix` configuration to prevent redirect loops
-- ✅ Now uses nginx sub_filter for URL rewriting instead of Next.js basePath
-- ✅ Toggles `MXTK_BEHIND_PROXY` environment variable for tunnel detection
+## What We Changed (Authoritative Summary)
 
-#### `middleware.ts`
-- ✅ **UPDATED**: Simplified to handle paths directly without base path manipulation
-- ✅ Skips Next.js internals, HMR, and WebSocket connections
-- ✅ Optional basic auth (disabled by default in development)
+### 1) Next.js app remains root-aware only
+- No `basePath` and no `assetPrefix` in `next.config.js`.
+- `middleware.ts` is a no-op pass-through.
+- All internal links and public asset URLs are generated with `lib/routing/basePath.ts` helpers:
+  - `getRelativePath()` for internal navigation
+  - `getPublicPath()` for assets under `public/`
+  - `getApiPath()` for `/api/*` routes
+- These helpers detect the external prefix on the client and prepend `/mxtk` only when needed.
 
-#### `app/api/health/route.ts`
-- ✅ Health check endpoint already exists at `/api/health`
+### 2) Proxy handles SSR and dev internals
+`config/dev-proxy/apps/mxtk.conf` was enhanced to:
+- proxy Next.js dev internals (`/_next/*`, `__nextjs_*`), with WebSocket upgrade headers
+- disable proxy buffering for HMR stability
+- rewrite absolute `href="/…"` and `src="/…"` in HTML via `sub_filter`
+- proxy a safe set of root-level public assets that SSR may reference without a prefix:
+  - `/favicon.ico`, `/favicon.svg`, `/icons/`, `/organizations/`, `/media/`
+- block other unexpected root paths when accessed via the proxy
 
-### 2. Docker Configuration
+Key directives in the `/mxtk` location:
+```
+proxy_set_header Accept-Encoding "";       # required for sub_filter
+sub_filter_types text/html;
+sub_filter 'href="/' 'href="/mxtk/';
+sub_filter 'src="/'  'src="/mxtk/';
+sub_filter_once off;
+proxy_buffering off; proxy_request_buffering off;
+proxy_set_header Upgrade $http_upgrade; proxy_set_header Connection "upgrade";
+```
 
-#### `docker-compose.yml` (Base - Local Development)
-- ✅ Service exposes port 2000 internally
-- ✅ Runs on 0.0.0.0
-- ✅ No `MXTK_BEHIND_PROXY` set (root path)
-- ✅ Added `devproxy` external network
-- ✅ Health check configured
+### 3) Client components fixed to be prefix-aware
+- `components/OrganizationLogo.tsx` uses `getPublicPath()` with the current pathname to build logo URLs that work on both `localhost` and `/mxtk`.
 
-#### `docker-compose.tunnel.yml` (Tunnel Override)
-- ✅ Sets `MXTK_BEHIND_PROXY=1`
-- ✅ Disables basic auth for tunnel
-- ✅ Joins both `default` and `devproxy` networks
-- ✅ Removed old ngrok-specific configuration
+### 4) Robust navigation tests
+- `tools/test/nav-regression.mjs` validates that:
+  - all internal links are absolute and correctly prefixed after hydration
+  - header/footer links navigate successfully
+  - console/network errors are surfaced (excluding benign dev warnings)
+  - both `http://localhost:2000` and `https://<ngrok>/mxtk` pass
 
-### 3. Nginx Configuration
-
-#### `config/dev-proxy/apps/mxtk.conf`
-- ✅ **UPDATED**: Enhanced nginx configuration to prevent redirect loops
-- ✅ Handles both `/mxtk` and `/mxtk/` paths
-- ✅ Properly strips `/mxtk` prefix before proxying to Next.js
-- ✅ Uses sub_filter to rewrite absolute links to include `/mxtk` prefix
-- ✅ Includes WebSocket/HMR support
-- ✅ Proper forwarding headers
-
-### 4. Helper Scripts
-
-#### `scripts/dev-proxy-install.sh`
-- ✅ Created executable script to install nginx config
-- ✅ Copies config to dev-tunnel-proxy project
-- ✅ Reloads nginx if proxy is running
-- ✅ Provides helpful error messages
-
-#### `scripts/setup-mxtk-site.sh` (Updated)
-- ✅ Added `tunnel` and `tunnel-stop` commands
-- ✅ Auto-detects dev-tunnel-proxy in common locations
-- ✅ Seamless integration with dev-tunnel-proxy
-
-### 5. Navigation System
-- ✅ **UPDATED**: `lib/routing/basePath.ts` with prefix-aware navigation helper
-- ✅ Client-side detection of deployment prefix (e.g., `/mxtk`)
-- ✅ Automatic generation of absolute URLs that preserve the correct prefix
-- ✅ SSR fallback with client-side hydration correction
-- ✅ App remains agnostic to deployment environment
-
-### 6. Documentation Updates
-- ✅ Updated integration instructions to use dev-tunnel-proxy
-- ✅ Updated documentation to reflect nginx sub_filter approach
-- ✅ Added comprehensive navigation testing documentation
+---
 
 ## How It Works
 
-### Local Development
-- App runs at root `/` (no basePath)
-- Direct access via `http://localhost:2000`
-- Navigation links use absolute paths (e.g., `/owners`, `/institutions`)
+### Local development (root)
+- App runs at `http://localhost:2000/`
+- All links and assets are root-absolute (e.g., `/owners`, `/icons/...`)
 
-### Tunnel Access
-- Nginx proxy handles `/mxtk` prefix
-- Strips prefix before sending to Next.js app
-- Navigation links automatically detect and preserve the `/mxtk` prefix
-- Access via `https://ramileo.ngrok.app/mxtk/`
+### Tunnel access (subpath)
+- Access via `https://<ngrok-domain>/mxtk/`
+- The proxy rewrites SSR-emitted absolute links in HTML and passes selected root assets through.
+- On the client, our helpers detect `/mxtk` and render prefix-aware links and asset URLs.
 
-### Navigation System
+---
 
-The MXTK site uses a prefix-aware navigation system that automatically adapts to the deployment environment:
+## Reference snippets
 
-#### Client-Side Detection
-- **Local Development**: Links generate as `/owners`, `/institutions`, etc.
-- **Tunnel Access**: Links automatically detect `/mxtk` prefix and generate as `/mxtk/owners`, `/mxtk/institutions`, etc.
-
-#### Implementation Details
-```typescript
+### Link and asset helpers (client-aware)
+```ts
 // lib/routing/basePath.ts
-export function getRelativePath(targetPath: string, currentPathname: string = '/'): string {
-  const target = stripLeading(targetPath);
-
-  if (typeof window !== 'undefined') {
-    // Client-side: Detect prefix from window.location
-    const parts = window.location.pathname.split('/').filter(Boolean);
-    const maybePrefix = parts[0]?.toLowerCase();
-    const prefix = maybePrefix === 'mxtk' ? '/mxtk' : '';
-    return `${prefix}/${target}`;
-  }
-
-  // SSR fallback; hydration will adjust on client
-  return `/${target}`;
-}
+export function getRelativePath(target: string, currentPathname?: string): string
+export function getPublicPath(asset: string, currentPathname?: string): string
+export function getApiPath(path: string, currentPathname?: string): string
 ```
 
-#### Navigation Behavior
-- **Top Navigation**: All header links automatically preserve the correct prefix
-- **Footer Links**: Links from deep pages (e.g., `/legal/terms`) correctly escape subdirectories
-- **Deep Routes**: Navigation works consistently from any page depth
-- **App Agnostic**: No hardcoded prefixes in the application code
+Usage in components:
+```tsx
+<Link href={getRelativePath('owners', pathname)}>
+  Owners
+</Link>
+<img src={getPublicPath('icons/mineral/icon-facet.svg', pathname)} />
+```
 
-### Redirect Loop Prevention
-- Next.js no longer uses basePath configuration
-- Nginx handles all prefix management
-- Navigation helper automatically detects and preserves prefixes
-- Both `/mxtk` and `/mxtk/` paths work correctly
+### Nginx notes
+- Upstream service resolves to Docker DNS name. With the default compose service `web`, Docker typically exposes it as `mxtk-site-web-1` internally; our config uses:
+  - `proxy_pass http://mxtk-site-web-1:2000/...`
+- Keep `proxy_buffering off` and upgrade headers for HMR stability.
+- `Accept-Encoding ""` is required so `sub_filter` can see/modify HTML.
 
-### 6. Environment Configuration Updates
+---
 
-- ✅ Removed ngrok settings from environment templates
-- ✅ Added `DEV_TUNNEL_PROXY_DIR` to all environment templates
-- ✅ Development template: Active configuration with default path
-- ✅ Staging/Production templates: Commented configuration (optional)
-- ✅ Local template: Active configuration for blockchain development
+## Usage
 
-## Usage Instructions
-
-### Local Development (Root Path)
+### Local (root)
 ```bash
 ./scripts/setup-mxtk-site.sh start
-# Access at: http://localhost:2000/
-# Health check: http://localhost:2000/api/health
+# http://localhost:2000/
 ```
 
-### Tunnel Development (Prefix Path) - Smart Integration
+### Tunnel (subpath)
 ```bash
-# Simply run share - it will automatically set up dev-tunnel-proxy integration
 ./scripts/setup-mxtk-site.sh share
-
-# The share command will:
-# 1. Check if dev-tunnel-proxy is running
-# 2. Install MXTK config if needed
-# 3. Connect to ngrok network
-# 4. Provide tunnel URLs
+# Outputs ngrok URL, e.g., https://<domain>/mxtk
 ```
 
-### Manual Tunnel Setup (Alternative)
+Manual install to an external dev-proxy (optional):
 ```bash
-# 1. Start the dev-tunnel-proxy project
-cd /path/to/dev-tunnel-proxy
-./scripts/smart-build.sh up
-
-# 2. Install MXTK config into the proxy
-# Option A: Use environment variable
 DEV_TUNNEL_PROXY_DIR=/path/to/dev-tunnel-proxy ./scripts/dev-proxy-install.sh
-
-# Option B: Add to .env file and run without parameter
-echo "DEV_TUNNEL_PROXY_DIR=/path/to/dev-tunnel-proxy" >> .env
-./scripts/dev-proxy-install.sh
-
-# 3. Start MXTK with tunnel configuration
-docker compose -f docker-compose.yml -f docker-compose.tunnel.yml up -d
-
-# 4. Access via tunnel
-# Main app: https://<ngrok-domain>/mxtk
-# Health check: https://<ngrok-domain>/mxtk/api/health
 ```
 
-## Updated Script Commands
+---
 
-The updated `setup-mxtk-site.sh` script now includes:
+## Validation checklist
 
-- **Smart `share` command** - Automatically handles dev-tunnel-proxy integration
-- Removed deprecated commands: `setup-proxy`, `stop-proxy`, `restart-proxy`
+- [ ] Local root works at `http://localhost:2000/`
+- [ ] Tunnel access works at `https://<ngrok>/mxtk/`
+- [ ] No 404s for `/icons/`, `/media/`, `/organizations/`, favicons
+- [ ] HMR/WebSocket connects through proxy
+- [ ] `npm run test:nav:localhost` passes
+- [ ] `npm run test:nav:ngrok` passes
 
-## Path Configuration
+Notes:
+- In dev, the HMR WebSocket stays open; DevTools may show a long “Finish” time on that request. This is expected and does not indicate slow rendering.
 
-The `DEV_TUNNEL_PROXY_DIR` supports multiple path formats:
+---
 
-### Supported Path Types:
-- **Absolute paths:** `/Users/leorami/Development/dev-tunnel-proxy`
-- **Home directory expansion:** `~/Development/dev-tunnel-proxy`
-- **Relative paths:** `../dev-tunnel-proxy`, `../../dev-tunnel-proxy`
+## Service and network
 
-### Configuration Methods:
-1. **Environment variable (inline):**
-   ```bash
-   DEV_TUNNEL_PROXY_DIR=~/Development/dev-tunnel-proxy ./scripts/dev-proxy-install.sh
-   ```
-
-2. **Add to .env file (recommended):**
-   ```bash
-   echo "DEV_TUNNEL_PROXY_DIR=~/Development/dev-tunnel-proxy" >> .env
-   ./scripts/dev-proxy-install.sh
-   ```
-
-### Auto-Detection (Legacy)
-
-The old `tunnel` command automatically searched for dev-tunnel-proxy in common locations:
-- `../dev-tunnel-proxy`
-- `../../dev-tunnel-proxy`
-- `$HOME/Development/dev-tunnel-proxy`
-- `$HOME/dev-tunnel-proxy`
-
-## Validation Checklist
-
-- [ ] Local development works at root path (`http://localhost:2000/`)
-- [ ] Health check responds at `/api/health`
-- [ ] Tunnel mode works with `/mxtk` prefix
-- [ ] WebSocket/HMR connections work in both modes
-- [ ] Next.js internals (`/_next/`, etc.) are not intercepted
-- [ ] Nginx config is properly installed in dev-tunnel-proxy
-- [ ] `./scripts/setup-mxtk-site.sh share` automatically handles dev-tunnel-proxy integration
-
-### Navigation Testing
-- [ ] **Local Development**: All navigation links work correctly (e.g., `/owners`, `/institutions`)
-- [ ] **Tunnel Access**: All links preserve `/mxtk` prefix (e.g., `/mxtk/owners`, `/mxtk/institutions`)
-- [ ] **Deep Routes**: Navigation from nested pages (e.g., `/legal/terms`) works correctly
-- [ ] **Footer Links**: Links from legal pages escape subdirectory context
-- [ ] **Post-Hydration Verification**: Run `npm run test:nav:localhost` and `npm run test:nav:ngrok` to verify DOM behavior
-- [ ] **Click-Through Testing**: Navigation actually works by clicking through to target pages
-
-### Automated Navigation Testing
-The project includes comprehensive navigation testing that can be run to verify the integration:
-
-```bash
-# Test localhost navigation
-npm run test:nav:localhost
-
-# Test ngrok navigation
-npm run test:nav:ngrok
-
-# Test with custom URL
-BASE_URL=https://your-domain.com/mxtk npm run test:navigation
-
-# Full regression test with detailed reporting
-npm run test:full
-```
-
-The tests verify:
-- **Post-hydration DOM verification**: Checks that links have correct absolute URLs after client-side hydration
-- **Prefix-aware behavior**: Ensures `/mxtk` prefix is preserved on ngrok, absent on localhost
-- **Click-through testing**: Verifies navigation actually works by clicking through to target pages
-- **Footer link escape**: Confirms footer links from legal pages don't contain `/legal/` in their hrefs
-- **Cross-environment consistency**: Validates behavior across localhost and ngrok environments
-
-## Service Name
-
-The nginx configuration uses `mxtk-site-dev` as the service name, which matches the container name in `docker-compose.yml`. If you need to change this, update both files accordingly.
-
-## Network Configuration
-
-The MXTK service joins the external `devproxy` network when running in tunnel mode, allowing it to communicate with the dev-tunnel-proxy nginx container.
+- Compose service: `web` (port `2000`); Docker names it like `mxtk-site-web-1`.
+- The proxy container and the app must share a Docker network so nginx can reach `mxtk-site-web-1:2000`.

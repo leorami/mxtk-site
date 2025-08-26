@@ -109,7 +109,7 @@
    - **Environment Management Script:** Use the `./scripts/setup-mxtk-site.sh` script for basic Docker operations (start, stop, restart, reset), environment setup, validation, status, logs, and cleanup.
    - **Smart Development Workflow:** The `./scripts/smart-build.sh` script intelligently categorizes file changes: (1) **Instant changes** (JS, CSS, React components) are reflected immediately via bind mounts, (2) **Restart changes** (environment variables, Next.js config) require container restart, (3) **Rebuild changes** (dependencies, Dockerfiles) require full rebuild.
    - **Environment Variables:** Store sensitive configuration in `.env` files and exclude them from version control.
-   - **Ngrok Integration:** Use `./scripts/setup-mxtk-site.sh share` to connect to shared ngrok networks for development collaboration.
+   - **Dev Tunnel Integration:** Use `./scripts/setup-mxtk-site.sh share` to integrate with the shared dev tunnel proxy (ngrok), exposing the app at `https://<domain>/mxtk` while keeping the app itself root-based.
    - **Debug & Testing Tools:** Use `./tools/debug/debug.js` for comprehensive site validation and `./tools/test/` for automated testing.
 
 3. **Root Directory Cleanliness**  
@@ -162,6 +162,15 @@
    - Follow financial compliance requirements for token-related features.
    - Implement proper audit trails for transparency features.
    - Use secure communication protocols for external integrations.
+
+5. **Deployment-Agnostic Routing (Mandatory)**  
+   - The app must run at the domain root across development, staging, and production (including `localhost`).
+   - The app must also run behind a subpath when accessed through a dev tunnel proxy (e.g., `https://<ngrok>/mxtk`).
+   - Do not use Next.js `basePath` or `assetPrefix`. All prefixing is handled by:
+     - Client-side helpers (`lib/routing/basePath.ts`): `getRelativePath`, `getPublicPath`, `getApiPath`.
+     - Proxy layer nginx `sub_filter` and selective root asset pass-through.
+   - Internal links and public asset URLs in components must use the helpers above and avoid hardcoded `/mxtk`.
+   - Tests in `tools/test/nav-regression.mjs` must pass for both `http://localhost:2000` and `https://<ngrok>/mxtk`.
 
 ---
 
