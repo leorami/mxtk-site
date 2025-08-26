@@ -1,6 +1,8 @@
 'use client'
 
+import { getPublicPath } from '@/lib/routing/basePath'
 import Image from 'next/image'
+import { usePathname } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
 interface OrganizationLogoProps {
@@ -20,6 +22,7 @@ export default function OrganizationLogo({
 }: OrganizationLogoProps) {
   const [mounted, setMounted] = useState(false)
   const [imageError, setImageError] = useState(false)
+  const pathname = usePathname() || '/'
 
   useEffect(() => {
     setMounted(true)
@@ -57,7 +60,7 @@ export default function OrganizationLogo({
   return (
     <div className={`${sizeClasses[size]} relative ${className}`}>
       <Image
-        src={logoPath}
+        src={getPublicPath(logoPath, pathname)}
         alt={alt || `${name} logo`}
         fill
         className="object-contain rounded-lg"

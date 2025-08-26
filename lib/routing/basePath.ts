@@ -6,7 +6,7 @@ function stripLeading(p: string) { return p.replace(/^\/+/, ''); }
 function stripTrailing(p: string) { return p.replace(/\/+$/, ''); }
 function cleanJoin(a: string, b: string) { return (`${a}/${b}`).replace(/\/{2,}/g, '/'); }
 
-/** Detect the external prefix from a pathname (server) or window (client). */
+/** Detect the external prefix from pathname (server) or window (client). */
 function detectPrefix(currentPathname?: string): string {
   if (typeof window !== 'undefined' && !currentPathname) {
     currentPathname = window.location.pathname || '/';
