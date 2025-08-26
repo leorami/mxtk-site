@@ -1,11 +1,10 @@
 import '@/app/styles/design-tokens.scss'
 import BrandThemeProvider from '@/components/BrandThemeProvider'
-import MineralBackdrop from '@/components/MineralBackdrop'
 import SiteFooter from '@/components/SiteFooter'
 import SiteHeader from '@/components/SiteHeader'
 import type { Metadata } from 'next'
-import Script from 'next/script'
 import { Roboto } from 'next/font/google'
+import Script from 'next/script'
 import './globals.css'
 import './styles/minerals.css'
 
@@ -42,9 +41,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             </head>
             <body className="page min-h-dvh flex flex-col">
                 <SiteHeader />
-                <main className="flex-1 min-h-0 overflow-y-auto mx-auto w-full max-w-6xl px-4 py-10 mineral-sheen">
+                <main className="flex-1 min-h-0 overflow-y-auto mx-auto w-full max-w-6xl px-4 py-10">
                     <BrandThemeProvider>
-                        <MineralBackdrop />
                         {children}
                     </BrandThemeProvider>
                 </main>

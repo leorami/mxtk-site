@@ -312,12 +312,20 @@ table a:hover {
 
 /* Glass */
 .glass {
-    backdrop-filter: blur(10px) saturate(1.05);
-    background: color-mix(in oklab, var(--surface-card) 82%, transparent);
+  backdrop-filter: blur(14px) saturate(1.1);
+  -webkit-backdrop-filter: blur(14px) saturate(1.1);
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.14);
+  border-radius: 1rem;
+  box-shadow: 0 6px 18px rgba(0,0,0,.08);
 }
 .dark .glass {
-    background: color-mix(in oklab, var(--surface-card) 78%, transparent);
+  background: rgba(0,0,0,0.22);
+  border-color: rgba(255,255,255,0.10);
 }
+
+/* If a gradient text class exists, neutralize it */
+.headline-gradient { background: none !important; -webkit-text-fill-color: inherit !important; color: inherit !important; }
 
 /* Text helpers for mineral backgrounds */
 .h-on-tile    { color: var(--h-color); text-shadow: 0 1px 1px rgba(0,0,0,.25); }
