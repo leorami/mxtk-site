@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    ports:
+      - "2000:2000"
+    environment:
+      - BASIC_AUTH_ENABLED=1       # enable auth over tunnel (optional)
+    networks:
+      - devproxy
+
+networks:
+  devproxy:
+    external: true
+

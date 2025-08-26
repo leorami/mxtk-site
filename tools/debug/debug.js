@@ -163,9 +163,51 @@ async function testThemeColors(url, label, darkMode = false) {
             console.log(`  404 errors: ${pageContent.hasErrors}`);
             totalErrors += 10; // Add significant error weight
         }
+
+        // Check if background images are actually visible
+        const backgroundCheck = await page.evaluate(() => {
+            const heroElements = document.querySelectorAll('[style*="background-image"]');
+            const results = [];
+            
+            heroElements.forEach((el, index) => {
+                const style = window.getComputedStyle(el);
+                const bgImage = style.backgroundImage;
+                const isVisible = style.display !== 'none' && style.visibility !== 'hidden' && style.opacity !== '0';
+                const hasBgImage = bgImage && bgImage !== 'none' && bgImage !== 'initial';
+                
+                results.push({
+                    index,
+                    hasBgImage,
+                    bgImage,
+                    isVisible,
+                    element: el.tagName,
+                    classes: el.className
+                });
+            });
+            
+            return results;
+        });
+        
+        console.log('\n🖼️ Background Image Check:');
+        if (backgroundCheck.length === 0) {
+            console.log('  ❌ NO BACKGROUND IMAGE ELEMENTS FOUND!');
+            totalErrors += 5;
+        } else {
+            backgroundCheck.forEach((check, index) => {
+                if (check.hasBgImage && check.isVisible) {
+                    console.log(`  ✅ Background ${index + 1}: ${check.bgImage} (${check.element})`);
+                } else if (check.hasBgImage && !check.isVisible) {
+                    console.log(`  ⚠️ Background ${index + 1}: ${check.bgImage} (${check.element}) - NOT VISIBLE`);
+                    totalErrors += 2;
+                } else {
+                    console.log(`  ❌ Background ${index + 1}: NO BACKGROUND IMAGE (${check.element})`);
+                    totalErrors += 3;
+                }
+            });
+        }
         
         // Take a screenshot
-        const screenshotPath = `debug-${label.toLowerCase().replace(/\s+/g, '-')}-${darkMode ? 'dark' : 'light'}.png`;
+        const screenshotPath = `tools/debug/output/screenshots/debug-${label.toLowerCase().replace(/\s+/g, '-')}-${darkMode ? 'dark' : 'light'}.png`;
         await page.screenshot({ path: screenshotPath, fullPage: true });
         console.log(`📸 Screenshot saved: ${screenshotPath}`);
         
@@ -406,32 +448,28 @@ async function main() {
         }
     }
     
-    // Test ngrok URLs (only once each)
-    const ngrokTests = [
-        [`${ngrokUrl}/mxtk/`, 'Home (ngrok)', false],
-        [`${ngrokUrl}/mxtk/owners`, 'Owners (ngrok)', false],
-        [`${ngrokUrl}/mxtk/institutions`, 'Institutions (ngrok)', false],
-        [`${ngrokUrl}/mxtk/transparency`, 'Transparency (ngrok)', false],
-        [`${ngrokUrl}/mxtk/whitepaper`, 'Whitepaper (ngrok)', false],
-        [`${ngrokUrl}/mxtk/the-team`, 'Team (ngrok)', false]
-    ];
-
     // Test localhost URLs as well
     const localhostTests = [
-        ['http://localhost:2000/', 'Home (localhost)', false],
-        ['http://localhost:2000/the-team', 'Team (localhost)', false]
+        { url: 'http://localhost:2000/owners', label: 'Localhost Owners' },
+        { url: 'http://localhost:2000/institutions', label: 'Localhost Institutions' },
+        { url: 'http://localhost:2000/transparency', label: 'Localhost Transparency' }
     ];
 
-    console.log('\n🌐 Testing ngrok URLs...');
-    for (const [url, label, darkMode] of ngrokTests) {
-        const result = await testThemeColors(url, label, darkMode);
-        // Error threshold check is now done immediately after each page loads
+    for (const test of localhostTests) {
+        await testThemeColors(test.url, test.label, false);
+        await testThemeColors(test.url, test.label, true);
     }
 
-    console.log('\n🏠 Testing localhost URLs...');
-    for (const [url, label, darkMode] of localhostTests) {
-        const result = await testThemeColors(url, label, darkMode);
-        // Error threshold check is now done immediately after each page loads
+    // Test ngrok URLs
+    const ngrokTests = [
+        { url: 'https://ramileo.ngrok.app/mxtk/owners', label: 'Ngrok Owners' },
+        { url: 'https://ramileo.ngrok.app/mxtk/institutions', label: 'Ngrok Institutions' },
+        { url: 'https://ramileo.ngrok.app/mxtk/transparency', label: 'Ngrok Transparency' }
+    ];
+
+    for (const test of ngrokTests) {
+        await testThemeColors(test.url, test.label, false);
+        await testThemeColors(test.url, test.label, true);
     }
     
     console.log('\n✅ Theme debugging complete!');

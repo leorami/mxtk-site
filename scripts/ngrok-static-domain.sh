@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Ngrok Static Domain Management Script
-# Based on encast.web pattern
+# Based on dev-tunnel-proxy pattern
 
 set -e
 

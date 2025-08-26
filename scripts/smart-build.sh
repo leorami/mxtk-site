@@ -340,7 +340,7 @@ get_tracked_files() {
     -not -path "*/.dev-cache/*" \
     2>/dev/null || true)
     
-    printf '%s\n' "${tracked_files[@]}"
+    printf '%s\n' "${tracked_files[@]:-}"
 }
 
 # Load file manifest from cache
@@ -367,17 +367,17 @@ save_file_manifest() {
         [[ -n "$file" ]] && tracked_files+=("$file")
     done < <(get_tracked_files)
     
-    log "DEBUG" "Found ${#tracked_files[@]} files to track"
+    log "DEBUG" "Found ${#tracked_files[@]:-0} files to track"
     
     # Write manifest: filepath:mtime
     > "$manifest_file"  # Clear file
-    for file in "${tracked_files[@]}"; do
+    for file in "${tracked_files[@]:-}"; do
         local mtime
         mtime=$(get_file_mtime "$file")
         echo "$file:$mtime" >> "$manifest_file"
     done
     
-    log "DEBUG" "Saved file manifest with ${#tracked_files[@]} files"
+    log "DEBUG" "Saved file manifest with ${#tracked_files[@]:-0} files"
 }
 
 # =============================================================================
@@ -405,7 +405,7 @@ detect_changes() {
     done < <(get_tracked_files)
     
     # Check each tracked file for changes
-    for file in "${tracked_files[@]}"; do
+    for file in "${tracked_files[@]:-}"; do
         local current_mtime
         current_mtime=$(get_file_mtime "$file")
         

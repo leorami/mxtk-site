@@ -1,0 +1,167 @@
+// tools/test/nav-regression.mjs
+// Regression test: verify anchor hrefs after hydration reflect correct prefix behavior.
+// Usage:
+//   BASE_URL=http://localhost:2000 node tools/test/nav-regression.mjs
+//   BASE_URL=https://ramileo.ngrok.app/mxtk node tools/test/nav-regression.mjs
+//
+// Requires: puppeteer (dev dependency)
+
+import puppeteer from 'puppeteer';
+
+const BASE_URL = process.env.BASE_URL;
+if (!BASE_URL) {
+  console.error('ERROR: BASE_URL env var is required (e.g., http://localhost:2000 or https://ramileo.ngrok.app/mxtk)');
+  process.exit(1);
+}
+
+// Infer expected prefix from BASE_URL path (first segment)
+function expectedPrefixFromUrl(urlStr) {
+  try {
+    const u = new URL(urlStr);
+    const segs = u.pathname.split('/').filter(Boolean);
+    return segs.length && segs[0].toLowerCase() !== '_next' ? `/${segs[0]}` : '';
+  } catch (_) {
+    return '';
+  }
+}
+
+const EXPECT_PREFIX = expectedPrefixFromUrl(BASE_URL);
+// On localhost root (e.g., http://localhost:2000), EXPECT_PREFIX === '' (no prefix)
+// On ngrok mxtk (e.g., https://ramileo.ngrok.app/mxtk), EXPECT_PREFIX === '/mxtk'
+
+function isInternal(href) {
+  if (!href) return false;
+  if (href.startsWith('#')) return false;
+  if (/^https?:\/\//i.test(href)) return false;
+  return true;
+}
+
+function normalize(href) {
+  // Convert relative links like "owners" or "../media" into absolute paths relative to current location
+  // We don't actually resolve; we assert final DOM has absolute hrefs after hydration
+  return href;
+}
+
+function assertLink(path, cond, message) {
+  if (!cond) {
+    throw new Error(`[FAIL] ${message} :: href="${path}"`);
+  }
+}
+
+async function collectAnchors(page) {
+  return await page.$$eval('a[href]', as => as.map(a => ({
+    text: (a.textContent || '').trim(),
+    href: a.getAttribute('href') || '',
+    pathname: a.pathname || '',
+  })));
+}
+
+async function testPage(browser, url, { checkFooterLegalEscape = false } = {}) {
+  const page = await browser.newPage();
+  await page.goto(url, { waitUntil: 'networkidle2' });
+
+  // After hydration, Next should render absolute, prefix-aware hrefs in the DOM (client)
+  const anchors = await collectAnchors(page);
+
+  // Debug: Log some anchors to see what we're getting
+  console.log('Debug: First 5 anchors:', anchors.slice(0, 5).map(a => ({ text: a.text, href: a.href })));
+
+  // Filter internal links we care about (skip external and hash)
+  const internal = anchors.filter(a => isInternal(a.href));
+
+  // Debug: Log internal links
+  console.log('Debug: Internal links:', internal.slice(0, 5).map(a => ({ text: a.text, href: a.href })));
+
+  // Expected behavior:
+  // - If EXPECT_PREFIX === '/mxtk', all internal hrefs should start with '/mxtk/' (or be exactly '/mxtk')
+  // - If EXPECT_PREFIX === '', all internal hrefs should start with '/' (root) and NOT with '/mxtk'
+  for (const a of internal) {
+    const h = a.href;
+
+    // Allow absolute root '/' for home
+    if (h === '/' || h === EXPECT_PREFIX || h === `${EXPECT_PREFIX}/`) continue;
+
+    if (EXPECT_PREFIX) {
+      assertLink(h, h.startsWith(`${EXPECT_PREFIX}/`), `Expected prefixed href starting with "${EXPECT_PREFIX}/"`);
+    } else {
+      assertLink(h, h.startsWith('/'), `Expected root-absolute href starting with "/"`);
+      assertLink(h, !h.startsWith('/mxtk/'), `Localhost must not use "/mxtk" prefix`);
+    }
+  }
+
+  // Special case: on legal pages, footer links (Media/Team/Careers/Contact) must NOT contain '/legal/'
+  if (checkFooterLegalEscape) {
+    const footerLinks = await page.$$eval('footer a[href]', as => as.map(a => a.getAttribute('href') || ''));
+    for (const h of footerLinks) {
+      if (!isInternal(h)) continue;
+      // Legal links themselves are allowed to include /legal/
+      const isLegalSelf = /\/legal(\/|$)/.test(h) && /\/legal(\/|$)/.test(new URL(url).pathname);
+      if (isLegalSelf) continue;
+
+      // Non-legal footer targets should never include '/legal/' in their href
+      if (/\/legal\//.test(h)) {
+        throw new Error(`[FAIL] Footer link must not contain "/legal/" :: href="${h}"`);
+      }
+    }
+  }
+
+  await page.close();
+}
+
+(async () => {
+  const browser = await puppeteer.launch({
+    headless: 'new',
+    args: ['--no-sandbox','--disable-setuid-sandbox'],
+  });
+
+  try {
+    // 1) Landing page
+    await testPage(browser, BASE_URL);
+
+    // 2) Click through: Owners
+    {
+      const page = await browser.newPage();
+      await page.goto(BASE_URL, { waitUntil: 'networkidle2' });
+      // Find a visible Owners link (case-insensitive)
+      const ownerSel = 'a[href]:not([href^="http"]):not([href^="#"])';
+      await page.waitForSelector(ownerSel);
+      const linkToOwners = await page.evaluate(() => {
+        const links = Array.from(document.querySelectorAll('a[href]'));
+        const match = links.find(a => /owners/i.test(a.textContent || ''));
+        return match ? match.getAttribute('href') : null;
+      });
+      if (!linkToOwners) throw new Error('Owners link not found on landing page');
+      await Promise.all([
+        page.waitForNavigation({ waitUntil: 'networkidle2' }),
+        page.click(`a[href="${linkToOwners}"]`),
+      ]);
+      const current = page.url();
+      if (EXPECT_PREFIX) {
+        if (!/\/mxtk\/owners(\/|$)/.test(current)) {
+          throw new Error(`[FAIL] Owners page URL should be "${EXPECT_PREFIX}/owners", got: ${current}`);
+        }
+      } else {
+        if (!/\/owners(\/|$)/.test(new URL(current).pathname)) {
+          throw new Error(`[FAIL] Owners page URL should be "/owners", got: ${current}`);
+        }
+      }
+      await page.close();
+    }
+
+    // 3) Legal page + footer escape
+    {
+      const legalUrl = new URL(BASE_URL);
+      if (EXPECT_PREFIX) legalUrl.pathname = `${EXPECT_PREFIX}/legal/terms`;
+      else legalUrl.pathname = '/legal/terms';
+      await testPage(browser, legalUrl.toString(), { checkFooterLegalEscape: true });
+    }
+
+    console.log('✅ nav-regression: all checks passed');
+    process.exit(0);
+  } catch (err) {
+    console.error(String(err && err.stack || err));
+    process.exit(1);
+  } finally {
+    await browser.close();
+  }
+})();

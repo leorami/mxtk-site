@@ -12,9 +12,9 @@ RED='\033[0;31m'; GREEN='\033[0;32m'; YELLOW='\033[1;33m'
 BLUE='\033[0;34m'; CYAN='\033[0;36m'; NC='\033[0m'
 
 # ─────────────────────────────────────────── Configuration & Defaults
-WORKING_DIR=${MXTK_WORKING_DIR:-$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)}
+WORKING_DIR=${MXTK_WORKING_DIR:-$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)}
 VALID_ENVIRONMENTS=("development" "staging" "production")
-VALID_ACTIONS=("start" "stop" "restart" "reset" "build" "logs" "status" "clean" "setup-env" "validate-env" "share" "setup-proxy" "stop-proxy" "restart-proxy" "integrate-with" "disconnect-from" "integrate-encast" "disconnect-encast")
+VALID_ACTIONS=("start" "stop" "restart" "reset" "build" "logs" "status" "clean" "setup-env" "validate-env" "share" "restart-ngrok")
 
 ENVIRONMENT="development"
 ACTION="start"
@@ -42,13 +42,7 @@ $(print_subheader "ACTIONS:")
   status | logs | clean             Monitoring and utilities
   share                            Connect to shared ngrok network
   restart-ngrok                    Restart ngrok service (for static domain changes)
-  setup-proxy                      Setup MXTK's own dev proxy system
-  stop-proxy | restart-proxy        Manage dev proxy lifecycle
-  integrate-with <project> <dir>   Integrate with any project's shared proxy
-  disconnect-from <project> <dir>  Disconnect from any project's shared proxy
-  integrate-encast [dir]           Quick integrate with encast-web
-  disconnect-encast [dir]          Quick disconnect from encast-web
-  resolve-conflicts                Resolve container name conflicts
+
 
 $(print_subheader "OPTIONS:")
   --env <environment> development | staging | production
@@ -71,9 +65,8 @@ $(print_subheader "EXAMPLES:")
   $0 share --currenturl            # Get current ngrok URL only
   $0 share --updateurl             # Update ngrok configuration
   $0 restart-ngrok                 # Restart ngrok service
-  $0 setup-proxy                   # Setup MXTK's own dev proxy
-  $0 integrate-with encast-web ../encast.web
-  $0 integrate-encast              # Quick integrate with encast-web
+
+
 EOF
 exit 1
 }
@@ -172,26 +165,36 @@ ensure_docker_ready() {
 }
 
 get_ngrok_url() {
-    # Check if static domain is configured
-    if [[ -f .env ]] && grep -q "^NGROK_STATIC_DOMAIN=" .env; then
-        local static_domain=$(grep "^NGROK_STATIC_DOMAIN=" .env | cut -d= -f2)
-        if [[ -n "$static_domain" && "$static_domain" != "# NGROK_STATIC_DOMAIN=ramileo.ngrok.app" ]]; then
-            echo "https://$static_domain"
+    # Check if dev-proxy is running and has ngrok
+    if docker ps --filter "name=dev-proxy" --filter "status=running" | grep -q "dev-proxy"; then
+        # Try to get URL from dev-proxy's ngrok with timeout
+        for _ in {1..3}; do
+            url=$(docker exec dev-proxy curl -s --max-time 2 http://localhost:4040/api/tunnels 2>/dev/null \
+                  | grep -o '"public_url":"https:[^"]*"' \
+                  | head -n1 | sed -E 's/.*"public_url":"([^"]*)".*/\1/')
+            [[ -n "$url" ]] && { echo "$url"; return; }
+            sleep 1
+        done
+        
+        # Fallback: check dev-proxy logs for ngrok URL with timeout
+        url=$(docker logs --tail 50 dev-proxy 2>&1 | grep -m1 -o 'https://[a-z0-9.-]*\.ngrok\.io' | head -n1)
+        if [[ -n "$url" ]]; then
+            echo "$url"
             return
         fi
     fi
     
-    # try the API for 10 s
-    for _ in {1..10}; do
-        url=$(curl -s http://localhost:4040/api/tunnels 2>/dev/null \
+    # Legacy: try local ngrok (for backward compatibility) with timeout
+    for _ in {1..2}; do
+        url=$(curl -s --max-time 2 http://localhost:4040/api/tunnels 2>/dev/null \
               | grep -o '"public_url":"https:[^"]*"' \
               | head -n1 | sed -E 's/.*"public_url":"([^"]*)".*/\1/')
         [[ -n "$url" ]] && { echo "$url"; return; }
         sleep 1
     done
-    # fallback: grep the container logs
-    docker logs ngrok-external-proxy 2>&1 \
-      | grep -m1 -o 'https://[a-z0-9.-]*\.ngrok\.io'
+    
+    # No URL found
+    echo ""
 }
 
 # ─────────────────────────────────────────── Environment management
@@ -388,8 +391,6 @@ start_services() {
             if [[ -f "scripts/manage-nginx-config.sh" ]]; then
                 # Look for the nginx config file in common locations
                 local nginx_config_locations=(
-                    "../encast.web/nginx-proxy.conf"
-                    "../encast/nginx-proxy.conf"
                     "./nginx-proxy.conf"
                 )
                 
@@ -698,7 +699,7 @@ share_with_ngrok() {
         local url
         url=$(get_ngrok_url)
         if [[ -z "$url" ]]; then
-            echo "ERROR: Ngrok did not report a URL within 30 seconds." >&2
+            echo "ERROR: Ngrok URL not available. Check if dev-proxy is running." >&2
             return 1
         fi
         
@@ -752,26 +753,23 @@ share_with_ngrok() {
         fi
     done <<< "$mxtk_containers"
     
-    # Check if ngrok-external-proxy exists (from encast.web project)
-    if docker ps --filter "name=ngrok-external-proxy" --filter "status=running" | grep -q "ngrok-external-proxy"; then
-        print_status "✅ Found ngrok-external-proxy from encast.web project"
-        if docker network inspect ngrok-shared | grep -q "ngrok-external-proxy"; then
-            print_status "✅ ngrok-external-proxy already connected to ngrok-shared"
-        else
-            docker network connect ngrok-shared ngrok-external-proxy
-            print_status "✅ Connected ngrok-external-proxy to ngrok-shared"
-        fi
+    # Ensure dev-tunnel-proxy integration is set up
+    print_status "Setting up dev-tunnel-proxy integration..."
+    if ensure_dev_tunnel_proxy_integration; then
+        print_status "✅ Dev-tunnel-proxy integration ready"
     else
-        print_warning "⚠️  ngrok-external-proxy not found (may not be running in encast.web project)"
+        print_warning "⚠️  Dev-tunnel-proxy integration not available"
+        print_status "MXTK will still be accessible via direct ngrok URL"
     fi
     
-    # Always get and display the ngrok URL when sharing
+    # Try to get and display the ngrok URL when sharing
     print_status "Getting ngrok URL..."
     local url
     url=$(get_ngrok_url)
     if [[ -z "$url" ]]; then
-        print_warning "Ngrok URL not available yet. Please check the ngrok dashboard at http://localhost:4040"
-        print_status "The URL will be available once ngrok establishes the tunnel."
+        print_warning "⚠️  Ngrok URL not available yet"
+        print_status "This is normal if ngrok is still starting up"
+        print_status "Check the dev-proxy logs or dashboard for the URL"
     else
         print_status "🌍  Ngrok URL → $url"
         print_status "📖 Access MXTK site at: $url/mxtk"
@@ -781,16 +779,15 @@ share_with_ngrok() {
     echo
     echo -e "${CYAN}Access Points:${NC}"
     echo "  • MXTK Site (direct): http://localhost:2000"
-    echo "  • Ngrok Dashboard:     http://localhost:4040"
     if [[ -n "$url" ]]; then
-        echo "  • MXTK Site (ngrok):  $url/mxtk"
+        echo "  • MXTK Site (tunnel): $url/mxtk"
         echo "  • Root redirects to:  $url/mxtk"
     else
-        echo "  • MXTK Site (ngrok):  [Check ngrok dashboard for URL]"
+        echo "  • MXTK Site (tunnel): [URL will appear when ngrok starts]"
     fi
     echo
-    echo -e "${YELLOW}Note:${NC} The ngrok tunnel will be available at the URL shown in the ngrok dashboard"
-    echo "      Other projects can now access MXTK via the shared network"
+    echo -e "${YELLOW}Note:${NC} MXTK is now connected to the dev-tunnel-proxy network"
+    echo "      The tunnel URL will be available once ngrok establishes the connection"
     echo
     echo -e "${CYAN}Network Status:${NC}"
     docker network inspect ngrok-shared --format "table {{.Name}}\t{{.IPAddress}}\t{{.EndpointID}}" 2>/dev/null || echo "No containers in network"
@@ -825,469 +822,80 @@ restart_ngrok_service() {
     print_status "Ngrok restart complete"
 }
 
-# ─────────────────────────────────────────── Shared Dev Proxy Management
-setup_shared_dev_proxy() {
+# ─────────────────────────────────────────── Dev Tunnel Proxy Integration
+ensure_dev_tunnel_proxy_integration() {
     ensure_docker_ready
     
-    print_subheader "Setting up MXTK shared dev proxy system"
-    
-    # Create ngrok-shared network if it doesn't exist
-    if ! docker network ls | grep -q "ngrok-shared"; then
-        print_status "Creating ngrok-shared network"
-        docker network create ngrok-shared
-    else
-        print_status "✅ ngrok-shared network exists"
-    fi
-    
-    # Start dev proxy and ngrok services
-    print_status "Starting dev proxy and ngrok services..."
-    docker compose up -d proxy ngrok
-    
-    print_status "🎉 MXTK shared dev proxy system is ready!"
-    echo
-    echo -e "${CYAN}Access Points:${NC}"
-    echo "  • MXTK Site (direct): http://localhost:2000"
-    echo "  • MXTK Site (proxy):  http://localhost:8080"
-    echo "  • Ngrok Dashboard:     http://localhost:4040"
-    echo
-    echo -e "${YELLOW}Note:${NC} Other projects can now connect to the shared network"
-}
-
-stop_shared_dev_proxy() {
-    ensure_docker_ready
-    
-    print_subheader "Stopping MXTK shared dev proxy system"
-    
-    docker compose stop proxy ngrok
-    print_status "Shared dev proxy system stopped"
-}
-
-restart_shared_dev_proxy() {
-    ensure_docker_ready
-    
-    print_subheader "Restarting MXTK shared dev proxy system"
-    
-    docker compose restart proxy ngrok
-    print_status "Shared dev proxy system restarted"
-}
-
-# ─────────────────────────────────────────── Universal Project Integration
-integrate_with_other_project() {
-    ensure_docker_ready
-    
-    if [[ "$ENVIRONMENT" != "development" ]]; then
-        print_error "Integration is only available in development environment"
+    # Check if dev-proxy is running
+    if ! docker ps --filter "name=dev-proxy" --filter "status=running" | grep -q "dev-proxy"; then
+        print_warning "⚠️  dev-proxy not found running"
+        print_status "Please start the dev-tunnel-proxy project first:"
+        print_status "  cd /path/to/dev-tunnel-proxy && ./scripts/smart-build.sh up"
         return 1
     fi
     
-    local other_project_name="$1"
-    local other_project_dir="$2"
+    print_status "✅ Found dev-proxy running"
     
-    if [[ -z "$other_project_name" || -z "$other_project_dir" ]]; then
-        print_error "Usage: integrate-with <project-name> <project-directory>"
-        print_error "Example: integrate-with encast-web ../encast.web"
-        return 1
+    # Check if MXTK config is already installed
+    local proxy_dir=""
+    
+    # Try to find dev-tunnel-proxy directory
+    if [[ -n "${DEV_TUNNEL_PROXY_DIR:-}" ]]; then
+        proxy_dir="$DEV_TUNNEL_PROXY_DIR"
+    elif [[ -f .env ]]; then
+        # Load from .env if available
+        # shellcheck disable=SC1091
+        source .env
+        proxy_dir="${DEV_TUNNEL_PROXY_DIR:-}"
     fi
     
-    print_subheader "Integrating MXTK with $other_project_name shared dev proxy"
-    
-    # Check if shared dev proxy is running (using standard container names)
-    local proxy_container_name="dev-proxy"
-    if ! docker ps --filter "name=$proxy_container_name" --filter "status=running" | grep -q "$proxy_container_name"; then
-        print_warning "Shared dev proxy not found running"
-        print_status "Please ensure the shared dev proxy is running (dev-proxy container)"
-        return 1
-    fi
-    
-    # Connect MXTK containers to shared network
-    print_status "Connecting MXTK containers to shared network..."
-    
-    # Connect the main MXTK site container
-    if docker network inspect ngrok-shared | grep -q "mxtk-site-dev"; then
-        print_status "✅ mxtk-site-dev already connected to ngrok-shared"
-    else
-        docker network connect ngrok-shared mxtk-site-dev
-        print_status "✅ Connected mxtk-site-dev to ngrok-shared"
-    fi
-    
-    # Update environment to set base path for shared proxy
-    print_status "Updating environment for shared proxy integration..."
-    if grep -q "^NEXT_PUBLIC_BASE_PATH=" .env; then
-        sed -i.bak 's|^NEXT_PUBLIC_BASE_PATH=.*|NEXT_PUBLIC_BASE_PATH=/mxtk|' .env
-    else
-        echo "NEXT_PUBLIC_BASE_PATH=/mxtk" >> .env
-    fi
-    print_status "✅ Set NEXT_PUBLIC_BASE_PATH=/mxtk"
-    
-    # Restart MXTK container to pick up new environment
-    print_status "Restarting MXTK container to apply base path..."
-    docker restart mxtk-site-dev
-    print_status "✅ Restarted MXTK container"
-    
-    # Add MXTK route to shared nginx config using working approach
-    print_status "Adding MXTK route to shared nginx config..."
-    
-    if [[ -d "$other_project_dir" ]]; then
-        cd "$other_project_dir"
-        
-        # Create a temporary route file with working configuration
-        local temp_route_file="mxtk_route.txt"
-        cat > "$temp_route_file" << 'EOF'
-# mxtk-site project route - main application
-location /mxtk/ {
-    # Strip /mxtk prefix and proxy to MXTK
-    rewrite ^/mxtk/(.*)$ /$1 break;
-    proxy_pass http://mxtk-site-dev:2000/;
-    proxy_set_header Host $host;
-    proxy_set_header X-Real-IP $remote_addr;
-    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-    proxy_set_header X-Forwarded-Proto $scheme;
-    proxy_set_header X-Forwarded-Host $host;
-    proxy_set_header X-Forwarded-Port $server_port;
-    proxy_http_version 1.1;
-    proxy_set_header Upgrade $http_upgrade;
-    proxy_set_header Connection "upgrade";
-    proxy_set_header ngrok-skip-browser-warning "true";
-    proxy_set_header User-Agent "MXTK-Development-Proxy/1.0";
-    # Next.js specific headers
-    proxy_set_header Origin $scheme://$host;
-    proxy_set_header Referer $scheme://$host;
-    proxy_connect_timeout 60s;
-    proxy_send_timeout 60s;
-    proxy_read_timeout 60s;
-}
-
-# MXTK static assets - proxy /mxtk/_next/ to /_next/
-location /mxtk/_next/ {
-    # Strip /mxtk prefix and proxy to MXTK
-    rewrite ^/mxtk/_next/(.*)$ /_next/$1 break;
-    proxy_pass http://mxtk-site-dev:2000/_next/;
-    proxy_set_header Host $host;
-    proxy_set_header X-Real-IP $remote_addr;
-    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-    proxy_set_header X-Forwarded-Proto $scheme;
-    proxy_set_header X-Forwarded-Host $host;
-    proxy_set_header X-Forwarded-Port $server_port;
-    proxy_http_version 1.1;
-    proxy_set_header Upgrade $http_upgrade;
-    proxy_set_header Connection "upgrade";
-    proxy_set_header ngrok-skip-browser-warning "true";
-    proxy_set_header User-Agent "MXTK-Development-Proxy/1.0";
-    # Next.js specific headers
-    proxy_set_header Origin $scheme://$host;
-    proxy_set_header Referer $scheme://$host;
-    proxy_connect_timeout 60s;
-    proxy_send_timeout 60s;
-    proxy_read_timeout 60s;
-}
-
-# MXTK public assets - proxy /mxtk/public/ to /public/
-location /mxtk/public/ {
-    # Strip /mxtk prefix and proxy to MXTK
-    rewrite ^/mxtk/public/(.*)$ /public/$1 break;
-    proxy_pass http://mxtk-site-dev:2000/public/;
-    proxy_set_header Host $host;
-    proxy_set_header X-Real-IP $remote_addr;
-    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-    proxy_set_header X-Forwarded-Proto $scheme;
-    proxy_set_header X-Forwarded-Host $host;
-    proxy_set_header X-Forwarded-Port $server_port;
-    proxy_http_version 1.1;
-    proxy_set_header Upgrade $http_upgrade;
-    proxy_set_header Connection "upgrade";
-    proxy_set_header ngrok-skip-browser-warning "true";
-    proxy_set_header User-Agent "MXTK-Development-Proxy/1.0";
-    # Next.js specific headers
-    proxy_set_header Origin $scheme://$host;
-    proxy_set_header Referer $scheme://$host;
-    proxy_connect_timeout 60s;
-    proxy_send_timeout 60s;
-    proxy_read_timeout 60s;
-}
-EOF
-        
-        # Add the route to the nginx config
-        awk -v route_file="$temp_route_file" '/END_EXTERNAL_PROJECTS/ { while ((getline line < route_file) > 0) { print line }; close(route_file); print ""; next } { print }' nginx-proxy.conf > nginx-proxy.conf.new
-        
-        # Apply the changes
-        if [[ -f "nginx-proxy.conf.new" ]]; then
-            mv nginx-proxy.conf.new nginx-proxy.conf
-            rm -f "$temp_route_file"
-            docker restart dev-proxy
-            cd - > /dev/null
-            print_status "✅ Added MXTK route to shared proxy"
-        else
-            rm -f "$temp_route_file"
-            cd - > /dev/null
-            print_error "Failed to add MXTK route to shared proxy"
-        fi
-    else
-        print_warning "Project directory not found at $other_project_dir"
-        print_status "Please manually add MXTK route to the shared nginx config"
-    fi
-    
-    print_status "🎉 MXTK integrated with $other_project_name shared dev proxy!"
-    echo
-    echo -e "${CYAN}Access Points:${NC}"
-    echo "  • MXTK Site (direct): http://localhost:2000"
-    echo "  • MXTK Site (via $other_project_name): http://localhost:8080/mxtk/"
-    echo "  • Ngrok Dashboard:     http://localhost:4040"
-}
-
-disconnect_from_other_project() {
-    ensure_docker_ready
-    
-    local other_project_name="$1"
-    local other_project_dir="$2"
-    
-    if [[ -z "$other_project_name" || -z "$other_project_dir" ]]; then
-        print_error "Usage: disconnect-from <project-name> <project-directory>"
-        print_error "Example: disconnect-from encast-web ../encast.web"
-        return 1
-    fi
-    
-    print_subheader "Disconnecting MXTK from $other_project_name shared dev proxy"
-    
-    # Remove MXTK route from shared nginx config using working approach
-    if [[ -d "$other_project_dir" ]]; then
-        cd "$other_project_dir"
-        
-        # Remove the MXTK route from nginx config
-        awk -v project="mxtk-site" '
-            /START_EXTERNAL_PROJECTS/ {
-                in_external = 1
-                print
-                next
-            }
-            /END_EXTERNAL_PROJECTS/ {
-                in_external = 0
-                print
-                next
-            }
-            in_external && /# '"mxtk-site"' project route/ {
-                # Skip this line and the next 20 lines (the route block)
-                skip_lines = 20
-                next
-            }
-            skip_lines > 0 {
-                skip_lines--
-                next
-            }
-            { print }
-        ' nginx-proxy.conf > nginx-proxy.conf.new
-        
-        # Apply the changes
-        if [[ -f "nginx-proxy.conf.new" ]]; then
-            mv nginx-proxy.conf.new nginx-proxy.conf
-            docker restart dev-proxy
-            cd - > /dev/null
-            print_status "✅ Removed MXTK route from shared proxy"
-        else
-            cd - > /dev/null
-            print_error "Failed to remove MXTK route from shared proxy"
+    # Expand ~ and resolve relative paths
+    if [[ -n "$proxy_dir" ]]; then
+        proxy_dir=$(eval echo "$proxy_dir")
+        if [[ ! "$proxy_dir" = /* ]]; then
+            proxy_dir="$(pwd)/$proxy_dir"
         fi
     fi
     
-    # Remove base path from environment when disconnecting
-    print_status "Removing base path from environment..."
-    if grep -q "^NEXT_PUBLIC_BASE_PATH=" .env; then
-        sed -i.bak 's|^NEXT_PUBLIC_BASE_PATH=.*|NEXT_PUBLIC_BASE_PATH=|' .env
-        print_status "✅ Removed NEXT_PUBLIC_BASE_PATH"
+    # Check if MXTK config exists in the proxy
+    local mxtk_config_exists=false
+    if [[ -n "$proxy_dir" && -f "$proxy_dir/apps/mxtk.conf" ]]; then
+        mxtk_config_exists=true
+        print_status "✅ MXTK config found in dev-tunnel-proxy"
+    else
+        print_status "📝 MXTK config not found in dev-tunnel-proxy"
     fi
     
-    # Disconnect from shared network
-    if docker network inspect ngrok-shared | grep -q "mxtk-site-dev"; then
-        docker network disconnect ngrok-shared mxtk-site-dev
-        print_status "✅ Disconnected mxtk-site-dev from ngrok-shared"
-    fi
-    
-    print_status "MXTK disconnected from $other_project_name shared dev proxy"
-}
-
-# ─────────────────────────────────────────── Universal Integration Helper
-integrate_with_any_project() {
-    local project_name="$1"
-    local project_dir="$2"
-    
-    case "$project_name" in
-        "encast-web"|"encast")
-            integrate_with_other_project "encast-web" "${project_dir:-../encast.web}"
-            ;;
-        "other-project"|"other")
-            integrate_with_other_project "other-project" "${project_dir:-../other-project}"
-            ;;
-        *)
-            print_error "Unknown project: $project_name"
-            print_status "Available projects: encast-web, other-project"
-            print_status "Or use: integrate-with <project-name> <project-directory>"
-            ;;
-    esac
-}
-
-disconnect_from_any_project() {
-    local project_name="$1"
-    local project_dir="$2"
-    
-    case "$project_name" in
-        "encast-web"|"encast")
-            disconnect_from_other_project "encast-web" "${project_dir:-../encast.web}"
-            ;;
-        "other-project"|"other")
-            disconnect_from_other_project "other-project" "${project_dir:-../other-project}"
-            ;;
-        *)
-            print_error "Unknown project: $project_name"
-            print_status "Available projects: encast-web, other-project"
-            print_status "Or use: disconnect-from <project-name> <project-directory>"
-            ;;
-    esac
-}
-
-# ─────────────────────────────────────────── Container conflict resolution
-resolve_container_conflicts() {
-    ensure_docker_ready
-    print_subheader "Container Conflict Resolution"
-    
-    local conflicting_containers=()
-    
-    # Check for ngrok-external-proxy conflict
-    if docker ps -a --format "table {{.Names}}" | grep -q "^ngrok-external-proxy$"; then
-        conflicting_containers+=("ngrok-external-proxy")
-    fi
-    
-    # Check for dev-proxy conflict
-    if docker ps -a --format "table {{.Names}}" | grep -q "^dev-proxy$"; then
-        conflicting_containers+=("dev-proxy")
-    fi
-    
-    if [[ ${#conflicting_containers[@]} -eq 0 ]]; then
-        print_status "✅ No container conflicts detected"
-        return 0
-    fi
-    
-    print_warning "⚠️  Found conflicting containers: ${conflicting_containers[*]}"
-    print_status "These containers may be from another project's shared proxy system."
-    echo ""
-    print_status "Options:"
-    echo "  1. Integrate with existing proxy (recommended)"
-    echo "  2. Stop conflicting containers (if not using them)"
-    echo "  3. Rename conflicting containers"
-    echo "  4. Start MXTK services only (skip proxy containers)"
-    echo "  5. Cancel"
-    echo ""
-    
-    read -p "Choose option (1-4): " -n 1 -r
-    echo
-    
-    case $REPLY in
-        1)
-            print_status "Integrating with existing proxy..."
-            # Start MXTK services
-            docker compose -f docker-compose.yml up -d web
-            print_status "✅ MXTK site started at http://localhost:2000"
-            
-            # Try to integrate with existing proxy
-            if [[ -f "scripts/manage-nginx-config.sh" ]]; then
-                local nginx_config_locations=(
-                    "../encast.web/nginx-proxy.conf"
-                    "../encast/nginx-proxy.conf"
-                    "./nginx-proxy.conf"
-                )
-                
-                local nginx_config_found=""
-                for config_path in "${nginx_config_locations[@]}"; do
-                    if [[ -f "$config_path" ]]; then
-                        nginx_config_found="$config_path"
-                        break
-                    fi
-                done
-                
-                if [[ -n "$nginx_config_found" ]]; then
-                    print_status "Found nginx config at: $nginx_config_found"
-                    print_status "Adding MXTK routes to proxy configuration..."
-                    
-                    # Create backup
-                    local timestamp=$(date +"%Y%m%d_%H%M%S")
-                    cp "$nginx_config_found" "${nginx_config_found}.backup.${timestamp}"
-                    
-                    # Add MXTK routes using awk
-                    if awk '/END_EXTERNAL_PROJECTS/ { 
-                        print "# MXTK app"
-                        print "location ^~ /mxtk/ {"
-                        print "  # Strip /mxtk prefix and proxy to MXTK"
-                        print "  rewrite ^/mxtk/(.*)$ /$1 break;"
-                        print "  proxy_pass http://mxtk-site-dev:2000;"
-                        print "  proxy_set_header Host $host;"
-                        print "  proxy_http_version 1.1;"
-                        print "  proxy_set_header Upgrade $http_upgrade;"
-                        print "  proxy_set_header Connection \"upgrade\";"
-                        print "  # Add sub_filter to rewrite absolute root links to /mxtk/"
-                        print "  sub_filter \"href=\\\"/\" \"href=\\\"/mxtk/\";"
-                        print "  sub_filter \"src=\\\"/\" \"src=\\\"/mxtk/\";"
-                        print "  sub_filter_once off; # Apply filter multiple times"
-                        print "}"
-                        print ""
-                        print "# MXTK static assets (Next.js _next directory)"
-                        print "location ^~ /mxtk/_next/ {"
-                        print "  # Strip /mxtk prefix and proxy to MXTK"
-                        print "  rewrite ^/mxtk/_next/(.*)$ /_next/$1 break;"
-                        print "  proxy_pass http://mxtk-site-dev:2000;"
-                        print "  proxy_set_header Host $host;"
-                        print "  proxy_http_version 1.1;"
-                        print "  proxy_set_header Upgrade $http_upgrade;"
-                        print "  proxy_set_header Connection \"upgrade\";"
-                        print "}"
-                        print ""
-                        print "# MXTK public assets (images, etc.)"
-                        print "location ^~ /mxtk/public/ {"
-                        print "  # Strip /mxtk prefix and proxy to MXTK"
-                        print "  rewrite ^/mxtk/public/(.*)$ /public/$1 break;"
-                        print "  proxy_pass http://mxtk-site-dev:2000;"
-                        print "  proxy_set_header Host $host;"
-                        print "}"
-                        print ""
-                    } { print }' "$nginx_config_found" > "${nginx_config_found}.new" && mv "${nginx_config_found}.new" "$nginx_config_found"; then
-                        print_status "✅ MXTK routes added to proxy configuration"
-                        print_status "🌐 MXTK should now be accessible via the shared proxy"
-                    else
-                        print_warning "⚠️  Failed to add MXTK routes to proxy configuration"
-                    fi
-                else
-                    print_warning "⚠️  No nginx config found in common locations"
-                fi
+    # If config doesn't exist, try to install it
+    if [[ "$mxtk_config_exists" == "false" ]]; then
+        print_status "Installing MXTK config into dev-tunnel-proxy..."
+        
+        if [[ -n "$proxy_dir" && -f "$proxy_dir/scripts/smart-build.sh" ]]; then
+            # Use the dev-proxy-install script
+            if [[ -f "scripts/dev-proxy-install.sh" ]]; then
+                DEV_TUNNEL_PROXY_DIR="$proxy_dir" ./scripts/dev-proxy-install.sh
+                print_status "✅ MXTK config installed successfully"
+            else
+                print_warning "⚠️  dev-proxy-install.sh script not found"
+                print_status "Please install MXTK config manually or run:"
+                print_status "  DEV_TUNNEL_PROXY_DIR=$proxy_dir ./scripts/dev-proxy-install.sh"
             fi
-            ;;
-        2)
-            print_status "Stopping conflicting containers..."
-            for container in "${conflicting_containers[@]}"; do
-                docker stop "$container" 2>/dev/null || true
-                docker rm "$container" 2>/dev/null || true
-                print_status "✅ Removed $container"
-            done
-            print_status "Conflicts resolved. You can now run 'start' again."
-            ;;
-        3)
-            print_status "Renaming conflicting containers..."
-            for container in "${conflicting_containers[@]}"; do
-                local new_name="${container}-backup-$(date +%s)"
-                docker rename "$container" "$new_name" 2>/dev/null || true
-                print_status "✅ Renamed $container to $new_name"
-            done
-            print_status "Conflicts resolved. You can now run 'start' again."
-            ;;
-        4)
-            print_status "Starting MXTK services only..."
-            docker compose -f docker-compose.yml up -d web
-            print_status "✅ MXTK site started at http://localhost:2000"
-            print_warning "⚠️  Proxy containers not started due to conflicts"
-            ;;
-        5)
-            print_status "Operation cancelled."
-            ;;
-        *)
-            print_error "Invalid option. Operation cancelled."
-            ;;
-    esac
+        else
+            print_warning "⚠️  Could not determine dev-tunnel-proxy directory"
+            print_status "Please set DEV_TUNNEL_PROXY_DIR in your .env file or run:"
+            print_status "  DEV_TUNNEL_PROXY_DIR=/path/to/dev-tunnel-proxy ./scripts/dev-proxy-install.sh"
+        fi
+    fi
+    
+    # Ensure dev-proxy is connected to ngrok-shared network
+    if docker network inspect ngrok-shared | grep -q "dev-proxy"; then
+        print_status "✅ dev-proxy already connected to ngrok-shared"
+    else
+        docker network connect ngrok-shared dev-proxy
+        print_status "✅ Connected dev-proxy to ngrok-shared"
+    fi
+    
+    return 0
 }
 
 # ─────────────────────────────────────────── Argument parsing
@@ -1297,7 +905,7 @@ UPDATE_URL=false
 
 while [[ "$#" -gt 0 ]]; do
   case $1 in
-    start|stop|restart|reset|build|setup-env|validate-env|status|logs|clean|share|restart-ngrok|setup-proxy|stop-proxy|restart-proxy|integrate-with|disconnect-from|integrate-encast|disconnect-encast|resolve-conflicts)
+    start|stop|restart|reset|build|setup-env|validate-env|status|logs|clean|share|restart-ngrok)
       ACTION="$1"; shift ;;
     --env|--environment)
       ENVIRONMENT="$2"
@@ -1312,27 +920,16 @@ while [[ "$#" -gt 0 ]]; do
     --help|-h)
       show_usage ;;
     *)
-      # For actions that take additional arguments, store them
-      if [[ "$ACTION" == "integrate-with" || "$ACTION" == "disconnect-from" ]]; then
-        if [[ -z "$PROJECT_NAME" ]]; then
-          PROJECT_NAME="$1"
-        elif [[ -z "$PROJECT_DIR" ]]; then
-          PROJECT_DIR="$1"
-        else
-          print_error "Too many arguments for $ACTION"
-        fi
-      else
-        print_error "Unknown parameter: $1"
-      fi
+      print_error "Unknown parameter: $1"
       shift ;;
   esac
 done
 
 # ─────────────────────────────────────────── Prepare environment
+cd "$WORKING_DIR" || exit 1
+
 [[ -f .env ]] || touch .env
 switch_env "$ENVIRONMENT"
-
-cd "$WORKING_DIR" || exit 1
 
 print_header "🚀 MXTK Site Development Environment Manager"
 echo "Working directory: $WORKING_DIR"
@@ -1367,22 +964,7 @@ case $ACTION in
     share_with_ngrok "$CURRENT_URL_ONLY" "$UPDATE_URL" ;;
   restart-ngrok)
     restart_ngrok_service ;;
-  setup-proxy)
-    setup_shared_dev_proxy ;;
-  stop-proxy)
-    stop_shared_dev_proxy ;;
-  restart-proxy)
-    restart_shared_dev_proxy ;;
-  integrate-with)
-    integrate_with_other_project "$PROJECT_NAME" "$PROJECT_DIR" ;;
-  disconnect-from)
-    disconnect_from_other_project "$PROJECT_NAME" "$PROJECT_DIR" ;;
-  integrate-encast)
-    integrate_with_any_project "encast-web" "$2" ;;
-  disconnect-encast)
-    disconnect_from_any_project "encast-web" "$2" ;;
-  resolve-conflicts)
-    resolve_container_conflicts ;;
+
   *)
     print_error "Unknown action: $ACTION" ;;
 esac
