@@ -1,7 +1,7 @@
 'use client'
 
+import PageHero from '@/components/PageHero'
 import Card from '@/components/ui/Card'
-import { withBase } from '@/lib/routing/basePath'
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
 
@@ -63,12 +63,14 @@ export default function Team() {
     return (
         <div className="space-y-16">
             {/* Hero */}
-            <section className="text-center space-y-6">
-                <h1 className="text-4xl md:text-6xl font-bold tracking-tight">The Team</h1>
-                <p className="text-xl text-muted max-w-3xl mx-auto">
-                    Experienced operators and advisors focused on verifiable value, governance, and market integrity in the mineral tokenization space.
-                </p>
-            </section>
+            <PageHero>
+                <section className="text-center space-y-6">
+                    <h1 className="text-4xl md:text-6xl font-bold tracking-tight text-slate-900 dark:text-slate-50 drop-shadow-[0_1px_1px_rgba(0,0,0,0.25)]">The Team</h1>
+                    <p className="text-xl text-muted max-w-3xl mx-auto">
+                        Experienced operators and advisors focused on verifiable value, governance, and market integrity in the mineral tokenization space.
+                    </p>
+                </section>
+            </PageHero>
 
             {/* Leadership Team */}
             <section className="section-amber">
@@ -80,7 +82,7 @@ export default function Team() {
                                 <div className="text-center">
                                     <div className="relative h-32 w-32 rounded-full overflow-hidden mx-auto mb-4">
                                         <Image 
-                                            src={withBase(member.img)} 
+                                            src={member.img} 
                                             alt={member.name} 
                                             fill 
                                             sizes="128px"
@@ -120,7 +122,7 @@ export default function Team() {
                                 <div className="text-center">
                                     <div className="relative h-32 w-32 rounded-full overflow-hidden mx-auto mb-4">
                                         <Image 
-                                            src={withBase(advisor.img)} 
+                                            src={advisor.img} 
                                             alt={advisor.name} 
                                             fill 
                                             sizes="128px"
@@ -184,8 +186,8 @@ export default function Team() {
                             mineral resources, or financial innovation, we'd love to hear from you.
                         </p>
                         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                            <a href="/careers" className="btn-soft">View Open Positions</a>
-                            <a href="/contact-us" className="btn-outline">Get in Touch</a>
+                                                <a href="careers" className="btn-soft">View Open Positions</a>
+            <a href="contact-us" className="btn-outline">Get in Touch</a>
                         </div>
                     </div>
                 </Card>

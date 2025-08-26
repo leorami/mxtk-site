@@ -1,3 +1,4 @@
+import PageHero from '@/components/PageHero'
 import Card from '@/components/ui/Card'
 import Link from 'next/link'
 
@@ -5,12 +6,14 @@ export default function Resources() {
   return (
     <div className="space-y-16">
       {/* Hero */}
-      <section className="text-center space-y-6">
-        <h1 className="text-4xl md:text-6xl font-bold tracking-tight">Resources</h1>
-        <p className="text-xl text-muted max-w-3xl mx-auto">
-          Educational content, research, and insights about Mineral Token and the future of asset-backed securities.
-        </p>
-      </section>
+      <PageHero>
+        <section className="text-center space-y-6">
+          <h1 className="text-4xl md:text-6xl font-bold tracking-tight text-slate-900 dark:text-slate-50 drop-shadow-[0_1px_1px_rgba(0,0,0,0.25)]">Resources</h1>
+          <p className="text-xl text-muted max-w-3xl mx-auto">
+            Educational content, research, and insights about Mineral Token and the future of asset-backed securities.
+          </p>
+        </section>
+      </PageHero>
 
       {/* Featured Articles */}
       <section className="section-amber">
@@ -127,7 +130,7 @@ export default function Resources() {
               <div className="text-3xl font-bold mb-2">📚</div>
               <h3 className="font-semibold mb-2 text-foreground">Whitepaper</h3>
               <p className="text-foreground/80 text-sm mb-4">Comprehensive technical documentation and tokenomics</p>
-              <Link href="/whitepaper" className="btn-soft">
+              <Link href="whitepaper" className="btn-soft">
                 Read Whitepaper
               </Link>
             </div>
@@ -136,7 +139,7 @@ export default function Resources() {
               <div className="text-3xl font-bold mb-2">📊</div>
               <h3 className="font-semibold mb-2 text-foreground">Transparency Hub</h3>
               <p className="text-foreground/80 text-sm mb-4">Real-time data, oracle logs, and OTC aggregates</p>
-              <Link href="/transparency" className="btn-soft">
+              <Link href="transparency" className="btn-soft">
                 View Data
               </Link>
             </div>
@@ -145,7 +148,7 @@ export default function Resources() {
               <div className="text-3xl font-bold mb-2">🔗</div>
               <h3 className="font-semibold mb-2 text-foreground">Ecosystem</h3>
               <p className="text-foreground/80 text-sm mb-4">Partners, integrations, and infrastructure</p>
-              <Link href="/ecosystem" className="btn-soft">
+              <Link href="ecosystem" className="btn-soft">
                 Explore Ecosystem
               </Link>
             </div>
@@ -199,17 +202,17 @@ export default function Resources() {
               <h3 className="text-lg font-semibold mb-4 text-foreground">Wallet Setup Guides</h3>
               <ul className="space-y-3">
                 <li>
-                  <Link href="/faq" className="text-accent hover:underline">
+                  <Link href="faq" className="text-accent hover:underline">
                     MetaMask Setup Guide
                   </Link>
                 </li>
                 <li>
-                  <Link href="/faq" className="text-accent hover:underline">
+                  <Link href="faq" className="text-accent hover:underline">
                     Bitget Exchange Guide
                   </Link>
                 </li>
                 <li>
-                  <Link href="/faq" className="text-accent hover:underline">
+                  <Link href="faq" className="text-accent hover:underline">
                     Arbitrum Network Configuration
                   </Link>
                 </li>

@@ -1,16 +1,18 @@
+import PageHero from '@/components/PageHero'
 import Card from '@/components/ui/Card'
-import Link from 'next/link'
 
 export default function FAQ() {
   return (
     <div className="space-y-16">
       {/* Hero */}
-      <section className="text-center space-y-6">
-        <h1 className="text-4xl md:text-6xl font-bold tracking-tight">FAQ</h1>
-        <p className="text-xl text-muted max-w-3xl mx-auto">
-          Learn more about how to set-up and access Mineral Token.
-        </p>
-      </section>
+      <PageHero>
+        <section className="text-center space-y-6">
+          <h1 className="text-4xl md:text-6xl font-bold tracking-tight text-slate-900 dark:text-slate-50 drop-shadow-[0_1px_1px_rgba(0,0,0,0.25)]">FAQ</h1>
+          <p className="text-xl text-muted max-w-3xl mx-auto">
+            Learn more about how to set-up and access Mineral Token.
+          </p>
+        </section>
+      </PageHero>
 
       {/* How to find MXTK */}
       <section className="section-amber">

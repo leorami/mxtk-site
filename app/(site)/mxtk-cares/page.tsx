@@ -1,33 +1,30 @@
+import OrganizationLogoGrid from '@/components/OrganizationLogoGrid'
+import PageHero from '@/components/PageHero'
 import Card from '@/components/ui/Card'
+import { PLACEHOLDER_ORGANIZATIONS } from '@/lib/placeholders'
 import Link from 'next/link'
 
-// Get the base path from environment or detect from window location
-function getBasePath(): string {
-  if (typeof window !== 'undefined') {
-    // Check if we're running under /mxtk path
-    if (window.location.pathname.startsWith('/mxtk')) {
-      return '/mxtk'
-    }
-  }
-  // Fallback to environment variable
-  return process.env.NEXT_PUBLIC_ASSET_PREFIX || ''
-}
-
 export default function MXTKCaresPage() {
-  const basePath = getBasePath()
+
+  // Filter organizations for success stories (health and disaster relief categories)
+  const successStoryOrganizations = PLACEHOLDER_ORGANIZATIONS.filter(
+    org => org.category === 'health' || org.category === 'disaster-relief'
+  )
 
   return (
     <div className="space-y-16">
       {/* Hero */}
-      <section className="text-center space-y-6">
-        <h1 className="text-4xl md:text-6xl font-bold tracking-tight">
-          MXTK Cares
-        </h1>
-        <p className="text-xl text-muted max-w-4xl mx-auto">
-          Up to $10M (today's dollars) in MXTK tokens to 100 nonprofits—innovative funding that works for you, 
-          even while tokens are locked for tradability.
-        </p>
-      </section>
+      <PageHero>
+        <section className="text-center space-y-6">
+          <h1 className="text-4xl md:text-6xl font-bold tracking-tight text-slate-900 dark:text-slate-50 drop-shadow-[0_1px_1px_rgba(0,0,0,0.25)]">
+            MXTK Cares
+          </h1>
+          <p className="text-xl text-muted max-w-4xl mx-auto">
+            Up to $10M (today's dollars) in MXTK tokens to 100 nonprofits—innovative funding that works for you, 
+            even while tokens are locked for tradability.
+          </p>
+        </section>
+      </PageHero>
 
       {/* How it works - Updated */}
       <section className="section-amber">
@@ -152,15 +149,24 @@ export default function MXTKCaresPage() {
 
           <div className="bg-white/5 rounded-lg p-6">
             <h3 className="font-semibold mb-3">Success Stories</h3>
-            <p className="text-muted text-sm mb-4">
+            <p className="text-muted text-sm mb-6">
               Organizations in our pilot program have successfully leveraged their MXTK grants to:
             </p>
-            <ul className="text-muted text-sm space-y-2">
+            <ul className="text-muted text-sm space-y-2 mb-6">
               <li>• Secure $2M in low-interest loans for program expansion</li>
               <li>• Form strategic partnerships worth $5M in combined resources</li>
               <li>• Qualify for additional grants totaling $3M</li>
               <li>• Create sustainable revenue streams through innovative financing</li>
             </ul>
+            
+            {/* Organization Logos */}
+            <OrganizationLogoGrid
+              organizations={successStoryOrganizations}
+              title="Featured Organizations"
+              subtitle="Organizations that have successfully leveraged MXTK grants"
+              size="md"
+              columns={4}
+            />
           </div>
         </Card>
       </section>
@@ -173,7 +179,7 @@ export default function MXTKCaresPage() {
             Ready to transform how your organization accesses and leverages funding? 
             Join the next generation of nonprofit financing.
           </p>
-          <Link href={`${basePath}/elite-drop/nominate`} className="btn-primary">
+                        <Link href="elite-drop/nominate" className="btn-primary">
             Nominate a nonprofit
           </Link>
         </Card>

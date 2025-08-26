@@ -1,38 +1,85 @@
+'use client'
+
+import PageHero from '@/components/PageHero'
 import OnchainSummary from '@/components/live/OnchainSummary'
 import PoolTable from '@/components/live/PoolTable'
 import Card from '@/components/ui/Card'
+import { getPublicPath } from '@/lib/routing/basePath'
+import { usePathname } from 'next/navigation'
 
 export default function InstitutionsPage() {
+  const pathname = usePathname() || '/'
   return (
     <div className="space-y-16">
       {/* Hero */}
-      <section className="text-center space-y-6">
-        <h1 className="text-4xl md:text-6xl font-bold tracking-tight">
-          For Traders & Institutions
-        </h1>
-        <p className="text-xl text-muted max-w-3xl mx-auto">
-          MXTK offers institutional-grade infrastructure for trading and custody of tokenized mineral interests, with transparent pricing and deep liquidity.
-        </p>
-      </section>
+      <PageHero>
+        <section className="text-center space-y-6">
+          <h1 className="text-4xl md:text-6xl font-bold tracking-tight text-gray-950 dark:text-gray-50">
+            For Traders & Institutions
+          </h1>
+          <div className="flex justify-center items-center gap-4 mt-4">
+            <img src={getPublicPath('icons/mineral/icon-droplet.svg', pathname)} alt="" className="w-6 h-6 opacity-70" />
+            <img src={getPublicPath('icons/mineral/icon-lattice.svg', pathname)} alt="" className="w-6 h-6 opacity-70" />
+            <img src={getPublicPath('icons/mineral/icon-sparkle.svg', pathname)} alt="" className="w-6 h-6 opacity-70" />
+          </div>
+          <p className="text-xl text-gray-800 dark:text-gray-200 max-w-3xl mx-auto">
+            MXTK offers institutional-grade infrastructure for trading and custody of tokenized mineral interests, with transparent pricing and deep liquidity.
+          </p>
+        </section>
+      </PageHero>
 
       {/* Token Information */}
-      <section className="section-amber">
+      <section className="glass">
         <Card tint="amber">
           <h2 className="text-2xl font-semibold mb-6">Token Information</h2>
           <OnchainSummary />
+          
+          {/* Intro/liquidity depth supporting image - temporarily removed for cleaner look */}
+          {/* <img src={getPublicPath('minerals/supporting/institutions_support_depth.jpg', pathname)} alt="Lapis depth" className="w-full rounded-xl shadow my-6" loading="lazy" /> */}
         </Card>
       </section>
 
       {/* Liquidity Pools */}
-      <section className="section-teal">
+      <section className="glass">
         <Card tint="teal">
           <h2 className="text-2xl font-semibold mb-6">Liquidity & On-chain Addresses</h2>
           <PoolTable />
         </Card>
       </section>
 
+      {/* Inline Photo with Copy */}
+      <section className="glass">
+        <Card tint="teal">
+          <div className="grid md:grid-cols-2 gap-8 items-center">
+            <div>
+              <h3 className="font-semibold mb-3 text-lg">Scale of Operations</h3>
+              <p className="text-muted mb-4">
+                Large-scale mining operations like this demonstrate the substantial value of mineral assets that can be tokenized through MXTK. Our platform supports assets of all sizes, from small claims to major mining operations.
+              </p>
+              <p className="text-muted text-sm">
+                The tokenization process maintains the same rigorous standards regardless of asset size, ensuring consistent quality and transparency across all listings.
+              </p>
+            </div>
+            <figure className="rounded-2xl overflow-hidden shadow-lg">
+              <img
+                src={getPublicPath('media/inline-openpit-1600x900.jpg', pathname)}
+                alt="Open pit mining operations showing large-scale mineral extraction"
+                className="w-full h-auto"
+                loading="lazy"
+              />
+              <figcaption className="text-xs text-slate-500 dark:text-slate-400 p-3">
+                Large-scale mining operations demonstrate the scale of mineral assets that can be tokenized through MXTK.
+              </figcaption>
+            </figure>
+          </div>
+          
+          {/* Custody/KYC partner supporting image - temporarily removed for cleaner look */}
+          {/* <img src={getPublicPath('minerals/supporting/institutions_support_pyrite.jpg', pathname)} alt="Lapis pyrite flecks" className="w-full rounded-xl shadow my-6" loading="lazy" /> */}
+        </Card>
+      </section>
+
       {/* Infrastructure */}
-      <section className="section-navy">
+      <section className="glass">
         <Card tint="navy">
           <h2 className="text-2xl font-semibold mb-6">Infrastructure & Security</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -61,7 +108,7 @@ export default function InstitutionsPage() {
       </section>
 
       {/* Trading Features */}
-      <section className="section-amber">
+      <section className="glass">
         <Card tint="amber">
           <h2 className="text-2xl font-semibold mb-6">Trading Features</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -81,11 +128,14 @@ export default function InstitutionsPage() {
               <p className="text-muted text-sm">Transparent oracle pricing with documented methodology</p>
             </div>
           </div>
+          
+          {/* Partner grid/infrastructure supporting image - temporarily removed for cleaner look */}
+          {/* <img src={getPublicPath('minerals/supporting/institutions_support_geometry.jpg', pathname)} alt="Lapis geometry" className="w-full rounded-xl shadow my-6" loading="lazy" /> */}
         </Card>
       </section>
 
       {/* Compliance */}
-      <section className="section-teal">
+      <section className="glass">
         <Card tint="teal">
           <h2 className="text-2xl font-semibold mb-6">Compliance & Custody</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">

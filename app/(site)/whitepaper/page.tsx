@@ -1,17 +1,20 @@
+import PageHero from '@/components/PageHero'
 import Card from '@/components/ui/Card'
 
 export default function WhitepaperPage() {
   return (
     <div className="space-y-16">
       {/* Hero */}
-      <section className="text-center space-y-6">
-        <h1 className="text-4xl md:text-6xl font-bold tracking-tight">
-          Whitepaper
-        </h1>
-        <p className="text-xl text-muted max-w-3xl mx-auto">
-          This page summarizes the structure, oracle methodology, and market plumbing behind MXTK. A signed MDX/PDF will replace this sample content.
-        </p>
-      </section>
+      <PageHero>
+        <section className="text-center space-y-6">
+          <h1 className="text-4xl md:text-6xl font-bold tracking-tight text-slate-900 dark:text-slate-50 drop-shadow-[0_1px_1px_rgba(0,0,0,0.25)]">
+            Whitepaper
+          </h1>
+          <p className="text-xl text-muted max-w-3xl mx-auto">
+            This page summarizes the structure, oracle methodology, and market plumbing behind MXTK. A signed MDX/PDF will replace this sample content.
+          </p>
+        </section>
+      </PageHero>
 
       {/* Design Goals */}
       <section className="section-amber">

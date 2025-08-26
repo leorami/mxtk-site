@@ -5,7 +5,15 @@ import SiteFooter from '@/components/SiteFooter'
 import SiteHeader from '@/components/SiteHeader'
 import type { Metadata } from 'next'
 import Script from 'next/script'
+import { Roboto } from 'next/font/google'
 import './globals.css'
+import './styles/minerals.css'
+
+const roboto = Roboto({
+  subsets: ['latin'],
+  weight: ['300','400','500','700'],
+  display: 'swap',
+});
 
 export const metadata: Metadata = {
     title: 'MXTK — Mineral Token',
@@ -22,7 +30,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
     return (
-        <html lang="en" suppressHydrationWarning>
+        <html lang="en" className={roboto.className} suppressHydrationWarning>
             <head>
                 <Script id="theme-init" strategy="beforeInteractive">{`
           try {

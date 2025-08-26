@@ -1,16 +1,21 @@
+import OrganizationLogoGrid from '@/components/OrganizationLogoGrid'
+import PageHero from '@/components/PageHero'
 import Card from '@/components/ui/Card'
+import { PLACEHOLDER_PARTNERS_ECOSYSTEM } from '@/lib/placeholders'
 import Link from 'next/link'
 
 export default function Ecosystem() {
   return (
     <div className="space-y-16">
       {/* Hero */}
-      <section className="text-center space-y-6">
-        <h1 className="text-4xl md:text-6xl font-bold tracking-tight">MXTK Ecosystem</h1>
-        <p className="text-xl text-muted max-w-3xl mx-auto">
-          A comprehensive ecosystem of partners, integrations, and infrastructure supporting Mineral Token's mission to unlock liquidity for global mineral holdings.
-        </p>
-      </section>
+      <PageHero>
+        <section className="text-center space-y-6">
+          <h1 className="text-4xl md:text-6xl font-bold tracking-tight text-slate-900 dark:text-slate-50 drop-shadow-[0_1px_1px_rgba(0,0,0,0.25)]">MXTK Ecosystem</h1>
+          <p className="text-xl text-muted max-w-3xl mx-auto">
+            A comprehensive ecosystem of partners, integrations, and infrastructure supporting Mineral Token's mission to unlock liquidity for global mineral holdings.
+          </p>
+        </section>
+      </PageHero>
 
       {/* Core Infrastructure */}
       <section className="section-amber">
@@ -91,6 +96,17 @@ export default function Ecosystem() {
       <section className="section-teal">
         <Card tint="teal">
           <h2 className="text-2xl font-semibold mb-6">Partners & Integrations</h2>
+          
+          {/* Partner Logos */}
+          <OrganizationLogoGrid
+            organizations={PLACEHOLDER_PARTNERS_ECOSYSTEM}
+            title="Strategic Partners"
+            subtitle="Key partners supporting the MXTK ecosystem"
+            size="lg"
+            columns={4}
+            className="mb-8"
+          />
+          
           <div className="grid gap-6 md:grid-cols-3">
             <div>
               <h3 className="text-lg font-semibold mb-3">Wallets & Portfolio Trackers</h3>
@@ -98,27 +114,27 @@ export default function Ecosystem() {
                 <li>MetaMask & other Web3 wallets</li>
                 <li>Portfolio tracking apps</li>
                 <li>Mobile wallet support</li>
-                <li>Hardware wallet compatibility</li>
+                <li>Hardware wallet integration</li>
+              </ul>
+            </div>
+            
+            <div>
+              <h3 className="text-lg font-semibold mb-3">KYC & Compliance</h3>
+              <ul className="space-y-2 text-sm text-muted">
+                <li>Identity verification services</li>
+                <li>AML screening & monitoring</li>
+                <li>Regulatory compliance tools</li>
+                <li>Audit & reporting systems</li>
               </ul>
             </div>
             
             <div>
               <h3 className="text-lg font-semibold mb-3">Custody & Security</h3>
               <ul className="space-y-2 text-sm text-muted">
-                <li>Institutional custody solutions</li>
+                <li>Institutional-grade custody</li>
                 <li>Multi-signature security</li>
-                <li>Cold storage options</li>
                 <li>Insurance coverage</li>
-              </ul>
-            </div>
-            
-            <div>
-              <h3 className="text-lg font-semibold mb-3">Analytics & Risk Tools</h3>
-              <ul className="space-y-2 text-sm text-muted">
-                <li>Real-time market data</li>
-                <li>Risk assessment tools</li>
-                <li>Portfolio analytics</li>
-                <li>Compliance monitoring</li>
+                <li>Cold storage solutions</li>
               </ul>
             </div>
           </div>
@@ -221,7 +237,7 @@ export default function Ecosystem() {
             <div className="pt-4 border-t border-border">
               <p className="text-sm text-muted mb-4">
                 For comprehensive developer documentation, visit our{' '}
-                <Link href="/resources" className="text-accent hover:underline">
+                <Link href="resources" className="text-accent hover:underline">
                   Resources page
                 </Link>
                 .
@@ -239,10 +255,10 @@ export default function Ecosystem() {
             Interested in partnering with Mineral Token? We're always looking for innovative companies and developers to join our ecosystem.
           </p>
           <div className="flex flex-col sm:flex-row gap-4">
-            <Link href="/contact-us" className="btn-soft">
+            <Link href="contact-us" className="btn-soft">
               Partner with Us
             </Link>
-            <Link href="/resources" className="btn-outline">
+            <Link href="resources" className="btn-outline">
               Developer Resources
             </Link>
           </div>

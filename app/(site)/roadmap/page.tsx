@@ -1,17 +1,20 @@
+import PageHero from '@/components/PageHero'
 import Card from '@/components/ui/Card'
 
 export default function RoadmapPage() {
   return (
     <div className="space-y-16">
       {/* Hero */}
-      <section className="text-center space-y-6">
-        <h1 className="text-4xl md:text-6xl font-bold tracking-tight">
-          Roadmap
-        </h1>
-        <p className="text-xl text-muted max-w-3xl mx-auto">
-          Indicative milestones subject to verification and partner timelines. Our path to building the future of mineral tokenization.
-        </p>
-      </section>
+      <PageHero>
+        <section className="text-center space-y-6">
+          <h1 className="text-4xl md:text-6xl font-bold tracking-tight text-slate-900 dark:text-slate-50 drop-shadow-[0_1px_1px_rgba(0,0,0,0.25)]">
+            Roadmap
+          </h1>
+          <p className="text-xl text-muted max-w-3xl mx-auto">
+            Indicative milestones subject to verification and partner timelines. Our path to building the future of mineral tokenization.
+          </p>
+        </section>
+      </PageHero>
 
       {/* Current Quarter */}
       <section className="section-amber">

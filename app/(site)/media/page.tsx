@@ -1,3 +1,4 @@
+import PageHero from '@/components/PageHero'
 import Card from '@/components/ui/Card'
 import Link from 'next/link'
 
@@ -5,14 +6,16 @@ export default function MediaPage() {
   return (
     <div className="space-y-16">
       {/* Hero */}
-      <section className="text-center space-y-6">
-        <h1 className="text-4xl md:text-6xl font-bold tracking-tight">
-          Media & Press
-        </h1>
-        <p className="text-xl text-muted max-w-3xl mx-auto">
-          Logos, brand guidance, and contacts for press and partners. Everything you need to cover MXTK accurately and effectively.
-        </p>
-      </section>
+      <PageHero>
+        <section className="text-center space-y-6">
+          <h1 className="text-4xl md:text-6xl font-bold tracking-tight text-slate-900 dark:text-slate-50 drop-shadow-[0_1px_1px_rgba(0,0,0,0.25)]">
+            Media & Press
+          </h1>
+          <p className="text-xl text-muted max-w-3xl mx-auto">
+            Logos, brand guidance, and contacts for press and partners. Everything you need to cover MXTK accurately and effectively.
+          </p>
+        </section>
+      </PageHero>
 
       {/* Press Kit */}
       <section className="section-amber">
@@ -23,7 +26,7 @@ export default function MediaPage() {
               <div className="text-3xl font-bold mb-2">🎨</div>
               <h3 className="font-semibold mb-2">Brand Assets</h3>
               <p className="text-muted text-sm mb-4">Official logos, color palettes, and visual guidelines</p>
-              <a className="btn-soft" href="/docs/design-assets/mxtk_palette_light.png" target="_blank" rel="noopener noreferrer">
+              <a className="btn-soft" href="docs/design-assets/mxtk_palette_light.png" target="_blank" rel="noopener noreferrer">
                 Download Assets
               </a>
             </div>
@@ -31,7 +34,7 @@ export default function MediaPage() {
               <div className="text-3xl font-bold mb-2">📄</div>
               <h3 className="font-semibold mb-2">Logo Package</h3>
               <p className="text-muted text-sm mb-4">High-resolution MXTK logos in various formats</p>
-              <a className="btn-soft" href="/logo-horizontal.png" target="_blank" rel="noopener noreferrer">
+              <a className="btn-soft" href="logo-horizontal.png" target="_blank" rel="noopener noreferrer">
                 Download Logo
               </a>
             </div>
@@ -79,22 +82,22 @@ export default function MediaPage() {
             <div>
               <h3 className="font-semibold mb-2">Whitepaper</h3>
               <p className="text-muted text-sm mb-4">Technical documentation and methodology</p>
-              <Link className="btn-link" href="/whitepaper">Read Whitepaper</Link>
+              <Link className="btn-link" href="whitepaper">Read Whitepaper</Link>
             </div>
             <div>
               <h3 className="font-semibold mb-2">Transparency</h3>
               <p className="text-muted text-sm mb-4">On-chain data and verification sources</p>
-              <Link className="btn-link" href="/transparency">View Transparency</Link>
+              <Link className="btn-link" href="transparency">View Transparency</Link>
             </div>
             <div>
               <h3 className="font-semibold mb-2">Roadmap</h3>
               <p className="text-muted text-sm mb-4">Development milestones and timeline</p>
-              <Link className="btn-link" href="/roadmap">See Roadmap</Link>
+              <Link className="btn-link" href="roadmap">See Roadmap</Link>
             </div>
             <div>
               <h3 className="font-semibold mb-2">MXTK Gives</h3>
               <p className="text-muted text-sm mb-4">Nonprofit initiative and impact</p>
-              <Link className="btn-link" href="/elite-drop">Learn More</Link>
+              <Link className="btn-link" href="elite-drop">Learn More</Link>
             </div>
           </div>
         </Card>

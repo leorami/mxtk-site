@@ -1,15 +1,18 @@
+import PageHero from '@/components/PageHero'
 import Card from '@/components/ui/Card'
 
 export default function Careers() {
   return (
     <div className="space-y-16">
       {/* Hero */}
-      <section className="text-center space-y-6">
-        <h1 className="text-4xl md:text-6xl font-bold tracking-tight">Careers</h1>
-        <p className="text-xl text-muted max-w-3xl mx-auto">
-          Employment opportunities with Mineral Token.
-        </p>
-      </section>
+      <PageHero>
+        <section className="text-center space-y-6">
+          <h1 className="text-4xl md:text-6xl font-bold tracking-tight text-slate-900 dark:text-slate-50 drop-shadow-[0_1px_1px_rgba(0,0,0,0.25)]">Careers</h1>
+          <p className="text-xl text-muted max-w-3xl mx-auto">
+            Employment opportunities with Mineral Token.
+          </p>
+        </section>
+      </PageHero>
 
       {/* Company Overview */}
       <section className="section-amber">
