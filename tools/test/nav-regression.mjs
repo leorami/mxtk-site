@@ -32,7 +32,10 @@ const EXPECT_PREFIX = expectedPrefixFromUrl(BASE_URL);
 function isInternal(href) {
   if (!href) return false;
   if (href.startsWith('#')) return false;
+  // Treat absolute http(s) as external
   if (/^https?:\/\//i.test(href)) return false;
+  // Treat other schemes as external too (mailto:, tel:, data:, javascript:)
+  if (/^[a-zA-Z][a-zA-Z0-9+.-]*:\/\//.test(href) || /^(mailto:|tel:|data:|javascript:)/i.test(href)) return false;
   return true;
 }
 
@@ -56,9 +59,76 @@ async function collectAnchors(page) {
   })));
 }
 
+async function captureErrors(page) {
+  const consoleErrors = [];
+  const networkErrors = [];
+  page.on('console', msg => {
+    if (msg.type() === 'error') {
+      const text = msg.text();
+      if (
+        !text.includes('__nextjs_original-stack-frames') &&
+        !/preload but not used/i.test(text)
+      ) {
+        consoleErrors.push(text);
+      }
+    }
+  });
+  page.on('response', response => {
+    const url = response.url();
+    if (response.status() >= 400 &&
+        !url.includes('__nextjs_original-stack-frames') &&
+        !url.includes('webpack-hmr')) {
+      networkErrors.push(`${response.status()} ${response.statusText()}: ${url}`);
+    }
+  });
+  return { consoleErrors, networkErrors };
+}
+
+async function gotoWithRetry(page, url, attempts = 3, timeout = 30000) {
+  let lastErr;
+  for (let i = 0; i < attempts; i++) {
+    try {
+      await page.goto(url, { waitUntil: 'networkidle2', timeout });
+      return;
+    } catch (err) {
+      lastErr = err;
+      await new Promise(res => setTimeout(res, 500));
+    }
+  }
+  throw lastErr;
+}
+
+async function clickAndWaitForUrl(page, href, expectPrefix) {
+  const before = new URL(page.url());
+  const expected = new URL(href, before.origin);
+  try {
+    await page.click(`a[href="${href}"]`);
+  } catch {
+    // Try a broader selector if exact match fails
+    const selector = `a[href="${href}"]`;
+    await page.evaluate(sel => {
+      const el = document.querySelector(sel);
+      if (el) el.click();
+    }, selector);
+  }
+  // Poll for URL change or expected path within timeout
+  const start = Date.now();
+  const timeoutMs = 8000;
+  while (Date.now() - start < timeoutMs) {
+    await new Promise(res => setTimeout(res, 250));
+    const current = new URL(page.url());
+    // Accept either exact href path or any path that retains required prefix (for client router transitions)
+    const prefixOk = expectPrefix ? current.pathname.startsWith(expectPrefix) : current.pathname.startsWith('/');
+    if (current.pathname === expected.pathname || prefixOk) return current.toString();
+  }
+  return new URL(page.url()).toString();
+}
+
 async function testPage(browser, url, { checkFooterLegalEscape = false } = {}) {
   const page = await browser.newPage();
-  await page.goto(url, { waitUntil: 'networkidle2' });
+  await page.setViewport({ width: 1280, height: 900 });
+  const { consoleErrors, networkErrors } = await captureErrors(page);
+  await gotoWithRetry(page, url);
 
   // After hydration, Next should render absolute, prefix-aware hrefs in the DOM (client)
   const anchors = await collectAnchors(page);
@@ -105,6 +175,9 @@ async function testPage(browser, url, { checkFooterLegalEscape = false } = {}) {
     }
   }
 
+  if (consoleErrors.length || networkErrors.length) {
+    throw new Error(`Page errors detected: console=${consoleErrors.length}, network=${networkErrors.length}`);
+  }
   await page.close();
 }
 
@@ -121,7 +194,9 @@ async function testPage(browser, url, { checkFooterLegalEscape = false } = {}) {
     // 2) Click through: Owners
     {
       const page = await browser.newPage();
-      await page.goto(BASE_URL, { waitUntil: 'networkidle2' });
+      await page.setViewport({ width: 1280, height: 900 });
+      const { consoleErrors, networkErrors } = await captureErrors(page);
+      await gotoWithRetry(page, BASE_URL);
       // Find a visible Owners link (case-insensitive)
       const ownerSel = 'a[href]:not([href^="http"]):not([href^="#"])';
       await page.waitForSelector(ownerSel);
@@ -131,11 +206,7 @@ async function testPage(browser, url, { checkFooterLegalEscape = false } = {}) {
         return match ? match.getAttribute('href') : null;
       });
       if (!linkToOwners) throw new Error('Owners link not found on landing page');
-      await Promise.all([
-        page.waitForNavigation({ waitUntil: 'networkidle2' }),
-        page.click(`a[href="${linkToOwners}"]`),
-      ]);
-      const current = page.url();
+      const current = await clickAndWaitForUrl(page, linkToOwners, EXPECT_PREFIX);
       if (EXPECT_PREFIX) {
         if (!/\/mxtk\/owners(\/|$)/.test(current)) {
           throw new Error(`[FAIL] Owners page URL should be "${EXPECT_PREFIX}/owners", got: ${current}`);
@@ -144,6 +215,9 @@ async function testPage(browser, url, { checkFooterLegalEscape = false } = {}) {
         if (!/\/owners(\/|$)/.test(new URL(current).pathname)) {
           throw new Error(`[FAIL] Owners page URL should be "/owners", got: ${current}`);
         }
+      }
+      if (consoleErrors.length || networkErrors.length) {
+        throw new Error(`Click-through page errors: console=${consoleErrors.length}, network=${networkErrors.length}`);
       }
       await page.close();
     }
@@ -154,6 +228,36 @@ async function testPage(browser, url, { checkFooterLegalEscape = false } = {}) {
       if (EXPECT_PREFIX) legalUrl.pathname = `${EXPECT_PREFIX}/legal/terms`;
       else legalUrl.pathname = '/legal/terms';
       await testPage(browser, legalUrl.toString(), { checkFooterLegalEscape: true });
+    }
+
+    // 4) Click all header/footer internal links to ensure no errors and correct prefixes
+    {
+      const page = await browser.newPage();
+      await page.setViewport({ width: 1280, height: 900 });
+      const { consoleErrors, networkErrors } = await captureErrors(page);
+      await gotoWithRetry(page, BASE_URL);
+      const links = await page.$$eval('header a[href], footer a[href]', as => as.map(a => a.getAttribute('href') || ''));
+      const internalLinks = links.filter(h => h && !h.startsWith('http') && !h.startsWith('#'));
+      for (const href of internalLinks) {
+        if (EXPECT_PREFIX) {
+          if (!(href === EXPECT_PREFIX || href.startsWith(`${EXPECT_PREFIX}/`))) {
+            throw new Error(`[FAIL] Header/Footer link missing prefix on ngrok :: href="${href}"`);
+          }
+        } else {
+          if (!(href === '/' || href.startsWith('/'))) {
+            throw new Error(`[FAIL] Header/Footer link not root-absolute on localhost :: href="${href}`);
+          }
+        }
+        const current = await clickAndWaitForUrl(page, href, EXPECT_PREFIX);
+        if (EXPECT_PREFIX && !new URL(current).pathname.startsWith(EXPECT_PREFIX)) {
+          throw new Error(`[FAIL] Navigation lost prefix :: url="${current}"`);
+        }
+        await gotoWithRetry(page, BASE_URL);
+      }
+      if (consoleErrors.length || networkErrors.length) {
+        throw new Error(`Header/Footer nav errors: console=${consoleErrors.length}, network=${networkErrors.length}`);
+      }
+      await page.close();
     }
 
     console.log('✅ nav-regression: all checks passed');
