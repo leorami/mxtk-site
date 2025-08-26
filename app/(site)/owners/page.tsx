@@ -106,30 +106,17 @@ export default function OwnersPage() {
           </Card>
         </section>
 
-        {/* Inline Photo with Copy */}
+        {/* Field Verification */}
         <section className="glass">
           <Card tint="amber">
-            <div className="grid md:grid-cols-2 gap-8 items-center">
-              <figure className="rounded-2xl overflow-hidden shadow-lg">
-                <img
-                  src={getPublicPath('media/inline-miners-1600x900.jpg', pathname)}
-                  alt="Underground mining crew during operations"
-                  className="w-full h-auto"
-                  loading="lazy"
-                />
-                <figcaption className="text-xs text-slate-500 dark:text-slate-400 p-3">
-                  Field work is evaluated against accepted reporting standards before any claim is listed.
-                </figcaption>
-              </figure>
-              <div>
-                <h3 className="font-semibold mb-3 text-lg">Field Verification</h3>
-                <p className="text-muted mb-4">
-                  Our team conducts thorough field assessments to verify mineral claims and ensure compliance with industry standards. This includes on-site inspections, sample collection, and documentation review.
-                </p>
-                <p className="text-muted text-sm">
-                  Every mineral asset undergoes rigorous evaluation before being considered for tokenization, ensuring transparency and accuracy in our reporting.
-                </p>
-              </div>
+            <div>
+              <h3 className="font-semibold mb-3 text-lg">Field Verification</h3>
+              <p className="text-muted mb-4">
+                Our team conducts thorough field assessments to verify mineral claims and ensure compliance with industry standards. This includes on-site inspections, sample collection, and documentation review.
+              </p>
+              <p className="text-muted text-sm">
+                Every mineral asset undergoes rigorous evaluation before being considered for tokenization, ensuring transparency and accuracy in our reporting.
+              </p>
             </div>
           </Card>
         </section>

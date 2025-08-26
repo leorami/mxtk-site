@@ -50,34 +50,18 @@ export default function TransparencyPage() {
         </Card>
       </section>
 
-      {/* Inline Photo with Copy */}
+      {/* Independent Verification */}
       <section className="glass">
         <Card tint="navy">
-          <div className="grid md:grid-cols-2 gap-8 items-center">
-            <figure className="rounded-2xl overflow-hidden shadow-lg">
-              <img
-                src={getPublicPath('media/inline-assay-1600x900.jpg', pathname)}
-                alt="Laboratory assay testing mineral samples"
-                className="w-full h-auto"
-                loading="lazy"
-              />
-              <figcaption className="text-xs text-slate-500 dark:text-slate-400 p-3">
-                Independent verification and testing ensure accurate mineral valuations and transparent reporting.
-              </figcaption>
-            </figure>
-            <div>
-              <h3 className="font-semibold mb-3 text-lg">Independent Verification</h3>
-              <p className="text-muted mb-4">
-                Our transparency framework relies on independent verification and testing to ensure accurate mineral valuations. Every claim is backed by rigorous laboratory analysis and third-party validation.
-              </p>
-              <p className="text-muted text-sm">
-                This commitment to independent verification ensures that all MXTK token holders can trust the underlying asset valuations and reporting standards.
-              </p>
-            </div>
+          <div>
+            <h3 className="font-semibold mb-3 text-lg">Independent Verification</h3>
+            <p className="text-muted mb-4">
+              Our transparency framework relies on independent verification and testing to ensure accurate mineral valuations. Every claim is backed by rigorous laboratory analysis and third-party validation.
+            </p>
+            <p className="text-muted text-sm">
+              This commitment to independent verification ensures that all MXTK token holders can trust the underlying asset valuations and reporting standards.
+            </p>
           </div>
-          
-          {/* Independent verification supporting image - temporarily removed for cleaner look */}
-          {/* <img src={getPublicPath('minerals/supporting/transparency_support_facets.jpg', pathname)} alt="Tiger's eye facets" className="w-full rounded-xl shadow my-6" loading="lazy" /> */}
         </Card>
       </section>
 

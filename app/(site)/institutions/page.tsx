@@ -47,34 +47,18 @@ export default function InstitutionsPage() {
         </Card>
       </section>
 
-      {/* Inline Photo with Copy */}
+      {/* Scale of Operations */}
       <section className="glass">
         <Card tint="teal">
-          <div className="grid md:grid-cols-2 gap-8 items-center">
-            <div>
-              <h3 className="font-semibold mb-3 text-lg">Scale of Operations</h3>
-              <p className="text-muted mb-4">
-                Large-scale mining operations like this demonstrate the substantial value of mineral assets that can be tokenized through MXTK. Our platform supports assets of all sizes, from small claims to major mining operations.
-              </p>
-              <p className="text-muted text-sm">
-                The tokenization process maintains the same rigorous standards regardless of asset size, ensuring consistent quality and transparency across all listings.
-              </p>
-            </div>
-            <figure className="rounded-2xl overflow-hidden shadow-lg">
-              <img
-                src={getPublicPath('media/inline-openpit-1600x900.jpg', pathname)}
-                alt="Open pit mining operations showing large-scale mineral extraction"
-                className="w-full h-auto"
-                loading="lazy"
-              />
-              <figcaption className="text-xs text-slate-500 dark:text-slate-400 p-3">
-                Large-scale mining operations demonstrate the scale of mineral assets that can be tokenized through MXTK.
-              </figcaption>
-            </figure>
+          <div>
+            <h3 className="font-semibold mb-3 text-lg">Scale of Operations</h3>
+            <p className="text-muted mb-4">
+              Large-scale mining operations demonstrate the substantial value of mineral assets that can be tokenized through MXTK. Our platform supports assets of all sizes, from small claims to major mining operations.
+            </p>
+            <p className="text-muted text-sm">
+              The tokenization process maintains the same rigorous standards regardless of asset size, ensuring consistent quality and transparency across all listings.
+            </p>
           </div>
-          
-          {/* Custody/KYC partner supporting image - temporarily removed for cleaner look */}
-          {/* <img src={getPublicPath('minerals/supporting/institutions_support_pyrite.jpg', pathname)} alt="Lapis pyrite flecks" className="w-full rounded-xl shadow my-6" loading="lazy" /> */}
         </Card>
       </section>
 
