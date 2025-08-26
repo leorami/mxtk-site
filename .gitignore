@@ -124,5 +124,8 @@ temp/
 test.conf
 *.test.conf
 
+# Test output directories
+tools/debug/output/
+
 # Nginx configuration files (should be managed by external projects)
 nginx-*.conf

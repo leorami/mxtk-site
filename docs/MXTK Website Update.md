@@ -19,7 +19,7 @@ I synthesized the current site, your WIP sandbox, our target personas, and best 
 - **Mineral owners:** Clear intake, accepted standards (JORC/NI 43‑101/SKR), confidentiality and next steps.
 - **Institutions & banks:** One‑stop diligence view (governance, oracle method, addresses, liquidity plan, OTC rails).
 - **Regulators & skeptics:** Traceable claims (IPFS proofs), change logs, and a risk page; conservative wording.
-- **Nonprofits (MXTK Gives):** Program overview, nomination flow, lock/learning/story‑sharing commitments; Encast partnership.
+- **Nonprofits (MXTK Gives):** Program overview, nomination flow, lock/learning/story‑sharing commitments.
 
 ---
 
@@ -101,7 +101,7 @@ Top nav, landing, transparency, institutions, and footer in Dark for crypto‑na
 
 - **Transparency hub** scaffolding with placeholders clearly labeled; swap to live CIDs and addresses as they’re approved.
 - **Owners** and **Institutions** pages with the right language and modules.
-- **MXTK Gives** program page + nomination form; Encast partnership noted.
+- **MXTK Gives** program page + nomination form.
 - **Media** page (boilerplate, logo assets) and **Legal** (Terms, Privacy, Disclosures).
 - Performance, accessibility, and cookie consent.
 

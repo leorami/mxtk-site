@@ -184,11 +184,11 @@ MXTK implements a **completely independent** shared dev proxy system that can wo
 ./scripts/setup-mxtk-site.sh start
 
 # Integrate with any project (universal approach)
-./scripts/setup-mxtk-site.sh integrate-with encast-web ../encast.web
+DEV_TUNNEL_PROXY_DIR=/path/to/dev-tunnel-proxy ./scripts/dev-proxy-install.sh
 ./scripts/setup-mxtk-site.sh integrate-with other-project ../other-project
 
-# Quick integrate with encast-web (if in standard location)
-./scripts/setup-mxtk-site.sh integrate-encast
+# Quick integrate with dev-tunnel-proxy (if in standard location)
+./scripts/dev-proxy-install.sh
 
 # Access via: http://localhost:8080/mxtk/
 ```
@@ -207,8 +207,7 @@ MXTK implements a **completely independent** shared dev proxy system that can wo
 - `./scripts/setup-mxtk-site.sh restart-proxy` - Restart dev proxy services
 - `./scripts/setup-mxtk-site.sh integrate-with <project> <dir>` - Integrate with any project
 - `./scripts/setup-mxtk-site.sh disconnect-from <project> <dir>` - Disconnect from project
-- `./scripts/setup-mxtk-site.sh integrate-encast [dir]` - Quick integrate with encast-web
-- `./scripts/setup-mxtk-site.sh disconnect-encast [dir]` - Quick disconnect from encast-web
+- `./scripts/dev-proxy-install.sh` - Install MXTK config into dev-tunnel-proxy
 
 ### Ngrok Integration (Legacy)
 The legacy ngrok integration is still available for backward compatibility:
