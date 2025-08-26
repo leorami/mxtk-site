@@ -1,0 +1,128 @@
+/* === Mineral-Inspired Gradient System (Bright, modern, glass-first) === */
+
+/* --- Page Gradients --- */
+/* Owners → Citrine */
+.bg-citrine {
+  background: radial-gradient(circle at 30% 30%, #fff7d6 0%, #ffd54f 38%, #f9a825 100%);
+}
+
+/* Transparency → Tiger's Eye */
+.bg-tigereye {
+  background: linear-gradient(135deg, #f6d365 0%, #d68a37 55%, #8e5624 100%);
+}
+
+/* Home → Amber */
+.bg-amber {
+  background: radial-gradient(circle at 40% 40%, #ffecb3 0%, #ffb74d 45%, #f57c00 100%);
+}
+
+/* Institutions → Lapis */
+.bg-lapis {
+  background: linear-gradient(145deg, #5f7fe8 0%, #3a53c7 50%, #1f2b8f 100%);
+}
+
+/* Whitepaper → Obsidian */
+.bg-obsidian {
+  background: linear-gradient(160deg, #1e1e1e 0%, #2c2c2c 60%, #0d0d0d 100%);
+}
+
+/* Roadmap → Copper */
+.bg-copper {
+  background: linear-gradient(160deg, #de8a5a 0%, #b15e34 55%, #73361d 100%);
+}
+
+/* Cares → Jade */
+.bg-jade {
+  background: radial-gradient(60% 50% at 30% 40%, #d6f8d6 0%, #8bd3a3 45%, #0f9b69 100%);
+}
+
+/* Media → Onyx */
+.bg-onyx {
+  background: linear-gradient(145deg, #222 0%, #111 60%, #000 100%);
+}
+
+/* FAQ → Quartz */
+.bg-quartz {
+  background: radial-gradient(70% 60% at 30% 40%, #ffffff 0%, #f7f7f7 50%, #ececec 100%);
+}
+
+/* Resources → Hematite */
+.bg-hematite {
+  background: linear-gradient(160deg, #bfc5cb 0%, #7a8289 55%, #474c51 100%);
+}
+
+/* Contact → Jade (brighter) */
+.bg-contact {
+  background: radial-gradient(70% 60% at 50% 40%, #e6ffef 0%, #9be5ba 50%, #11a674 100%);
+}
+
+/* Team → Lapis variation */
+.bg-team {
+  background: linear-gradient(140deg, #6a87ff 0%, #3f58d2 55%, #22319a 100%);
+}
+
+/* --- Accent Variables (utility classes) --- */
+.accent-citrine    { --mxtk-accent: #f5b700; }
+.accent-tigereye   { --mxtk-accent: #d68a37; }
+.accent-amber      { --mxtk-accent: #ff9800; }
+.accent-lapis      { --mxtk-accent: #3a53c7; }
+.accent-obsidian   { --mxtk-accent: #2c2c2c; }
+.accent-copper     { --mxtk-accent: #b15e34; }
+.accent-jade       { --mxtk-accent: #0f9b69; }
+.accent-onyx       { --mxtk-accent: #111111; }
+.accent-quartz     { --mxtk-accent: #bdbdbd; }
+.accent-hematite   { --mxtk-accent: #7a8289; }
+.accent-contact    { --mxtk-accent: #11a674; }
+.accent-team       { --mxtk-accent: #3f58d2; }
+
+/* --- Glass 2.0 --- */
+.glass {
+  backdrop-filter: blur(14px) saturate(1.1);
+  -webkit-backdrop-filter: blur(14px) saturate(1.1);
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.14);
+  border-radius: 1rem;
+  box-shadow: 0 6px 18px rgba(0,0,0,.08);
+}
+.dark .glass {
+  background: rgba(0,0,0,0.22);
+  border-color: rgba(255,255,255,0.10);
+}
+
+/* Optional gradient border accent for hero/CTA cards */
+.glass-gradient-border {
+  border: 2px solid transparent;
+  border-radius: 1.25rem;
+  background: linear-gradient(#1e1e1e, #1e1e1e) padding-box,
+              linear-gradient(90deg, var(--mxtk-accent, #ff9800), transparent) border-box;
+}
+
+/* --- Animated Mineral Light Wash --- */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+/* .mineral-wash {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(120deg, transparent, rgba(255,255,255,0.07), transparent);
+  background-size: 200% 100%;
+  animation: shimmer 20s linear infinite;
+  opacity: 0.6;
+} */
+
+/* --- Headline Gradient Text --- */
+/* .headline-gradient {
+  background: linear-gradient(90deg, var(--mxtk-accent, #ff9800), #ffffff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+} */
+
+/* --- Readability helpers --- */
+.h-on-gradient { color: #0b0b0b; text-shadow: none; }
+.dark .h-on-gradient { color: #fafafa; }
+.sub-on-gradient { color: rgba(0,0,0,0.78); }
+.dark .sub-on-gradient { color: rgba(255,255,255,0.78); }

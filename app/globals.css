@@ -300,22 +300,35 @@ table a:hover {
     color: #F4F7FD; /* Even brighter on hover */
 }
 
+/* Mineral tile backgrounds */
+.bg-mineral-tile {
+  background-repeat: repeat;
+  background-size: 640px 640px;
+  image-rendering: -webkit-optimize-contrast;
+}
+.dark .bg-mineral-tile {
+  background-blend-mode: multiply;
+}
+
 /* Glass */
 .glass {
-    border: 1px solid var(--border-soft);
-    border-radius: var(--radius-2xl);
-    backdrop-filter: blur(10px);
-    box-shadow: var(--shadow-inner-top);
-    background: var(--surface-card);
-    transition: transform .2s cubic-bezier(.22, .61, .36, 1), box-shadow .2s;
+    backdrop-filter: blur(10px) saturate(1.05);
+    background: color-mix(in oklab, var(--surface-card) 82%, transparent);
 }
+.dark .glass {
+    background: color-mix(in oklab, var(--surface-card) 78%, transparent);
+}
+
+/* Text helpers for mineral backgrounds */
+.h-on-tile    { color: var(--h-color); text-shadow: 0 1px 1px rgba(0,0,0,.25); }
+.sub-on-tile  { color: var(--ink-muted); }
 
 .glass-embedded {
     background: var(--surface-card-emb);
 }
 
 .hover-lift:hover {
-    transform: translateY(-2px);
+    transform: translateY(-1px);
     box-shadow: var(--shadow-lift);
 }
 
@@ -335,6 +348,54 @@ table a:hover {
 
 .section-navy {
     background: var(--surface-section-3);
+}
+
+/* Citrine-themed sections for owners page */
+.section-citrine {
+    background: rgba(255, 215, 0, 0.08);
+    border: 1px solid rgba(255, 215, 0, 0.15);
+}
+
+.section-citrine-dark {
+    background: rgba(255, 215, 0, 0.12);
+    border: 1px solid rgba(255, 215, 0, 0.2);
+}
+
+.section-citrine-light {
+    background: rgba(255, 215, 0, 0.05);
+    border: 1px solid rgba(255, 215, 0, 0.1);
+}
+
+/* Lapis-themed sections for institutions page */
+.section-lapis {
+    background: rgba(38, 97, 156, 0.08);
+    border: 1px solid rgba(38, 97, 156, 0.15);
+}
+
+.section-lapis-dark {
+    background: rgba(38, 97, 156, 0.12);
+    border: 1px solid rgba(38, 97, 156, 0.2);
+}
+
+.section-lapis-light {
+    background: rgba(38, 97, 156, 0.05);
+    border: 1px solid rgba(38, 97, 156, 0.1);
+}
+
+/* Tiger-eye themed sections for transparency page */
+.section-tiger-eye {
+    background: rgba(205, 133, 63, 0.08);
+    border: 1px solid rgba(205, 133, 63, 0.15);
+}
+
+.section-tiger-eye-dark {
+    background: rgba(205, 133, 63, 0.12);
+    border: 1px solid rgba(205, 133, 63, 0.2);
+}
+
+.section-tiger-eye-light {
+    background: rgba(205, 133, 63, 0.05);
+    border: 1px solid rgba(205, 133, 63, 0.1);
 }
 
 /* Tables */
@@ -567,7 +628,7 @@ html body [data-mineral] h3 {
 }
 
 .btn-base:hover {
-    transform: translateY(-1px);
+    transform: translateY(-0.5px);
     box-shadow: var(--shadow-lift-sm);
 }
 
@@ -584,7 +645,7 @@ html body [data-mineral] h3 {
 }
 
 .btn-primary:hover {
-    transform: translateY(-1px);
+    transform: translateY(-0.5px);
     box-shadow: var(--shadow-lift-sm);
 }
 
@@ -602,7 +663,7 @@ html body [data-mineral] h3 {
 }
 
 .btn-outline:hover {
-    transform: translateY(-1px);
+    transform: translateY(-0.5px);
     box-shadow: var(--shadow-lift-sm);
     background: var(--mxtk-hover-bg);
 }
@@ -620,7 +681,7 @@ html body [data-mineral] h3 {
 }
 
 .btn-soft:hover {
-    transform: translateY(-1px);
+    transform: translateY(-0.5px);
     box-shadow: var(--shadow-lift-sm);
 }
 
@@ -633,12 +694,15 @@ html body [data-mineral] h3 {
     font-weight: 600;
     transition: transform .15s, box-shadow .15s, background-color .15s, color .15s;
     color: var(--mxtk-accent);
+    text-decoration: none;
 }
 
 .btn-link:hover {
-    transform: translateY(-1px);
+    transform: translateY(-0.5px);
     box-shadow: var(--shadow-lift-sm);
     background: var(--mxtk-hover-bg);
+    color: var(--mxtk-accent);
+    text-decoration: none;
 }
 
 /* Themed table header + card outlines */
@@ -679,6 +743,59 @@ html body [data-mineral] h3 {
 
 .btn-primary:hover {
     filter: brightness(1.06);
+}
+
+/* Enhanced dark mode primary button contrast */
+.dark .btn-primary {
+    background: var(--mxtk-accent);
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 
+        0 4px 12px rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+/* Enhanced "Read More" button visibility */
+.btn-link.text-sm {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--mxtk-accent);
+    background: rgba(224, 147, 43, 0.1);
+    border: 1px solid rgba(224, 147, 43, 0.2);
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    transition: all 0.2s ease;
+}
+
+.btn-link.text-sm:hover {
+    background: rgba(224, 147, 43, 0.15);
+    border-color: rgba(224, 147, 43, 0.3);
+    color: var(--mxtk-accent);
+    transform: translateY(-0.5px);
+    box-shadow: 0 2px 8px rgba(224, 147, 43, 0.2);
+}
+
+.dark .btn-link.text-sm {
+    background: rgba(224, 147, 43, 0.15);
+    border-color: rgba(224, 147, 43, 0.3);
+    color: #fff;
+}
+
+.dark .btn-link.text-sm:hover {
+    background: rgba(224, 147, 43, 0.25);
+    border-color: rgba(224, 147, 43, 0.4);
+    color: #fff;
+    box-shadow: 0 2px 8px rgba(224, 147, 43, 0.3);
+}
+
+.dark .btn-primary:hover {
+    background: var(--mxtk-accent);
+    color: #fff;
+    filter: brightness(1.1);
+    border-color: rgba(255, 255, 255, 0.3);
+    box-shadow: 
+        0 6px 16px rgba(0, 0, 0, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
 }
 
 .btn-outline {
@@ -846,10 +963,10 @@ html body [data-mineral] h3 {
 .textarea:focus,
 .glass:hover,
 .card-outline:hover {
-  transform: translateY(-2px) scale(1.01);
+  transform: translateY(-1px) scale(1.005);
   box-shadow: 
-    0 12px 32px rgba(0, 0, 0, 0.15),
-    0 6px 16px rgba(0, 0, 0, 0.1),
+    0 8px 24px rgba(0, 0, 0, 0.12),
+    0 4px 12px rgba(0, 0, 0, 0.08),
     inset 0 1px 0 rgba(255, 255, 255, 0.3);
   border-color: rgba(255, 255, 255, 0.25);
   background: rgba(255, 255, 255, 0.12);
@@ -863,6 +980,15 @@ html body [data-mineral] h3 {
 .dark .section-amber,
 .dark .section-teal,
 .dark .section-navy,
+.dark .section-citrine,
+.dark .section-citrine-dark,
+.dark .section-citrine-light,
+.dark .section-lapis,
+.dark .section-lapis-dark,
+.dark .section-lapis-light,
+.dark .section-tiger-eye,
+.dark .section-tiger-eye-dark,
+.dark .section-tiger-eye-light,
 .dark .content-block,
 .dark .info-block,
 .dark .token-info,
@@ -870,7 +996,6 @@ html body [data-mineral] h3 {
 .dark .pool-table,
 .dark .liquidity-table,
 .dark .table,
-.dark .btn-primary,
 .dark .btn-outline,
 .dark .btn-soft,
 .dark .btn-link,
@@ -897,6 +1022,15 @@ html body [data-mineral] h3 {
 .dark .section-amber:hover,
 .dark .section-teal:hover,
 .dark .section-navy:hover,
+.dark .section-citrine:hover,
+.dark .section-citrine-dark:hover,
+.dark .section-citrine-light:hover,
+.dark .section-lapis:hover,
+.dark .section-lapis-dark:hover,
+.dark .section-lapis-light:hover,
+.dark .section-tiger-eye:hover,
+.dark .section-tiger-eye-dark:hover,
+.dark .section-tiger-eye-light:hover,
 .dark .content-block:hover,
 .dark .info-block:hover,
 .dark .token-info:hover,
@@ -904,7 +1038,6 @@ html body [data-mineral] h3 {
 .dark .pool-table:hover,
 .dark .liquidity-table:hover,
 .dark .table:hover,
-.dark .btn-primary:hover,
 .dark .btn-outline:hover,
 .dark .btn-soft:hover,
 .dark .btn-link:hover,
@@ -914,10 +1047,10 @@ html body [data-mineral] h3 {
 .dark .textarea:focus,
 .dark .glass:hover,
 .dark .card-outline:hover {
-  transform: translateY(-2px) scale(1.01);
+  transform: translateY(-1px) scale(1.005);
   box-shadow: 
-    0 12px 32px rgba(0, 0, 0, 0.5),
-    0 6px 16px rgba(0, 0, 0, 0.4),
+    0 8px 24px rgba(0, 0, 0, 0.4),
+    0 4px 12px rgba(0, 0, 0, 0.3),
     inset 0 1px 0 rgba(255, 255, 255, 0.3);
   border-color: rgba(255, 255, 255, 0.4);
   background: rgba(255, 255, 255, 0.2);
@@ -1091,9 +1224,9 @@ h3 + .btn-link {
 .btn-outline:hover,
 .btn-soft:hover,
 .btn-link:hover {
-  transform: translateY(-1px) scale(1.02);
+  transform: translateY(-0.5px) scale(1.01);
   box-shadow: 
-    0 6px 20px rgba(0, 0, 0, 0.15),
+    0 4px 16px rgba(0, 0, 0, 0.12),
     inset 0 1px 0 rgba(255, 255, 255, 0.3);
   border-color: rgba(255, 255, 255, 0.3);
   background: rgba(255, 255, 255, 0.15);
@@ -1112,9 +1245,9 @@ h3 + .btn-link {
 
 .nav-link:hover {
   background: var(--hover-bg);
-  transform: translateY(-1px) scale(1.02);
+  transform: translateY(-0.5px) scale(1.01);
   box-shadow: 
-    0 4px 12px rgba(0, 0, 0, 0.1),
+    0 3px 8px rgba(0, 0, 0, 0.08),
     inset 0 1px 0 rgba(255, 255, 255, 0.2);
   border-color: rgba(255, 255, 255, 0.25);
 }
@@ -1146,9 +1279,9 @@ h3 + .btn-link {
 .input:focus,
 .select:focus,
 .textarea:focus {
-  transform: translateY(-1px);
+  transform: translateY(-0.5px);
   box-shadow: 
-    0 6px 20px rgba(0, 0, 0, 0.15),
+    0 4px 16px rgba(0, 0, 0, 0.12),
     inset 0 1px 0 rgba(255, 255, 255, 0.25);
   border-color: rgba(255, 255, 255, 0.3);
   background: rgba(255, 255, 255, 0.15);
