@@ -7,7 +7,7 @@ export default function SiteFooter() {
   const basePath = useBasePath() || ''
   const href = (path: string) => (`${basePath}/${path}`).replace(/\/{2,}/g, '/')
   return (
-    <footer className="brand-footer">
+    <footer className="brand-footer relative z-10">
       <div className="mx-auto max-w-none px-4 py-8">
         <div className="flex flex-col md:flex-row justify-between items-center gap-4">
           <div className="text-sm text-muted">

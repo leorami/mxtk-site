@@ -44,15 +44,16 @@ export default function BrandThemeProvider({ children }: { children: React.React
 
   // Calculate accent text color based on theme mode
   const accentTextColor = useMemo(() => {
+    const accentBase = '#040F3D'
     if (!mounted) {
       // During SSR and initial render, use the base color to match server
-      return theme.accent
+      return accentBase
     }
     
     // After mounting, check for dark mode
     const isDark = document.documentElement.classList.contains('dark')
-    return isDark ? lightenColor(theme.accent, 58) : theme.accent
-  }, [theme.accent, mounted])
+    return isDark ? lightenColor(accentBase, 58) : accentBase
+  }, [mounted])
 
   return (
     <Ctx.Provider value={theme}>
@@ -60,10 +61,10 @@ export default function BrandThemeProvider({ children }: { children: React.React
         <div
           suppressHydrationWarning
           style={{ 
-            ['--mxtk-accent' as any]: theme.accent, 
+            ['--mxtk-accent' as any]: '#040F3D', 
             ['--mxtk-hover-bg' as any]: theme.hoverBg,
             ['--mxtk-accent-text' as any]: accentTextColor,
-            ['--mxtk-accent-rgb' as any]: hexToRgb(theme.accent)
+            ['--mxtk-accent-rgb' as any]: hexToRgb('#040F3D')
           } as React.CSSProperties}
           data-mineral={theme.name}
           data-photo={theme.photo}

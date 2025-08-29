@@ -52,7 +52,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             <body className="page min-h-dvh flex flex-col">
                 <BasePathProvider value={bp}>
                     <SiteHeader />
-                    <main className="relative z-10 flex-1 min-h-0 overflow-y-auto mx-auto w-full max-w-none px-4">
+                    <main className="relative z-10 flex-1 min-h-0">
                         <BrandThemeProvider>
                             {children}
                         </BrandThemeProvider>

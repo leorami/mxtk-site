@@ -22,7 +22,7 @@ export default function Home() {
 
   return (
     <>
-      <PageBackground src="art/backgrounds/home_gold.jpg" />
+      <PageBackground page="home" />
       
       <PageHero>
         <div className="relative">
