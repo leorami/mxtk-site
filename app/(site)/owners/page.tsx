@@ -1,65 +1,63 @@
 'use client'
 
 import PageHero from '@/components/PageHero';
+import SectionWrapper from '@/components/SectionWrapper';
+// FullBleed removed per revert
 import Card from '@/components/ui/Card';
-import { getPublicPath } from '@/lib/routing/basePath';
+import FeatureGrid from '@/components/ui/FeatureGrid';
+import { KeyPoint, KeyPointsGrid } from '@/components/ui/KeyPoints';
+import BackgroundBands from '@/components/visuals/BackgroundBands';
+import { usePublicPath } from '@/lib/routing/getPublicPathClient';
 import { usePathname } from 'next/navigation';
 
 export default function OwnersPage() {
   const pathname = usePathname() || '/'
   return (
-    <PageHero>
-      <div className="space-y-16">
+    <>
+      <BackgroundBands variant="owners" />
+      <PageHero>
+        <div className="relative">
+          <div className="space-y-0">
         {/* Hero */}
-        <section className="text-center space-y-6 pt-16">
-          <h1 className="text-4xl md:text-6xl font-bold tracking-tight text-gray-950 dark:text-gray-50">
+        <SectionWrapper index={0} className="text-center">
+          <h1 className="text-4xl md:text-6xl font-bold tracking-tight">
             For Mineral Owners
           </h1>
           <div className="flex justify-center items-center gap-4 mt-4">
-            <img src={getPublicPath('icons/mineral/icon-bands.svg', pathname)} alt="" className="w-6 h-6 opacity-70" />
-            <img src={getPublicPath('icons/mineral/icon-droplet.svg', pathname)} alt="" className="w-6 h-6 opacity-70" />
-            <img src={getPublicPath('icons/mineral/icon-facet.svg', pathname)} alt="" className="w-6 h-6 opacity-70" />
+            <img src={usePublicPath('icons/mineral/icon-bands.svg')} alt="" role="presentation" aria-hidden="true" className="w-6 h-6 opacity-70" />
+            <img src={usePublicPath('icons/mineral/icon-droplet.svg')} alt="" role="presentation" aria-hidden="true" className="w-6 h-6 opacity-70" />
+            <img src={usePublicPath('icons/mineral/icon-facet.svg')} alt="" role="presentation" aria-hidden="true" className="w-6 h-6 opacity-70" />
           </div>
-          <p className="text-xl text-gray-800 dark:text-gray-200 max-w-3xl mx-auto">
+          <p className="text-xl max-w-3xl mx-auto">
             MXTK offers a compliant, confidential intake path for owners and operators seeking to digitize mineral interests and participate in a transparent, governed token economy.
           </p>
-        </section>
+        </SectionWrapper>
 
         {/* What We Consider */}
-        <section className="glass">
+        <SectionWrapper index={1}>
           <Card tint="amber">
             <h2 className="text-2xl font-semibold mb-6">What We Consider</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <div>
-                <h3 className="font-semibold mb-3">Geological Documentation</h3>
-                <ul className="space-y-2 text-muted">
-                  <li>• JORC/NI43-101 technical reports</li>
-                  <li>• Resource and reserve estimates</li>
-                  <li>• Geological modeling and analysis</li>
-                  <li>• Exploration and development plans</li>
-                </ul>
-              </div>
-              <div>
-                <h3 className="font-semibold mb-3">Legal & Financial</h3>
-                <ul className="space-y-2 text-muted">
-                  <li>• Chain-of-title verification</li>
-                  <li>• Mineral rights documentation</li>
-                  <li>• Financial statements and projections</li>
-                  <li>• Regulatory compliance status</li>
-                </ul>
-              </div>
-            </div>
+            <FeatureGrid
+              cols={3}
+              items={[
+                { title: 'Aligned incentives', body: 'Structures designed to protect long-term asset value.' },
+                { title: 'Flexible repayment', body: 'Terms optimized for project reality and timing.' },
+                { title: 'No personal guarantees', body: 'Project-backed mechanics without personal liability.' },
+              ]}
+            />
             
             {/* What We Consider supporting image - temporarily removed for cleaner look */}
             {/* <img src={getPublicPath('minerals/supporting/owners_support_facets.jpg', pathname)} alt="Citrine facets" className="w-full rounded-xl shadow my-6" loading="lazy" /> */}
           </Card>
-        </section>
+        </SectionWrapper>
+
+        
 
         {/* What You Provide */}
-        <section className="glass">
+        <SectionWrapper index={2}>
           <Card tint="teal">
             <h2 className="text-2xl font-semibold mb-6">What You Provide</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
               <div className="text-center">
                 <div className="text-3xl font-bold mb-2">📋</div>
                 <h3 className="font-semibold mb-2">Documentation</h3>
@@ -77,13 +75,13 @@ export default function OwnersPage() {
               </div>
             </div>
           </Card>
-        </section>
+        </SectionWrapper>
 
         {/* Process Steps */}
-        <section className="glass">
+        <SectionWrapper index={3}>
           <Card tint="navy">
             <h2 className="text-2xl font-semibold mb-6">Our Process</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
               <div className="text-center">
                 <div className="text-4xl font-bold mb-4 text-accent">🔍</div>
                 <h3 className="text-xl font-semibold mb-3">Discovery</h3>
@@ -104,10 +102,10 @@ export default function OwnersPage() {
             {/* Process supporting image - temporarily removed for cleaner look */}
             {/* <img src={getPublicPath('minerals/supporting/owners_support_veins.jpg', pathname)} alt="Citrine veins" className="w-full rounded-xl shadow my-6" loading="lazy" /> */}
           </Card>
-        </section>
+        </SectionWrapper>
 
         {/* Field Verification */}
-        <section className="glass">
+        <SectionWrapper index={4}>
           <Card tint="amber">
             <div>
               <h3 className="font-semibold mb-3 text-lg">Field Verification</h3>
@@ -119,62 +117,38 @@ export default function OwnersPage() {
               </p>
             </div>
           </Card>
-        </section>
+        </SectionWrapper>
 
-        {/* Confidentiality */}
+        {/* Consolidated grid */}
         <section className="glass">
           <Card tint="amber">
-            <h2 className="text-2xl font-semibold mb-6">Confidentiality</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <div>
-                <h3 className="font-semibold mb-3">Data Protection</h3>
-                <ul className="space-y-2 text-muted">
-                  <li>• Secure data room access</li>
-                  <li>• Non-disclosure agreements</li>
-                  <li>• Redacted public disclosures</li>
-                  <li>• Controlled information flow</li>
-                </ul>
-              </div>
-              <div>
-                <h3 className="font-semibold mb-3">Privacy Controls</h3>
-                <ul className="space-y-2 text-muted">
-                  <li>• Owner identity protection</li>
-                  <li>• Sensitive data redaction</li>
-                  <li>• Limited public exposure</li>
-                  <li>• Confidential settlement terms</li>
-                </ul>
-              </div>
-            </div>
+            <FeatureGrid
+              cols={3}
+              items={[
+                { title: 'Qualified custody', body: 'Institutional-grade controls and segregation.' },
+                { title: 'Insurance coverage', body: 'Risk mitigation for stored assets.' },
+                { title: 'Audit trails', body: 'Transparent, traceable on-chain activity.' },
+              ]}
+            />
           </Card>
         </section>
 
-        {/* Benefits for Owners */}
-        <section className="glass">
+        {/* Benefits for Owners as Key Points */}
+        <SectionWrapper index={5}>
           <Card tint="teal">
             <h2 className="text-2xl font-semibold mb-6">Benefits for Owners</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="text-center">
-                <div className="text-3xl font-bold mb-2">💰</div>
-                <h3 className="font-semibold mb-2">Liquidity</h3>
-                <p className="text-muted text-sm">Access to global capital markets and trading liquidity</p>
-              </div>
-              <div className="text-center">
-                <div className="text-3xl font-bold mb-2">📈</div>
-                <h3 className="font-semibold mb-2">Value Discovery</h3>
-                <p className="text-muted text-sm">Market-driven pricing and transparent valuation</p>
-              </div>
-              <div className="text-center">
-                <div className="text-3xl font-bold mb-2">🔒</div>
-                <h3 className="font-semibold mb-2">Security</h3>
-                <p className="text-muted text-sm">Blockchain-based ownership and transfer security</p>
-              </div>
-            </div>
-            
-            {/* Benefits supporting image - temporarily removed for cleaner look */}
-            {/* <img src={getPublicPath('minerals/supporting/owners_support_bands.jpg', pathname)} alt="Citrine bands" className="w-full rounded-xl shadow my-6" loading="lazy" /> */}
+            <KeyPointsGrid>
+              <KeyPoint label="Liquidity">Access to global capital markets and trading liquidity.</KeyPoint>
+              <KeyPoint label="Value Discovery">Market-driven pricing and transparent valuation.</KeyPoint>
+              <KeyPoint label="Security">Blockchain-based ownership and transfer security.</KeyPoint>
+            </KeyPointsGrid>
           </Card>
-        </section>
-      </div>
-    </PageHero>
+        </SectionWrapper>
+
+          
+          </div>
+        </div>
+      </PageHero>
+    </>
   );
 }

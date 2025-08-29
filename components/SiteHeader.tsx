@@ -1,7 +1,7 @@
 'use client'
-
+import { useBasePath } from '@/components/providers/BasePathProvider'
 import { themeForRoute } from '@/lib/brand/theme'
-import { getPublicPath, getRelativePath } from '@/lib/routing/basePath'
+import { usePublicPath } from '@/lib/routing/getPublicPathClient'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { CSSProperties, useEffect, useState } from 'react'
@@ -24,38 +24,34 @@ export default function SiteHeader() {
   const pathname = usePathname() || '/'
   const [open, setOpen] = useState(false)
   const [mounted, setMounted] = useState(false)
+  const logoUrl = usePublicPath('logo-horizontal.png')
+  const basePath = useBasePath() || ''
 
   useEffect(() => {
     setMounted(true)
   }, [])
 
   const getActiveState = (href: string) => {
-    // Normalize paths for comparison
     const currentPath = pathname || '/'
-    const linkPath = href === '/' ? '/' : href
-    
-    // Check exact match or if current path starts with link path
-    return currentPath === linkPath || 
-           (linkPath !== '/' && currentPath.startsWith(linkPath))
+    const leaf = href.replace(/^\/+|\/+$/g, '') // remove leading/trailing slashes
+    if (leaf === '') return currentPath === '/'
+    // basePath-aware: consider it active if pathname ends with '/leaf' or '/leaf/...'
+    return currentPath.endsWith(`/${leaf}`) || currentPath.includes(`/${leaf}/`)
   }
 
   return (
     <header className="sticky top-0 z-50">
       <div className="brand-header">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-4" style={{ height: '76px' }}>
+        <div className="mx-auto flex max-w-none items-center justify-between px-4" style={{ height: '76px' }}>
           <div className="flex items-center gap-3">
-            <Link href={getRelativePath('', pathname)} className="flex items-center" aria-label="MXTK Home" suppressHydrationWarning>
-              {mounted ? (
-                <img 
-                  src={getPublicPath('logo-horizontal.svg', pathname)}
-                  alt="MXTK" 
-                  width={140} 
-                  height={32} 
-                  style={{ width: '140px', height: '32px' }}
-                />
-              ) : (
-                <span style={{width:140,height:32,display:'inline-block'}} />
-              )}
+            <Link href={(basePath ? `${basePath}/` : '/').replace(/\/{2,}/g, '/')} className="flex items-center" aria-label="MXTK Home" suppressHydrationWarning>
+              <img 
+                src={logoUrl}
+                alt="MXTK logo"
+                width={120} 
+                height={32} 
+                style={{ width: '120px', height: 'auto', objectFit: 'contain' }}
+              />
             </Link>
           </div>
 
@@ -63,14 +59,14 @@ export default function SiteHeader() {
             {TOP_ORDER.map(({ href, label }) => {
               const t = themeForRoute(href)
               const isActive = getActiveState(href)
-              const navHref = getRelativePath(href, pathname)
+              const navHref = `${basePath}/${href}`.replace(/\/{2,}/g, '/')
 
               return (
                 <Link
                   key={href}
                   href={navHref}
                   aria-current={isActive ? 'page' : undefined}
-                  className="nav-link nav-pill px-3 py-2 rounded-lg transition-colors"
+                  className="nav-link nav-pill px-3 py-2 rounded-lg transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-400/35"
                   style={{ ['--hover-bg' as any]: t.hoverBg } as CSSProperties}
                   suppressHydrationWarning
                 >
@@ -97,10 +93,10 @@ export default function SiteHeader() {
 
       {open && (
         <div className="lg:hidden border-t border-[var(--border-soft)] bg-[var(--surface-2)]">
-          <div className="mx-auto max-w-6xl px-4 py-3 space-y-1">
+          <div className="mx-auto max-w-none px-4 py-3 space-y-1">
             {TOP_ORDER.map(({ href, label }) => {
               const isActive = getActiveState(href)
-              const navHref = getRelativePath(href, pathname)
+              const navHref = `${basePath}/${href}`.replace(/\/{2,}/g, '/')
               return (
                 <Link
                   key={href}

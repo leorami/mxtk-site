@@ -1,5 +1,6 @@
 import PageHero from '@/components/PageHero'
 import Card from '@/components/ui/Card'
+import { BulletItem, BulletList } from '@/components/ui/List'
 
 export default function FAQ() {
   return (
@@ -80,44 +81,44 @@ export default function FAQ() {
             <div className="space-y-4">
               <div>
                 <h4 className="font-semibold mb-2">Step 1: Create a Bitget Account</h4>
-                <ul className="list-disc pl-5 text-sm text-muted space-y-1">
-                  <li>Visit the official Bitget website</li>
-                  <li>Click on the "Sign Up" button</li>
-                  <li>Choose your country and enter your email address or phone number</li>
-                  <li>Create a strong password and agree to the Terms of Service</li>
-                  <li>Complete email/phone verification</li>
-                </ul>
+                <BulletList>
+                  <BulletItem title="Visit the official Bitget website" />
+                  <BulletItem title="Click on the 'Sign Up' button" />
+                  <BulletItem title="Choose your country and enter your email address or phone number" />
+                  <BulletItem title="Create a strong password and agree to the Terms of Service" />
+                  <BulletItem title="Complete email/phone verification" />
+                </BulletList>
               </div>
               
               <div>
                 <h4 className="font-semibold mb-2">Step 2: Secure Your Account with 2FA</h4>
-                <ul className="list-disc pl-5 text-sm text-muted space-y-1">
-                  <li>Log in to your account</li>
-                  <li>Go to account settings and navigate to "Security"</li>
-                  <li>Select "Two-Factor Authentication"</li>
-                  <li>Download an authenticator app (Google Authenticator, Authy, etc.)</li>
-                  <li>Scan the QR code and enter the 6-digit verification code</li>
-                </ul>
+                <BulletList>
+                  <BulletItem title="Log in to your account" />
+                  <BulletItem title="Go to account settings and navigate to 'Security'" />
+                  <BulletItem title="Select 'Two-Factor Authentication'" />
+                  <BulletItem title="Download an authenticator app (Google Authenticator, Authy, etc.)" />
+                  <BulletItem title="Scan the QR code and enter the 6-digit verification code" />
+                </BulletList>
               </div>
               
               <div>
                 <h4 className="font-semibold mb-2">Step 3: Generate Wallet Addresses</h4>
-                <ul className="list-disc pl-5 text-sm text-muted space-y-1">
-                  <li>Navigate to the "Wallet" section</li>
-                  <li>Select the cryptocurrency for which you want to generate a wallet address</li>
-                  <li>Click on the "Deposit" button</li>
-                  <li>Copy the generated wallet address</li>
-                </ul>
+                <BulletList>
+                  <BulletItem title={'Navigate to the "Wallet" section'} />
+                  <BulletItem title="Select the cryptocurrency for which you want to generate a wallet address" />
+                  <BulletItem title={'Click on the "Deposit" button'} />
+                  <BulletItem title="Copy the generated wallet address" />
+                </BulletList>
               </div>
               
               <div>
                 <h4 className="font-semibold mb-2">Step 4: Start Trading</h4>
-                <ul className="list-disc pl-5 text-sm text-muted space-y-1">
-                  <li>Deposit funds using the wallet address</li>
-                  <li>Navigate to the "Trade" section</li>
-                  <li>Transfer funds to your trading account if necessary</li>
-                  <li>Begin trading MXTK and other cryptocurrencies</li>
-                </ul>
+                <BulletList>
+                  <BulletItem title="Deposit funds using the wallet address" />
+                  <BulletItem title={'Navigate to the "Trade" section'} />
+                  <BulletItem title="Transfer funds to your trading account if necessary" />
+                  <BulletItem title="Begin trading MXTK and other cryptocurrencies" />
+                </BulletList>
               </div>
             </div>
           </div>
@@ -132,52 +133,52 @@ export default function FAQ() {
             <div className="space-y-4">
               <div>
                 <h4 className="font-semibold mb-2">Step 1: Install MetaMask</h4>
-                <ul className="list-disc pl-5 text-sm text-muted space-y-1">
-                  <li>Go to the MetaMask website and click "Download"</li>
-                  <li>Choose the appropriate version for your browser</li>
-                  <li>Follow the prompts to add the MetaMask extension</li>
-                </ul>
+                <BulletList>
+                  <BulletItem title="Go to the MetaMask website and click 'Download'" />
+                  <BulletItem title="Choose the appropriate version for your browser" />
+                  <BulletItem title="Follow the prompts to add the MetaMask extension" />
+                </BulletList>
               </div>
               
               <div>
                 <h4 className="font-semibold mb-2">Step 2: Create a New Wallet</h4>
-                <ul className="list-disc pl-5 text-sm text-muted space-y-1">
-                  <li>Click on the MetaMask icon in your browser toolbar</li>
-                  <li>Choose "Create a Wallet"</li>
-                  <li>Set a strong password for your MetaMask wallet</li>
-                  <li>Agree to the Terms of Use and click "Create"</li>
-                </ul>
+                <BulletList>
+                  <BulletItem title="Click on the MetaMask icon in your browser toolbar" />
+                  <BulletItem title="Choose 'Create a Wallet'" />
+                  <BulletItem title="Set a strong password for your MetaMask wallet" />
+                  <BulletItem title="Agree to the Terms of Use and click 'Create'" />
+                </BulletList>
               </div>
               
               <div>
                 <h4 className="font-semibold mb-2">Step 3: Secure Your Wallet</h4>
-                <ul className="list-disc pl-5 text-sm text-muted space-y-1">
-                  <li>Write down your 12-word secret backup phrase on paper</li>
-                  <li>Store it in a secure place - do not save it digitally</li>
-                  <li>Confirm your seed phrase by selecting the words in order</li>
-                </ul>
+                <BulletList>
+                  <BulletItem title="Write down your 12-word secret backup phrase on paper" />
+                  <BulletItem title="Store it in a secure place - do not save it digitally" />
+                  <BulletItem title="Confirm your seed phrase by selecting the words in order" />
+                </BulletList>
               </div>
               
               <div>
                 <h4 className="font-semibold mb-2">Step 4: Add Arbitrum Network</h4>
-                <ul className="list-disc pl-5 text-sm text-muted space-y-1">
-                  <li>Click on the network dropdown at the top of MetaMask</li>
-                  <li>Select "Add Network" or "Custom RPC"</li>
-                  <li>Add Arbitrum One with these details:</li>
-                  <li className="pl-5">Network Name: Arbitrum One</li>
-                  <li className="pl-5">RPC URL: https://arb1.arbitrum.io/rpc</li>
-                  <li className="pl-5">Chain ID: 42161</li>
-                  <li className="pl-5">Currency Symbol: ETH</li>
-                </ul>
+                <BulletList>
+                  <BulletItem title="Click on the network dropdown at the top of MetaMask" />
+                  <BulletItem title="Select 'Add Network' or 'Custom RPC'" />
+                  <BulletItem title="Add Arbitrum One with these details:" />
+                  <BulletItem title="Network Name: Arbitrum One" />
+                  <BulletItem title="RPC URL: https://arb1.arbitrum.io/rpc" />
+                  <BulletItem title="Chain ID: 42161" />
+                  <BulletItem title="Currency Symbol: ETH" />
+                </BulletList>
               </div>
               
               <div>
                 <h4 className="font-semibold mb-2">Step 5: Connect to DApps</h4>
-                <ul className="list-disc pl-5 text-sm text-muted space-y-1">
-                  <li>Navigate to Uniswap or other DApps</li>
-                  <li>MetaMask will prompt you to connect your wallet</li>
-                  <li>Authorize the connection to begin trading</li>
-                </ul>
+                <BulletList>
+                  <BulletItem title="Navigate to Uniswap or other DApps" />
+                  <BulletItem title="MetaMask will prompt you to connect your wallet" />
+                  <BulletItem title="Authorize the connection to begin trading" />
+                </BulletList>
               </div>
             </div>
           </div>

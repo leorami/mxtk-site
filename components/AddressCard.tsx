@@ -4,17 +4,17 @@ import Card from './ui/Card'
 const getChainColor = (chain: string) => {
   switch (chain.toLowerCase()) {
     case 'arbitrum':
-      return 'bg-blue-100 text-blue-800 border-blue-200 dark:bg-blue-900/20 dark:text-blue-300 dark:border-blue-800/30'
+      return 'bg-[color-mix(in_srgb,#3b82f6_14%,transparent)] text-[var(--ink-strong)] border-[color-mix(in_srgb,#3b82f6_24%,transparent)]'
     case 'ethereum':
-      return 'bg-purple-100 text-purple-800 border-purple-200 dark:bg-purple-900/20 dark:text-purple-300 dark:border-purple-800/30'
+      return 'bg-[color-mix(in_srgb,#8b5cf6_14%,transparent)] text-[var(--ink-strong)] border-[color-mix(in_srgb,#8b5cf6_24%,transparent)]'
     case 'polygon':
-      return 'bg-purple-100 text-purple-800 border-purple-200 dark:bg-purple-900/20 dark:text-purple-300 dark:border-purple-800/30'
+      return 'bg-[color-mix(in_srgb,#8b5cf6_14%,transparent)] text-[var(--ink-strong)] border-[color-mix(in_srgb,#8b5cf6_24%,transparent)]'
     case 'optimism':
-      return 'bg-red-100 text-red-800 border-red-200 dark:bg-red-900/20 dark:text-red-300 dark:border-red-800/30'
+      return 'bg-[color-mix(in_srgb,#ef4444_14%,transparent)] text-[var(--ink-strong)] border-[color-mix(in_srgb,#ef4444_24%,transparent)]'
     case 'base':
-      return 'bg-blue-100 text-blue-800 border-blue-200 dark:bg-blue-900/20 dark:text-blue-300 dark:border-blue-800/30'
+      return 'bg-[color-mix(in_srgb,#3b82f6_14%,transparent)] text-[var(--ink-strong)] border-[color-mix(in_srgb,#3b82f6_24%,transparent)]'
     default:
-      return 'bg-gray-100 text-gray-800 border-gray-200 dark:bg-gray-900/20 dark:text-gray-300 dark:border-gray-800/30'
+      return 'bg-[var(--surface-2)] text-[var(--ink-strong)] border-[var(--border-soft)]'
   }
 }
 
@@ -39,7 +39,7 @@ export default function AddressCard({
           {chain}
         </span>
       </div>
-      <div className='mt-1 font-mono text-sm bg-gray-50 dark:bg-gray-900/50 p-2 rounded border'>{address}</div>
+      <div className='mt-1 font-mono text-sm p-2 rounded border bg-[var(--surface-2)] dark:bg-[rgba(0,0,0,.35)]'>{address}</div>
       {link && (
         <a 
           className='mt-2 inline-block text-sm underline hover:text-brand-orange transition-colors' 

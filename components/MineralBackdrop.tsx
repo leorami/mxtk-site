@@ -1,7 +1,6 @@
 'use client'
+import AppImage from '@/components/ui/AppImage'
 import { themeForPath } from '@/lib/brand/theme'
-import { getPublicPath } from '@/lib/routing/basePath'
-import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
@@ -24,8 +23,6 @@ export default function MineralBackdrop(){
   }
 
   const theme = themeForPath(pathname)
-  // e.g. "minerals/photos/amber-crystal.svg" -> "/mxtk/minerals/photos/amber-crystal.svg"
-  const photoPath = getPublicPath(theme.photo, pathname)
 
   return (
     <div aria-hidden className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
@@ -33,11 +30,11 @@ export default function MineralBackdrop(){
       <div className="absolute inset-0 opacity-[.10] dark:opacity-[.12]" style={{ background: `radial-gradient(1200px 600px at 80% -10%, var(--mxtk-accent), transparent)` }} />
       {/* mineral image top-right */}
       <div className="absolute right-[-6%] top-[-8%] h-[58vh] w-[58vh] opacity-[.14] blur-[6px] mix-blend-multiply dark:opacity-[.18]">
-        <Image src={photoPath} alt="" fill sizes="58vh" style={{ objectFit:'contain' }} priority />
+        <AppImage src={theme.photo} alt="" fill sizes="58vh" style={{ objectFit:'contain' }} priority />
       </div>
       {/* subtle grain */}
       <div className="absolute left-[-12%] bottom-[-14%] h-[48vh] w-[48vh] opacity-[.10] blur-[8px] mix-blend-multiply dark:opacity-[.16]">
-        <Image src={getPublicPath('minerals/grain.svg', pathname)} alt="" fill sizes="48vh" style={{ objectFit:'contain' }} priority />
+        <AppImage src={'minerals/grain.svg'} alt="" fill sizes="48vh" style={{ objectFit:'contain' }} priority />
       </div>
     </div>
   )

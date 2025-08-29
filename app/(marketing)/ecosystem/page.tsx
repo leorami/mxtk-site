@@ -1,8 +1,9 @@
+import BasePathLink from '@/components/BasePathLink'
 import OrganizationLogoGrid from '@/components/OrganizationLogoGrid'
 import PageHero from '@/components/PageHero'
 import Card from '@/components/ui/Card'
+import { BulletItem, BulletList } from '@/components/ui/List'
 import { PLACEHOLDER_PARTNERS_ECOSYSTEM } from '@/lib/placeholders'
-import Link from 'next/link'
 
 export default function Ecosystem() {
   return (
@@ -24,32 +25,38 @@ export default function Ecosystem() {
           <div className="grid gap-6 md:grid-cols-3">
             <div>
               <h3 className="text-lg font-semibold mb-3">Blockchain & Smart Contracts</h3>
-              <ul className="space-y-2 text-sm text-muted">
-                <li><strong>Network:</strong> Arbitrum One (Layer 2)</li>
-                <li><strong>Token Address:</strong> <code className="font-mono text-xs">0x3e4Ffeb394b371aaaa0998488046ca19d870d9Ba</code></li>
-                <li><strong>DEX:</strong> Uniswap v4 pools (auto-discovered)</li>
-                <li><strong>Security:</strong> LP lock & timelock multisig (planned)</li>
-              </ul>
+              <div className="text-sm">
+                <BulletList>
+                  <BulletItem title="Network: Arbitrum One (Layer 2)" />
+                  <BulletItem title="Token Address: 0x3e4Ffeb394b371aaaa0998488046ca19d870d9Ba" />
+                  <BulletItem title="DEX: Uniswap v4 pools (auto-discovered)" />
+                  <BulletItem title="Security: LP lock & timelock multisig (planned)" />
+                </BulletList>
+              </div>
             </div>
             
             <div>
               <h3 className="text-lg font-semibold mb-3">Data & Analytics</h3>
-              <ul className="space-y-2 text-sm text-muted">
-                <li><strong>Price Feeds:</strong> Real-time oracle data</li>
-                <li><strong>Indexers:</strong> Factory + pool discovery</li>
-                <li><strong>Metrics:</strong> TVL, volume, liquidity tracking</li>
-                <li><strong>Transparency:</strong> Public oracle logs</li>
-              </ul>
+              <div className="text-sm">
+                <BulletList>
+                  <BulletItem title="Price Feeds: Real-time oracle data" />
+                  <BulletItem title="Indexers: Factory + pool discovery" />
+                  <BulletItem title="Metrics: TVL, volume, liquidity tracking" />
+                  <BulletItem title="Transparency: Public oracle logs" />
+                </BulletList>
+              </div>
             </div>
             
             <div>
               <h3 className="text-lg font-semibold mb-3">Developer Tools</h3>
-              <ul className="space-y-2 text-sm text-muted">
-                <li><strong>API:</strong> Pool discovery endpoints</li>
-                <li><strong>ABIs:</strong> Smart contract interfaces</li>
-                <li><strong>Documentation:</strong> Technical guides</li>
-                <li><strong>SDKs:</strong> Integration libraries</li>
-              </ul>
+              <div className="text-sm">
+                <BulletList>
+                  <BulletItem title="API: Pool discovery endpoints" />
+                  <BulletItem title="ABIs: Smart contract interfaces" />
+                  <BulletItem title="Documentation: Technical guides" />
+                  <BulletItem title="SDKs: Integration libraries" />
+                </BulletList>
+              </div>
             </div>
           </div>
         </Card>
@@ -62,31 +69,35 @@ export default function Ecosystem() {
           <div className="grid gap-6 md:grid-cols-2">
             <div>
               <h3 className="text-lg font-semibold mb-3">Decentralized Exchanges</h3>
-              <ul className="space-y-2 text-sm text-muted">
-                <li>
-                  <a 
-                    href="https://app.uniswap.org/explore/tokens/arbitrum/0x3e4ffeb394b371aaaa0998488046ca19d870d9ba" 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="text-accent hover:underline"
-                  >
-                    Uniswap v4 (Arbitrum) - Primary DEX
-                  </a>
-                </li>
-                <li>Automated market making with concentrated liquidity</li>
-                <li>Low fees and high efficiency</li>
-                <li>Real-time price discovery</li>
-              </ul>
+              <div className="text-sm">
+                <BulletList>
+                  <BulletItem title="Uniswap v4 (Arbitrum) - Primary DEX">
+                    <a 
+                      href="https://app.uniswap.org/explore/tokens/arbitrum/0x3e4ffeb394b371aaaa0998488046ca19d870d9ba" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="text-accent hover:underline"
+                    >
+                      Link to token
+                    </a>
+                  </BulletItem>
+                  <BulletItem title="Automated market making with concentrated liquidity" />
+                  <BulletItem title="Low fees and high efficiency" />
+                  <BulletItem title="Real-time price discovery" />
+                </BulletList>
+              </div>
             </div>
             
             <div>
               <h3 className="text-lg font-semibold mb-3">Over-the-Counter (OTC)</h3>
-              <ul className="space-y-2 text-sm text-muted">
-                <li>Institutional-grade trading</li>
-                <li>KYC/AML compliant escrow services</li>
-                <li>Large block trading capabilities</li>
-                <li>Custom settlement terms</li>
-              </ul>
+              <div className="text-sm">
+                <BulletList>
+                  <BulletItem title="Institutional-grade trading" />
+                  <BulletItem title="KYC/AML compliant escrow services" />
+                  <BulletItem title="Large block trading capabilities" />
+                  <BulletItem title="Custom settlement terms" />
+                </BulletList>
+              </div>
             </div>
           </div>
         </Card>
@@ -110,32 +121,38 @@ export default function Ecosystem() {
           <div className="grid gap-6 md:grid-cols-3">
             <div>
               <h3 className="text-lg font-semibold mb-3">Wallets & Portfolio Trackers</h3>
-              <ul className="space-y-2 text-sm text-muted">
-                <li>MetaMask & other Web3 wallets</li>
-                <li>Portfolio tracking apps</li>
-                <li>Mobile wallet support</li>
-                <li>Hardware wallet integration</li>
-              </ul>
+              <div className="text-sm">
+                <BulletList>
+                  <BulletItem title="MetaMask & other Web3 wallets" />
+                  <BulletItem title="Portfolio tracking apps" />
+                  <BulletItem title="Mobile wallet support" />
+                  <BulletItem title="Hardware wallet integration" />
+                </BulletList>
+              </div>
             </div>
             
             <div>
               <h3 className="text-lg font-semibold mb-3">KYC & Compliance</h3>
-              <ul className="space-y-2 text-sm text-muted">
-                <li>Identity verification services</li>
-                <li>AML screening & monitoring</li>
-                <li>Regulatory compliance tools</li>
-                <li>Audit & reporting systems</li>
-              </ul>
+              <div className="text-sm">
+                <BulletList>
+                  <BulletItem title="Identity verification services" />
+                  <BulletItem title="AML screening & monitoring" />
+                  <BulletItem title="Regulatory compliance tools" />
+                  <BulletItem title="Audit & reporting systems" />
+                </BulletList>
+              </div>
             </div>
             
             <div>
               <h3 className="text-lg font-semibold mb-3">Custody & Security</h3>
-              <ul className="space-y-2 text-sm text-muted">
-                <li>Institutional-grade custody</li>
-                <li>Multi-signature security</li>
-                <li>Insurance coverage</li>
-                <li>Cold storage solutions</li>
-              </ul>
+              <div className="text-sm">
+                <BulletList>
+                  <BulletItem title="Institutional-grade custody" />
+                  <BulletItem title="Multi-signature security" />
+                  <BulletItem title="Insurance coverage" />
+                  <BulletItem title="Cold storage solutions" />
+                </BulletList>
+              </div>
             </div>
           </div>
         </Card>
@@ -148,22 +165,26 @@ export default function Ecosystem() {
           <div className="grid gap-6 md:grid-cols-2">
             <div>
               <h3 className="text-lg font-semibold mb-3">Mining Companies</h3>
-              <ul className="space-y-2 text-sm text-muted">
-                <li>Global mining operations</li>
-                <li>Resource exploration companies</li>
-                <li>Mining equipment providers</li>
-                <li>Logistics and transportation</li>
-              </ul>
+              <div className="text-sm">
+                <BulletList>
+                  <BulletItem title="Global mining operations" />
+                  <BulletItem title="Resource exploration companies" />
+                  <BulletItem title="Mining equipment providers" />
+                  <BulletItem title="Logistics and transportation" />
+                </BulletList>
+              </div>
             </div>
             
             <div>
               <h3 className="text-lg font-semibold mb-3">Geological Services</h3>
-              <ul className="space-y-2 text-sm text-muted">
-                <li>JORC/NI 43-101 compliant reports</li>
-                <li>Independent geological assessments</li>
-                <li>Resource estimation services</li>
-                <li>Environmental impact studies</li>
-              </ul>
+              <div className="text-sm">
+                <BulletList>
+                  <BulletItem title="JORC/NI 43-101 compliant reports" />
+                  <BulletItem title="Independent geological assessments" />
+                  <BulletItem title="Resource estimation services" />
+                  <BulletItem title="Environmental impact studies" />
+                </BulletList>
+              </div>
             </div>
           </div>
         </Card>
@@ -176,32 +197,38 @@ export default function Ecosystem() {
           <div className="grid gap-6 md:grid-cols-3">
             <div>
               <h3 className="text-lg font-semibold mb-3">Traditional Finance</h3>
-              <ul className="space-y-2 text-sm text-muted">
-                <li>Investment banks</li>
-                <li>Asset management firms</li>
-                <li>Hedge funds</li>
-                <li>Family offices</li>
-              </ul>
+              <div className="text-sm">
+                <BulletList>
+                  <BulletItem title="Investment banks" />
+                  <BulletItem title="Asset management firms" />
+                  <BulletItem title="Hedge funds" />
+                  <BulletItem title="Family offices" />
+                </BulletList>
+              </div>
             </div>
             
             <div>
               <h3 className="text-lg font-semibold mb-3">DeFi Protocols</h3>
-              <ul className="space-y-2 text-sm text-muted">
-                <li>Lending platforms</li>
-                <li>Yield farming protocols</li>
-                <li>Derivatives exchanges</li>
-                <li>Insurance protocols</li>
-              </ul>
+              <div className="text-sm">
+                <BulletList>
+                  <BulletItem title="Lending platforms" />
+                  <BulletItem title="Yield farming protocols" />
+                  <BulletItem title="Derivatives exchanges" />
+                  <BulletItem title="Insurance protocols" />
+                </BulletList>
+              </div>
             </div>
             
             <div>
               <h3 className="text-lg font-semibold mb-3">Regulatory & Compliance</h3>
-              <ul className="space-y-2 text-sm text-muted">
-                <li>Legal counsel</li>
-                <li>Compliance consultants</li>
-                <li>Audit firms</li>
-                <li>Regulatory advisors</li>
-              </ul>
+              <div className="text-sm">
+                <BulletList>
+                  <BulletItem title="Legal counsel" />
+                  <BulletItem title="Compliance consultants" />
+                  <BulletItem title="Audit firms" />
+                  <BulletItem title="Regulatory advisors" />
+                </BulletList>
+              </div>
             </div>
           </div>
         </Card>
@@ -215,31 +242,35 @@ export default function Ecosystem() {
             <div className="grid gap-6 md:grid-cols-2">
               <div>
                 <h3 className="text-lg font-semibold mb-3">API Endpoints</h3>
-                <ul className="space-y-2 text-sm text-muted">
-                  <li><code className="font-mono">/api/pools?auto=1</code> - Pool discovery</li>
-                  <li><code className="font-mono">/api/token/summary</code> - Token data</li>
-                  <li><code className="font-mono">/api/oracle/logs</code> - Oracle feeds</li>
-                  <li><code className="font-mono">/api/otc/aggregates</code> - OTC data</li>
-                </ul>
+                <div className="text-sm">
+                  <BulletList>
+                    <BulletItem title="/api/pools?auto=1 - Pool discovery" />
+                    <BulletItem title="/api/token/summary - Token data" />
+                    <BulletItem title="/api/oracle/logs - Oracle feeds" />
+                    <BulletItem title="/api/otc/aggregates - OTC data" />
+                  </BulletList>
+                </div>
               </div>
               
               <div>
                 <h3 className="text-lg font-semibold mb-3">Smart Contract ABIs</h3>
-                <ul className="space-y-2 text-sm text-muted">
-                  <li>ERC-20 token interface</li>
-                  <li>Uniswap v4 pool interface</li>
-                  <li>Oracle contract interface</li>
-                  <li>Governance contract interface</li>
-                </ul>
+                <div className="text-sm">
+                  <BulletList>
+                    <BulletItem title="ERC-20 token interface" />
+                    <BulletItem title="Uniswap v4 pool interface" />
+                    <BulletItem title="Oracle contract interface" />
+                    <BulletItem title="Governance contract interface" />
+                  </BulletList>
+                </div>
               </div>
             </div>
             
             <div className="pt-4 border-t border-border">
               <p className="text-sm text-muted mb-4">
                 For comprehensive developer documentation, visit our{' '}
-                <Link href="resources" className="text-accent hover:underline">
+                <BasePathLink to="resources" className="text-accent hover:underline">
                   Resources page
-                </Link>
+                </BasePathLink>
                 .
               </p>
             </div>
@@ -255,12 +286,12 @@ export default function Ecosystem() {
             Interested in partnering with Mineral Token? We're always looking for innovative companies and developers to join our ecosystem.
           </p>
           <div className="flex flex-col sm:flex-row gap-4">
-            <Link href="contact-us" className="btn-soft">
+            <BasePathLink to="contact-us" className="btn-soft">
               Partner with Us
-            </Link>
-            <Link href="resources" className="btn-outline">
+            </BasePathLink>
+            <BasePathLink to="resources" className="btn-outline">
               Developer Resources
-            </Link>
+            </BasePathLink>
           </div>
         </Card>
       </section>

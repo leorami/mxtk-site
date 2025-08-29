@@ -6,11 +6,21 @@ function stripLeading(p: string) { return p.replace(/^\/+/, ''); }
 function stripTrailing(p: string) { return p.replace(/\/+$/, ''); }
 function cleanJoin(a: string, b: string) { return (`${a}/${b}`).replace(/\/{2,}/g, '/'); }
 
-/** Detect the external prefix from pathname (server) or window (client). */
+/** Detect the external prefix from cookie/window (client) or provided pathname (server). */
 function detectPrefix(currentPathname?: string): string {
-  if (typeof window !== 'undefined' && !currentPathname) {
-    currentPathname = window.location.pathname || '/';
+  // Client-side: prefer cookie, then window location
+  if (typeof window !== 'undefined') {
+    try {
+      const cookie = typeof document !== 'undefined' ? document.cookie || '' : '';
+      const match = cookie.match(/(?:^|;\s*)bp=([^;]+)/);
+      const bp = match ? decodeURIComponent(match[1]) : '';
+      if (bp === '/mxtk') return '/mxtk';
+    } catch {}
+    const wpath = window.location?.pathname || '/';
+    const first = wpath.split('/').filter(Boolean)[0]?.toLowerCase();
+    if (first === 'mxtk') return '/mxtk';
   }
+  // Fallback: use provided pathname (SSR or explicit override)
   const parts = (currentPathname || '/').split('/').filter(Boolean);
   return parts[0]?.toLowerCase() === 'mxtk' ? '/mxtk' : '';
 }

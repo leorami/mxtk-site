@@ -1,8 +1,8 @@
 'use client'
 
 import PageHero from '@/components/PageHero'
+import AppImage from '@/components/ui/AppImage'
 import Card from '@/components/ui/Card'
-import Image from 'next/image'
 import { useEffect, useState } from 'react'
 
 const teamMembers = [
@@ -81,8 +81,8 @@ export default function Team() {
                             <div key={i} className="space-y-4">
                                 <div className="text-center">
                                     <div className="relative h-32 w-32 rounded-full overflow-hidden mx-auto mb-4">
-                                        <Image 
-                                            src={member.img} 
+                                        <AppImage 
+                                            src={member.img.replace(/^\//, '')} 
                                             alt={member.name} 
                                             fill 
                                             sizes="128px"
@@ -121,8 +121,8 @@ export default function Team() {
                             <div key={i} className="space-y-4">
                                 <div className="text-center">
                                     <div className="relative h-32 w-32 rounded-full overflow-hidden mx-auto mb-4">
-                                        <Image 
-                                            src={advisor.img} 
+                                        <AppImage 
+                                            src={advisor.img.replace(/^\//, '')} 
                                             alt={advisor.name} 
                                             fill 
                                             sizes="128px"

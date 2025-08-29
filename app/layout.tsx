@@ -2,35 +2,45 @@ import '@/app/styles/design-tokens.scss'
 import BrandThemeProvider from '@/components/BrandThemeProvider'
 import SiteFooter from '@/components/SiteFooter'
 import SiteHeader from '@/components/SiteHeader'
+import BasePathProvider from '@/components/providers/BasePathProvider'
+import { getServerPublicPath } from '@/lib/routing/getPublicPathServer'
+import { getServerBasePath } from '@/lib/routing/serverBasePath'
 import type { Metadata } from 'next'
-import { Roboto } from 'next/font/google'
+import { Roboto, Space_Grotesk } from 'next/font/google'
 import Script from 'next/script'
 import './globals.css'
 import './styles/minerals.css'
+import './styles/motion.css'
 
 const roboto = Roboto({
   subsets: ['latin'],
   weight: ['300','400','500','700'],
   display: 'swap',
+  variable: '--font-roboto',
+});
+
+const grotesk = Space_Grotesk({
+  subsets: ['latin'],
+  weight: ['400','500','700'],
+  display: 'swap',
+  variable: '--font-display',
 });
 
 export const metadata: Metadata = {
     title: 'MXTK — Mineral Token',
     description: 'Digitizing verified mineral interests with transparent, governed market plumbing.',
-    icons: {
-        icon: [
-            { url: '/favicon.svg', type: 'image/svg+xml' },
-            { url: '/favicon.ico', sizes: '32x32', type: 'image/x-icon' },
-        ],
-        shortcut: '/favicon.svg',
-        apple: '/favicon.svg',
-    },
 }
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+    const bp = await getServerBasePath()
+    const faviconIco = await getServerPublicPath('favicon.ico')
+    
     return (
-        <html lang="en" className={roboto.className} suppressHydrationWarning>
+        <html lang="en" className={`${roboto.variable} ${roboto.className} ${grotesk.variable}`} suppressHydrationWarning>
             <head>
+                <link rel="icon" type="image/x-icon" href={faviconIco} />
+                <link rel="shortcut icon" href={faviconIco} />
+                <link rel="apple-touch-icon" href={faviconIco} />
                 <Script id="theme-init" strategy="beforeInteractive">{`
           try {
             const saved = localStorage.getItem('theme')
@@ -40,13 +50,15 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         `}</Script>
             </head>
             <body className="page min-h-dvh flex flex-col">
-                <SiteHeader />
-                <main className="flex-1 min-h-0 overflow-y-auto mx-auto w-full max-w-6xl px-4 py-10">
-                    <BrandThemeProvider>
-                        {children}
-                    </BrandThemeProvider>
-                </main>
-                <SiteFooter />
+                <BasePathProvider value={bp}>
+                    <SiteHeader />
+                    <main className="relative z-10 flex-1 min-h-0 overflow-y-auto mx-auto w-full max-w-none px-4">
+                        <BrandThemeProvider>
+                            {children}
+                        </BrandThemeProvider>
+                    </main>
+                    <SiteFooter />
+                </BasePathProvider>
             </body>
         </html>
     )

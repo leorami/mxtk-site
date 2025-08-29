@@ -16,7 +16,7 @@ export default function Card({
   return (
     <div
       className={cn(
-        'glass p-4',
+        'glass p-6 md:p-8 rounded-[var(--radius-lg)] shadow-[var(--shadow-2)]',
         embedded && 'glass-embedded',
         interactive && 'hover-lift',
         tint === 'teal' && 'section section-teal',

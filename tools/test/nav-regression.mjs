@@ -101,6 +101,7 @@ async function gotoWithRetry(page, url, attempts = 3, timeout = 30000) {
 async function clickAndWaitForUrl(page, href, expectPrefix) {
   const before = new URL(page.url());
   const expected = new URL(href, before.origin);
+  const expectedPath = expected.pathname.replace(/\/$/, '');
   try {
     await page.click(`a[href="${href}"]`);
   } catch {
@@ -111,17 +112,24 @@ async function clickAndWaitForUrl(page, href, expectPrefix) {
       if (el) el.click();
     }, selector);
   }
-  // Poll for URL change or expected path within timeout
-  const start = Date.now();
-  const timeoutMs = 8000;
-  while (Date.now() - start < timeoutMs) {
-    await new Promise(res => setTimeout(res, 250));
-    const current = new URL(page.url());
-    // Accept either exact href path or any path that retains required prefix (for client router transitions)
-    const prefixOk = expectPrefix ? current.pathname.startsWith(expectPrefix) : current.pathname.startsWith('/');
-    if (current.pathname === expected.pathname || prefixOk) return current.toString();
+  // Prefer waiting for pathname to reach the expected route
+  try {
+    await page.waitForFunction(
+      (path) => location.pathname.replace(/\/$/, '') === path,
+      { timeout: 8000 },
+      expectedPath,
+    );
+  } catch (_) {
+    // Fallback: ensure we at least landed under the expected prefix if provided
+    if (expectPrefix) {
+      await page.waitForFunction(
+        (prefix) => location.pathname.startsWith(prefix),
+        { timeout: 8000 },
+        expectPrefix,
+      );
+    }
   }
-  return new URL(page.url()).toString();
+  return page.url();
 }
 
 async function testPage(browser, url, { checkFooterLegalEscape = false } = {}) {

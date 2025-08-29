@@ -14,19 +14,19 @@ type Proof = {
 const getTypeColor = (type: string) => {
   switch (type.toUpperCase()) {
     case 'JORC':
-      return 'bg-amber-100 text-amber-800 border-amber-200 dark:bg-amber-900/20 dark:text-amber-300 dark:border-amber-800/30'
+      return 'bg-[color-mix(in_srgb,var(--mxtk-orange)_16%,transparent)] text-[var(--ink-strong)] border-[color-mix(in_srgb,var(--mxtk-orange)_26%,transparent)]'
     case 'NI43-101':
-      return 'bg-teal-100 text-teal-800 border-teal-200 dark:bg-teal-900/20 dark:text-teal-300 dark:border-teal-800/30'
+      return 'bg-[color-mix(in_srgb,var(--mxtk-teal)_14%,transparent)] text-[var(--ink-strong)] border-[color-mix(in_srgb,var(--mxtk-teal)_24%,transparent)]'
     case 'SKR':
-      return 'bg-navy-100 text-navy-800 border-navy-200 dark:bg-navy-900/20 dark:text-navy-300 dark:border-navy-800/30'
+      return 'bg-[color-mix(in_srgb,var(--mxtk-navy)_14%,transparent)] text-[var(--ink-strong)] border-[color-mix(in_srgb,var(--mxtk-navy)_24%,transparent)]'
     case 'AUDIT':
-      return 'bg-green-100 text-green-800 border-green-200 dark:bg-green-900/20 dark:text-green-300 dark:border-green-800/30'
+      return 'bg-[color-mix(in_srgb,#22c55e_14%,transparent)] text-[var(--ink-strong)] border-[color-mix(in_srgb,#22c55e_24%,transparent)]'
     case 'ATTESTATION':
-      return 'bg-purple-100 text-purple-800 border-purple-200 dark:bg-purple-900/20 dark:text-purple-300 dark:border-purple-800/30'
+      return 'bg-[color-mix(in_srgb,#8b5cf6_14%,transparent)] text-[var(--ink-strong)] border-[color-mix(in_srgb,#8b5cf6_24%,transparent)]'
     case 'REPORT':
-      return 'bg-blue-100 text-blue-800 border-blue-200 dark:bg-blue-900/20 dark:text-blue-300 dark:border-blue-800/30'
+      return 'bg-[color-mix(in_srgb,#3b82f6_14%,transparent)] text-[var(--ink-strong)] border-[color-mix(in_srgb,#3b82f6_24%,transparent)]'
     default:
-      return 'bg-gray-100 text-gray-800 border-gray-200 dark:bg-gray-900/20 dark:text-gray-300 dark:border-gray-800/30'
+      return 'bg-[var(--surface-2)] text-[var(--ink-strong)] border-[var(--border-soft)]'
   }
 }
 

@@ -24,7 +24,7 @@ export default function ThemeToggle() {
   return (
     <button 
       onClick={toggle} 
-      className='rounded-xl border border-brand-border bg-white/60 dark:bg-dark-surface/60 dark:border-dark-border px-3 py-1 text-sm hover:bg-white/80 dark:hover:bg-dark-surface/80 transition-colors'
+      className='rounded-xl border px-3 py-1 text-sm transition-colors bg-[var(--surface-2)] border-[var(--border-soft)] hover:bg-[color-mix(in_srgb,var(--mxtk-orange)_10%,transparent)]'
     >
       {dark ? 'Light' : 'Dark'} mode
     </button>

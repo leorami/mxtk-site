@@ -1,7 +1,6 @@
 'use client'
 
-import { getPublicPath } from '@/lib/routing/basePath'
-import Image from 'next/image'
+import AppImage from '@/components/ui/AppImage'
 import { usePathname } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
@@ -43,24 +42,24 @@ export default function OrganizationLogo({
 
   if (!mounted) {
     return (
-      <div className={`${sizeClasses[size]} bg-gray-200 rounded-lg flex items-center justify-center ${className}`}>
-        <div className="text-gray-500 font-semibold text-sm">...</div>
+      <div className={`${sizeClasses[size]} rounded-lg flex items-center justify-center bg-[var(--surface-card)] text-[var(--ink-muted)] ${className}`}>
+        <div className="font-semibold text-sm">...</div>
       </div>
     )
   }
 
   if (imageError || !logoPath) {
     return (
-      <div className={`${sizeClasses[size]} bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center ${className}`}>
-        <span className="text-white font-semibold text-sm">{fallbackInitials}</span>
+      <div className={`${sizeClasses[size]} rounded-lg flex items-center justify-center bg-[var(--surface-2)]` + ` ${className}`}>
+        <span className="font-semibold text-sm" style={{color:'var(--ink-strong)'}}>{fallbackInitials}</span>
       </div>
     )
   }
 
   return (
     <div className={`${sizeClasses[size]} relative ${className}`}>
-      <Image
-        src={getPublicPath(logoPath, pathname)}
+      <AppImage
+        src={logoPath}
         alt={alt || `${name} logo`}
         fill
         className="object-contain rounded-lg"

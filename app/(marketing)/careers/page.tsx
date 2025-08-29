@@ -1,5 +1,6 @@
 import PageHero from '@/components/PageHero'
 import Card from '@/components/ui/Card'
+import { BulletItem, BulletList } from '@/components/ui/List'
 
 export default function Careers() {
   return (
@@ -23,14 +24,14 @@ export default function Careers() {
           </p>
           
           <h3 className="text-lg font-semibold mb-4">Benefits include:</h3>
-          <ul className="list-disc pl-5 text-muted space-y-2">
-            <li>Competitive salary and performance-based incentives</li>
-            <li>Comprehensive health, dental, and vision plans</li>
-            <li>Stock options and equity participation</li>
-            <li>Professional development opportunities</li>
-            <li>Flexible work arrangements</li>
-            <li>Collaborative and dynamic work environment</li>
-          </ul>
+          <BulletList>
+            <BulletItem title="Competitive salary and performance-based incentives" />
+            <BulletItem title="Comprehensive health, dental, and vision plans" />
+            <BulletItem title="Stock options and equity participation" />
+            <BulletItem title="Professional development opportunities" />
+            <BulletItem title="Flexible work arrangements" />
+            <BulletItem title="Collaborative and dynamic work environment" />
+          </BulletList>
         </Card>
       </section>
 
@@ -73,35 +74,35 @@ export default function Careers() {
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
                   <h5 className="font-semibold mb-2">Technical Leadership</h5>
-                  <ul className="list-disc pl-5 text-sm text-muted space-y-1">
-                    <li>Provide strategic leadership and direction for the entire engineering function</li>
-                    <li>Drive innovation and maintain a forward-thinking approach to technology trends</li>
-                    <li>Understand and navigate the complexities of financial markets</li>
-                  </ul>
+                  <BulletList>
+                    <BulletItem title="Provide strategic leadership and direction for the entire engineering function" />
+                    <BulletItem title="Drive innovation and maintain a forward-thinking approach to technology trends" />
+                    <BulletItem title="Understand and navigate the complexities of financial markets" />
+                  </BulletList>
                 </div>
                 <div>
                   <h5 className="font-semibold mb-2">Team Development</h5>
-                  <ul className="list-disc pl-5 text-sm text-muted space-y-1">
-                    <li>Recruit, mentor, and lead a world-class engineering team</li>
-                    <li>Implement effective talent development strategies</li>
-                    <li>Foster a culture of collaboration, innovation, and excellence</li>
-                  </ul>
+                  <BulletList>
+                    <BulletItem title="Recruit, mentor, and lead a world-class engineering team" />
+                    <BulletItem title="Implement effective talent development strategies" />
+                    <BulletItem title="Foster a culture of collaboration, innovation, and excellence" />
+                  </BulletList>
                 </div>
                 <div>
                   <h5 className="font-semibold mb-2">Product Development</h5>
-                  <ul className="list-disc pl-5 text-sm text-muted space-y-1">
-                    <li>Collaborate closely with cross-functional teams</li>
-                    <li>Oversee the full product development lifecycle</li>
-                    <li>Meet aggressive timelines and quality standards</li>
-                  </ul>
+                  <BulletList>
+                    <BulletItem title="Collaborate closely with cross-functional teams" />
+                    <BulletItem title="Oversee the full product development lifecycle" />
+                    <BulletItem title="Meet aggressive timelines and quality standards" />
+                  </BulletList>
                 </div>
                 <div>
                   <h5 className="font-semibold mb-2">Technology Stack</h5>
-                  <ul className="list-disc pl-5 text-sm text-muted space-y-1">
-                    <li>Define and implement scalable, robust, and secure architectures</li>
-                    <li>Evaluate and select appropriate technologies and frameworks</li>
-                    <li>Drive operational excellence in system performance</li>
-                  </ul>
+                  <BulletList>
+                    <BulletItem title="Define and implement scalable, robust, and secure architectures" />
+                    <BulletItem title="Evaluate and select appropriate technologies and frameworks" />
+                    <BulletItem title="Drive operational excellence in system performance" />
+                  </BulletList>
                 </div>
               </div>
             </div>
@@ -135,19 +136,19 @@ export default function Careers() {
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
                   <h5 className="font-semibold mb-2">Risk Strategy</h5>
-                  <ul className="list-disc pl-5 text-sm text-muted space-y-1">
-                    <li>Develop comprehensive risk management frameworks</li>
-                    <li>Monitor global asset tracking and management</li>
-                    <li>Analyze leverage and trading risks</li>
-                  </ul>
+                  <BulletList>
+                    <BulletItem title="Develop comprehensive risk management frameworks" />
+                    <BulletItem title="Monitor global asset tracking and management" />
+                    <BulletItem title="Analyze leverage and trading risks" />
+                  </BulletList>
                 </div>
                 <div>
                   <h5 className="font-semibold mb-2">Compliance & Operations</h5>
-                  <ul className="list-disc pl-5 text-sm text-muted space-y-1">
-                    <li>Ensure regulatory compliance across jurisdictions</li>
-                    <li>Implement operational risk controls</li>
-                    <li>Manage liquidity pool risk management</li>
-                  </ul>
+                  <BulletList>
+                    <BulletItem title="Ensure regulatory compliance across jurisdictions" />
+                    <BulletItem title="Implement operational risk controls" />
+                    <BulletItem title="Manage liquidity pool risk management" />
+                  </BulletList>
                 </div>
               </div>
             </div>

@@ -1,128 +1,162 @@
-/* === Mineral-Inspired Gradient System (Bright, modern, glass-first) === */
-
-/* --- Page Gradients --- */
-/* Owners → Citrine */
-.bg-citrine {
-  background: radial-gradient(circle at 30% 30%, #fff7d6 0%, #ffd54f 38%, #f9a825 100%);
-}
-
-/* Transparency → Tiger's Eye */
-.bg-tigereye {
-  background: linear-gradient(135deg, #f6d365 0%, #d68a37 55%, #8e5624 100%);
-}
-
-/* Home → Amber */
+/* --- Full-bleed gradient tokens (low-contrast, modern) --- */
 .bg-amber {
-  background: radial-gradient(circle at 40% 40%, #ffecb3 0%, #ffb74d 45%, #f57c00 100%);
+  background:
+    radial-gradient(1200px 600px at 10% 0%, rgba(255, 183, 77, 0.35), transparent 60%),
+    radial-gradient(1000px 500px at 90% 0%, rgba(255, 138, 101, 0.28), transparent 60%),
+    linear-gradient(180deg, #FFF6E8 0%, #FDF7EF 40%, #FAFAFA 100%);
 }
-
-/* Institutions → Lapis */
+.bg-citrine {
+  background:
+    radial-gradient(1200px 600px at 12% 0%, rgba(205, 220, 57, 0.35), transparent 60%),
+    radial-gradient(1000px 500px at 88% 0%, rgba(124, 179, 66, 0.28), transparent 60%),
+    linear-gradient(180deg, #F5FAE8 0%, #F4FAEE 40%, #FAFAFA 100%);
+}
+.bg-tigereye {
+  background:
+    radial-gradient(1200px 600px at 12% 0%, rgba(255, 160, 0, 0.18), transparent 60%),
+    radial-gradient(1000px 500px at 85% 0%, rgba(121, 85, 72, 0.12), transparent 60%),
+    linear-gradient(180deg, #FFF2E0 0%, #FAEEE7 40%, #FAFAFA 100%);
+}
 .bg-lapis {
-  background: linear-gradient(145deg, #5f7fe8 0%, #3a53c7 50%, #1f2b8f 100%);
+  background:
+    radial-gradient(1200px 600px at 12% 0%, rgba(33, 150, 243, 0.18), transparent 60%),
+    radial-gradient(1000px 500px at 88% 0%, rgba(63, 81, 181, 0.14), transparent 60%),
+    linear-gradient(180deg, #EDF5FF 0%, #EEF1FA 40%, #FAFAFA 100%);
 }
-
-/* Whitepaper → Obsidian */
 .bg-obsidian {
-  background: linear-gradient(160deg, #1e1e1e 0%, #2c2c2c 60%, #0d0d0d 100%);
+  background:
+    radial-gradient(1200px 600px at 12% 0%, rgba(84, 110, 122, 0.22), transparent 60%),
+    radial-gradient(1000px 500px at 85% 0%, rgba(69, 90, 100, 0.16), transparent 60%),
+    linear-gradient(180deg, #F1F4F6 0%, #EFF2F4 40%, #FAFAFA 100%);
+}
+.bg-teal {
+  background:
+    radial-gradient(1200px 600px at 12% 0%, rgba(0, 150, 136, 0.16), transparent 60%),
+    radial-gradient(1000px 500px at 88% 0%, rgba(77, 182, 172, 0.14), transparent 60%),
+    linear-gradient(180deg, #E8F7F5 0%, #ECF8F7 40%, #FAFAFA 100%);
 }
 
-/* Roadmap → Copper */
-.bg-copper {
-  background: linear-gradient(160deg, #de8a5a 0%, #b15e34 55%, #73361d 100%);
+/* --- Organic mask utility for backgrounds --- */
+/* Soft hand-cut top & bottom with gentle randomness (SVG mask via data URL) */
+.mask-organic {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg width='1200' height='200' viewBox='0 0 1200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%23000'/%3E%3Cstop offset='1' stop-color='%23000'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M0,30 C120,60 240,0 360,30 C480,60 600,10 720,35 C840,60 960,5 1080,25 C1140,35 1200,20 1200,20 L1200,180 C1080,150 960,200 840,170 C720,140 600,195 480,165 C360,135 240,190 120,170 C60,160 0,175 0,175 Z' fill='url(%23g)'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg width='1200' height='200' viewBox='0 0 1200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%23000'/%3E%3Cstop offset='1' stop-color='%23000'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M0,30 C120,60 240,0 360,30 C480,60 600,10 720,35 C840,60 960,5 1080,25 C1140,35 1200,20 1200,20 L1200,180 C1080,150 960,200 840,170 C720,140 600,195 480,165 C360,135 240,190 120,170 C60,160 0,175 0,175 Z' fill='url(%23g)'/%3E%3C/svg%3E");
+  -webkit-mask-size: 100% 200px;
+  mask-size: 100% 200px;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: top, bottom;
+  mask-position: top, bottom;
 }
 
-/* Cares → Jade */
-.bg-jade {
-  background: radial-gradient(60% 50% at 30% 40%, #d6f8d6 0%, #8bd3a3 45%, #0f9b69 100%);
-}
-
-/* Media → Onyx */
-.bg-onyx {
-  background: linear-gradient(145deg, #222 0%, #111 60%, #000 100%);
-}
-
-/* FAQ → Quartz */
-.bg-quartz {
-  background: radial-gradient(70% 60% at 30% 40%, #ffffff 0%, #f7f7f7 50%, #ececec 100%);
-}
-
-/* Resources → Hematite */
-.bg-hematite {
-  background: linear-gradient(160deg, #bfc5cb 0%, #7a8289 55%, #474c51 100%);
-}
-
-/* Contact → Jade (brighter) */
-.bg-contact {
-  background: radial-gradient(70% 60% at 50% 40%, #e6ffef 0%, #9be5ba 50%, #11a674 100%);
-}
-
-/* Team → Lapis variation */
-.bg-team {
-  background: linear-gradient(140deg, #6a87ff 0%, #3f58d2 55%, #22319a 100%);
-}
-
-/* --- Accent Variables (utility classes) --- */
-.accent-citrine    { --mxtk-accent: #f5b700; }
-.accent-tigereye   { --mxtk-accent: #d68a37; }
-.accent-amber      { --mxtk-accent: #ff9800; }
-.accent-lapis      { --mxtk-accent: #3a53c7; }
-.accent-obsidian   { --mxtk-accent: #2c2c2c; }
-.accent-copper     { --mxtk-accent: #b15e34; }
-.accent-jade       { --mxtk-accent: #0f9b69; }
-.accent-onyx       { --mxtk-accent: #111111; }
-.accent-quartz     { --mxtk-accent: #bdbdbd; }
-.accent-hematite   { --mxtk-accent: #7a8289; }
-.accent-contact    { --mxtk-accent: #11a674; }
-.accent-team       { --mxtk-accent: #3f58d2; }
-
-/* --- Glass 2.0 --- */
+/* keep the glass calm - override other glass styles */
 .glass {
-  backdrop-filter: blur(14px) saturate(1.1);
-  -webkit-backdrop-filter: blur(14px) saturate(1.1);
-  background: rgba(255,255,255,0.06);
-  border: 1px solid rgba(255,255,255,0.14);
-  border-radius: 1rem;
-  box-shadow: 0 6px 18px rgba(0,0,0,.08);
+  backdrop-filter: blur(14px) saturate(1.08) !important;
+  -webkit-backdrop-filter: blur(14px) saturate(1.08) !important;
+  background: rgba(255,255,255,0.6) !important;
+  border: 1px solid rgba(0,0,0,0.6) !important;
+  border-radius: 1rem !important;
+  box-shadow: 0 8px 22px rgba(0,0,0,.08) !important;
+  transition: all 0.3s ease-out !important;
+  transform: none !important;
+}
+
+.glass:hover {
+  transform: translateY(-4px) !important;
+  box-shadow: 0 12px 32px rgba(0,0,0,.12) !important;
 }
 .dark .glass {
-  background: rgba(0,0,0,0.22);
-  border-color: rgba(255,255,255,0.10);
+  background: rgba(0,0,0,0.22) !important;
+  border-color: rgba(255,255,255,0.08) !important;
 }
 
-/* Optional gradient border accent for hero/CTA cards */
-.glass-gradient-border {
-  border: 2px solid transparent;
-  border-radius: 1.25rem;
-  background: linear-gradient(#1e1e1e, #1e1e1e) padding-box,
-              linear-gradient(90deg, var(--mxtk-accent, #ff9800), transparent) border-box;
-}
-
-/* --- Animated Mineral Light Wash --- */
-@keyframes shimmer {
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
-}
-/* .mineral-wash {
-  position: absolute;
-  inset: 0;
+/* optional shimmer removed; keep a light noise wash if you want */
+.mineral-wash { 
   pointer-events: none;
-  background: linear-gradient(120deg, transparent, rgba(255,255,255,0.07), transparent);
-  background-size: 200% 100%;
-  animation: shimmer 20s linear infinite;
-  opacity: 0.6;
-} */
+  background: 
+    radial-gradient(circle at 20% 80%, rgba(255,255,255,0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(255,255,255,0.05) 0%, transparent 50%);
+  animation: mineral-shimmer 8s ease-in-out infinite;
+}
 
-/* --- Headline Gradient Text --- */
-/* .headline-gradient {
-  background: linear-gradient(90deg, var(--mxtk-accent, #ff9800), #ffffff);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  color: transparent;
-} */
+@keyframes mineral-shimmer {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.6; }
+}
 
-/* --- Readability helpers --- */
-.h-on-gradient { color: #0b0b0b; text-shadow: none; }
-.dark .h-on-gradient { color: #fafafa; }
-.sub-on-gradient { color: rgba(0,0,0,0.78); }
-.dark .sub-on-gradient { color: rgba(255,255,255,0.78); }
+/* Additional gradient classes for other pages */
+.bg-copper {
+  background:
+    radial-gradient(1200px 600px at 12% 0%, rgba(222, 138, 90, 0.18), transparent 60%),
+    radial-gradient(1000px 500px at 88% 0%, rgba(177, 94, 52, 0.14), transparent 60%),
+    linear-gradient(180deg, #FDF7F4 0%, #FAF5F2 40%, #FAFAFA 100%);
+}
+.bg-jade {
+  background:
+    radial-gradient(1200px 600px at 12% 0%, rgba(15, 191, 159, 0.16), transparent 60%),
+    radial-gradient(1000px 500px at 88% 0%, rgba(43, 169, 122, 0.14), transparent 60%),
+    linear-gradient(180deg, #E8F7F5 0%, #ECF8F7 40%, #FAFAFA 100%);
+}
+.bg-onyx {
+  background:
+    radial-gradient(1200px 600px at 12% 0%, rgba(34, 34, 34, 0.22), transparent 60%),
+    radial-gradient(1000px 500px at 85% 0%, rgba(17, 17, 17, 0.16), transparent 60%),
+    linear-gradient(180deg, #F1F1F1 0%, #EFEFEF 40%, #FAFAFA 100%);
+}
+.bg-quartz {
+  background:
+    radial-gradient(1200px 600px at 12% 0%, rgba(255, 255, 255, 0.18), transparent 60%),
+    radial-gradient(1000px 500px at 88% 0%, rgba(244, 246, 248, 0.14), transparent 60%),
+    linear-gradient(180deg, #FFFFFF 0%, #F8F9FA 40%, #FAFAFA 100%);
+}
+.bg-hematite {
+  background:
+    radial-gradient(1200px 600px at 12% 0%, rgba(229, 233, 238, 0.18), transparent 60%),
+    radial-gradient(1000px 500px at 88% 0%, rgba(184, 192, 200, 0.14), transparent 60%),
+    linear-gradient(180deg, #F5F7F9 0%, #F2F4F6 40%, #FAFAFA 100%);
+}
+.bg-contact {
+  background:
+    radial-gradient(1200px 600px at 12% 0%, rgba(156, 163, 175, 0.35), transparent 60%),
+    radial-gradient(1000px 500px at 88% 0%, rgba(107, 114, 128, 0.28), transparent 60%),
+    linear-gradient(180deg, #F9FAFB 0%, #F3F4F6 40%, #FAFAFA 100%);
+}
+.bg-team {
+  background:
+    radial-gradient(1200px 600px at 12% 0%, rgba(59, 130, 246, 0.35), transparent 60%),
+    radial-gradient(1000px 500px at 88% 0%, rgba(37, 99, 235, 0.28), transparent 60%),
+    linear-gradient(180deg, #EFF6FF 0%, #DBEAFE 40%, #FAFAFA 100%);
+}
+
+/* Full-bleed wrapper */
+.full-bleed { position: relative; left: 50%; right: 50%; margin-left: -50vw; margin-right: -50vw; width: 100vw; }
+
+/* Organic bands (Home) */
+.band-home { position: relative; padding: clamp(24px, 6vw, 56px) 0; }
+.band-home::before {
+  content: "";
+  position: absolute; inset: 0;
+  background-image: url("/art/home_band_light.png");
+  background-size: cover; background-position: center;
+  opacity: 0.9; pointer-events: none;
+  -webkit-mask: url("/art/home_light_wave_top.svg") top / cover no-repeat,
+                 url("/art/home_light_wave_bottom.svg") bottom / cover no-repeat;
+  mask: url("/art/home_light_wave_top.svg") top / cover no-repeat,
+        url("/art/home_light_wave_bottom.svg") bottom / cover no-repeat;
+}
+.dark .band-home::before { background-image: url("/art/home_band_dark.png"); }
+
+/* Organic bands (Owners) */
+.band-owners { position: relative; padding: clamp(24px, 6vw, 56px) 0; }
+.band-owners::before {
+  content: "";
+  position: absolute; inset: 0;
+  background-image: url("/art/owners_band_light.png");
+  background-size: cover; background-position: center;
+  opacity: 0.9; pointer-events: none;
+  -webkit-mask: url("/art/owners_light_wave_top.svg") top / cover no-repeat,
+                 url("/art/owners_light_wave_bottom.svg") bottom / cover no-repeat;
+  mask: url("/art/owners_light_wave_top.svg") top / cover no-repeat,
+        url("/art/owners_light_wave_bottom.svg") bottom / cover no-repeat;
+}
+.dark .band-owners::before { background-image: url("/art/owners_band_dark.png"); }

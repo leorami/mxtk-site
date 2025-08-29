@@ -1,5 +1,7 @@
+import BasePathLink from '@/components/BasePathLink'
 import PageHero from '@/components/PageHero'
 import Card from '@/components/ui/Card'
+import { BulletItem, BulletList } from '@/components/ui/List'
 import Link from 'next/link'
 
 export default function Resources() {
@@ -130,27 +132,27 @@ export default function Resources() {
               <div className="text-3xl font-bold mb-2">📚</div>
               <h3 className="font-semibold mb-2 text-foreground">Whitepaper</h3>
               <p className="text-foreground/80 text-sm mb-4">Comprehensive technical documentation and tokenomics</p>
-              <Link href="whitepaper" className="btn-soft">
+              <BasePathLink to="whitepaper" className="btn-soft">
                 Read Whitepaper
-              </Link>
+              </BasePathLink>
             </div>
             
             <div className="text-center">
               <div className="text-3xl font-bold mb-2">📊</div>
               <h3 className="font-semibold mb-2 text-foreground">Transparency Hub</h3>
               <p className="text-foreground/80 text-sm mb-4">Real-time data, oracle logs, and OTC aggregates</p>
-              <Link href="transparency" className="btn-soft">
+              <BasePathLink to="transparency" className="btn-soft">
                 View Data
-              </Link>
+              </BasePathLink>
             </div>
             
             <div className="text-center">
               <div className="text-3xl font-bold mb-2">🔗</div>
               <h3 className="font-semibold mb-2 text-foreground">Ecosystem</h3>
               <p className="text-foreground/80 text-sm mb-4">Partners, integrations, and infrastructure</p>
-              <Link href="ecosystem" className="btn-soft">
+              <BasePathLink to="ecosystem" className="btn-soft">
                 Explore Ecosystem
-              </Link>
+              </BasePathLink>
             </div>
           </div>
         </Card>
@@ -164,59 +166,59 @@ export default function Resources() {
           <div className="grid md:grid-cols-2 gap-8">
             <div>
               <h3 className="text-lg font-semibold mb-4 text-foreground">Where to Trade MXTK</h3>
-              <ul className="space-y-3">
-                <li>
+              <BulletList>
+                <BulletItem title="Uniswap (Arbitrum) - Primary DEX">
                   <a 
                     href="https://app.uniswap.org/explore/tokens/arbitrum/0x3e4ffeb394b371aaaa0998488046ca19d870d9ba" 
                     target="_blank" 
                     rel="noopener noreferrer"
                     className="text-accent hover:underline"
                   >
-                    Uniswap (Arbitrum) - Primary DEX
+                    Open link
                   </a>
-                </li>
-                <li>
+                </BulletItem>
+                <BulletItem title="CoinGecko - Price Tracking">
                   <a 
                     href="https://www.coingecko.com/en/coins/mineral-token" 
                     target="_blank" 
                     rel="noopener noreferrer"
                     className="text-accent hover:underline"
                   >
-                    CoinGecko - Price Tracking
+                    Open link
                   </a>
-                </li>
-                <li>
+                </BulletItem>
+                <BulletItem title="Arbiscan - Blockchain Explorer">
                   <a 
                     href="https://arbiscan.io/token/0x3e4ffeb394b371aaaa0998488046ca19d870d9ba" 
                     target="_blank" 
                     rel="noopener noreferrer"
                     className="text-accent hover:underline"
                   >
-                    Arbiscan - Blockchain Explorer
+                    Open link
                   </a>
-                </li>
-              </ul>
+                </BulletItem>
+              </BulletList>
             </div>
             
             <div>
               <h3 className="text-lg font-semibold mb-4 text-foreground">Wallet Setup Guides</h3>
-              <ul className="space-y-3">
-                <li>
-                  <Link href="faq" className="text-accent hover:underline">
-                    MetaMask Setup Guide
-                  </Link>
-                </li>
-                <li>
-                  <Link href="faq" className="text-accent hover:underline">
-                    Bitget Exchange Guide
-                  </Link>
-                </li>
-                <li>
-                  <Link href="faq" className="text-accent hover:underline">
-                    Arbitrum Network Configuration
-                  </Link>
-                </li>
-              </ul>
+              <BulletList>
+                <BulletItem title="MetaMask Setup Guide">
+                  <BasePathLink to="faq" className="text-accent hover:underline">
+                    Open guide
+                  </BasePathLink>
+                </BulletItem>
+                <BulletItem title="Bitget Exchange Guide">
+                  <BasePathLink to="faq" className="text-accent hover:underline">
+                    Open guide
+                  </BasePathLink>
+                </BulletItem>
+                <BulletItem title="Arbitrum Network Configuration">
+                  <BasePathLink to="faq" className="text-accent hover:underline">
+                    Open guide
+                  </BasePathLink>
+                </BulletItem>
+              </BulletList>
             </div>
           </div>
         </Card>

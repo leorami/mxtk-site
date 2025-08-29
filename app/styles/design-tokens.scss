@@ -1,65 +1,41 @@
-/* ========= MXTK Design Tokens =========
-   Palette derives from logo + mineral tones.
-   Light tokens bias toward warmth (orange/sand) + clarity (quartz/teal).
-   Dark tokens bias toward navy/graphite with teal/orange accents.
-*/
-
 :root {
-  /* Brand core */
-  --mxtk-orange: #E0932B;   /* logo orange */
-  --mxtk-navy:   #0B1C4A;   /* logo navy */
-  --mxtk-teal:   #0FBF9F;   /* accent */
-  --mxtk-copper: #C97E3D;   /* secondary accent */
-
-  /* Neutrals / surfaces (light) */
-  --surface-page:       #F6F8FC;       /* quartz */
-  --surface-card:       rgba(255,255,255,.78);
-  --surface-card-emb:   rgba(255,255,255,.88);
-  --surface-section-1:  rgba(15,191,159,.06);  /* teal tint */
-  --surface-section-2:  rgba(224,147,43,.06);  /* amber tint */
-  --surface-section-3:  rgba(11,28,74,.06);    /* navy tint */
-
-  --ink-strong: #0E1116;
-  --ink-muted:  #5B6572;
-  --border-soft: #E5E9F0;
-
-  /* Shadows / radii */
-  --radius-xl: 1rem;
-  --radius-2xl: 1.25rem;
-  --shadow-inner-top: 0 1px 0 rgba(255,255,255,.35);
-  --shadow-lift: 0 16px 42px -20px rgba(0,0,0,.22), 0 8px 18px -10px rgba(0,0,0,.14);
-  --shadow-lift-sm: 0 8px 20px -12px rgba(0,0,0,.18), 0 4px 10px -6px rgba(0,0,0,.12);
-
   /* Typography */
-  --h-color: var(--mxtk-navy);
-  --link:    #0d6bff;
-  --link-hover: #094cc0;
-}
+  --font-sans: var(--font-roboto, system-ui, Arial, sans-serif);
+  --font-display: var(--font-display, var(--font-sans));
 
-html.dark {
-  --surface-page:       #0B0E12;
-  --surface-card:       rgba(18,22,28,.55);
-  --surface-card-emb:   rgba(18,22,28,.70);
-  --surface-section-1:  rgba(15,191,159,.12);
-  --surface-section-2:  rgba(224,147,43,.12);
-  --surface-section-3:  rgba(11,28,74,.16);
+  /* Spacing scale */
+  --space-1: .25rem; --space-2: .5rem; --space-3: .75rem; --space-4: 1rem;
+  --space-6: 1.5rem; --space-8: 2rem; --space-10: 2.5rem; --space-12: 3rem;
 
-  --ink-strong: #E6EAF2;
-  --ink-muted:  #9AA3AE;
-  --border-soft:#1E2430;
-  --h-color:    #F4F7FD;
-  --link:       #7fc4ff;
-  --link-hover: #a8d6ff;
-}
+  /* Radii */
+  --radius-sm: .5rem; --radius-md: .75rem; --radius-lg: 1rem; --radius-xl: 1.25rem;
 
-/* Mineral "texture" gradient (no heavy images needed) */
-.mineral-sheen {
-  background:
-    radial-gradient(800px 220px at 50% -160px, rgba(15,191,159,.10), transparent 60%),
-    linear-gradient(180deg, rgba(255,255,255,.35), rgba(255,255,255,0));
+  /* Shadows (subtle) */
+  --shadow-1: 0 2px 8px rgba(0,0,0,.06);
+  --shadow-2: 0 6px 18px rgba(0,0,0,.08);
+  --shadow-lift: 0 16px 42px -20px rgba(0, 0, 0, .22), 0 8px 18px -10px rgba(0, 0, 0, .14);
+  --shadow-lift-sm: 0 8px 20px -12px rgba(0, 0, 0, .18), 0 4px 10px -6px rgba(0, 0, 0, .12);
+
+  /* Surfaces */
+  --surface-1: rgba(255,255,255,.06);
+  --surface-2: rgba(255,255,255,.10);
+  --surface-border: rgba(255,255,255,.14);
+
+  /* Text */
+  --text-strong: #0b0b0b;
+  --text: #2a2a2a;
+  --text-muted: #595959;
+
+  /* Accent strategy */
+  --accent: #2be4d0;
+  --accent-hover: #20bfa9;
 }
-html.dark .mineral-sheen {
-  background:
-    radial-gradient(800px 220px at 50% -160px, rgba(15,191,159,.18), transparent 60%),
-    linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,0));
+:root.dark {
+  --surface-1: rgba(0,0,0,.22);
+  --surface-2: rgba(255,255,255,.08);
+  --surface-border: rgba(255,255,255,.10);
+
+  --text-strong: #f6f6f6;
+  --text: #e6e6e6;
+  --text-muted: #b7b7b7;
 }

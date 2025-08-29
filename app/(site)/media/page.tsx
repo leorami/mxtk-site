@@ -1,6 +1,6 @@
+import BasePathLink from '@/components/BasePathLink'
 import PageHero from '@/components/PageHero'
 import Card from '@/components/ui/Card'
-import Link from 'next/link'
 
 export default function MediaPage() {
   return (
@@ -82,22 +82,22 @@ export default function MediaPage() {
             <div>
               <h3 className="font-semibold mb-2">Whitepaper</h3>
               <p className="text-muted text-sm mb-4">Technical documentation and methodology</p>
-              <Link className="btn-link" href="whitepaper">Read Whitepaper</Link>
+              <BasePathLink className="btn-link" to="whitepaper">Read Whitepaper</BasePathLink>
             </div>
             <div>
               <h3 className="font-semibold mb-2">Transparency</h3>
               <p className="text-muted text-sm mb-4">On-chain data and verification sources</p>
-              <Link className="btn-link" href="transparency">View Transparency</Link>
+              <BasePathLink className="btn-link" to="transparency">View Transparency</BasePathLink>
             </div>
             <div>
               <h3 className="font-semibold mb-2">Roadmap</h3>
               <p className="text-muted text-sm mb-4">Development milestones and timeline</p>
-              <Link className="btn-link" href="roadmap">See Roadmap</Link>
+              <BasePathLink className="btn-link" to="roadmap">See Roadmap</BasePathLink>
             </div>
             <div>
               <h3 className="font-semibold mb-2">MXTK Gives</h3>
               <p className="text-muted text-sm mb-4">Nonprofit initiative and impact</p>
-              <Link className="btn-link" href="elite-drop">Learn More</Link>
+              <BasePathLink className="btn-link" to="elite-drop">Learn More</BasePathLink>
             </div>
           </div>
         </Card>

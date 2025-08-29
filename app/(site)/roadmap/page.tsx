@@ -1,5 +1,6 @@
 import PageHero from '@/components/PageHero'
 import Card from '@/components/ui/Card'
+import { BulletItem, BulletList } from '@/components/ui/List'
 
 export default function RoadmapPage() {
   return (
@@ -71,21 +72,21 @@ export default function RoadmapPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div>
               <h3 className="font-semibold mb-3">Market Infrastructure</h3>
-              <ul className="space-y-2 text-muted">
-                <li>• Uniswap v4 integration</li>
-                <li>• Advanced liquidity management</li>
-                <li>• Cross-chain bridge development</li>
-                <li>• Institutional custody solutions</li>
-              </ul>
+              <BulletList>
+                <BulletItem title="Uniswap v4 integration" />
+                <BulletItem title="Advanced liquidity management" />
+                <BulletItem title="Cross-chain bridge development" />
+                <BulletItem title="Institutional custody solutions" />
+              </BulletList>
             </div>
             <div>
               <h3 className="font-semibold mb-3">Ecosystem Growth</h3>
-              <ul className="space-y-2 text-muted">
-                <li>• Partner network expansion</li>
-                <li>• Developer tooling and APIs</li>
-                <li>• Community governance framework</li>
-                <li>• Educational initiatives</li>
-              </ul>
+              <BulletList>
+                <BulletItem title="Partner network expansion" />
+                <BulletItem title="Developer tooling and APIs" />
+                <BulletItem title="Community governance framework" />
+                <BulletItem title="Educational initiatives" />
+              </BulletList>
             </div>
           </div>
         </Card>

@@ -2,37 +2,42 @@
 
 import PageHero from '@/components/PageHero'
 import ProofTable from '@/components/ProofTable'
+import SectionWrapper from '@/components/SectionWrapper'
+// FullBleed removed per revert
 import OnchainSummary from '@/components/live/OnchainSummary'
 import PoolTable from '@/components/live/PoolTable'
 import Card from '@/components/ui/Card'
+import { BulletItem, BulletList } from '@/components/ui/List'
+import OrganicBand from '@/components/visuals/OrganicBand'
 import { PLACEHOLDER_PROOFS } from '@/lib/placeholders'
-import { getPublicPath, getRelativePath } from '@/lib/routing/basePath'
+import { getRelativePath } from '@/lib/routing/basePath'
+import { usePublicPath } from '@/lib/routing/getPublicPathClient'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
 export default function TransparencyPage() {
   const pathname = usePathname() || '/'
   return (
-    <div className="space-y-16">
+    <div className="space-y-0">
       {/* Hero */}
       <PageHero>
-        <section className="text-center space-y-6">
-          <h1 className="text-4xl md:text-6xl font-bold tracking-tight text-gray-950 dark:text-gray-50">
+        <SectionWrapper index={0} className="text-center">
+          <h1 className="text-4xl md:text-6xl font-bold tracking-tight">
             Trust & Transparency
           </h1>
           <div className="flex justify-center items-center gap-4 mt-4">
-            <img src={getPublicPath('icons/mineral/icon-lattice.svg', pathname)} alt="" className="w-6 h-6 opacity-70" />
-            <img src={getPublicPath('icons/mineral/icon-sparkle.svg', pathname)} alt="" className="w-6 h-6 opacity-70" />
-            <img src={getPublicPath('icons/mineral/icon-bands.svg', pathname)} alt="" className="w-6 h-6 opacity-70" />
+            <img src={usePublicPath('icons/mineral/icon-lattice.svg')} alt="" role="presentation" aria-hidden="true" className="w-6 h-6 opacity-70" />
+            <img src={usePublicPath('icons/mineral/icon-sparkle.svg')} alt="" role="presentation" aria-hidden="true" className="w-6 h-6 opacity-70" />
+            <img src={usePublicPath('icons/mineral/icon-bands.svg')} alt="" role="presentation" aria-hidden="true" className="w-6 h-6 opacity-70" />
           </div>
-          <p className="text-xl text-gray-800 dark:text-gray-200 max-w-3xl mx-auto">
+          <p className="text-xl max-w-3xl mx-auto">
             Every material statement about MXTK should map to a source: a file, an address, or a method. Until a claim is evidenced, it stays clearly labeled as preview.
           </p>
-        </section>
+        </SectionWrapper>
       </PageHero>
 
       {/* Token Information */}
-      <section className="glass">
+      <SectionWrapper index={1}>
         <Card tint="amber">
           <h2 className="text-2xl font-semibold mb-6">Token Information</h2>
           <OnchainSummary />
@@ -40,18 +45,18 @@ export default function TransparencyPage() {
           {/* Token data supporting image - temporarily removed for cleaner look */}
           {/* <img src={getPublicPath('minerals/supporting/transparency_support_veins.jpg', pathname)} alt="Tiger's eye veins" className="w-full rounded-xl shadow my-6" loading="lazy" /> */}
         </Card>
-      </section>
+      </SectionWrapper>
 
       {/* Liquidity Pools */}
-      <section className="glass">
+      <SectionWrapper index={2}>
         <Card tint="teal">
           <h2 className="text-2xl font-semibold mb-6">Liquidity & On-chain Addresses</h2>
           <PoolTable />
         </Card>
-      </section>
+      </SectionWrapper>
 
       {/* Independent Verification */}
-      <section className="glass">
+      <SectionWrapper index={3}>
         <Card tint="navy">
           <div>
             <h3 className="font-semibold mb-3 text-lg">Independent Verification</h3>
@@ -63,21 +68,21 @@ export default function TransparencyPage() {
             </p>
           </div>
         </Card>
-      </section>
+      </SectionWrapper>
 
       {/* Attestations & Audits */}
-      <section className="glass">
+      <SectionWrapper index={4}>
         <Card tint="navy">
           <h2 className="text-2xl font-semibold mb-6">Attestations & Audits</h2>
           <ProofTable proofs={PLACEHOLDER_PROOFS} />
         </Card>
-      </section>
+      </SectionWrapper>
 
       {/* Additional Resources */}
-      <section className="glass">
+      <SectionWrapper index={5}>
         <Card tint="amber">
           <h2 className="text-2xl font-semibold mb-6">Additional Resources</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
             <div className="text-center">
               <div className="text-3xl font-bold mb-2">📄</div>
               <h3 className="font-semibold mb-2">Whitepaper</h3>
@@ -101,7 +106,25 @@ export default function TransparencyPage() {
           {/* Lab/attestations supporting image - temporarily removed for cleaner look */}
           {/* <img src={getPublicPath('minerals/supporting/transparency_support_cells.jpg', pathname)} alt="Tiger's eye cells" className="w-full rounded-xl shadow my-6" loading="lazy" /> */}
         </Card>
-      </section>
+      </SectionWrapper>
+
+      <OrganicBand tint="tigereye" className="py-14 md:py-20">
+        <div className="mask-organic relative">
+          <div className="container mx-auto px-4">
+            <div className="glass p-6">
+              <h3 className="text-lg font-semibold">Transparency in practice</h3>
+              <p className="text-sm opacity-80">We prefer explicit, verifiable mechanics to vague claims.</p>
+              <div className="mt-4">
+                <BulletList>
+                  <BulletItem title="Clear disclosures">We document what matters and keep it current.</BulletItem>
+                  <BulletItem title="Verifiable signals">When possible, on-chain or signed attestations.</BulletItem>
+                  <BulletItem title="Plain language">We avoid ambiguity and marketing speak.</BulletItem>
+                </BulletList>
+              </div>
+            </div>
+          </div>
+        </div>
+      </OrganicBand>
     </div>
   )
 }

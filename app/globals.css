@@ -79,6 +79,9 @@ html.dark .mineral-sheen {
         linear-gradient(180deg, rgba(255, 255, 255, .05), rgba(255, 255, 255, 0));
 }
 
+/* Header height for pinned backgrounds */
+:root { --nav-height: 64px; }
+
 /* Page background so glass pops */
 body.page {
     background:
@@ -96,13 +99,29 @@ html.dark body.page {
 /* Make the content area (between header and footer) the scroll container */
 .page {
     height: 100vh;
-    overflow: hidden;
 }
 
 .page>main {
     overflow-y: auto;
     flex: 1;
 }
+
+/* Organic mask utility for backgrounds */
+.mask-organic {
+    -webkit-mask-image: radial-gradient(120% 40% at 50% -10%, #000 60%, transparent 100%),
+                         radial-gradient(120% 60% at 10% 100%, #000 60%, transparent 100%),
+                         radial-gradient(120% 60% at 90% 100%, #000 60%, transparent 100%);
+    mask-image: radial-gradient(120% 40% at 50% -10%, #000 60%, transparent 100%),
+                radial-gradient(120% 60% at 10% 100%, #000 60%, transparent 100%),
+                radial-gradient(120% 60% at 90% 100%, #000 60%, transparent 100%);
+    -webkit-mask-composite: source-over;
+    mask-composite: add;
+}
+
+/* Layering: minerals (0), glass (10), content (20) */
+.z-mineral { z-index: 0; }
+.z-glass { z-index: 10; }
+.z-content { z-index: 20; }
 
 /* Center the first section as the hero across pages */
 [data-mineral]>.space-y-16>section:first-child {
@@ -118,6 +137,7 @@ h1,
 h2,
 h3 {
     color: var(--h-color);
+    font-family: var(--font-display), var(--font-sans), ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
 }
 
 /* Default heading colors */
@@ -312,12 +332,12 @@ table a:hover {
 
 /* Glass */
 .glass {
-  backdrop-filter: blur(14px) saturate(1.1);
-  -webkit-backdrop-filter: blur(14px) saturate(1.1);
-  background: rgba(255,255,255,0.06);
-  border: 1px solid rgba(255,255,255,0.14);
-  border-radius: 1rem;
-  box-shadow: 0 6px 18px rgba(0,0,0,.08);
+  backdrop-filter: blur(14px) saturate(1.08);
+  -webkit-backdrop-filter: blur(14px) saturate(1.08);
+  background: var(--surface-1);
+  border: 1px solid var(--surface-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-2);
 }
 .dark .glass {
   background: rgba(0,0,0,0.22);
@@ -328,6 +348,8 @@ table a:hover {
 .headline-gradient { background: none !important; -webkit-text-fill-color: inherit !important; color: inherit !important; }
 
 /* Text helpers for mineral backgrounds */
+.h-on-gradient { color: var(--ink-strong); text-shadow: none; }
+.sub-on-gradient { color: var(--ink-muted); }
 .h-on-tile    { color: var(--h-color); text-shadow: 0 1px 1px rgba(0,0,0,.25); }
 .sub-on-tile  { color: var(--ink-muted); }
 
@@ -342,8 +364,8 @@ table a:hover {
 
 /* Section tints for visual grouping */
 .section {
-    border-radius: var(--radius-2xl);
-    padding: 1.25rem;
+    border-radius: inherit;
+    padding: 0;
 }
 
 .section-teal {
@@ -745,22 +767,18 @@ html body [data-mineral] h3 {
 
 .btn-primary {
     @apply btn-base;
-    background: var(--mxtk-accent);
-    color: #fff;
+    background: var(--accent, var(--mxtk-accent));
+    color: #0E1116;
 }
 
-.btn-primary:hover {
-    filter: brightness(1.06);
-}
+.btn-primary:hover { filter: brightness(1.04); }
 
 /* Enhanced dark mode primary button contrast */
 .dark .btn-primary {
-    background: var(--mxtk-accent);
-    color: #fff;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    box-shadow: 
-        0 4px 12px rgba(0, 0, 0, 0.3),
-        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    background: var(--accent, var(--mxtk-accent));
+    color: #0E1116;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 
 /* Enhanced "Read More" button visibility */
@@ -797,13 +815,11 @@ html body [data-mineral] h3 {
 }
 
 .dark .btn-primary:hover {
-    background: var(--mxtk-accent);
-    color: #fff;
-    filter: brightness(1.1);
-    border-color: rgba(255, 255, 255, 0.3);
-    box-shadow: 
-        0 6px 16px rgba(0, 0, 0, 0.4),
-        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    background: var(--accent-hover, var(--mxtk-accent));
+    color: #0E1116;
+    filter: brightness(1.05);
+    border-color: rgba(255, 255, 255, 0.28);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.3);
 }
 
 .btn-outline {
@@ -1268,6 +1284,20 @@ h3 + .btn-link {
   font-weight: 600;
 }
 
+/* brand background images (full-bleed, behind content) */
+.brand-bg{
+  position:absolute;
+  left:50%;
+  transform:translateX(-50%);
+  width:100vw;
+  max-width:none;
+  height:auto;
+  pointer-events:none;
+  user-select:none;
+  z-index:0;
+  object-fit:cover;
+}
+
 /* Enhanced input fields with glass effects */
 .input,
 .select,
@@ -1491,4 +1521,25 @@ h3 + .btn-link {
 .dark .surface-card .text-muted,
 .dark .surface-card-emb .text-muted {
   color: rgba(255, 255, 255, 0.7) !important;
+}
+
+/* Wave 8.2: stronger glass tokens and class */
+:root{
+  --glass-bg: color-mix(in oklab, white 62%, transparent);
+  --glass-border: color-mix(in oklab, #7d8ca6 35%, transparent);
+  --glass-blur: 22px;
+  --glass-shadow: 0 12px 36px color-mix(in oklab, #0b1324 10%, transparent);
+}
+:root.dark{
+  --glass-bg: color-mix(in oklab, #0b1324 42%, transparent);
+  --glass-border: color-mix(in oklab, #6b88a9 35%, transparent);
+  --glass-blur: 24px;
+  --glass-shadow: 0 14px 36px color-mix(in oklab, black 45%, transparent);
+}
+.glass{
+  background: var(--glass-bg);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(130%);
+  backdrop-filter: blur(var(--glass-blur)) saturate(130%);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
 }

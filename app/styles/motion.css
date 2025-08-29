@@ -1,0 +1,11 @@
+@media (prefers-reduced-motion: no-preference) {
+  .reveal { opacity: 0; transform: translateY(16px); animation: reveal 600ms ease forwards; }
+  .reveal-delayed-1 { animation-delay: 80ms; }
+  .reveal-delayed-2 { animation-delay: 160ms; }
+}
+
+@keyframes reveal {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+

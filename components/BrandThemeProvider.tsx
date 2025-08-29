@@ -1,7 +1,8 @@
 'use client'
 import { themeForPath, type MineralTheme } from '@/lib/brand/theme'
 import { usePathname } from 'next/navigation'
-import { createContext, useContext, useMemo, useEffect, useState } from 'react'
+import { createContext, useContext, useEffect, useMemo, useState } from 'react'
+import { ParallaxProvider } from 'react-scroll-parallax'
 
 const Ctx = createContext<MineralTheme | null>(null)
 export const useBrandTheme = () => useContext(Ctx)!
@@ -55,19 +56,21 @@ export default function BrandThemeProvider({ children }: { children: React.React
 
   return (
     <Ctx.Provider value={theme}>
-      <div
-        suppressHydrationWarning
-        style={{ 
-          ['--mxtk-accent' as any]: theme.accent, 
-          ['--mxtk-hover-bg' as any]: theme.hoverBg,
-          ['--mxtk-accent-text' as any]: accentTextColor,
-          ['--mxtk-accent-rgb' as any]: hexToRgb(theme.accent)
-        } as React.CSSProperties}
-        data-mineral={theme.name}
-        data-photo={theme.photo}
-      >
-        {children}
-      </div>
+      <ParallaxProvider>
+        <div
+          suppressHydrationWarning
+          style={{ 
+            ['--mxtk-accent' as any]: theme.accent, 
+            ['--mxtk-hover-bg' as any]: theme.hoverBg,
+            ['--mxtk-accent-text' as any]: accentTextColor,
+            ['--mxtk-accent-rgb' as any]: hexToRgb(theme.accent)
+          } as React.CSSProperties}
+          data-mineral={theme.name}
+          data-photo={theme.photo}
+        >
+          {children}
+        </div>
+      </ParallaxProvider>
     </Ctx.Provider>
   )
 }

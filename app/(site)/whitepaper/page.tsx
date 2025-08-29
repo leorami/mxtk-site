@@ -1,5 +1,6 @@
 import PageHero from '@/components/PageHero'
 import Card from '@/components/ui/Card'
+import { BulletItem, BulletList } from '@/components/ui/List'
 
 export default function WhitepaperPage() {
   return (
@@ -72,21 +73,21 @@ export default function WhitepaperPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div>
               <h3 className="font-semibold mb-3">Methodology</h3>
-              <ul className="space-y-2 text-muted">
-                <li>• Transparent pricing algorithms</li>
-                <li>• Multi-source data aggregation</li>
-                <li>• Regular review and updates</li>
-                <li>• Community feedback integration</li>
-              </ul>
+              <BulletList>
+                <BulletItem title="Transparent pricing algorithms" />
+                <BulletItem title="Multi-source data aggregation" />
+                <BulletItem title="Regular review and updates" />
+                <BulletItem title="Community feedback integration" />
+              </BulletList>
             </div>
             <div>
               <h3 className="font-semibold mb-3">Governance</h3>
-              <ul className="space-y-2 text-muted">
-                <li>• Timelock-protected upgrades</li>
-                <li>• Multi-signature controls</li>
-                <li>• Emergency pause mechanisms</li>
-                <li>• Transparent change logs</li>
-              </ul>
+              <BulletList>
+                <BulletItem title="Timelock-protected upgrades" />
+                <BulletItem title="Multi-signature controls" />
+                <BulletItem title="Emergency pause mechanisms" />
+                <BulletItem title="Transparent change logs" />
+              </BulletList>
             </div>
           </div>
         </Card>

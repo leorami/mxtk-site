@@ -40,7 +40,7 @@ export default function Button({
       onClick={onClick}
       disabled={disabled}
       className={cn(
-        'btn inline-flex items-center justify-center font-medium transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-400/35 disabled:opacity-60 disabled:cursor-not-allowed',
+        'btn inline-flex items-center justify-center font-medium transition-transform duration-[120ms] ease-out-soft hover:scale-105 focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-400/35 disabled:opacity-60 disabled:cursor-not-allowed',
         sizeCls,
         variantCls,
         className

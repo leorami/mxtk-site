@@ -1,4 +1,5 @@
 import Card from '@/components/ui/Card'
+import { BulletItem, BulletList } from '@/components/ui/List'
 
 export default function PrivacyPage() {
   return (
@@ -22,21 +23,21 @@ export default function PrivacyPage() {
             </p>
             <div className="space-y-2">
               <h3 className="font-semibold">Personal Information:</h3>
-              <ul className="list-disc pl-5 text-sm text-muted space-y-1">
-                <li>Name, email address, and contact information</li>
-                <li>Professional and business information</li>
-                <li>Financial and investment information</li>
-                <li>KYC/AML documentation and verification data</li>
-              </ul>
+              <BulletList>
+                <BulletItem title="Name, email address, and contact information" />
+                <BulletItem title="Professional and business information" />
+                <BulletItem title="Financial and investment information" />
+                <BulletItem title="KYC/AML documentation and verification data" />
+              </BulletList>
             </div>
             <div className="space-y-2">
               <h3 className="font-semibold">Technical Information:</h3>
-              <ul className="list-disc pl-5 text-sm text-muted space-y-1">
-                <li>IP address and device information</li>
-                <li>Browser type and version</li>
-                <li>Website usage data and analytics</li>
-                <li>Cookies and similar tracking technologies</li>
-              </ul>
+              <BulletList>
+                <BulletItem title="IP address and device information" />
+                <BulletItem title="Browser type and version" />
+                <BulletItem title="Website usage data and analytics" />
+                <BulletItem title="Cookies and similar tracking technologies" />
+              </BulletList>
             </div>
           </div>
         </Card>
@@ -52,14 +53,14 @@ export default function PrivacyPage() {
             </p>
             <div className="space-y-2">
               <h3 className="font-semibold">Primary Uses:</h3>
-              <ul className="list-disc pl-5 text-sm text-muted space-y-1">
-                <li>Provide and maintain our website and services</li>
-                <li>Process transactions and manage accounts</li>
-                <li>Comply with KYC/AML and regulatory requirements</li>
-                <li>Communicate with you about our services</li>
-                <li>Improve our services and develop new features</li>
-                <li>Protect against fraud and ensure security</li>
-              </ul>
+              <BulletList>
+                <BulletItem title="Provide and maintain our website and services" />
+                <BulletItem title="Process transactions and manage accounts" />
+                <BulletItem title="Comply with KYC/AML and regulatory requirements" />
+                <BulletItem title="Communicate with you about our services" />
+                <BulletItem title="Improve our services and develop new features" />
+                <BulletItem title="Protect against fraud and ensure security" />
+              </BulletList>
             </div>
           </div>
         </Card>
@@ -75,13 +76,13 @@ export default function PrivacyPage() {
             </p>
             <div className="space-y-2">
               <h3 className="font-semibold">We may share information with:</h3>
-              <ul className="list-disc pl-5 text-sm text-muted space-y-1">
-                <li>Service providers who assist in our operations</li>
-                <li>Regulatory authorities as required by law</li>
-                <li>Legal and compliance advisors</li>
-                <li>Partners in our ecosystem (with your consent)</li>
-                <li>Law enforcement when required by law</li>
-              </ul>
+              <BulletList>
+                <BulletItem title="Service providers who assist in our operations" />
+                <BulletItem title="Regulatory authorities as required by law" />
+                <BulletItem title="Legal and compliance advisors" />
+                <BulletItem title="Partners in our ecosystem (with your consent)" />
+                <BulletItem title="Law enforcement when required by law" />
+              </BulletList>
             </div>
             <p className="text-muted text-sm">
               We require all third parties to maintain appropriate security measures and use your information only 
@@ -101,13 +102,13 @@ export default function PrivacyPage() {
             </p>
             <div className="space-y-2">
               <h3 className="font-semibold">Security Measures:</h3>
-              <ul className="list-disc pl-5 text-sm text-muted space-y-1">
-                <li>Encryption of data in transit and at rest</li>
-                <li>Multi-factor authentication systems</li>
-                <li>Regular security audits and assessments</li>
-                <li>Access controls and monitoring</li>
-                <li>Employee training on data protection</li>
-              </ul>
+              <BulletList>
+                <BulletItem title="Encryption of data in transit and at rest" />
+                <BulletItem title="Multi-factor authentication systems" />
+                <BulletItem title="Regular security audits and assessments" />
+                <BulletItem title="Access controls and monitoring" />
+                <BulletItem title="Employee training on data protection" />
+              </BulletList>
             </div>
             <p className="text-muted text-sm">
               While we strive to protect your information, no method of transmission over the internet is 100% secure. 
@@ -127,13 +128,13 @@ export default function PrivacyPage() {
             </p>
             <div className="space-y-2">
               <h3 className="font-semibold">Retention Periods:</h3>
-              <ul className="list-disc pl-5 text-sm text-muted space-y-1">
-                <li>Account information: Duration of account plus 7 years</li>
-                <li>Transaction records: 7 years for tax and regulatory compliance</li>
-                <li>KYC/AML documentation: As required by law (typically 5-7 years)</li>
-                <li>Website analytics: 2 years</li>
-                <li>Marketing communications: Until you opt out</li>
-              </ul>
+              <BulletList>
+                <BulletItem title="Account information: Duration of account plus 7 years" />
+                <BulletItem title="Transaction records: 7 years for tax and regulatory compliance" />
+                <BulletItem title="KYC/AML documentation: As required by law (typically 5-7 years)" />
+                <BulletItem title="Website analytics: 2 years" />
+                <BulletItem title="Marketing communications: Until you opt out" />
+              </BulletList>
             </div>
           </div>
         </Card>
@@ -148,15 +149,15 @@ export default function PrivacyPage() {
             </p>
             <div className="space-y-2">
               <h3 className="font-semibold">Your Rights May Include:</h3>
-              <ul className="list-disc pl-5 text-sm text-muted space-y-1">
-                <li>Access to your personal information</li>
-                <li>Correction of inaccurate information</li>
-                <li>Deletion of your personal information</li>
-                <li>Restriction of processing</li>
-                <li>Data portability</li>
-                <li>Objection to processing</li>
-                <li>Withdrawal of consent</li>
-              </ul>
+              <BulletList>
+                <BulletItem title="Access to your personal information" />
+                <BulletItem title="Correction of inaccurate information" />
+                <BulletItem title="Deletion of your personal information" />
+                <BulletItem title="Restriction of processing" />
+                <BulletItem title="Data portability" />
+                <BulletItem title="Objection to processing" />
+                <BulletItem title="Withdrawal of consent" />
+              </BulletList>
             </div>
             <p className="text-muted text-sm">
               To exercise these rights, please contact us using the information provided below. We will respond to 
@@ -176,12 +177,12 @@ export default function PrivacyPage() {
             </p>
             <div className="space-y-2">
               <h3 className="font-semibold">Types of Cookies:</h3>
-              <ul className="list-disc pl-5 text-sm text-muted space-y-1">
-                <li>Essential cookies for website functionality</li>
-                <li>Analytics cookies to understand usage patterns</li>
-                <li>Preference cookies to remember your settings</li>
-                <li>Marketing cookies for targeted advertising</li>
-              </ul>
+              <BulletList>
+                <BulletItem title="Essential cookies for website functionality" />
+                <BulletItem title="Analytics cookies to understand usage patterns" />
+                <BulletItem title="Preference cookies to remember your settings" />
+                <BulletItem title="Marketing cookies for targeted advertising" />
+              </BulletList>
             </div>
             <p className="text-muted text-sm">
               You can control cookie settings through your browser preferences. However, disabling certain cookies 

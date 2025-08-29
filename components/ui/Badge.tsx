@@ -9,7 +9,7 @@ export default function Badge({
 }) {
   return (
     <span className={cn(
-      'rounded-xl border border-brand-border bg-white/60 dark:bg-dark-surface/60 dark:border-dark-border px-2 py-0.5 text-xs',
+      'rounded-xl border px-2 py-0.5 text-xs bg-[var(--surface-2)] border-[var(--border-soft)]',
       className
     )}>
       {children}

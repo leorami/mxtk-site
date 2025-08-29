@@ -165,26 +165,63 @@ ensure_docker_ready() {
 }
 
 get_ngrok_url() {
-    # Check if dev-proxy is running and has ngrok
-    if docker ps --filter "name=dev-proxy" --filter "status=running" | grep -q "dev-proxy"; then
-        # Try to get URL from dev-proxy's ngrok with timeout
-        for _ in {1..3}; do
-            url=$(docker exec dev-proxy curl -s --max-time 2 http://localhost:4040/api/tunnels 2>/dev/null \
+    # 0) Env overrides (support static domains)
+    if [[ -n "${NGROK_STATIC_DOMAIN:-}" ]]; then
+        echo "https://${NGROK_STATIC_DOMAIN}"; return
+    fi
+    if [[ -n "${NGROK_DOMAIN:-}" ]]; then
+        echo "https://${NGROK_DOMAIN}"; return
+    fi
+
+    # Probe known containers for the ngrok API
+    local candidates=()
+    # 1) Explicit env var for ngrok container
+    if [[ -n "${DEV_NGROK_CONTAINER:-}" ]] && docker ps --filter "name=${DEV_NGROK_CONTAINER}" --filter "status=running" | grep -q "${DEV_NGROK_CONTAINER}"; then
+        candidates+=("${DEV_NGROK_CONTAINER}")
+    fi
+    # 2) Conventional name
+    if docker ps --filter "name=dev-ngrok" --filter "status=running" | grep -q "dev-ngrok"; then
+        candidates+=("dev-ngrok")
+    fi
+    # 3) Any running container with 'ngrok' in its name
+    while IFS= read -r c; do
+        [[ -n "$c" ]] && candidates+=("$c")
+    done < <(docker ps --filter "name=ngrok" --filter "status=running" --format "{{.Names}}" | grep -v '^dev-ngrok$' || true)
+
+    # De-duplicate candidates
+    local uniq=()
+    local seen=""
+    for c in "${candidates[@]}"; do
+        if [[ ",$seen," != *",$c,"* ]]; then
+            uniq+=("$c"); seen+=",$c"
+        fi
+    done
+
+    for container in "${uniq[@]}"; do
+        for _ in {1..5}; do
+            url=$(docker exec "$container" curl -s --max-time 2 http://localhost:4040/api/tunnels 2>/dev/null \
                   | grep -o '"public_url":"https:[^"]*"' \
                   | head -n1 | sed -E 's/.*"public_url":"([^"]*)".*/\1/')
             [[ -n "$url" ]] && { echo "$url"; return; }
             sleep 1
         done
-        
-        # Fallback: check dev-proxy logs for ngrok URL with timeout
-        url=$(docker logs --tail 50 dev-proxy 2>&1 | grep -m1 -o 'https://[a-z0-9.-]*\.ngrok\.io' | head -n1)
-        if [[ -n "$url" ]]; then
-            echo "$url"
-            return
+    done
+
+    # Fallback: scrape logs from typical containers that might print ngrok URL
+    for logc in dev-ngrok dev-proxy; do
+        if docker ps -a --format "{{.Names}}" | grep -q "^${logc}$"; then
+            # Try to capture a full https URL first
+            url=$(docker logs --tail 400 "$logc" 2>&1 | grep -m1 -o 'https://[a-z0-9.-]*\.ngrok\.(io|app)' | head -n1)
+            [[ -n "$url" ]] && { echo "$url"; return; }
+            # Static domain line (no scheme): ngrok: using static domain 'ramileo.ngrok.app'
+            domain=$(docker logs --tail 400 "$logc" 2>&1 | sed -n "s/.*using static domain '\([^']*\)'.*/\1/p" | head -n1)
+            if [[ -n "$domain" ]]; then
+                echo "https://${domain}"; return
+            fi
         fi
-    fi
-    
-    # Legacy: try local ngrok (for backward compatibility) with timeout
+    done
+
+    # Last resort: host-local ngrok
     for _ in {1..2}; do
         url=$(curl -s --max-time 2 http://localhost:4040/api/tunnels 2>/dev/null \
               | grep -o '"public_url":"https:[^"]*"' \
@@ -192,8 +229,7 @@ get_ngrok_url() {
         [[ -n "$url" ]] && { echo "$url"; return; }
         sleep 1
     done
-    
-    # No URL found
+
     echo ""
 }
 
@@ -766,13 +802,12 @@ share_with_ngrok() {
     print_status "Getting ngrok URL..."
     local url
     url=$(get_ngrok_url)
-    if [[ -z "$url" ]]; then
-        print_warning "⚠️  Ngrok URL not available yet"
-        print_status "This is normal if ngrok is still starting up"
-        print_status "Check the dev-proxy logs or dashboard for the URL"
-    else
+    if [[ -n "$url" ]]; then
         print_status "🌍  Ngrok URL → $url"
         print_status "📖 Access MXTK site at: $url/mxtk"
+    else
+        print_warning "⚠️  Could not automatically detect ngrok URL"
+        print_status "If ngrok is running in another container, set DEV_PROXY_CONTAINER or visit your ngrok dashboard."
     fi
     
     print_status "🎉 MXTK site is now connected to the shared ngrok network!"
@@ -790,7 +825,13 @@ share_with_ngrok() {
     echo "      The tunnel URL will be available once ngrok establishes the connection"
     echo
     echo -e "${CYAN}Network Status:${NC}"
-    docker network inspect ngrok-shared --format "table {{.Name}}\t{{.IPAddress}}\t{{.EndpointID}}" 2>/dev/null || echo "No containers in network"
+    local members
+    members=$(docker network inspect ngrok-shared -f '{{range .Containers}}{{.Name}}{{"\n"}}{{end}}' 2>/dev/null | sed '/^$/d')
+    if [[ -n "$members" ]]; then
+        echo "$members"
+    else
+        echo "No containers in network"
+    fi
 }
 
 restart_ngrok_service() {

@@ -1,0 +1,171 @@
+public
+├── .DS_Store
+├── README.txt
+├── art
+│   ├── .DS_Store
+│   ├── home_band_dark.png
+│   ├── home_band_light.png
+│   ├── home_light_wave_bottom.svg
+│   ├── home_light_wave_top.svg
+│   ├── mxtk_micro_mark_12.svg
+│   ├── mxtk_micro_mark_16.svg
+│   ├── mxtk_micro_mark_20.svg
+│   ├── mxtk_micro_mark_24.svg
+│   ├── owners_band_dark.png
+│   ├── owners_band_light.png
+│   ├── owners_light_wave_bottom.svg
+│   ├── owners_light_wave_top.svg
+│   └── waves
+│       ├── .DS_Store
+│       ├── home
+│       │   ├── wave_bottom_dark.png
+│       │   ├── wave_bottom_light.png
+│       │   ├── wave_top_dark.png
+│       │   └── wave_top_light.png
+│       └── owners
+│           ├── wave_bottom_dark.png
+│           ├── wave_bottom_light.png
+│           ├── wave_top_dark.png
+│           └── wave_top_light.png
+├── favicon.ico
+├── favicon.svg
+├── home
+│   ├── wave_bottom_dark.png
+│   ├── wave_bottom_light.png
+│   ├── wave_top_dark.png
+│   └── wave_top_light.png
+├── icons
+│   ├── .DS_Store
+│   ├── mineral
+│   │   ├── icon-bands.svg
+│   │   ├── icon-droplet.svg
+│   │   ├── icon-facet.svg
+│   │   ├── icon-lattice.svg
+│   │   └── icon-sparkle.svg
+│   ├── mxtk-glyph.svg
+│   └── mxtk-micro.svg
+├── logo-horizontal.png
+├── logo-horizontal.svg
+├── logo-vertical.png
+├── logomark copy.png
+├── media
+│   ├── inline-assay-1600x900.jpg
+│   ├── inline-miners-1600x900.jpg
+│   ├── inline-openpit-1600x900.jpg
+│   └── team
+│       ├── Dan_Kirichanski.png
+│       ├── bo_vargas_2000px.png
+│       ├── finance-advisors.jpg
+│       ├── geology-advisors.jpg
+│       ├── legal-advisors.jpg
+│       └── todd_2000px.png
+├── minerals
+│   ├── .DS_Store
+│   ├── README.txt
+│   ├── accents
+│   │   ├── .DS_Store
+│   │   ├── amber-1.jpg
+│   │   ├── amber-2.jpg
+│   │   ├── citrine-1.jpg
+│   │   ├── citrine-2.jpg
+│   │   ├── copper-1.jpg
+│   │   ├── copper-2.jpg
+│   │   ├── hematite-1.jpg
+│   │   ├── hematite-2.jpg
+│   │   ├── jade-1.jpg
+│   │   ├── jade-2.jpg
+│   │   ├── lapis-lazuli-1.jpg
+│   │   ├── lapis-lazuli-2.jpg
+│   │   ├── obsidian-1.jpg
+│   │   ├── obsidian-2.jpg
+│   │   ├── onyx-1.jpg
+│   │   ├── onyx-2.jpg
+│   │   ├── quartz-1.jpg
+│   │   ├── quartz-2.jpg
+│   │   ├── sapphire-1.jpg
+│   │   ├── sapphire-2.jpg
+│   │   ├── tiger-eye-1.jpg
+│   │   └── tiger-eye-2.jpg
+│   ├── backgrounds
+│   │   ├── .DS_Store
+│   │   ├── bg-amber-3840x2160.jpg
+│   │   ├── bg-citrine-3840x2160.jpg
+│   │   ├── bg-copper-3840x2160.jpg
+│   │   ├── bg-hematite-3840x2160.jpg
+│   │   ├── bg-jade-3840x2160.jpg
+│   │   ├── bg-lapis-lazuli-3840x2160.jpg
+│   │   ├── bg-obsidian-3840x2160.jpg
+│   │   ├── bg-onyx-3840x2160.jpg
+│   │   ├── bg-quartz-3840x2160.jpg
+│   │   ├── bg-sapphire-3840x2160.jpg
+│   │   ├── bg-tiger-eye-3840x2160.jpg
+│   │   ├── home_bg_amber_2048_tile.jpg
+│   │   ├── institutions_bg_lapis_2048_tile.jpg
+│   │   ├── owners_bg_citrine_2048_tile.jpg
+│   │   └── transparency_bg_tigereye_2048_tile.jpg
+│   ├── grain.svg
+│   ├── photos
+│   │   ├── amber-crystal.svg
+│   │   ├── citrine-crystal.svg
+│   │   ├── copper-crystal.svg
+│   │   ├── hematite-crystal.svg
+│   │   ├── jade-crystal.svg
+│   │   ├── lapis-lazuli-crystal.svg
+│   │   ├── obsidian-crystal.svg
+│   │   ├── onyx-crystal.svg
+│   │   ├── quartz-crystal.svg
+│   │   ├── sapphire-crystal.svg
+│   │   └── tiger-eye-crystal.svg
+│   └── supporting
+│       ├── home_support_hero.jpg
+│       ├── home_support_method.jpg
+│       ├── home_support_trust.jpg
+│       ├── institutions_support_depth.jpg
+│       ├── institutions_support_geometry.jpg
+│       ├── institutions_support_pyrite.jpg
+│       ├── owners_support_bands.jpg
+│       ├── owners_support_facets.jpg
+│       ├── owners_support_veins.jpg
+│       ├── transparency_support_cells.jpg
+│       ├── transparency_support_facets.jpg
+│       └── transparency_support_veins.jpg
+├── organizations
+│   ├── american-cancer-society.png
+│   ├── american-cancer-society.svg
+│   ├── american-heart-association.png
+│   ├── american-heart-association.svg
+│   ├── american-red-cross.png
+│   ├── american-red-cross.svg
+│   ├── arbitrum.png
+│   ├── arbitrum.svg
+│   ├── bitgo.png
+│   ├── bitgo.svg
+│   ├── chainlink.png
+│   ├── chainlink.svg
+│   ├── doctors-without-borders.png
+│   ├── doctors-without-borders.svg
+│   ├── habitat-for-humanity.png
+│   ├── habitat-for-humanity.svg
+│   ├── march-of-dimes.png
+│   ├── march-of-dimes.svg
+│   ├── persona.png
+│   ├── persona.svg
+│   ├── salvation-army.png
+│   ├── salvation-army.svg
+│   ├── world-wildlife-fund.png
+│   └── world-wildlife-fund.svg
+├── owners
+│   ├── wave_bottom_dark.png
+│   ├── wave_bottom_light.png
+│   ├── wave_top_dark.png
+│   └── wave_top_light.png
+└── waves
+    ├── .DS_Store
+    ├── home
+    │   ├── bottom.png
+    │   └── top.png
+    └── owners
+        ├── bottom.png
+        └── top.png
+
+20 directories, 149 files

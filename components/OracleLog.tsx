@@ -10,15 +10,15 @@ type Entry = {
 // Color mapping for different oracle versions
 const getVersionColor = (version: string) => {
   if (version.includes('Preview') || version.includes('preview')) {
-    return 'bg-amber-100 text-amber-800 border-amber-200 dark:bg-amber-900/20 dark:text-amber-300 dark:border-amber-800/30'
+    return 'bg-[color-mix(in_srgb,var(--mxtk-orange)_18%,transparent)] text-[var(--ink-strong)] border-[color-mix(in_srgb,var(--mxtk-orange)_28%,transparent)]'
   }
   if (version.includes('v0.1') || version.includes('v0.2')) {
-    return 'bg-blue-100 text-blue-800 border-blue-200 dark:bg-blue-900/20 dark:text-blue-300 dark:border-blue-800/30'
+    return 'bg-[color-mix(in_srgb,var(--mxtk-navy)_14%,transparent)] text-[var(--ink-strong)] border-[color-mix(in_srgb,var(--mxtk-navy)_24%,transparent)]'
   }
   if (version.includes('v1.0') || version.includes('v1.')) {
-    return 'bg-green-100 text-green-800 border-green-200 dark:bg-green-900/20 dark:text-green-300 dark:border-green-800/30'
+    return 'bg-[color-mix(in_srgb,var(--mxtk-teal)_14%,transparent)] text-[var(--ink-strong)] border-[color-mix(in_srgb,var(--mxtk-teal)_24%,transparent)]'
   }
-  return 'bg-gray-100 text-gray-800 border-gray-200 dark:bg-gray-900/20 dark:text-gray-300 dark:border-gray-800/30'
+  return 'bg-[var(--surface-2)] text-[var(--ink-strong)] border-[var(--border-soft)]'
 }
 
 export default function OracleLog({

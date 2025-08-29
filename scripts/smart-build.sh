@@ -12,12 +12,17 @@
 # =============================================================================
 
 set -euo pipefail
-
 # =============================================================================
 # CONFIGURATION
 # =============================================================================
 
-PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# Resolve repo root (look upward for package.json)
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+SEARCH_DIR="$SCRIPT_DIR"
+while [[ "$SEARCH_DIR" != "/" && ! -f "$SEARCH_DIR/package.json" ]]; do
+    SEARCH_DIR="$(dirname "$SEARCH_DIR")"
+done
+PROJECT_ROOT="${SEARCH_DIR:-$(cd "$SCRIPT_DIR/.." && pwd)}"
 DEV_CACHE_DIR="$PROJECT_ROOT/.dev-cache"
 TIMESTAMP_FILE="$DEV_CACHE_DIR/last-check.timestamp"
 CHECKSUMS_FILE="${DEV_CACHE_DIR}/file-checksums.cache"
@@ -144,13 +149,13 @@ matches_pattern() {
             ;;
         "REBUILD")
             case "$basename_file" in
-                package*.json|yarn.lock|npm-shrinkwrap.json|package-lock.json|Dockerfile*|.dockerignore|next-env.d.ts)
+                package*.json|yarn.lock|npm-shrinkwrap.json|package-lock.json|Dockerfile*|.dockerignore|next-env.d.ts|docker-compose*.yml)
                     return 0
                     ;;
             esac
             # Check directory patterns
             case "$file" in
-                docker-compose*.yml)
+                ./*docker-compose*.yml|docker-compose*.yml)
                     return 0
                     ;;
             esac
@@ -197,10 +202,10 @@ check_js_import_changes() {
     
     # Check for new dependencies that might need npm install
     local new_deps=(
-        "import.*from ['\"]react" "import.*from ['\"]next" "import.*from ['\"]@next"
-        "import.*from ['\"]@mui" "import.*from ['\"]@emotion"
-        "import.*from ['\"]axios" "import.*from ['\"]lodash" "import.*from ['\"]moment"
-        "require\\(['\"]react" "require\\(['\"]next" "require\\(['\"]@mui" "require\\(['\"]axios"
+        "from ['\"]react" "from ['\"]next" "from ['\"]@next"
+        "from ['\"]framer-motion" "from ['\"]@mui" "from ['\"]@emotion"
+        "from ['\"]axios" "from ['\"]lodash" "from ['\"]moment"
+        "require\\(['\"]react" "require\\(['\"]next" "require\\(['\"]framer-motion" "require\\(['\"]axios"
     )
     
     for dep_pattern in "${new_deps[@]}"; do
@@ -208,7 +213,7 @@ check_js_import_changes() {
             # Check if this is a new import by looking at package.json
             if [[ -f "package.json" ]]; then
                 local dep_name
-                dep_name=$(echo "$content" | grep -o "$dep_pattern" | head -1 | sed 's/.*['\''"]\\([^'\''"]*\\)['\''"].*/\\1/')
+                dep_name=$(echo "$content" | grep -o "$dep_pattern" | head -1 | sed -E "s/.*from ['\"]([^'\"]*)['\"].*/\\1/")
                 if [[ -n "$dep_name" ]] && ! grep -q "\"$dep_name\"" "package.json"; then
                     log "DEBUG" "Found new dependency '$dep_name' in $file - might need rebuild"
                     return 0  # Might need rebuild
@@ -890,6 +895,16 @@ main() {
             
             # Update timestamp
             echo "$(date +%s)" > "$TIMESTAMP_FILE"
+
+            # Ensure dev tunnel sharing remains active after restarts/rebuilds
+            if [[ "$action" != "NONE" ]]; then
+                log "INFO" "Reconnecting shared proxy (ngrok/dev-proxy)"
+                if [[ -x "./scripts/setup-mxtk-site.sh" ]]; then
+                    ./scripts/setup-mxtk-site.sh share --updateurl || ./scripts/setup-mxtk-site.sh share || true
+                else
+                    log "WARN" "setup-mxtk-site.sh not found or not executable; skipping share step"
+                fi
+            fi
             
             log "INFO" "Environment update complete"
             ;;
