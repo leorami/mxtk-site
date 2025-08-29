@@ -1,10 +1,12 @@
 import PageHero from '@/components/PageHero'
 import Card from '@/components/ui/Card'
-import { BulletItem, BulletList } from '@/components/ui/List'
+import { FeatureRow } from '@/components/ui/List'
+import BackgroundPhoto from '@/components/visuals/BackgroundPhoto'
 
 export default function Careers() {
   return (
     <div className="space-y-16">
+      <BackgroundPhoto variant="careers" />
       {/* Hero */}
       <PageHero>
         <section className="text-center space-y-6">
@@ -24,14 +26,14 @@ export default function Careers() {
           </p>
           
           <h3 className="text-lg font-semibold mb-4">Benefits include:</h3>
-          <BulletList>
-            <BulletItem title="Competitive salary and performance-based incentives" />
-            <BulletItem title="Comprehensive health, dental, and vision plans" />
-            <BulletItem title="Stock options and equity participation" />
-            <BulletItem title="Professional development opportunities" />
-            <BulletItem title="Flexible work arrangements" />
-            <BulletItem title="Collaborative and dynamic work environment" />
-          </BulletList>
+          <FeatureRow cols={3} items={[
+            { title: 'Competitive compensation' },
+            { title: 'Health, dental, vision' },
+            { title: 'Equity participation' },
+            { title: 'Professional growth' },
+            { title: 'Flexible work' },
+            { title: 'Collaborative culture' },
+          ]} />
         </Card>
       </section>
 
@@ -74,35 +76,35 @@ export default function Careers() {
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
                   <h5 className="font-semibold mb-2">Technical Leadership</h5>
-                  <BulletList>
-                    <BulletItem title="Provide strategic leadership and direction for the entire engineering function" />
-                    <BulletItem title="Drive innovation and maintain a forward-thinking approach to technology trends" />
-                    <BulletItem title="Understand and navigate the complexities of financial markets" />
-                  </BulletList>
+                  <FeatureRow cols={2} items={[
+                    { title: 'Strategic technical leadership' },
+                    { title: 'Innovation & trends' },
+                    { title: 'Financial markets fluency' },
+                  ]} />
                 </div>
                 <div>
                   <h5 className="font-semibold mb-2">Team Development</h5>
-                  <BulletList>
-                    <BulletItem title="Recruit, mentor, and lead a world-class engineering team" />
-                    <BulletItem title="Implement effective talent development strategies" />
-                    <BulletItem title="Foster a culture of collaboration, innovation, and excellence" />
-                  </BulletList>
+                  <FeatureRow cols={2} items={[
+                    { title: 'Hire & mentor' },
+                    { title: 'Talent development' },
+                    { title: 'Culture of excellence' },
+                  ]} />
                 </div>
                 <div>
                   <h5 className="font-semibold mb-2">Product Development</h5>
-                  <BulletList>
-                    <BulletItem title="Collaborate closely with cross-functional teams" />
-                    <BulletItem title="Oversee the full product development lifecycle" />
-                    <BulletItem title="Meet aggressive timelines and quality standards" />
-                  </BulletList>
+                  <FeatureRow cols={2} items={[
+                    { title: 'Cross-functional collaboration' },
+                    { title: 'Full lifecycle ownership' },
+                    { title: 'Timeline & quality' },
+                  ]} />
                 </div>
                 <div>
                   <h5 className="font-semibold mb-2">Technology Stack</h5>
-                  <BulletList>
-                    <BulletItem title="Define and implement scalable, robust, and secure architectures" />
-                    <BulletItem title="Evaluate and select appropriate technologies and frameworks" />
-                    <BulletItem title="Drive operational excellence in system performance" />
-                  </BulletList>
+                  <FeatureRow cols={2} items={[
+                    { title: 'Scalable architectures' },
+                    { title: 'Tech selection' },
+                    { title: 'Operational excellence' },
+                  ]} />
                 </div>
               </div>
             </div>
@@ -136,19 +138,19 @@ export default function Careers() {
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
                   <h5 className="font-semibold mb-2">Risk Strategy</h5>
-                  <BulletList>
-                    <BulletItem title="Develop comprehensive risk management frameworks" />
-                    <BulletItem title="Monitor global asset tracking and management" />
-                    <BulletItem title="Analyze leverage and trading risks" />
-                  </BulletList>
+                  <FeatureRow cols={2} items={[
+                    { title: 'Risk frameworks' },
+                    { title: 'Asset tracking' },
+                    { title: 'Leverage & trading risks' },
+                  ]} />
                 </div>
                 <div>
                   <h5 className="font-semibold mb-2">Compliance & Operations</h5>
-                  <BulletList>
-                    <BulletItem title="Ensure regulatory compliance across jurisdictions" />
-                    <BulletItem title="Implement operational risk controls" />
-                    <BulletItem title="Manage liquidity pool risk management" />
-                  </BulletList>
+                  <FeatureRow cols={2} items={[
+                    { title: 'Regulatory compliance' },
+                    { title: 'Operational risk controls' },
+                    { title: 'Liquidity pool risk' },
+                  ]} />
                 </div>
               </div>
             </div>

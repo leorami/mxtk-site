@@ -14,7 +14,7 @@ export default function OwnersPage() {
   const pathname = usePathname() || '/'
   return (
     <>
-      <PageBackground src="art/backgrounds/owners_citrine.jpg" />
+      <PageBackground page="owners" />
       <PageHero>
         <div className="relative">
           <div className="space-y-0">
