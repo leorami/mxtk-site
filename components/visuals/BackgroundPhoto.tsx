@@ -1,42 +1,72 @@
 'use client';
-import { usePublicPath } from '@/lib/routing/getPublicPathClient';
-import cn from 'classnames';
+import { usePublicPath } from "@/lib/routing/getPublicPathClient";
+import cn from "classnames";
+
+type Variant =
+  | "home"
+  | "owners"
+  | "institutions"
+  | "transparency"
+  | "whitepaper"
+  | "elitedrop"
+  | "careers"
+  | "roadmap"
+  | "media"
+  | "ecosystem"
+  | "faq"
+  | "resources"
+  | "contact"
+  | "team";
+
+const MAP: Record<Variant, string> = {
+  home: "home_gold.jpg",
+  owners: "owners_citrine.jpg",
+  institutions: "institutions_lapis.jpg",
+  transparency: "transparency_tigereye.jpg",
+  whitepaper: "whitepaper_obsidian.jpg",
+  elitedrop: "elitedrop_jade.jpg",
+  careers: "careers_amber.jpg",
+  roadmap: "roadmap_copper.jpg",
+  media: "media_onyx.jpg",
+  ecosystem: "ecosystem_jade.jpg",
+  faq: "faq_quartz.jpg",
+  resources: "resources_hematite.jpg",
+  contact: "contact_diamond.jpg",
+  team: "team_sapphire.jpg",
+};
 
 export default function BackgroundPhoto({
-  variant = 'home',
-  height = 'calc(100dvh - var(--nav-height) - var(--footer-overlap,0px))',
-  className = '',
+  variant,
+  className = "",
+  opacity = 1,
 }: {
-  variant?: 'home';
-  height?: string;
+  variant: Variant;
   className?: string;
+  opacity?: number; // 0–1 in case we ever need a dimmer
 }) {
-  const light = usePublicPath(`art/${variant}/${variant}_bg_light.jpg`);
-  const dark  = usePublicPath(`art/${variant}/${variant}_bg_dark.jpg`);
+  const file = MAP[variant];
+  const src = file ? usePublicPath(`art/photos/${file}`) : "";
+
   return (
     <div
       aria-hidden
       className={cn(
-        'pointer-events-none fixed inset-x-0 z-0',
-        // pin between top nav and footer; we assume header is sticky at the top
-        'top-[var(--nav-height,56px)]',
+        "pointer-events-none fixed inset-x-0 top-[var(--nav-height,theme(spacing.14))] bottom-[var(--footer-height,theme(spacing.20))] -z-10",
         className
       )}
-      style={{ height }}
     >
-      <picture className="absolute inset-0 block w-full h-full">
-        <source srcSet={dark} media="(prefers-color-scheme: dark)" />
+      {src ? (
         <img
-          src={light}
+          src={src}
           alt=""
-          decoding="async"
-          loading="lazy"
           className="block w-full h-full object-cover"
-          style={{ objectPosition: 'center center' }}
+          style={{ opacity }}
+          loading="eager"
+          decoding="async"
         />
-      </picture>
-      {/* gentle vignette + wash so glass stays readable */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/[.06] via-transparent to-black/[.06] dark:from-black/[.18] dark:to-black/[.18]" />
+      ) : (
+        <div className="w-full h-full bg-[radial-gradient(1200px_600px_at_50%_-200px,rgba(255,184,77,.35),transparent),linear-gradient(180deg,rgba(0,0,0,.05),transparent)] dark:bg-[radial-gradient(1200px_600px_at_50%_-200px,rgba(88,120,255,.18),transparent),linear-gradient(180deg,rgba(255,255,255,.04),transparent)]" />
+      )}
     </div>
   );
 }
