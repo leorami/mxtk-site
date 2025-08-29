@@ -6,7 +6,7 @@ import SectionWrapper from '@/components/SectionWrapper';
 import Card from '@/components/ui/Card';
 import FeatureGrid from '@/components/ui/FeatureGrid';
 import { KeyPoint, KeyPointsGrid } from '@/components/ui/KeyPoints';
-import BackgroundBands from '@/components/visuals/BackgroundBands';
+import PageBackground from '@/components/visuals/PageBackground';
 import { usePublicPath } from '@/lib/routing/getPublicPathClient';
 import { usePathname } from 'next/navigation';
 
@@ -14,7 +14,7 @@ export default function OwnersPage() {
   const pathname = usePathname() || '/'
   return (
     <>
-      <BackgroundBands variant="owners" />
+      <PageBackground src="art/backgrounds/owners_citrine.jpg" />
       <PageHero>
         <div className="relative">
           <div className="space-y-0">

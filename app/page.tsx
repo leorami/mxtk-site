@@ -7,7 +7,7 @@ import { useBasePath } from '@/components/providers/BasePathProvider'
 import Card from '@/components/ui/Card'
 import { KeyPoint, KeyPointsGrid } from '@/components/ui/KeyPoints'
 // import BackgroundBands from '@/components/visuals/BackgroundBands'
-import BackgroundPhoto from '@/components/visuals/BackgroundPhoto'
+import PageBackground from '@/components/visuals/PageBackground'
 import { usePublicPath } from '@/lib/routing/getPublicPathClient'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
@@ -22,7 +22,8 @@ export default function Home() {
 
   return (
     <>
-      <BackgroundPhoto variant="home" />
+      <PageBackground src="art/backgrounds/home_gold.jpg" />
+      
       <PageHero>
         <div className="relative">
           <div className="space-y-0">

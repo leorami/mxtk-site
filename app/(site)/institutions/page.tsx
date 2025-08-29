@@ -9,7 +9,7 @@ import OnchainSummary from '@/components/live/OnchainSummary'
 import PoolTable from '@/components/live/PoolTable'
 import Card from '@/components/ui/Card'
 import { BulletItem, BulletList } from '@/components/ui/List'
-import OrganicBand from '@/components/visuals/OrganicBand'
+import PageBackground from '@/components/visuals/PageBackground'
 import { usePublicPath } from '@/lib/routing/getPublicPathClient'
 import { usePathname } from 'next/navigation'
 
@@ -17,6 +17,7 @@ export default function InstitutionsPage() {
   const pathname = usePathname() || '/'
   return (
     <div className="space-y-0">
+      <PageBackground src="art/backgrounds/institutions_lapis.jpg" />
       {/* Hero */}
       <PageHero>
         <SectionWrapper index={0} className="text-center">
