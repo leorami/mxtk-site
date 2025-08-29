@@ -49,26 +49,7 @@
   mask-position: top, bottom;
 }
 
-/* keep the glass calm - override other glass styles */
-.glass {
-  backdrop-filter: blur(14px) saturate(1.08) !important;
-  -webkit-backdrop-filter: blur(14px) saturate(1.08) !important;
-  background: rgba(255,255,255,0.6) !important;
-  border: 1px solid rgba(0,0,0,0.6) !important;
-  border-radius: 1rem !important;
-  box-shadow: 0 8px 22px rgba(0,0,0,.08) !important;
-  transition: all 0.3s ease-out !important;
-  transform: none !important;
-}
-
-.glass:hover {
-  transform: translateY(-4px) !important;
-  box-shadow: 0 12px 32px rgba(0,0,0,.12) !important;
-}
-.dark .glass {
-  background: rgba(0,0,0,0.22) !important;
-  border-color: rgba(255,255,255,0.08) !important;
-}
+/* Wave 9: remove .glass overrides here; .glass lives in globals.css */
 
 /* optional shimmer removed; keep a light noise wash if you want */
 .mineral-wash { 

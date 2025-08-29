@@ -9,7 +9,7 @@ type SectionWrapperProps = {
 
 export default function SectionWrapper({ children, className = '', index = 0 }: SectionWrapperProps) {
   return (
-    <section className={`py-10 md:py-12 ${className}`}> {children} </section>
+    <section className={`container mx-auto px-4 py-10 md:py-12 ${className}`}>{children}</section>
   );
 }
 
