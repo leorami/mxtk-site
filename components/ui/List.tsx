@@ -1,24 +1,38 @@
-import React from 'react';
-import LogoGlyph from './LogoGlyph';
+import LogoGlyph from "./LogoGlyph";
 
-export function BulletList({ children }: React.PropsWithChildren) {
-  return <div className="space-y-3">{children}</div>;
-}
-
-export function BulletItem({ title, children }: { title: string; children?: React.ReactNode }) {
+export function FeatureRow({
+  items,
+  cols = 3,
+}: {
+  items: Array<{ title: string; body?: string }>;
+  cols?: 2 | 3 | 4;
+}) {
   return (
-    <div className="group focus-within:-translate-y-0.5 hover:-translate-y-0.5 transition-transform duration-300">
-      <div className="flex items-start gap-3">
-        <span className="inline-flex h-5 w-5 rounded-full ring-1 ring-[var(--accent)]/35 bg-[var(--accent)]/14 shrink-0 items-center justify-center mt-0.5 transition-all duration-300 group-hover:ring-[var(--accent)]/60 group-hover:shadow-[0_6px_16px_rgba(0,0,0,.12)] group-hover:scale-[1.03] group-focus-within:ring-[var(--accent)]/60">
-          <LogoGlyph size={12} className="opacity-80 transition-transform duration-300 group-hover:-rotate-6 group-focus-within:-rotate-6" />
-        </span>
-        <div>
-          <div className="font-medium" style={{ color: 'var(--ink-strong)' }}>{title}</div>
-          {children ? <div className="text-sm" style={{ color: 'var(--ink)' }}>{children}</div> : null}
+    <div
+      className={`grid gap-4 md:gap-5 ${cols === 4 ? "md:grid-cols-4" : cols === 2 ? "md:grid-cols-2" : "md:grid-cols-3"}`}
+    >
+      {items.map((it, i) => (
+        <div
+          key={i}
+          className="group glass p-4 md:p-5 transition-transform duration-300 will-change-transform hover:-translate-y-0.5"
+        >
+          <div className="flex items-start gap-3">
+            <span className="inline-flex h-6 w-6 rounded-full ring-1 ring-[var(--accent)]/35 bg-[var(--accent)]/18 shrink-0 items-center justify-center">
+              <LogoGlyph size={12} className="opacity-90" />
+            </span>
+            <div>
+              <div className="font-medium" style={{ color: "var(--ink-strong)" }}>
+                {it.title}
+              </div>
+              {it.body ? (
+                <div className="text-sm mt-0.5" style={{ color: "var(--ink)" }}>
+                  {it.body}
+                </div>
+              ) : null}
+            </div>
+          </div>
         </div>
-      </div>
+      ))}
     </div>
   );
 }
-
-

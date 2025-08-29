@@ -1,5 +1,5 @@
 import Card from '@/components/ui/Card'
-import { BulletItem, BulletList } from '@/components/ui/List'
+import { FeatureRow } from '@/components/ui/List'
 
 export default function PrivacyPage() {
   return (
@@ -23,21 +23,21 @@ export default function PrivacyPage() {
             </p>
             <div className="space-y-2">
               <h3 className="font-semibold">Personal Information:</h3>
-              <BulletList>
-                <BulletItem title="Name, email address, and contact information" />
-                <BulletItem title="Professional and business information" />
-                <BulletItem title="Financial and investment information" />
-                <BulletItem title="KYC/AML documentation and verification data" />
-              </BulletList>
+              <FeatureRow cols={2} items={[
+                { title: 'Contact details' },
+                { title: 'Professional info' },
+                { title: 'Financial information' },
+                { title: 'KYC/AML data' },
+              ]} />
             </div>
             <div className="space-y-2">
               <h3 className="font-semibold">Technical Information:</h3>
-              <BulletList>
-                <BulletItem title="IP address and device information" />
-                <BulletItem title="Browser type and version" />
-                <BulletItem title="Website usage data and analytics" />
-                <BulletItem title="Cookies and similar tracking technologies" />
-              </BulletList>
+              <FeatureRow cols={2} items={[
+                { title: 'IP & device data' },
+                { title: 'Browser details' },
+                { title: 'Usage analytics' },
+                { title: 'Cookies & tracking' },
+              ]} />
             </div>
           </div>
         </Card>
@@ -53,14 +53,14 @@ export default function PrivacyPage() {
             </p>
             <div className="space-y-2">
               <h3 className="font-semibold">Primary Uses:</h3>
-              <BulletList>
-                <BulletItem title="Provide and maintain our website and services" />
-                <BulletItem title="Process transactions and manage accounts" />
-                <BulletItem title="Comply with KYC/AML and regulatory requirements" />
-                <BulletItem title="Communicate with you about our services" />
-                <BulletItem title="Improve our services and develop new features" />
-                <BulletItem title="Protect against fraud and ensure security" />
-              </BulletList>
+              <FeatureRow cols={3} items={[
+                { title: 'Provide services' },
+                { title: 'Process transactions' },
+                { title: 'KYC/AML compliance' },
+                { title: 'Communications' },
+                { title: 'Improve features' },
+                { title: 'Fraud & security' },
+              ]} />
             </div>
           </div>
         </Card>
@@ -76,13 +76,13 @@ export default function PrivacyPage() {
             </p>
             <div className="space-y-2">
               <h3 className="font-semibold">We may share information with:</h3>
-              <BulletList>
-                <BulletItem title="Service providers who assist in our operations" />
-                <BulletItem title="Regulatory authorities as required by law" />
-                <BulletItem title="Legal and compliance advisors" />
-                <BulletItem title="Partners in our ecosystem (with your consent)" />
-                <BulletItem title="Law enforcement when required by law" />
-              </BulletList>
+              <FeatureRow cols={3} items={[
+                { title: 'Service providers' },
+                { title: 'Regulators' },
+                { title: 'Legal advisors' },
+                { title: 'Ecosystem partners' },
+                { title: 'Law enforcement' },
+              ]} />
             </div>
             <p className="text-muted text-sm">
               We require all third parties to maintain appropriate security measures and use your information only 
@@ -102,13 +102,13 @@ export default function PrivacyPage() {
             </p>
             <div className="space-y-2">
               <h3 className="font-semibold">Security Measures:</h3>
-              <BulletList>
-                <BulletItem title="Encryption of data in transit and at rest" />
-                <BulletItem title="Multi-factor authentication systems" />
-                <BulletItem title="Regular security audits and assessments" />
-                <BulletItem title="Access controls and monitoring" />
-                <BulletItem title="Employee training on data protection" />
-              </BulletList>
+              <FeatureRow cols={3} items={[
+                { title: 'Encryption' },
+                { title: 'Multi-factor auth' },
+                { title: 'Security audits' },
+                { title: 'Access controls' },
+                { title: 'Employee training' },
+              ]} />
             </div>
             <p className="text-muted text-sm">
               While we strive to protect your information, no method of transmission over the internet is 100% secure. 
@@ -128,13 +128,13 @@ export default function PrivacyPage() {
             </p>
             <div className="space-y-2">
               <h3 className="font-semibold">Retention Periods:</h3>
-              <BulletList>
-                <BulletItem title="Account information: Duration of account plus 7 years" />
-                <BulletItem title="Transaction records: 7 years for tax and regulatory compliance" />
-                <BulletItem title="KYC/AML documentation: As required by law (typically 5-7 years)" />
-                <BulletItem title="Website analytics: 2 years" />
-                <BulletItem title="Marketing communications: Until you opt out" />
-              </BulletList>
+              <FeatureRow cols={2} items={[
+                { title: 'Account: life + 7y' },
+                { title: 'Transactions: 7y' },
+                { title: 'KYC/AML: 5–7y' },
+                { title: 'Analytics: 2y' },
+                { title: 'Marketing: until opt-out' },
+              ]} />
             </div>
           </div>
         </Card>
@@ -149,15 +149,15 @@ export default function PrivacyPage() {
             </p>
             <div className="space-y-2">
               <h3 className="font-semibold">Your Rights May Include:</h3>
-              <BulletList>
-                <BulletItem title="Access to your personal information" />
-                <BulletItem title="Correction of inaccurate information" />
-                <BulletItem title="Deletion of your personal information" />
-                <BulletItem title="Restriction of processing" />
-                <BulletItem title="Data portability" />
-                <BulletItem title="Objection to processing" />
-                <BulletItem title="Withdrawal of consent" />
-              </BulletList>
+              <FeatureRow cols={2} items={[
+                { title: 'Access' },
+                { title: 'Correction' },
+                { title: 'Deletion' },
+                { title: 'Restriction' },
+                { title: 'Portability' },
+                { title: 'Objection' },
+                { title: 'Withdraw consent' },
+              ]} />
             </div>
             <p className="text-muted text-sm">
               To exercise these rights, please contact us using the information provided below. We will respond to 
@@ -177,12 +177,12 @@ export default function PrivacyPage() {
             </p>
             <div className="space-y-2">
               <h3 className="font-semibold">Types of Cookies:</h3>
-              <BulletList>
-                <BulletItem title="Essential cookies for website functionality" />
-                <BulletItem title="Analytics cookies to understand usage patterns" />
-                <BulletItem title="Preference cookies to remember your settings" />
-                <BulletItem title="Marketing cookies for targeted advertising" />
-              </BulletList>
+              <FeatureRow cols={2} items={[
+                { title: 'Essential' },
+                { title: 'Analytics' },
+                { title: 'Preferences' },
+                { title: 'Marketing' },
+              ]} />
             </div>
             <p className="text-muted text-sm">
               You can control cookie settings through your browser preferences. However, disabling certain cookies 

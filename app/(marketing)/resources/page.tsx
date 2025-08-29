@@ -1,28 +1,28 @@
-import BasePathLink from '@/components/BasePathLink'
 import PageHero from '@/components/PageHero'
+import SectionWrapper from '@/components/SectionWrapper'
 import Card from '@/components/ui/Card'
-import { BulletItem, BulletList } from '@/components/ui/List'
+import { FeatureRow } from '@/components/ui/List'
+import BackgroundPhoto from '@/components/visuals/BackgroundPhoto'
 import Link from 'next/link'
 
 export default function Resources() {
   return (
-    <div className="space-y-16">
-      {/* Hero */}
+    <>
+      <BackgroundPhoto variant="resources" />
       <PageHero>
-        <section className="text-center space-y-6">
-          <h1 className="text-4xl md:text-6xl font-bold tracking-tight text-slate-900 dark:text-slate-50 drop-shadow-[0_1px_1px_rgba(0,0,0,0.25)]">Resources</h1>
-          <p className="text-xl text-muted max-w-3xl mx-auto">
-            Educational content, research, and insights about Mineral Token and the future of asset-backed securities.
-          </p>
-        </section>
-      </PageHero>
+        <div className="relative">
+          <div className="space-y-0">
+            <SectionWrapper index={0} className="text-center">
+              <h1 className="text-4xl md:text-6xl font-bold tracking-tight text-slate-900 dark:text-slate-50 drop-shadow-[0_1px_1px_rgba(0,0,0,0.25)]">Resources</h1>
+              <p className="text-xl text-muted max-w-3xl mx-auto">
+                Educational content, research, and insights about Mineral Token and the future of asset-backed securities.
+              </p>
+            </SectionWrapper>
 
-      {/* Featured Articles */}
-      <section className="section-amber">
-        <Card tint="amber">
-          <h2 className="text-2xl font-semibold mb-8">Featured Articles</h2>
-          
-          <div className="grid md:grid-cols-2 gap-8">
+            <SectionWrapper index={1}>
+              <Card tint="amber">
+                <h2 className="text-2xl font-semibold mb-8">Featured Articles</h2>
+                <div className="grid md:grid-cols-2 gap-8">
             {/* Article 1 */}
             <div className="space-y-4">
               <div className="flex items-center gap-2 text-sm text-muted">
@@ -112,141 +112,51 @@ export default function Resources() {
                 Read More →
               </Link>
             </div>
-          </div>
+                </div>
+                <div className="mt-8 pt-6 border-t border-border">
+                  <Link href="#" className="btn-soft">View Older Posts</Link>
+                </div>
+              </Card>
+            </SectionWrapper>
 
-          <div className="mt-8 pt-6 border-t border-border">
-            <Link href="#" className="btn-soft">
-              View Older Posts
-            </Link>
-          </div>
-        </Card>
-      </section>
+            <SectionWrapper index={2}>
+              <Card tint="navy">
+                <h2 className="text-2xl font-semibold mb-6">Educational Resources</h2>
+                <FeatureRow cols={3} items={[
+                  { title: 'Whitepaper', body: 'Technical documentation and tokenomics.' },
+                  { title: 'Transparency hub', body: 'Live data, logs, OTC aggregates.' },
+                  { title: 'Ecosystem', body: 'Partners, integrations, infra.' },
+                ]} />
+              </Card>
+            </SectionWrapper>
 
-      {/* Educational Resources */}
-      <section className="section-navy">
-        <Card tint="navy">
-          <h2 className="text-2xl font-semibold mb-6">Educational Resources</h2>
-          
-          <div className="grid md:grid-cols-3 gap-6">
-            <div className="text-center">
-              <div className="text-3xl font-bold mb-2">📚</div>
-              <h3 className="font-semibold mb-2 text-foreground">Whitepaper</h3>
-              <p className="text-foreground/80 text-sm mb-4">Comprehensive technical documentation and tokenomics</p>
-              <BasePathLink to="whitepaper" className="btn-soft">
-                Read Whitepaper
-              </BasePathLink>
-            </div>
-            
-            <div className="text-center">
-              <div className="text-3xl font-bold mb-2">📊</div>
-              <h3 className="font-semibold mb-2 text-foreground">Transparency Hub</h3>
-              <p className="text-foreground/80 text-sm mb-4">Real-time data, oracle logs, and OTC aggregates</p>
-              <BasePathLink to="transparency" className="btn-soft">
-                View Data
-              </BasePathLink>
-            </div>
-            
-            <div className="text-center">
-              <div className="text-3xl font-bold mb-2">🔗</div>
-              <h3 className="font-semibold mb-2 text-foreground">Ecosystem</h3>
-              <p className="text-foreground/80 text-sm mb-4">Partners, integrations, and infrastructure</p>
-              <BasePathLink to="ecosystem" className="btn-soft">
-                Explore Ecosystem
-              </BasePathLink>
-            </div>
-          </div>
-        </Card>
-      </section>
+            <SectionWrapper index={3}>
+              <Card tint="teal">
+                <h2 className="text-2xl font-semibold mb-6">Trading Resources</h2>
+                <div className="grid md:grid-cols-2 gap-8">
+            <FeatureRow cols={2} items={[
+              { title: 'Uniswap (Arbitrum)', body: 'Primary DEX for MXTK' },
+              { title: 'CoinGecko', body: 'Price tracking and metadata' },
+              { title: 'Arbiscan', body: 'Token details and holders' },
+              { title: 'Setup guides', body: 'MetaMask, Bitget, Arbitrum network' },
+            ]} />
+                </div>
+              </Card>
+            </SectionWrapper>
 
-      {/* Trading Resources */}
-      <section className="section-teal">
-        <Card tint="teal">
-          <h2 className="text-2xl font-semibold mb-6">Trading Resources</h2>
-          
-          <div className="grid md:grid-cols-2 gap-8">
-            <div>
-              <h3 className="text-lg font-semibold mb-4 text-foreground">Where to Trade MXTK</h3>
-              <BulletList>
-                <BulletItem title="Uniswap (Arbitrum) - Primary DEX">
-                  <a 
-                    href="https://app.uniswap.org/explore/tokens/arbitrum/0x3e4ffeb394b371aaaa0998488046ca19d870d9ba" 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="text-accent hover:underline"
-                  >
-                    Open link
-                  </a>
-                </BulletItem>
-                <BulletItem title="CoinGecko - Price Tracking">
-                  <a 
-                    href="https://www.coingecko.com/en/coins/mineral-token" 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="text-accent hover:underline"
-                  >
-                    Open link
-                  </a>
-                </BulletItem>
-                <BulletItem title="Arbiscan - Blockchain Explorer">
-                  <a 
-                    href="https://arbiscan.io/token/0x3e4ffeb394b371aaaa0998488046ca19d870d9ba" 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="text-accent hover:underline"
-                  >
-                    Open link
-                  </a>
-                </BulletItem>
-              </BulletList>
-            </div>
-            
-            <div>
-              <h3 className="text-lg font-semibold mb-4 text-foreground">Wallet Setup Guides</h3>
-              <BulletList>
-                <BulletItem title="MetaMask Setup Guide">
-                  <BasePathLink to="faq" className="text-accent hover:underline">
-                    Open guide
-                  </BasePathLink>
-                </BulletItem>
-                <BulletItem title="Bitget Exchange Guide">
-                  <BasePathLink to="faq" className="text-accent hover:underline">
-                    Open guide
-                  </BasePathLink>
-                </BulletItem>
-                <BulletItem title="Arbitrum Network Configuration">
-                  <BasePathLink to="faq" className="text-accent hover:underline">
-                    Open guide
-                  </BasePathLink>
-                </BulletItem>
-              </BulletList>
-            </div>
+            <SectionWrapper index={4}>
+              <Card tint="amber">
+                <h2 className="text-2xl font-semibold mb-6 text-foreground">Stay Connected</h2>
+                <p className="text-foreground/80 mb-6">For the latest updates, research, and insights about Mineral Token, follow us on social media and subscribe to our newsletter.</p>
+                <div className="space-y-2">
+                  <p><strong>Email:</strong> <a href="mailto:info@mineral-token.com" className="text-accent hover:underline">info@mineral-token.com</a></p>
+                  <p><strong>Telegram:</strong> <a href="https://t.me/mineraltoken" target="_blank" rel="noopener noreferrer" className="text-accent hover:underline">@mineraltoken</a></p>
+                </div>
+              </Card>
+            </SectionWrapper>
           </div>
-        </Card>
-      </section>
-
-      {/* Contact */}
-      <section className="section-amber">
-        <Card tint="amber">
-          <h2 className="text-2xl font-semibold mb-6 text-foreground">Stay Connected</h2>
-          <p className="text-foreground/80 mb-6">
-            For the latest updates, research, and insights about Mineral Token, follow us on social media and subscribe to our newsletter.
-          </p>
-          <div className="space-y-2">
-            <p>
-              <strong>Email:</strong>{' '}
-              <a href="mailto:info@mineral-token.com" className="text-accent hover:underline">
-                info@mineral-token.com
-              </a>
-            </p>
-            <p>
-              <strong>Telegram:</strong>{' '}
-              <a href="https://t.me/mineraltoken" target="_blank" rel="noopener noreferrer" className="text-accent hover:underline">
-                @mineraltoken
-              </a>
-            </p>
-          </div>
-        </Card>
-      </section>
-    </div>
+        </div>
+      </PageHero>
+    </>
   )
 }

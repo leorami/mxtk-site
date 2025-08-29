@@ -2,8 +2,8 @@ import BasePathLink from '@/components/BasePathLink'
 import OrganizationLogoGrid from '@/components/OrganizationLogoGrid'
 import PageHero from '@/components/PageHero'
 import Card from '@/components/ui/Card'
-import { BulletItem, BulletList } from '@/components/ui/List'
-import OrganicBand from '@/components/visuals/OrganicBand'
+import { FeatureRow } from '@/components/ui/List'
+import BackgroundPhoto from '@/components/visuals/BackgroundPhoto'
 import { PLACEHOLDER_ORGANIZATIONS } from '@/lib/placeholders'
 
 export default function MXTKCaresPage() {
@@ -15,6 +15,7 @@ export default function MXTKCaresPage() {
 
   return (
     <div className="space-y-16">
+      <BackgroundPhoto variant="elitedrop" />
       {/* Hero */}
       <PageHero>
         <section className="text-center space-y-6">
@@ -62,31 +63,24 @@ export default function MXTKCaresPage() {
             <div>
               <h3 className="font-semibold mb-3 text-lg">Token-Backed Loans</h3>
               <p className="text-muted text-sm mb-4">
-                Use your locked MXTK tokens as collateral to secure traditional loans from our partner financial institutions. 
-                This provides immediate liquidity while maintaining your token position.
+                Use locked MXTK as collateral for immediate liquidity via partner institutions.
               </p>
-              <div className="text-sm">
-                <BulletList>
-                  <BulletItem title="Competitive interest rates based on token value" />
-                  <BulletItem title="Flexible repayment terms" />
-                  <BulletItem title="No personal guarantees required" />
-                </BulletList>
-              </div>
+              <FeatureRow cols={2} items={[
+                { title: 'Competitive rates' },
+                { title: 'Flexible terms' },
+                { title: 'No personal guarantees' },
+              ]} />
             </div>
-            
             <div>
               <h3 className="font-semibold mb-3 text-lg">Revenue-Based Financing</h3>
               <p className="text-muted text-sm mb-4">
-                Convert future MXTK token distributions into upfront capital through revenue-sharing agreements 
-                with our network of impact investors.
+                Convert future token distributions into upfront capital via revenue-sharing.
               </p>
-              <div className="text-sm">
-                <BulletList>
-                  <BulletItem title="Aligns with your mission and growth" />
-                  <BulletItem title="Flexible repayment tied to performance" />
-                  <BulletItem title="Access to strategic partnerships" />
-                </BulletList>
-              </div>
+              <FeatureRow cols={2} items={[
+                { title: 'Mission-aligned' },
+                { title: 'Performance-based' },
+                { title: 'Strategic partners' },
+              ]} />
             </div>
           </div>
 
@@ -94,31 +88,24 @@ export default function MXTKCaresPage() {
             <div>
               <h3 className="font-semibold mb-3 text-lg">Grant Acceleration</h3>
               <p className="text-muted text-sm mb-4">
-                Our team helps you structure your MXTK holdings to qualify for additional grants and funding 
-                from foundations and government programs.
+                Structure MXTK holdings to qualify for grants from foundations and government programs.
               </p>
-              <div className="text-sm">
-                <BulletList>
-                  <BulletItem title="Expert grant writing support" />
-                  <BulletItem title="Compliance and reporting assistance" />
-                  <BulletItem title="Network access to funders" />
-                </BulletList>
-              </div>
+              <FeatureRow cols={2} items={[
+                { title: 'Grant writing' },
+                { title: 'Compliance/reporting' },
+                { title: 'Funder network' },
+              ]} />
             </div>
-            
             <div>
               <h3 className="font-semibold mb-3 text-lg">Strategic Partnerships</h3>
               <p className="text-muted text-sm mb-4">
-                Leverage your MXTK position to form strategic partnerships with other grantees, 
-                creating collaborative funding pools and shared resources.
+                Build cross-org partnerships and shared resource pools.
               </p>
-              <div className="text-sm">
-                <BulletList>
-                  <BulletItem title="Cross-organizational collaboration" />
-                  <BulletItem title="Shared administrative costs" />
-                  <BulletItem title="Amplified impact potential" />
-                </BulletList>
-              </div>
+              <FeatureRow cols={2} items={[
+                { title: 'Collaboration' },
+                { title: 'Shared costs' },
+                { title: 'Amplified impact' },
+              ]} />
             </div>
           </div>
         </Card>
@@ -157,19 +144,17 @@ export default function MXTKCaresPage() {
             </div>
           </div>
 
-          <div className="bg-white/5 rounded-lg p-6">
+          <div className="glass p-6">
             <h3 className="font-semibold mb-3">Success Stories</h3>
             <p className="text-muted text-sm mb-6">
               Organizations in our pilot program have successfully leveraged their MXTK grants to:
             </p>
-            <div className="text-sm mb-6">
-              <BulletList>
-                <BulletItem title="Secure $2M in low-interest loans for program expansion" />
-                <BulletItem title="Form strategic partnerships worth $5M in combined resources" />
-                <BulletItem title="Qualify for additional grants totaling $3M" />
-                <BulletItem title="Create sustainable revenue streams through innovative financing" />
-              </BulletList>
-            </div>
+            <FeatureRow cols={2} items={[
+              { title: 'Secure $2M low-interest loans' },
+              { title: '$5M strategic partnerships' },
+              { title: '$3M additional grants' },
+              { title: 'Sustainable revenue streams' },
+            ]} />
             
             {/* Organization Logos */}
             <OrganizationLogoGrid
@@ -208,13 +193,11 @@ export default function MXTKCaresPage() {
                 Organizations with clear, measurable outcomes and the capacity to scale their impact 
                 with additional funding.
               </p>
-              <div className="text-sm">
-                <BulletList>
-                  <BulletItem title="Proven track record of measurable impact" />
-                  <BulletItem title="Clear theory of change" />
-                  <BulletItem title="Scalable program model" />
-                </BulletList>
-              </div>
+              <FeatureRow cols={2} items={[
+                { title: 'Proven measurable impact' },
+                { title: 'Clear theory of change' },
+                { title: 'Scalable program model' },
+              ]} />
             </div>
             <div>
               <h3 className="font-semibold mb-3">Transparency</h3>
@@ -222,13 +205,11 @@ export default function MXTKCaresPage() {
                 Open about their operations, financials, and impact measurement. 
                 Willing to share learnings with the community.
               </p>
-              <div className="text-sm">
-                <BulletList>
-                  <BulletItem title="Regular financial reporting" />
-                  <BulletItem title="Impact measurement systems" />
-                  <BulletItem title="Open communication practices" />
-                </BulletList>
-              </div>
+              <FeatureRow cols={2} items={[
+                { title: 'Financial reporting' },
+                { title: 'Impact measurement' },
+                { title: 'Open communication' },
+              ]} />
             </div>
             <div>
               <h3 className="font-semibold mb-3">Innovation readiness</h3>
@@ -236,13 +217,11 @@ export default function MXTKCaresPage() {
                 Willing to explore new funding mechanisms and work with our team to maximize 
                 the utility of their MXTK grant.
               </p>
-              <div className="text-sm">
-                <BulletList>
-                  <BulletItem title="Open to new financial instruments" />
-                  <BulletItem title="Adaptive organizational culture" />
-                  <BulletItem title="Strategic partnership mindset" />
-                </BulletList>
-              </div>
+              <FeatureRow cols={2} items={[
+                { title: 'New financial instruments' },
+                { title: 'Adaptive culture' },
+                { title: 'Partnership mindset' },
+              ]} />
             </div>
             <div>
               <h3 className="font-semibold mb-3">Sustainability</h3>
@@ -250,13 +229,11 @@ export default function MXTKCaresPage() {
                 Long-term vision and operational stability. Organizations that can sustain 
                 and grow their impact over time.
               </p>
-              <div className="text-sm">
-                <BulletList>
-                  <BulletItem title="Strong leadership and governance" />
-                  <BulletItem title="Diversified funding sources" />
-                  <BulletItem title="Long-term strategic planning" />
-                </BulletList>
-              </div>
+              <FeatureRow cols={2} items={[
+                { title: 'Leadership & governance' },
+                { title: 'Diversified funding' },
+                { title: 'Long-term planning' },
+              ]} />
             </div>
           </div>
         </Card>
@@ -291,25 +268,7 @@ export default function MXTKCaresPage() {
         </Card>
       </section>
 
-      <OrganicBand tint="teal" className="py-14 md:py-20">
-        <div className="mask-organic relative">
-          <div className="container mx-auto px-4">
-            <div className="grid md:grid-cols-2 gap-8 items-center">
-              <div className="glass p-6">
-                <h3 className="text-lg font-semibold">Impact, not spin</h3>
-                <p className="text-sm opacity-80">Programs designed with outcomes and accountability in mind.</p>
-              </div>
-              <div className="glass p-6">
-                <BulletList>
-                  <BulletItem title="Aligned with mission">We start with the ‘why’, then ship the ‘how’.</BulletItem>
-                  <BulletItem title="Measurable">Simple KPIs; report the truth, improve fast.</BulletItem>
-                  <BulletItem title="Partner-first">We co-design and respect constraints.</BulletItem>
-                </BulletList>
-              </div>
-            </div>
-          </div>
-        </div>
-      </OrganicBand>
+      {/* Decorative band removed; BackgroundPhoto provides the backdrop */}
     </div>
   )
 }
