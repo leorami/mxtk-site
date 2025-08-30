@@ -1,24 +1,21 @@
 import PageHero from '@/components/PageHero'
+import SectionWrapper from '@/components/SectionWrapper'
+import PageTheme from '@/components/theme/PageTheme'
 import Card from '@/components/ui/Card'
 import { FeatureRow } from '@/components/ui/List'
-import BackgroundPhoto from '@/components/visuals/BackgroundPhoto'
+import PhotoBackdrop from '@/components/visuals/PhotoBackdrop'
 
 export default function Careers() {
   return (
-    <div className="space-y-16">
-      <BackgroundPhoto variant="careers" />
-      {/* Hero */}
+    <PageTheme ink="warm" lift="M">
+      <PhotoBackdrop src="art/photos/careers_amber.jpg" />
       <PageHero>
-        <section className="text-center space-y-6">
-          <h1 className="text-4xl md:text-6xl font-bold tracking-tight text-slate-900 dark:text-slate-50 drop-shadow-[0_1px_1px_rgba(0,0,0,0.25)]">Careers</h1>
-          <p className="text-xl text-muted max-w-3xl mx-auto">
-            Employment opportunities with Mineral Token.
-          </p>
-        </section>
-      </PageHero>
+        <SectionWrapper index={0} className="text-center">
+          <h1 className="text-4xl md:text-6xl font-bold tracking-tight">Careers</h1>
+          <p className="text-xl max-w-3xl mx-auto">Employment opportunities with Mineral Token.</p>
+        </SectionWrapper>
 
-      {/* Company Overview */}
-      <section className="section-amber">
+      <SectionWrapper index={1}>
         <Card tint="amber">
           <h2 className="text-2xl font-semibold mb-6">Company Overview</h2>
           <p className="text-muted mb-6">
@@ -35,10 +32,9 @@ export default function Careers() {
             { title: 'Collaborative culture' },
           ]} />
         </Card>
-      </section>
+      </SectionWrapper>
 
-      {/* Open Positions */}
-      <section className="section-navy">
+      <SectionWrapper index={2}>
         <Card tint="navy">
           <h2 className="text-2xl font-semibold mb-6">Open Positions</h2>
           <p className="text-muted mb-8">
@@ -156,10 +152,9 @@ export default function Careers() {
             </div>
           </div>
         </Card>
-      </section>
+      </SectionWrapper>
 
-      {/* How to Apply */}
-      <section className="section-teal">
+      <SectionWrapper index={3}>
         <Card tint="teal">
           <h2 className="text-2xl font-semibold mb-6">How to Apply</h2>
           <p className="text-muted mb-4">
@@ -171,7 +166,8 @@ export default function Careers() {
           </p>
           <p className="text-sm text-muted italic">Sorry, no recruiters.</p>
         </Card>
-      </section>
-    </div>
+      </SectionWrapper>
+      </PageHero>
+    </PageTheme>
   )
 }

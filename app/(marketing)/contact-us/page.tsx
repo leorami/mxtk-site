@@ -1,10 +1,11 @@
 import PageHero from '@/components/PageHero'
 import SectionWrapper from '@/components/SectionWrapper'
+import PageTheme from '@/components/theme/PageTheme'
 import BackgroundPhoto from '@/components/visuals/BackgroundPhoto'
 
 export default function Contact() {
     return (
-        <>
+        <PageTheme ink="warm" lift="M">
             <BackgroundPhoto variant="contact" />
             <PageHero>
                 <div className="relative">
@@ -28,6 +29,6 @@ export default function Contact() {
                     </div>
                 </div>
             </PageHero>
-        </>
+        </PageTheme>
     )
 }

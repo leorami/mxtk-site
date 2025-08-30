@@ -2,6 +2,7 @@ import BasePathLink from '@/components/BasePathLink'
 import OrganizationLogoGrid from '@/components/OrganizationLogoGrid'
 import PageHero from '@/components/PageHero'
 import SectionWrapper from '@/components/SectionWrapper'
+import PageTheme from '@/components/theme/PageTheme'
 import Card from '@/components/ui/Card'
 import { FeatureRow } from '@/components/ui/List'
 import BackgroundPhoto from '@/components/visuals/BackgroundPhoto'
@@ -9,7 +10,7 @@ import { PLACEHOLDER_PARTNERS_ECOSYSTEM } from '@/lib/placeholders'
 
 export default function Ecosystem() {
   return (
-    <>
+    <PageTheme ink="warm" lift="M">
       <BackgroundPhoto variant="ecosystem" />
       <PageHero>
         <div className="relative">
@@ -144,6 +145,6 @@ export default function Ecosystem() {
           </div>
         </div>
       </PageHero>
-    </>
+    </PageTheme>
   )
 }

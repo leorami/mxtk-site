@@ -1,12 +1,13 @@
 import PageHero from '@/components/PageHero'
 import SectionWrapper from '@/components/SectionWrapper'
+import PageTheme from '@/components/theme/PageTheme'
 import Card from '@/components/ui/Card'
 import { FeatureRow } from '@/components/ui/List'
 import BackgroundPhoto from '@/components/visuals/BackgroundPhoto'
 
 export default function FAQ() {
   return (
-    <>
+    <PageTheme ink="dark" lift="M">
       <BackgroundPhoto variant="faq" />
       <PageHero>
         <div className="relative">
@@ -138,6 +139,6 @@ export default function FAQ() {
           </div>
         </div>
       </PageHero>
-    </>
+    </PageTheme>
   )
 }
