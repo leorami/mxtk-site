@@ -44,7 +44,7 @@ Before starting development, you need to configure environment variables for the
 
 #### Required Environment Variables
 
-Create a `.env.local` file in your project root with the following variables:
+Create or update your environment file with the following variables (preferred: `.env` managed by `./scripts/setup-mxtk-site.sh`, or `config/environments/.env.dev` for development):
 
 ```bash
 # Required for on-chain reads (Arbitrum mainnet)
@@ -144,63 +144,55 @@ node tools/debug/debug.js
 
 ### Environment Management
 ```bash
-# Switch environments
-./scripts/setup-mxtk-site.sh switch dev|staging|prod
+# Start environment (use --env to select: development|staging|production)
+./scripts/setup-mxtk-site.sh --env development start
+./scripts/setup-mxtk-site.sh --env staging start
+./scripts/setup-mxtk-site.sh --env production start
 
-# Check status
-./scripts/smart-build.sh status
+# Stop / Restart / Build / Logs / Status / Clean
+./scripts/setup-mxtk-site.sh --env development stop
+./scripts/setup-mxtk-site.sh --env development restart
+./scripts/setup-mxtk-site.sh --env development build
+./scripts/setup-mxtk-site.sh --env development logs
+./scripts/setup-mxtk-site.sh --env development status
+./scripts/setup-mxtk-site.sh --env development clean
 
-# Apply changes
+# Setup or validate .env files
+./scripts/setup-mxtk-site.sh setup-env
+./scripts/setup-mxtk-site.sh validate-env
+
+# Smart build: detect and apply required restarts/rebuilds
+./scripts/smart-build.sh check
 ./scripts/smart-build.sh apply
 
-# Connect to shared ngrok network (development only)
+# Shared tunnel (development only)
 ./scripts/setup-mxtk-site.sh share
+./scripts/setup-mxtk-site.sh share --currenturl   # URL only (for scripting)
+./scripts/setup-mxtk-site.sh share --updateurl   # Refresh and print URL
 
-# Get current ngrok URL only
-./scripts/setup-mxtk-site.sh share --currenturl
-
-# Update ngrok configuration and get URL
-./scripts/setup-mxtk-site.sh share --updateurl
-
-# Setup MXTK proxy route in shared ngrok
-./scripts/setup-mxtk-site.sh proxy
+# Restart the ngrok service in Docker (if using static domains)
+./scripts/setup-mxtk-site.sh restart-ngrok
+```
 
 ### Shared Dev Proxy System (Development Only)
-MXTK implements a **completely independent** shared dev proxy system that can work standalone OR integrate cooperatively with other projects:
+We support a shared dev proxy that exposes the app at a subpath (`/mxtk`) while the app itself remains root-based. To integrate with an external dev proxy (e.g., `dev-tunnel-proxy`):
 
-#### **Independent Mode** (MXTK's own dev proxy)
 ```bash
-# Setup MXTK's own dev proxy system
-./scripts/setup-mxtk-site.sh setup-proxy
-
-# Start MXTK with shared dev proxy
+# Start MXTK locally (bind-mounts, port 2000)
 ./scripts/setup-mxtk-site.sh start
 
-# Access via: http://localhost:8080
-```
-
-#### **Cooperative External Proxy Sharing Mode**
-```bash
-# Start MXTK
-./scripts/setup-mxtk-site.sh start
-
-# Integrate with any project (universal approach)
+# Install MXTK nginx snippet into the external dev proxy
 DEV_TUNNEL_PROXY_DIR=/path/to/dev-tunnel-proxy ./scripts/dev-proxy-install.sh
-./scripts/setup-mxtk-site.sh integrate-with other-project ../other-project
 
-# Quick integrate with dev-tunnel-proxy (if in standard location)
-./scripts/dev-proxy-install.sh
+# Connect MXTK containers to the shared ngrok network and print URL
+./scripts/setup-mxtk-site.sh share
 
-# Access via: http://localhost:8080/mxtk/
+# Access via the proxy (if running): http(s)://<proxy-domain>/mxtk/
 ```
 
-#### **Key Features**
-1. **✅ Completely Independent**: MXTK can run its own dev proxy system
-2. **✅ Universal Compatibility**: Works with ANY project using the shared pattern
-3. **✅ No Dependencies**: Doesn't know about or depend on any specific project
-4. **✅ Cooperative Integration**: Can integrate with any project's shared network
-5. **✅ Flexible**: Supports both standalone and integrated modes
-6. **✅ Scalable**: Easy to add new project integrations
+Notes:
+1. The install script copies `config/dev-proxy/apps/mxtk.conf` into the proxy and reloads Nginx.
+2. The share command attempts to auto-detect the ngrok URL and prints both direct and tunneled access points.
 
 ### Dev Tunnel Proxy (ngrok)
 We support a shared dev proxy that exposes the app at a subpath (`/mxtk`). The app itself remains root-based.
@@ -217,20 +209,22 @@ DEV_TUNNEL_PROXY_DIR=/path/to/dev-tunnel-proxy ./scripts/dev-proxy-install.sh
 ./scripts/setup-mxtk-site.sh share
 ```
 
-### Ngrok Integration (Legacy)
-The legacy ngrok integration is still available for backward compatibility:
-
+### Ngrok Integration
 - `./scripts/setup-mxtk-site.sh share` - Connect to shared network and show status
 - `./scripts/setup-mxtk-site.sh share --currenturl` - Get current ngrok URL only (for scripting)
 - `./scripts/setup-mxtk-site.sh share --updateurl` - Get ngrok URL and display access information
+- `./scripts/setup-mxtk-site.sh restart-ngrok` - Restart the ngrok service container
 
 ### Docker Architecture
 - **Development**: Internal network + optional ngrok-shared network + dev proxy system
 - **Staging/Production**: Internal network only (production-ready)
-- **Port Mapping**: 2000:3000 (external:internal) for all environments
+- **Port Mapping**: 2000:2000 (external:internal) for all environments
 - **Dev Proxy**: Port 8080 for shared proxy access
 - **Ngrok**: Port 4040 for tunnel management
 - **Health Checks**: Automatic container health monitoring
+
+Guardrails:
+- Builds are blocked if `next.config.js` defines `basePath` (see `scripts/guardrails/check-basepath.js`).
 
 ### Project Structure
 ```
@@ -246,11 +240,7 @@ mxtk-site/
 ├── config/                 # Configuration files
 │   ├── nginx-proxy.conf   # Nginx proxy configuration
 │   ├── ngrok.yml          # Ngrok tunnel configuration
-│   ├── environments/      # Environment-specific configuration
-│   │   ├── .env.dev       # Development environment variables
-│   │   ├── .env.staging   # Staging environment variables
-│   │   ├── .env.prod      # Production environment variables
-│   │   └── *.template     # Environment file templates
+│   ├── environments/      # Optional env storage (.env.* files and templates)
 │   └── docker/            # Docker compose configurations
 │       ├── docker-compose.staging.yml
 │       └── docker-compose.prod.yml
@@ -258,14 +248,18 @@ mxtk-site/
 ```
 
 ### Development Tools
-- **Debug System**: `node tools/debug/debug.js` - Comprehensive site validation
+- **Debug System**: `node tools/debug/debug.js` - Theme/CSS variable checks, navigation, and error thresholds
 - **Navigation Regression**: `npm run test:nav:localhost` and `npm run test:nav:ngrok`
+- **Smart Build**: `./scripts/smart-build.sh status|check|apply` - Determines if restart/rebuild is needed
 - **Puppeteer Tools**: See `tools/test/` and `tools/debug/`
 
-### Traditional Development
+### Traditional Development (for quick local checks only)
 ```bash
-pnpm install && pnpm dev
+npm install
+npm run dev           # root-based
+npm run dev:proxy     # simulate /mxtk base path in dev
 ```
+Note: Primary development is Docker-based (see PROJECT_RULES). Local runs are acceptable for quick checks but are not the supported workflow.
 
 ## Routing and Prefixing (Important)
 
@@ -284,6 +278,10 @@ npm run test:nav:localhost
 
 # Ngrok navigation (requires share running)
 npm run test:nav:ngrok
+
+# Generic (provide BASE_URL explicitly)
+BASE_URL=http://localhost:2000 node tools/test/nav-regression.mjs
+BASE_URL=https://<your-ngrok-domain>/mxtk node tools/test/nav-regression.mjs
 ```
 
 The navigation tests verify:
@@ -304,9 +302,8 @@ This project follows comprehensive development guidelines defined in `PROJECT_RU
 ### AI Collaboration
 
 The project is configured for effective AI collaboration with:
-- **Cursor Rules**: `.cursorrules` file guides AI behavior
-- **VS Code Integration**: Tasks and settings for seamless development
-- **Project Rules**: `PROJECT_RULES.md` defines coding standards
+- **Project Rules**: `PROJECT_RULES.md` defines coding standards and enforcement
+- **VS Code/Cursor**: Use tasks and these rules as guidance
 
 ### Quick Commands (VS Code Tasks)
 
