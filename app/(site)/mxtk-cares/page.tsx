@@ -1,9 +1,11 @@
 import BasePathLink from '@/components/BasePathLink'
 import OrganizationLogoGrid from '@/components/OrganizationLogoGrid'
 import PageHero from '@/components/PageHero'
+import SectionWrapper from '@/components/SectionWrapper'
+import PageTheme from '@/components/theme/PageTheme'
 import Card from '@/components/ui/Card'
 import { FeatureRow } from '@/components/ui/List'
-import BackgroundPhoto from '@/components/visuals/BackgroundPhoto'
+import PhotoBackdrop from '@/components/visuals/PhotoBackdrop'
 import { PLACEHOLDER_ORGANIZATIONS } from '@/lib/placeholders'
 
 export default function MXTKCaresPage() {
@@ -14,23 +16,15 @@ export default function MXTKCaresPage() {
   )
 
   return (
-    <div className="space-y-16">
-      <BackgroundPhoto variant="elitedrop" />
-      {/* Hero */}
+    <PageTheme ink="warm" lift="M">
+      <PhotoBackdrop src="art/photos/mxtk_cares_amethyst.jpg" />
       <PageHero>
-        <section className="text-center space-y-6">
-          <h1 className="text-4xl md:text-6xl font-bold tracking-tight text-slate-900 dark:text-slate-50 drop-shadow-[0_1px_1px_rgba(0,0,0,0.25)]">
-            MXTK Cares
-          </h1>
-          <p className="text-xl text-muted max-w-4xl mx-auto">
-            Up to $10M (today's dollars) in MXTK tokens to 100 nonprofits—innovative funding that works for you, 
-            even while tokens are locked for tradability.
-          </p>
-        </section>
-      </PageHero>
+        <SectionWrapper index={0} className="text-center">
+          <h1 className="text-4xl md:text-6xl font-bold tracking-tight">MXTK Cares</h1>
+          <p className="text-xl max-w-3xl mx-auto">Up to $10M in MXTK tokens to 100 nonprofits—innovative funding that works for you during lockup.</p>
+        </SectionWrapper>
 
-      {/* How it works - Updated */}
-      <section className="section-amber">
+        <SectionWrapper index={1}>
         <Card tint="amber" className="text-center">
           <h2 className="text-2xl font-semibold mb-6">How it works</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -48,10 +42,9 @@ export default function MXTKCaresPage() {
             </div>
           </div>
         </Card>
-      </section>
+        </SectionWrapper>
 
-      {/* Leveraging MXTK Grants */}
-      <section className="section-teal">
+        <SectionWrapper index={2}>
         <Card tint="teal">
           <h2 className="text-2xl font-semibold mb-6">Leveraging Your MXTK Grant</h2>
           <p className="text-lg mb-6">
@@ -109,10 +102,9 @@ export default function MXTKCaresPage() {
             </div>
           </div>
         </Card>
-      </section>
+        </SectionWrapper>
 
-      {/* Our Support During Lockup */}
-      <section className="section-navy">
+        <SectionWrapper index={3}>
         <Card tint="navy">
           <h2 className="text-2xl font-semibold mb-6">Our Support During Lockup</h2>
           <p className="text-lg mb-6">
@@ -166,10 +158,9 @@ export default function MXTKCaresPage() {
             />
           </div>
         </Card>
-      </section>
+        </SectionWrapper>
 
-      {/* Get Involved */}
-      <section className="section-teal">
+        <SectionWrapper index={4}>
         <Card tint="teal" className="text-center">
           <h2 className="text-2xl font-semibold mb-4">Get involved</h2>
           <p className="text-lg mb-6 max-w-2xl mx-auto">
@@ -180,10 +171,9 @@ export default function MXTKCaresPage() {
             Nominate a nonprofit
           </BasePathLink>
         </Card>
-      </section>
+        </SectionWrapper>
 
-      {/* Selection criteria - Enhanced */}
-      <section className="section-navy">
+        <SectionWrapper index={5}>
         <Card tint="navy">
           <h2 className="text-2xl font-semibold mb-6">Selection criteria</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -237,10 +227,9 @@ export default function MXTKCaresPage() {
             </div>
           </div>
         </Card>
-      </section>
+        </SectionWrapper>
 
-      {/* Timeline and Process */}
-      <section className="section-amber">
+        <SectionWrapper index={6}>
         <Card tint="amber">
           <h2 className="text-2xl font-semibold mb-6">Timeline and Process</h2>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
@@ -266,9 +255,8 @@ export default function MXTKCaresPage() {
             </div>
           </div>
         </Card>
-      </section>
-
-      {/* Decorative band removed; BackgroundPhoto provides the backdrop */}
-    </div>
+        </SectionWrapper>
+      </PageHero>
+    </PageTheme>
   )
 }

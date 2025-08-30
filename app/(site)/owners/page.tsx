@@ -3,6 +3,7 @@
 import PageHero from '@/components/PageHero';
 import SectionWrapper from '@/components/SectionWrapper';
 // FullBleed removed per revert
+import PageTheme from '@/components/theme/PageTheme';
 import Card from '@/components/ui/Card';
 import FeatureGrid from '@/components/ui/FeatureGrid';
 import { KeyPoint, KeyPointsGrid } from '@/components/ui/KeyPoints';
@@ -13,7 +14,7 @@ import { usePathname } from 'next/navigation';
 export default function OwnersPage() {
   const pathname = usePathname() || '/'
   return (
-    <>
+    <PageTheme ink="light" lift="M">
       <PageBackground page="owners" />
       <PageHero>
         <div className="relative">
@@ -149,6 +150,6 @@ export default function OwnersPage() {
           </div>
         </div>
       </PageHero>
-    </>
+    </PageTheme>
   );
 }

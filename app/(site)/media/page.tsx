@@ -1,12 +1,13 @@
 import BasePathLink from '@/components/BasePathLink'
 import PageHero from '@/components/PageHero'
 import SectionWrapper from '@/components/SectionWrapper'
+import PageTheme from '@/components/theme/PageTheme'
 import Card from '@/components/ui/Card'
 import BackgroundPhoto from '@/components/visuals/BackgroundPhoto'
 
 export default function MediaPage() {
   return (
-    <>
+    <PageTheme ink="light" lift="M">
       <BackgroundPhoto variant="media" />
       <PageHero>
         <div className="relative">
@@ -103,6 +104,6 @@ export default function MediaPage() {
           </div>
         </div>
       </PageHero>
-    </>
+    </PageTheme>
   )
 }

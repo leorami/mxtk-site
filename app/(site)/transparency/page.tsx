@@ -5,19 +5,20 @@ import ProofTable from '@/components/ProofTable'
 import SectionWrapper from '@/components/SectionWrapper'
 import OnchainSummary from '@/components/live/OnchainSummary'
 import PoolTable from '@/components/live/PoolTable'
+import PageTheme from '@/components/theme/PageTheme'
 import Card from '@/components/ui/Card'
 import { FeatureRow } from '@/components/ui/List'
 import BackgroundPhoto from '@/components/visuals/BackgroundPhoto'
 import { PLACEHOLDER_PROOFS } from '@/lib/placeholders'
 import { getRelativePath } from '@/lib/routing/basePath'
-import Link from 'next/link'
 import { usePublicPath } from '@/lib/routing/getPublicPathClient'
+import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
 export default function TransparencyPage() {
   const pathname = usePathname() || '/'
   return (
-    <>
+    <PageTheme ink="warm" lift="M">
       <BackgroundPhoto variant="transparency" />
       <PageHero>
         <div className="relative">
@@ -98,6 +99,6 @@ export default function TransparencyPage() {
           </div>
         </div>
       </PageHero>
-    </>
+    </PageTheme>
   )
 }
