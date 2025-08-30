@@ -2,6 +2,7 @@
 
 import PageHero from '@/components/PageHero'
 import SectionWrapper from '@/components/SectionWrapper'
+import PageTheme from '@/components/theme/PageTheme'
 // FullBleed removed per revert
 import { useBasePath } from '@/components/providers/BasePathProvider'
 import Card from '@/components/ui/Card'
@@ -21,9 +22,9 @@ export default function Home() {
   const href = (path: string) => (`${basePath}/${path}`).replace(/\/{2,}/g, '/')
 
   return (
-    <>
+    <PageTheme ink="warm" lift="M">
       <PageBackground page="home" />
-      
+
       <PageHero>
         <div className="relative">
           <div className="space-y-0">
@@ -118,6 +119,6 @@ export default function Home() {
           </div>
         </div>
       </PageHero>
-    </>
+    </PageTheme>
   )
 }

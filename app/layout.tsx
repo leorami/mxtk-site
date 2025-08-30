@@ -2,6 +2,7 @@ import '@/app/styles/design-tokens.scss'
 import BrandThemeProvider from '@/components/BrandThemeProvider'
 import SiteFooter from '@/components/SiteFooter'
 import SiteHeader from '@/components/SiteHeader'
+import DevThemeSwitcher from '@/components/dev/DevThemeSwitcher'
 import BasePathProvider from '@/components/providers/BasePathProvider'
 import { getServerPublicPath } from '@/lib/routing/getPublicPathServer'
 import { getServerBasePath } from '@/lib/routing/serverBasePath'
@@ -58,6 +59,10 @@ export default async function RootLayout({ children }: { children: React.ReactNo
                         </BrandThemeProvider>
                     </main>
                     <SiteFooter />
+                    {/* Lift overlay behind content */}
+                    <div aria-hidden className="page-lift" />
+                    {/* Dev switcher (hidden in production) */}
+                    <DevThemeSwitcher />
                 </BasePathProvider>
             </body>
         </html>
