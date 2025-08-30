@@ -1,19 +1,19 @@
+import PageHero from '@/components/PageHero'
+import SectionWrapper from '@/components/SectionWrapper'
+import PageTheme from '@/components/theme/PageTheme'
 import Card from '@/components/ui/Card'
 
 export default function DisclosuresPage() {
   return (
-    <div className="space-y-16">
-      {/* Hero */}
-      <section className="text-center space-y-6">
-        <h1 className="text-4xl md:text-6xl font-bold tracking-tight">Disclosures</h1>
-        <p className="text-xl text-muted max-w-3xl mx-auto">
-          Important information about Mineral Token, its operations, and regulatory compliance.
-        </p>
-      </section>
+    <PageTheme ink="dark" lift="none">
+      <PageHero>
+        <SectionWrapper index={0} className="text-center">
+          <h1 className="text-4xl md:text-6xl font-bold tracking-tight">Disclosures</h1>
+          <p className="text-xl max-w-3xl mx-auto">Effective date: …</p>
+        </SectionWrapper>
 
-      {/* Investment Risk Disclosures */}
-      <section className="section-amber">
-        <Card tint="amber">
+        <SectionWrapper index={1}>
+          <Card tint="amber">
           <h2 className="text-2xl font-semibold mb-6">Investment Risk Disclosures</h2>
           <div className="space-y-4">
             <p className="text-muted">
@@ -52,11 +52,10 @@ export default function DisclosuresPage() {
             </div>
           </div>
         </Card>
-      </section>
+        </SectionWrapper>
 
-      {/* Mineral Asset Disclosures */}
-      <section className="section-navy">
-        <Card tint="navy">
+        <SectionWrapper index={2}>
+          <Card tint="navy">
           <h2 className="text-2xl font-semibold mb-6">Mineral Asset Disclosures</h2>
           <div className="space-y-4">
             <p className="text-muted">
@@ -94,11 +93,10 @@ export default function DisclosuresPage() {
             </div>
           </div>
         </Card>
-      </section>
+        </SectionWrapper>
 
-      {/* Regulatory Disclosures */}
-      <section className="section-teal">
-        <Card tint="teal">
+        <SectionWrapper index={3}>
+          <Card tint="teal">
           <h2 className="text-2xl font-semibold mb-6">Regulatory Disclosures</h2>
           <div className="space-y-4">
             <p className="text-muted">
@@ -130,11 +128,10 @@ export default function DisclosuresPage() {
             </div>
           </div>
         </Card>
-      </section>
+        </SectionWrapper>
 
-      {/* Technical Disclosures */}
-      <section className="section-amber">
-        <Card tint="amber">
+        <SectionWrapper index={4}>
+          <Card tint="amber">
           <h2 className="text-2xl font-semibold mb-6">Technical Disclosures</h2>
           <div className="space-y-4">
             <p className="text-muted">
@@ -172,11 +169,10 @@ export default function DisclosuresPage() {
             </div>
           </div>
         </Card>
-      </section>
+        </SectionWrapper>
 
-      {/* Conflict of Interest Disclosures */}
-      <section className="section-navy">
-        <Card tint="navy">
+        <SectionWrapper index={5}>
+          <Card tint="navy">
           <h2 className="text-2xl font-semibold mb-6">Conflict of Interest Disclosures</h2>
           <div className="space-y-4">
             <p className="text-muted">
@@ -207,11 +203,10 @@ export default function DisclosuresPage() {
             </div>
           </div>
         </Card>
-      </section>
+        </SectionWrapper>
 
-      {/* Forward-Looking Statements */}
-      <section className="section-teal">
-        <Card tint="teal">
+        <SectionWrapper index={6}>
+          <Card tint="teal">
           <h2 className="text-2xl font-semibold mb-6">Forward-Looking Statements</h2>
           <div className="space-y-4">
             <p className="text-muted">
@@ -243,11 +238,10 @@ export default function DisclosuresPage() {
             </div>
           </div>
         </Card>
-      </section>
+        </SectionWrapper>
 
-      {/* Contact Information */}
-      <section className="section-amber">
-        <Card tint="amber">
+        <SectionWrapper index={7}>
+          <Card tint="amber">
           <h2 className="text-2xl font-semibold mb-6">Additional Information</h2>
           <p className="text-muted mb-4">
             For additional information about these disclosures or to request clarification, please contact us:
@@ -273,7 +267,8 @@ export default function DisclosuresPage() {
             <strong>Last Updated:</strong> January 2025
           </p>
         </Card>
-      </section>
-    </div>
+        </SectionWrapper>
+      </PageHero>
+    </PageTheme>
   )
 }

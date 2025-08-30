@@ -1,19 +1,19 @@
+import PageHero from '@/components/PageHero'
+import SectionWrapper from '@/components/SectionWrapper'
+import PageTheme from '@/components/theme/PageTheme'
 import Card from '@/components/ui/Card'
 
 export default function TermsPage() {
   return (
-    <div className="space-y-16">
-      {/* Hero */}
-      <section className="text-center space-y-6">
-        <h1 className="text-4xl md:text-6xl font-bold tracking-tight">Terms of Service</h1>
-        <p className="text-xl text-muted max-w-3xl mx-auto">
-          These terms govern your use of the Mineral Token website and services. Please read them carefully.
-        </p>
-      </section>
+    <PageTheme ink="dark" lift="none">
+      <PageHero>
+        <SectionWrapper index={0} className="text-center">
+          <h1 className="text-4xl md:text-6xl font-bold tracking-tight">Terms of Service</h1>
+          <p className="text-xl max-w-3xl mx-auto">Effective date: …</p>
+        </SectionWrapper>
 
-      {/* Terms Content */}
-      <section className="section-amber">
-        <Card tint="amber">
+        <SectionWrapper index={1}>
+          <Card tint="amber">
           <h2 className="text-2xl font-semibold mb-6">1. Acceptance of Terms</h2>
           <p className="text-muted mb-4">
             By accessing and using this website, you accept and agree to be bound by the terms and provision of this agreement. 
@@ -23,10 +23,10 @@ export default function TermsPage() {
             These terms may be updated from time to time. Continued use of the site constitutes acceptance of revised terms.
           </p>
         </Card>
-      </section>
+        </SectionWrapper>
 
-      <section className="section-navy">
-        <Card tint="navy">
+        <SectionWrapper index={2}>
+          <Card tint="navy">
           <h2 className="text-2xl font-semibold mb-6">2. Use of Site</h2>
           <div className="space-y-4">
             <p className="text-muted">
@@ -42,10 +42,10 @@ export default function TermsPage() {
             </p>
           </div>
         </Card>
-      </section>
+        </SectionWrapper>
 
-      <section className="section-teal">
-        <Card tint="teal">
+        <SectionWrapper index={3}>
+          <Card tint="teal">
           <h2 className="text-2xl font-semibold mb-6">3. Investment Risks</h2>
           <div className="space-y-4">
             <p className="text-muted">
@@ -62,10 +62,10 @@ export default function TermsPage() {
             </p>
           </div>
         </Card>
-      </section>
+        </SectionWrapper>
 
-      <section className="section-amber">
-        <Card tint="amber">
+        <SectionWrapper index={4}>
+          <Card tint="amber">
           <h2 className="text-2xl font-semibold mb-6">4. Intellectual Property</h2>
           <div className="space-y-4">
             <p className="text-muted">
@@ -78,10 +78,10 @@ export default function TermsPage() {
             </p>
           </div>
         </Card>
-      </section>
+        </SectionWrapper>
 
-      <section className="section-navy">
-        <Card tint="navy">
+        <SectionWrapper index={5}>
+          <Card tint="navy">
           <h2 className="text-2xl font-semibold mb-6">5. Privacy and Data</h2>
           <div className="space-y-4">
             <p className="text-muted">
@@ -94,10 +94,10 @@ export default function TermsPage() {
             </p>
           </div>
         </Card>
-      </section>
+        </SectionWrapper>
 
-      <section className="section-teal">
-        <Card tint="teal">
+        <SectionWrapper index={6}>
+          <Card tint="teal">
           <h2 className="text-2xl font-semibold mb-6">6. Disclaimers</h2>
           <div className="space-y-4">
             <p className="text-muted">
@@ -114,10 +114,10 @@ export default function TermsPage() {
             </p>
           </div>
         </Card>
-      </section>
+        </SectionWrapper>
 
-      <section className="section-amber">
-        <Card tint="amber">
+        <SectionWrapper index={7}>
+          <Card tint="amber">
           <h2 className="text-2xl font-semibold mb-6">7. Limitation of Liability</h2>
           <div className="space-y-4">
             <p className="text-muted">
@@ -130,10 +130,10 @@ export default function TermsPage() {
             </p>
           </div>
         </Card>
-      </section>
+        </SectionWrapper>
 
-      <section className="section-navy">
-        <Card tint="navy">
+        <SectionWrapper index={8}>
+          <Card tint="navy">
           <h2 className="text-2xl font-semibold mb-6">8. Governing Law</h2>
           <div className="space-y-4">
             <p className="text-muted">
@@ -146,10 +146,10 @@ export default function TermsPage() {
             </p>
           </div>
         </Card>
-      </section>
+        </SectionWrapper>
 
-      <section className="section-teal">
-        <Card tint="teal">
+        <SectionWrapper index={9}>
+          <Card tint="teal">
           <h2 className="text-2xl font-semibold mb-6">9. Contact Information</h2>
           <p className="text-muted mb-4">
             If you have any questions about these Terms of Service, please contact us at:
@@ -166,7 +166,8 @@ export default function TermsPage() {
             </p>
           </div>
         </Card>
-      </section>
-    </div>
+        </SectionWrapper>
+      </PageHero>
+    </PageTheme>
   )
 }

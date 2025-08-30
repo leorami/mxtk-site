@@ -1,20 +1,20 @@
+import PageHero from '@/components/PageHero'
+import SectionWrapper from '@/components/SectionWrapper'
+import PageTheme from '@/components/theme/PageTheme'
 import Card from '@/components/ui/Card'
 import { FeatureRow } from '@/components/ui/List'
 
 export default function PrivacyPage() {
   return (
-    <div className="space-y-16">
-      {/* Hero */}
-      <section className="text-center space-y-6">
-        <h1 className="text-4xl md:text-6xl font-bold tracking-tight">Privacy Policy</h1>
-        <p className="text-xl text-muted max-w-3xl mx-auto">
-          This Privacy Policy describes how Mineral Token collects, uses, and protects your personal information.
-        </p>
-      </section>
+    <PageTheme ink="dark" lift="none">
+      <PageHero>
+        <SectionWrapper index={0} className="text-center">
+          <h1 className="text-4xl md:text-6xl font-bold tracking-tight">Privacy Policy</h1>
+          <p className="text-xl max-w-3xl mx-auto">Effective date: …</p>
+        </SectionWrapper>
 
-      {/* Privacy Content */}
-      <section className="section-amber">
-        <Card tint="amber">
+        <SectionWrapper index={1}>
+          <Card tint="amber">
           <h2 className="text-2xl font-semibold mb-6">1. Information We Collect</h2>
           <div className="space-y-4">
             <p className="text-muted">
@@ -41,10 +41,10 @@ export default function PrivacyPage() {
             </div>
           </div>
         </Card>
-      </section>
+        </SectionWrapper>
 
-      <section className="section-navy">
-        <Card tint="navy">
+        <SectionWrapper index={2}>
+          <Card tint="navy">
           <h2 className="text-2xl font-semibold mb-6">2. How We Use Your Information</h2>
           <div className="space-y-4">
             <p className="text-muted">
@@ -64,10 +64,10 @@ export default function PrivacyPage() {
             </div>
           </div>
         </Card>
-      </section>
+        </SectionWrapper>
 
-      <section className="section-teal">
-        <Card tint="teal">
+        <SectionWrapper index={3}>
+          <Card tint="teal">
           <h2 className="text-2xl font-semibold mb-6">3. Information Sharing</h2>
           <div className="space-y-4">
             <p className="text-muted">
@@ -90,10 +90,10 @@ export default function PrivacyPage() {
             </p>
           </div>
         </Card>
-      </section>
+        </SectionWrapper>
 
-      <section className="section-amber">
-        <Card tint="amber">
+        <SectionWrapper index={4}>
+          <Card tint="amber">
           <h2 className="text-2xl font-semibold mb-6">4. Data Security</h2>
           <div className="space-y-4">
             <p className="text-muted">
@@ -116,10 +116,10 @@ export default function PrivacyPage() {
             </p>
           </div>
         </Card>
-      </section>
+        </SectionWrapper>
 
-      <section className="section-navy">
-        <Card tint="navy">
+        <SectionWrapper index={5}>
+          <Card tint="navy">
           <h2 className="text-2xl font-semibold mb-6">5. Data Retention</h2>
           <div className="space-y-4">
             <p className="text-muted">
@@ -138,10 +138,10 @@ export default function PrivacyPage() {
             </div>
           </div>
         </Card>
-      </section>
+        </SectionWrapper>
 
-      <section className="section-teal">
-        <Card tint="teal">
+        <SectionWrapper index={6}>
+          <Card tint="teal">
           <h2 className="text-2xl font-semibold mb-6">6. Your Rights</h2>
           <div className="space-y-4">
             <p className="text-muted">
@@ -165,10 +165,10 @@ export default function PrivacyPage() {
             </p>
           </div>
         </Card>
-      </section>
+        </SectionWrapper>
 
-      <section className="section-amber">
-        <Card tint="amber">
+        <SectionWrapper index={7}>
+          <Card tint="amber">
           <h2 className="text-2xl font-semibold mb-6">7. Cookies and Tracking</h2>
           <div className="space-y-4">
             <p className="text-muted">
@@ -190,10 +190,10 @@ export default function PrivacyPage() {
             </p>
           </div>
         </Card>
-      </section>
+        </SectionWrapper>
 
-      <section className="section-navy">
-        <Card tint="navy">
+        <SectionWrapper index={8}>
+          <Card tint="navy">
           <h2 className="text-2xl font-semibold mb-6">8. International Transfers</h2>
           <div className="space-y-4">
             <p className="text-muted">
@@ -206,10 +206,10 @@ export default function PrivacyPage() {
             </p>
           </div>
         </Card>
-      </section>
+        </SectionWrapper>
 
-      <section className="section-teal">
-        <Card tint="teal">
+        <SectionWrapper index={9}>
+          <Card tint="teal">
           <h2 className="text-2xl font-semibold mb-6">9. Changes to This Policy</h2>
           <div className="space-y-4">
             <p className="text-muted">
@@ -221,10 +221,10 @@ export default function PrivacyPage() {
             </p>
           </div>
         </Card>
-      </section>
+        </SectionWrapper>
 
-      <section className="section-amber">
-        <Card tint="amber">
+        <SectionWrapper index={10}>
+          <Card tint="amber">
           <h2 className="text-2xl font-semibold mb-6">10. Contact Us</h2>
           <p className="text-muted mb-4">
             If you have any questions about this Privacy Policy or our data practices, please contact us:
@@ -247,7 +247,8 @@ export default function PrivacyPage() {
             </p>
           </div>
         </Card>
-      </section>
-    </div>
+        </SectionWrapper>
+      </PageHero>
+    </PageTheme>
   )
 }
