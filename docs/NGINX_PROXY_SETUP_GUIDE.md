@@ -84,7 +84,7 @@ Mount each app at its own prefix and repeat the "allow Next internals" blocks pe
 
 4. **Handle Both Prefix Forms**
    - `/prefix` and `/prefix/` should both work
-   - No 308 redirects (use `if` condition to normalize)
+   - Normalize `/prefix` → `/prefix/` with a single 308 at the mount point to keep relative URLs stable
 
 5. **Set Proper Headers**
    - `X-Forwarded-Prefix` for app awareness
@@ -268,18 +268,16 @@ const pathname = usePathname() || '/';
 
 ### Issue 5: 308 Redirects
 
-**Symptoms**: Browser shows 308 redirects in network tab
+**Symptoms**: Unexpected 308 chains or redirects outside the mount normalization
 
-**Cause**: Nginx location blocks causing redirects
+**Cause**: Redirects elsewhere in the config (beyond the single mount-point redirect)
 
 **Solution**:
 ```nginx
-# Use if condition instead of redirect
-location ~* ^/prefix(?<rest>/.*)?$ {
-    set $prefix_rest $rest;
-    if ($prefix_rest = "") { set $prefix_rest "/"; }
-    proxy_pass http://upstream$prefix_rest;
-}
+# Keep only one normalization for the mount point
+location = /prefix { return 308 /prefix/; }
+# All other prefix traffic proxies without further redirects
+location ^~ /prefix/ { proxy_pass http://upstream; }
 ```
 
 ## Performance Considerations
@@ -395,3 +393,7 @@ For issues specific to this setup:
 6. Check browser network tab for redirects
 
 This setup provides a robust, scalable solution for serving Next.js apps behind prefixes while maintaining app agnosticism and proper navigation behavior.
+
+## See Also
+
+- `docs/AUTOMATED_TESTING.md` – run navigation regression to validate your proxy setup

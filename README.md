@@ -137,6 +137,8 @@ node tools/debug/debug.js
 # Tests (see section below)
 ```
 
+If you are integrating with an external proxy (ngrok/dev-proxy) or serving behind a prefix, see `docs/NGINX_PROXY_SETUP_GUIDE.md` for the full configuration and validation steps.
+
 ### Access Points
 - **Development (root)**: http://localhost:2000
 - **Dev Tunnel (subpath)**: https://<ngrok-domain>/mxtk
