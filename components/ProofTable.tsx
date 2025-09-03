@@ -41,7 +41,7 @@ export default function ProofTable({
         <div className="text-sm font-semibold">Attestations & Audits</div>
       </div>
       <div className='overflow-x-auto'>
-        <table className='table text-sm'>
+        <table className='table text-sm md:table-fixed'>
           <thead>
             <tr>
               <th>Title</th>
@@ -54,16 +54,27 @@ export default function ProofTable({
           </thead>
           <tbody>
             {proofs.map(p => (
-              <tr key={p.id}>
-                <td>{p.title}</td>
+              <tr key={p.id} className="align-top">
                 <td>
+                  <div className="md:hidden text-[11px] uppercase tracking-wide text-muted mb-1">Title</div>
+                  {p.title}
+                </td>
+                <td>
+                  <div className="md:hidden text-[11px] uppercase tracking-wide text-muted mb-1">Type</div>
                   <span className={`rounded-xl border px-2 py-0.5 text-xs font-medium ${getTypeColor(p.type)}`}>
                     {p.type}
                   </span>
                 </td>
-                <td>{p.issuer}</td>
-                <td>{p.effectiveDate}</td>
                 <td>
+                  <div className="md:hidden text-[11px] uppercase tracking-wide text-muted mb-1">Issuer</div>
+                  {p.issuer}
+                </td>
+                <td>
+                  <div className="md:hidden text-[11px] uppercase tracking-wide text-muted mb-1">Effective</div>
+                  {p.effectiveDate}
+                </td>
+                <td>
+                  <div className="md:hidden text-[11px] uppercase tracking-wide text-muted mb-1">IPFS CID</div>
                   <a 
                     className='table-link' 
                     href={`https://ipfs.io/ipfs/${p.cid}`} 
@@ -73,7 +84,10 @@ export default function ProofTable({
                     {p.cid.slice(0, 12)}…
                   </a>
                 </td>
-                <td className='font-mono text-xs'>{p.sha256.slice(0, 12)}…</td>
+                <td className='font-mono text-xs'>
+                  <div className="md:hidden text-[11px] uppercase tracking-wide text-muted mb-1">Hash</div>
+                  {p.sha256.slice(0, 12)}…
+                </td>
               </tr>
             ))}
           </tbody>

@@ -8,8 +8,8 @@ import ModeTextSwap from '@/components/experience/ModeTextSwap'
 import OnchainSummary from '@/components/live/OnchainSummary'
 import PoolTable from '@/components/live/PoolTable'
 import PageTheme from '@/components/theme/PageTheme'
+import { BulletList } from '@/components/ui/BulletList'
 import Card from '@/components/ui/Card'
-import { FeatureRow } from '@/components/ui/List'
 import PhotoBackdrop from '@/components/visuals/PhotoBackdrop'
 import { PLACEHOLDER_PROOFS } from '@/lib/placeholders'
 import { getRelativePath } from '@/lib/routing/basePath'
@@ -23,7 +23,7 @@ export default function TransparencyPage() {
   const pathname = usePathname() || '/'
   const { mode, pageCopy } = useCopy('transparency')
   return (
-    <PageTheme ink="dark" lift="M" glass="soft">
+    <PageTheme ink="light" lift="H" glass="soft">
       <PhotoBackdrop src="art/photos/transparency_tigereye.jpg" />
       <PageHero>
         <div className="relative">
@@ -56,16 +56,49 @@ export default function TransparencyPage() {
               </Card>
             </SectionWrapper>
 
-            <div className="container mx-auto px-4 py-10 md:py-12">
-              <FeatureRow
-                cols={3}
-                items={[
-                  { title: 'Independent verification', body: 'Third-party validation and lab analysis.' },
-                  { title: 'Method transparency', body: 'Documented, reviewable oracle methodology.' },
-                  { title: 'Traceable claims', body: 'Every statement maps to evidence.' },
-                ]}
-              />
-            </div>
+            <SectionWrapper index={3}>
+              <Card tint="teal">
+                <h2 className="text-2xl font-semibold mb-6 text-center">Verification Standards</h2>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                  <div className="text-center">
+                    <h3 className="font-semibold mb-3">Independent verification</h3>
+                    <BulletList 
+                      centered={true}
+                      showDescription={false}
+                      items={[
+                        { title: 'Third-party validation' },
+                        { title: 'Lab analysis' },
+                        { title: 'External audits' },
+                      ]} 
+                    />
+                  </div>
+                  <div className="text-center">
+                    <h3 className="font-semibold mb-3">Method transparency</h3>
+                    <BulletList 
+                      centered={true}
+                      showDescription={false}
+                      items={[
+                        { title: 'Documented processes' },
+                        { title: 'Reviewable methodology' },
+                        { title: 'Open algorithms' },
+                      ]} 
+                    />
+                  </div>
+                  <div className="text-center">
+                    <h3 className="font-semibold mb-3">Traceable claims</h3>
+                    <BulletList 
+                      centered={true}
+                      showDescription={false}
+                      items={[
+                        { title: 'Evidence mapping' },
+                        { title: 'Source verification' },
+                        { title: 'Chain of custody' },
+                      ]} 
+                    />
+                  </div>
+                </div>
+              </Card>
+            </SectionWrapper>
 
             <SectionWrapper index={4}>
               <Card tint="navy">
@@ -101,21 +134,21 @@ export default function TransparencyPage() {
             </SectionWrapper>
 
             {pageCopy.sections?.map((sec, idx) => (
-              <section key={`${idx}-${mode}`} className="mt-10">
-                <div className="glass glass--panel p-6 md:p-8 rounded-xl">
+              <SectionWrapper key={`${idx}-${mode}`} index={6 + idx}>
+                <Card tint={idx % 2 === 0 ? "amber" : "teal"}>
                   <ModeTextSwap
                     as="h2"
                     depKey={`tp-sec-${idx}-heading-${mode}`}
-                    className="text-xl md:text-2xl font-semibold h-on-gradient"
+                    className="text-xl md:text-2xl font-semibold mb-6"
                     content={sec.heading[mode]}
                   />
-                  <div className="mt-4 space-y-4 sub-on-gradient">
+                  <div className="space-y-4">
                     {sec.paragraphs[mode].map((p, i) => (
                       <ModeTextSwap
                         key={i}
                         as="p"
                         depKey={`tp-sec-${idx}-p-${i}-${mode}`}
-                        className="leading-relaxed"
+                        className="leading-relaxed text-muted"
                         content={p}
                       />
                     ))}
@@ -130,8 +163,8 @@ export default function TransparencyPage() {
                       />
                     </div>
                   ) : null}
-                </div>
-              </section>
+                </Card>
+              </SectionWrapper>
             ))}
 
             {/* Decorative organic band removed; background handled by BackgroundPhoto */}

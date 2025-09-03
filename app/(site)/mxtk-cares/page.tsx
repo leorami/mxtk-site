@@ -7,8 +7,8 @@ import SectionWrapper from '@/components/SectionWrapper'
 import { useCopy } from '@/components/copy/Copy'
 import ModeTextSwap from '@/components/experience/ModeTextSwap'
 import PageTheme from '@/components/theme/PageTheme'
+import { BulletList } from '@/components/ui/BulletList'
 import Card from '@/components/ui/Card'
-import { FeatureRow } from '@/components/ui/List'
 import PhotoBackdrop from '@/components/visuals/PhotoBackdrop'
 import { PLACEHOLDER_ORGANIZATIONS } from '@/lib/placeholders'
 
@@ -21,7 +21,7 @@ export default function MXTKCaresPage() {
   )
 
   return (
-    <PageTheme ink="warm" lift="M" glass="soft">
+    <PageTheme ink="light" lift="H" glass="soft">
       <PhotoBackdrop src="art/photos/mxtk_cares_amethyst.jpg" />
       <PageHero>
         <SectionWrapper index={0} className="text-center">
@@ -73,22 +73,28 @@ export default function MXTKCaresPage() {
               <p className="text-muted text-sm mb-4">
                 Use locked MXTK as collateral for immediate liquidity via partner institutions.
               </p>
-              <FeatureRow cols={2} items={[
-                { title: 'Competitive rates' },
-                { title: 'Flexible terms' },
-                { title: 'No personal guarantees' },
-              ]} />
+              <BulletList 
+                showDescription={false}
+                items={[
+                  { title: 'Competitive rates' },
+                  { title: 'Flexible terms' },
+                  { title: 'No personal guarantees' },
+                ]} 
+              />
             </div>
             <div>
               <h3 className="font-semibold mb-3 text-lg">Revenue-Based Financing</h3>
               <p className="text-muted text-sm mb-4">
                 Convert future token distributions into upfront capital via revenue-sharing.
               </p>
-              <FeatureRow cols={2} items={[
-                { title: 'Mission-aligned' },
-                { title: 'Performance-based' },
-                { title: 'Strategic partners' },
-              ]} />
+              <BulletList 
+                showDescription={false}
+                items={[
+                  { title: 'Mission-aligned' },
+                  { title: 'Performance-based' },
+                  { title: 'Strategic partners' },
+                ]} 
+              />
             </div>
           </div>
 
@@ -98,22 +104,28 @@ export default function MXTKCaresPage() {
               <p className="text-muted text-sm mb-4">
                 Structure MXTK holdings to qualify for grants from foundations and government programs.
               </p>
-              <FeatureRow cols={2} items={[
-                { title: 'Grant writing' },
-                { title: 'Compliance/reporting' },
-                { title: 'Funder network' },
-              ]} />
+              <BulletList 
+                showDescription={false}
+                items={[
+                  { title: 'Grant writing' },
+                  { title: 'Compliance/reporting' },
+                  { title: 'Funder network' },
+                ]} 
+              />
             </div>
             <div>
               <h3 className="font-semibold mb-3 text-lg">Strategic Partnerships</h3>
               <p className="text-muted text-sm mb-4">
                 Build cross-org partnerships and shared resource pools.
               </p>
-              <FeatureRow cols={2} items={[
-                { title: 'Collaboration' },
-                { title: 'Shared costs' },
-                { title: 'Amplified impact' },
-              ]} />
+              <BulletList 
+                showDescription={false}
+                items={[
+                  { title: 'Collaboration' },
+                  { title: 'Shared costs' },
+                  { title: 'Amplified impact' },
+                ]} 
+              />
             </div>
           </div>
         </Card>
@@ -156,12 +168,15 @@ export default function MXTKCaresPage() {
             <p className="text-muted text-sm mb-6">
               Organizations in our pilot program have successfully leveraged their MXTK grants to:
             </p>
-            <FeatureRow cols={2} items={[
-              { title: 'Secure $2M low-interest loans' },
-              { title: '$5M strategic partnerships' },
-              { title: '$3M additional grants' },
-              { title: 'Sustainable revenue streams' },
-            ]} />
+            <BulletList 
+              showDescription={false}
+              items={[
+                { title: 'Secure $2M low-interest loans' },
+                { title: '$5M strategic partnerships' },
+                { title: '$3M additional grants' },
+                { title: 'Sustainable revenue streams' },
+              ]} 
+            />
             
             {/* Organization Logos */}
             <OrganizationLogoGrid
@@ -198,11 +213,14 @@ export default function MXTKCaresPage() {
                 Organizations with clear, measurable outcomes and the capacity to scale their impact 
                 with additional funding.
               </p>
-              <FeatureRow cols={2} items={[
-                { title: 'Proven measurable impact' },
-                { title: 'Clear theory of change' },
-                { title: 'Scalable program model' },
-              ]} />
+              <BulletList 
+                showDescription={false}
+                items={[
+                  { title: 'Proven measurable impact' },
+                  { title: 'Clear theory of change' },
+                  { title: 'Scalable program model' },
+                ]} 
+              />
             </div>
             <div>
               <h3 className="font-semibold mb-3">Transparency</h3>
@@ -210,11 +228,14 @@ export default function MXTKCaresPage() {
                 Open about their operations, financials, and impact measurement. 
                 Willing to share learnings with the community.
               </p>
-              <FeatureRow cols={2} items={[
-                { title: 'Financial reporting' },
-                { title: 'Impact measurement' },
-                { title: 'Open communication' },
-              ]} />
+              <BulletList 
+                showDescription={false}
+                items={[
+                  { title: 'Financial reporting' },
+                  { title: 'Impact measurement' },
+                  { title: 'Open communication' },
+                ]} 
+              />
             </div>
             <div>
               <h3 className="font-semibold mb-3">Innovation readiness</h3>
@@ -222,11 +243,14 @@ export default function MXTKCaresPage() {
                 Willing to explore new funding mechanisms and work with our team to maximize 
                 the utility of their MXTK grant.
               </p>
-              <FeatureRow cols={2} items={[
-                { title: 'New financial instruments' },
-                { title: 'Adaptive culture' },
-                { title: 'Partnership mindset' },
-              ]} />
+              <BulletList 
+                showDescription={false}
+                items={[
+                  { title: 'New financial instruments' },
+                  { title: 'Adaptive culture' },
+                  { title: 'Partnership mindset' },
+                ]} 
+              />
             </div>
             <div>
               <h3 className="font-semibold mb-3">Sustainability</h3>
@@ -234,11 +258,14 @@ export default function MXTKCaresPage() {
                 Long-term vision and operational stability. Organizations that can sustain 
                 and grow their impact over time.
               </p>
-              <FeatureRow cols={2} items={[
-                { title: 'Leadership & governance' },
-                { title: 'Diversified funding' },
-                { title: 'Long-term planning' },
-              ]} />
+              <BulletList 
+                showDescription={false}
+                items={[
+                  { title: 'Leadership & governance' },
+                  { title: 'Diversified funding' },
+                  { title: 'Long-term planning' },
+                ]} 
+              />
             </div>
           </div>
         </Card>

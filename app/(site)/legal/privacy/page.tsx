@@ -3,13 +3,14 @@ import PageHero from '@/components/PageHero'
 import SectionWrapper from '@/components/SectionWrapper'
 import { useCopy } from '@/components/copy/Copy'
 import PageTheme from '@/components/theme/PageTheme'
+import { BulletList } from '@/components/ui/BulletList'
 import Card from '@/components/ui/Card'
 import { FeatureRow } from '@/components/ui/List'
 
 export default function PrivacyPage() {
   const { mode, pageCopy } = useCopy('privacy')
   return (
-    <PageTheme ink="dark" lift="none" glass="soft">
+    <PageTheme ink="light" lift="H" glass="soft">
       <PageHero>
         <SectionWrapper index={0} className="text-center">
           <h1 className="text-4xl md:text-6xl font-bold tracking-tight">{pageCopy.heroTitle[mode]}</h1>
@@ -26,12 +27,14 @@ export default function PrivacyPage() {
             </p>
             <div className="space-y-2">
               <h3 className="font-semibold">Personal Information:</h3>
-              <FeatureRow cols={2} items={[
-                { title: 'Contact details' },
-                { title: 'Professional info' },
-                { title: 'Financial information' },
-                { title: 'KYC/AML data' },
-              ]} />
+              <BulletList 
+                items={[
+                  { title: 'Contact details' },
+                  { title: 'Professional info' },
+                  { title: 'Financial information' },
+                  { title: 'KYC/AML data' },
+                ]} 
+              />
             </div>
             <div className="space-y-2">
               <h3 className="font-semibold">Technical Information:</h3>

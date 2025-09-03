@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react'
 
 interface OrganizationLogoProps {
   name: string
-  logoPath: string
+  logoPath?: string
   alt?: string
   size?: 'sm' | 'md' | 'lg'
   className?: string

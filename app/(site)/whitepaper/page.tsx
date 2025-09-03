@@ -4,14 +4,14 @@ import SectionWrapper from '@/components/SectionWrapper'
 import { useCopy } from '@/components/copy/Copy'
 import ModeTextSwap from '@/components/experience/ModeTextSwap'
 import PageTheme from '@/components/theme/PageTheme'
+import { BulletList } from '@/components/ui/BulletList'
 import Card from '@/components/ui/Card'
-import { FeatureRow } from '@/components/ui/List'
 import BackgroundPhoto from '@/components/visuals/BackgroundPhoto'
 
 export default function WhitepaperPage() {
   const { mode, pageCopy } = useCopy('whitepaper')
   return (
-    <PageTheme ink="dark" lift="M" glass="soft">
+    <PageTheme ink="light" lift="H" glass="soft">
       <BackgroundPhoto variant="whitepaper" />
       <PageHero>
         <div className="relative">
@@ -45,16 +45,46 @@ export default function WhitepaperPage() {
               </Card>
             </SectionWrapper>
 
-            <div className="container mx-auto px-4 py-10 md:py-12">
-              <FeatureRow
-                cols={3}
-                items={[
-                  { title: 'Documentation', body: 'JORC/NI43-101/SKR, chain-of-title, technical assessments.' },
-                  { title: 'Verification', body: 'Independent review and third-party validation.' },
-                  { title: 'Tokenization', body: 'Proper legal structure, custody, and on-chain representation.' },
-                ]}
-              />
-            </div>
+            <SectionWrapper index={2}>
+              <Card tint="teal">
+                <h2 className="text-2xl font-semibold mb-6">Token Foundation</h2>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                  <div className="text-center">
+                    <h3 className="font-semibold mb-3">Documentation</h3>
+                    <BulletList 
+                      centered={true}
+                      items={[
+                        { title: 'JORC/NI43-101/SKR reports' },
+                        { title: 'Chain-of-title verification' },
+                        { title: 'Technical assessments' },
+                      ]} 
+                    />
+                  </div>
+                  <div className="text-center">
+                    <h3 className="font-semibold mb-3">Verification</h3>
+                    <BulletList 
+                      centered={true}
+                      items={[
+                        { title: 'Independent review' },
+                        { title: 'Third-party validation' },
+                        { title: 'Expert assessments' },
+                      ]} 
+                    />
+                  </div>
+                  <div className="text-center">
+                    <h3 className="font-semibold mb-3">Tokenization</h3>
+                    <BulletList 
+                      centered={true}
+                      items={[
+                        { title: 'Legal structure' },
+                        { title: 'Custody solutions' },
+                        { title: 'On-chain representation' },
+                      ]} 
+                    />
+                  </div>
+                </div>
+              </Card>
+            </SectionWrapper>
 
             <SectionWrapper index={3}>
               <Card tint="navy">
@@ -62,21 +92,25 @@ export default function WhitepaperPage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   <div>
                     <h3 className="font-semibold mb-3">Methodology</h3>
-                    <FeatureRow cols={2} items={[
-                      { title: 'Transparent algorithms' },
-                      { title: 'Multi-source aggregation' },
-                      { title: 'Periodic review' },
-                      { title: 'Community input' },
-                    ]} />
+                    <BulletList 
+                      items={[
+                        { title: 'Transparent algorithms' },
+                        { title: 'Multi-source aggregation' },
+                        { title: 'Periodic review' },
+                        { title: 'Community input' },
+                      ]} 
+                    />
                   </div>
                   <div>
                     <h3 className="font-semibold mb-3">Governance</h3>
-                    <FeatureRow cols={2} items={[
-                      { title: 'Timelock upgrades' },
-                      { title: 'Multi-sig controls' },
-                      { title: 'Emergency pause' },
-                      { title: 'Change logs' },
-                    ]} />
+                    <BulletList 
+                      items={[
+                        { title: 'Timelock upgrades' },
+                        { title: 'Multi-sig controls' },
+                        { title: 'Emergency pause' },
+                        { title: 'Change logs' },
+                      ]} 
+                    />
                   </div>
                 </div>
               </Card>
@@ -106,21 +140,21 @@ export default function WhitepaperPage() {
             </SectionWrapper>
 
             {pageCopy.sections?.map((sec, idx) => (
-              <section key={`${idx}-${mode}`} className="mt-10">
-                <div className="glass glass--panel p-6 md:p-8 rounded-xl">
+              <SectionWrapper key={`${idx}-${mode}`} index={5 + idx}>
+                <Card tint={idx % 2 === 0 ? "amber" : "navy"}>
                   <ModeTextSwap
                     as="h2"
                     depKey={`wp-sec-${idx}-heading-${mode}`}
-                    className="text-xl md:text-2xl font-semibold h-on-gradient"
+                    className="text-xl md:text-2xl font-semibold mb-6"
                     content={sec.heading[mode]}
                   />
-                  <div className="mt-4 space-y-4 sub-on-gradient">
+                  <div className="space-y-4">
                     {sec.paragraphs[mode].map((p, i) => (
                       <ModeTextSwap
                         key={i}
                         as="p"
                         depKey={`wp-sec-${idx}-p-${i}-${mode}`}
-                        className="leading-relaxed"
+                        className="leading-relaxed text-muted"
                         content={p}
                       />
                     ))}
@@ -135,8 +169,8 @@ export default function WhitepaperPage() {
                       />
                     </div>
                   ) : null}
-                </div>
-              </section>
+                </Card>
+              </SectionWrapper>
             ))}
           </div>
         </div>

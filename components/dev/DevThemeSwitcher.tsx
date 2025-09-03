@@ -91,14 +91,14 @@ export default function DevThemeSwitcher() {
   const effectiveGlass: Glass = override ? glass : pageGlass;
 
   const copyMapping = () => {
-    const line = `${pageSlug}: ink=${effectiveInk} lift=${effectiveLift}`;
+    const line = `${pageSlug}: ink=${effectiveInk} lift=${effectiveLift} glass=${effectiveGlass}`;
     navigator.clipboard?.writeText(line);
     console.log("[DevThemeSwitcher] " + line);
   };
 
   // minimal UI
   return (
-    <div className="fixed z-[100] bottom-4 left-16">
+    <div className="fixed z-[100] bottom-4 left-1/2 -translate-x-1/2">
       {!open ? (
         <button
           onClick={() => setOpen(true)}

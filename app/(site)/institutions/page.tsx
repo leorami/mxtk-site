@@ -24,7 +24,7 @@ export default function InstitutionsPage() {
   );
 
   return (
-    <PageTheme ink="dark" lift="M" glass="soft">
+    <PageTheme ink="dark" lift="H" glass="soft">
       <JsonLd data={faq} />
       <PhotoBackdrop src="art/photos/institutions_lapis.jpg" />
       <PageHero>

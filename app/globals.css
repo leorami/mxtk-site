@@ -2,6 +2,19 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Section spacing standardization */
+.section-spacing {
+  padding-top: var(--section-gap-y);
+  padding-bottom: var(--section-gap-y);
+}
+
+@media (min-width: 768px) {
+  .section-spacing {
+    padding-top: var(--section-gap-md);
+    padding-bottom: var(--section-gap-md);
+  }
+}
+
 /* ========= MXTK Design Tokens =========
    Palette derives from logo + mineral tones.
    Light tokens bias toward warmth (orange/sand) + clarity (quartz/teal).
@@ -408,7 +421,7 @@ table a:hover {
 }
 
 .hover-lift:hover {
-    transform: translateY(-1px);
+    transform: translateY(-.5px);
     box-shadow: var(--shadow-lift);
 }
 
@@ -482,24 +495,29 @@ table a:hover {
 .table {
     width: 100%;
     border-collapse: collapse;
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .table tbody tr:nth-child(even) {
-    background: color-mix(in srgb, var(--surface-page) 90%, #000000 10%);
+    background: rgba(0, 0, 0, 0.03);
 }
 
 .table tbody tr:hover {
-    background: color-mix(in srgb, var(--surface-page) 82%, #000000 18%);
+    background: rgba(0, 0, 0, 0.08);
 }
 
 .table th,
 .table td {
-    border: 1px solid var(--border-soft);
+    border: 1px solid rgba(0, 0, 0, 0.08);
     padding: .75rem 1rem;
 }
 
 .table thead th {
-    background: rgba(255, 255, 255, .85);
+    background: rgba(0, 0, 0, 0.08);
+    color: var(--text-strong);
+    font-weight: 700;
+    border-bottom: 2px solid rgba(0, 0, 0, 0.15);
 }
 
 html.dark .table thead th {
@@ -510,23 +528,30 @@ html.dark .table thead th {
 
 /* Enhanced dark mode table contrast */
 .dark .table {
-    background: rgba(255, 255, 255, 0.12);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(0, 0, 0, 0.35);
+    border: 1px solid rgba(255, 255, 255, 0.25);
 }
 
 .dark .table th,
 .dark .table td {
     border: 1px solid rgba(255, 255, 255, 0.15);
-    color: #0E1116 !important;
-    background: rgba(255, 255, 255, 0.08);
+    color: #E6EAF2 !important;
+    background: rgba(0, 0, 0, 0.25);
+}
+
+.dark .table thead th {
+    background: rgba(0, 0, 0, 0.5) !important;
+    color: #F4F7FD !important;
+    font-weight: 700 !important;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.3) !important;
 }
 
 .dark .table tbody tr:nth-child(even) {
-    background: rgba(255, 255, 255, 0.12);
+    background: rgba(0, 0, 0, 0.3);
 }
 
 .dark .table tbody tr:hover {
-    background: rgba(255, 255, 255, 0.18);
+    background: rgba(0, 0, 0, 0.4);
 }
 
 /* Inputs (keeps glass vibe) */
@@ -555,20 +580,20 @@ html.dark .table thead th {
 }
 
 .dark .brand-header {
-    background: rgba(11, 14, 18, .92);
+    background: rgba(30, 41, 59, .88);
     color: #E6EAF2;
-    backdrop-filter: saturate(1.2) blur(6px);
+    backdrop-filter: saturate(1.2) blur(8px);
 }
 
-/* Ensure header nav links (anchors and buttons) inherit header color, not global link blue */
+/* Ensure header nav links inherit header color (ignore page ink tokens) */
 .brand-header .nav-link,
 .brand-header a.nav-link {
-    color: var(--ink-strong, #0B0E12) !important;
+    color: inherit !important;
 }
 
 .dark .brand-header .nav-link,
 .dark .brand-header a.nav-link {
-    color: rgba(255, 255, 255, .92) !important;
+    color: inherit !important;
 }
 
 /* Keep the accent line slim and elegant */
@@ -958,15 +983,22 @@ html body [data-mineral] h3 {
 
     .nav-pill {
         @apply rounded-xl px-3 py-1.5;
+        border: 1px solid color-mix(in srgb, currentColor 14%, transparent);
+        background: color-mix(in srgb, currentColor 4%, transparent);
     }
 
     /* Nav hover using CSS var set from route theme */
     .nav-pill:hover {
         background: var(--hover-bg);
+        color: var(--ink-strong);
     }
 
     .nav-pill[aria-current="page"] {
         background: var(--hover-bg);
+        color: var(--ink-strong);
+        font-weight: 700;
+        box-shadow: inset 0 -2px 0 color-mix(in srgb, var(--mxtk-accent) 65%, transparent);
+        border-color: color-mix(in srgb, var(--mxtk-accent) 22%, transparent);
     }
 
     /* Field utilities */
@@ -1048,7 +1080,7 @@ html body [data-mineral] h3 {
 .input:focus,
 .select:focus,
 .textarea:focus,
-.glass:hover,
+.glass.hover-lift:hover,
 .card-outline:hover {
   transform: translateY(-1px) scale(1.005);
   box-shadow: 
@@ -1132,7 +1164,7 @@ html body [data-mineral] h3 {
 .dark .input:focus,
 .dark .select:focus,
 .dark .textarea:focus,
-.dark .glass:hover,
+.dark .glass.hover-lift:hover,
 .dark .card-outline:hover {
   transform: translateY(-1px) scale(1.005);
   box-shadow: 
@@ -1237,34 +1269,45 @@ html body [data-mineral] h3 {
 
 /* Enhanced table styling with glass effects */
 [data-mineral] .table {
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(0, 0, 0, 0.4) !important;
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(var(--mxtk-accent-rgb, 224, 147, 43), 0.2);
+  border: 1px solid rgba(var(--mxtk-accent-rgb, 224, 147, 43), 0.35) !important;
   border-radius: 16px;
   box-shadow: 
-    0 8px 32px rgba(var(--mxtk-accent-rgb, 224, 147, 43), 0.12),
-    0 4px 16px rgba(0, 0, 0, 0.08);
+    0 8px 32px rgba(var(--mxtk-accent-rgb, 224, 147, 43), 0.2),
+    0 4px 16px rgba(0, 0, 0, 0.12);
   overflow: hidden;
 }
 
 [data-mineral] .table thead th {
-  background: rgba(var(--mxtk-accent-rgb, 224, 147, 43), 0.15);
-  color: var(--mxtk-accent-text) !important;
-  border-bottom: 1px solid rgba(var(--mxtk-accent-rgb, 224, 147, 43), 0.25);
+  background: rgba(0, 0, 0, 0.6) !important;
+  color: #F4F7FD !important;
+  border-bottom: 2px solid rgba(var(--mxtk-accent-rgb, 224, 147, 43), 0.4) !important;
   backdrop-filter: blur(15px);
   -webkit-backdrop-filter: blur(15px);
   padding: 1rem;
+  font-weight: 700 !important;
+}
+
+[data-mineral] .table th,
+[data-mineral] .table td {
+  color: #E6EAF2 !important;
+  background: rgba(0, 0, 0, 0.25) !important;
 }
 
 [data-mineral] .table tbody tr {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+[data-mineral] .table tbody tr:nth-child(even) {
+  background: rgba(0, 0, 0, 0.35) !important;
+}
+
 [data-mineral] .table tbody tr:hover {
-  background: rgba(var(--mxtk-accent-rgb, 224, 147, 43), 0.1);
+  background: rgba(var(--mxtk-accent-rgb, 224, 147, 43), 0.15) !important;
   transform: scale(1.005);
-  box-shadow: inset 0 0 0 1px rgba(var(--mxtk-accent-rgb, 224, 147, 43), 0.2);
+  box-shadow: inset 0 0 0 1px rgba(var(--mxtk-accent-rgb, 224, 147, 43), 0.3);
 }
 
 /* Enhanced button styling with reduced dramatic glass effects */
@@ -1494,6 +1537,13 @@ h3 + .btn-link {
 .nav-link[aria-current="page"] {
   background: var(--hover-bg);
   font-weight: 600;
+}
+
+/* Button size variants */
+.btn-sm {
+  padding: 0.375rem 0.75rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
 }
 
 /* Enhanced typography for Ecosystem page and consistency */

@@ -193,42 +193,43 @@ export default function Team() {
                                 </div>
                             </Card>
                         </SectionWrapper>
+                        
+                        {pageCopy.sections?.map((sec, idx) => (
+                            <SectionWrapper key={`${idx}-${mode}`} index={5 + idx}>
+                                <Card tint={idx % 2 === 0 ? "teal" : "navy"}>
+                                    <ModeTextSwap
+                                        as="h2"
+                                        depKey={`team-sec-${idx}-heading-${mode}`}
+                                        className="text-xl md:text-2xl font-semibold mb-6"
+                                        content={sec.heading[mode]}
+                                    />
+                                    <div className="space-y-4">
+                                        {sec.paragraphs[mode].map((p, i) => (
+                                            <ModeTextSwap
+                                                key={i}
+                                                as="p"
+                                                depKey={`team-sec-${idx}-p-${i}-${mode}`}
+                                                className="leading-relaxed text-muted"
+                                                content={p}
+                                            />
+                                        ))}
+                                    </div>
+                                    {sec.highlight?.[mode] ? (
+                                        <div className="mt-5 rounded-lg px-4 py-3" style={{ background: 'rgba(255,255,255,0.10)' }}>
+                                            <ModeTextSwap
+                                                as="div"
+                                                depKey={`team-sec-${idx}-hl-${mode}`}
+                                                className="text-sm opacity-90"
+                                                content={sec.highlight[mode]}
+                                            />
+                                        </div>
+                                    ) : null}
+                                </Card>
+                            </SectionWrapper>
+                        ))}
                     </div>
                 </div>
             </PageHero>
-            {pageCopy.sections?.map((sec, idx) => (
-              <section key={`${idx}-${mode}`} className="mt-10">
-                <div className="glass glass--panel p-6 md:p-8 rounded-xl">
-                  <ModeTextSwap
-                    as="h2"
-                    depKey={`team-sec-${idx}-heading-${mode}`}
-                    className="text-xl md:text-2xl font-semibold h-on-gradient"
-                    content={sec.heading[mode]}
-                  />
-                  <div className="mt-4 space-y-4 sub-on-gradient">
-                    {sec.paragraphs[mode].map((p, i) => (
-                      <ModeTextSwap
-                        key={i}
-                        as="p"
-                        depKey={`team-sec-${idx}-p-${i}-${mode}`}
-                        className="leading-relaxed"
-                        content={p}
-                      />
-                    ))}
-                  </div>
-                  {sec.highlight?.[mode] ? (
-                    <div className="mt-5 rounded-lg px-4 py-3" style={{ background: 'rgba(255,255,255,0.10)' }}>
-                      <ModeTextSwap
-                        as="div"
-                        depKey={`team-sec-${idx}-hl-${mode}`}
-                        className="text-sm opacity-90"
-                        content={sec.highlight[mode]}
-                      />
-                    </div>
-                  ) : null}
-                </div>
-              </section>
-            ))}
         </PageTheme>
         )
 }

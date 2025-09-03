@@ -27,7 +27,7 @@ export default function OwnersPage() {
     ]
   )
   return (
-    <PageTheme ink="dark" lift="M" glass="soft">
+    <PageTheme ink="light" lift="H" glass="soft">
       <JsonLd data={faq} />
       <PageBackground page="owners" />
       <PageHero>
@@ -130,8 +130,9 @@ export default function OwnersPage() {
         </SectionWrapper>
 
         {/* Consolidated grid */}
-        <section className="glass">
+        <SectionWrapper index={5}>
           <Card tint="amber">
+            <h2 className="text-2xl font-semibold mb-6">Security & Compliance</h2>
             <FeatureGrid
               cols={3}
               items={[
@@ -141,10 +142,10 @@ export default function OwnersPage() {
               ]}
             />
           </Card>
-        </section>
+        </SectionWrapper>
 
         {/* Benefits for Owners as Key Points */}
-        <SectionWrapper index={5}>
+        <SectionWrapper index={6}>
           <Card tint="teal">
             <h2 className="text-2xl font-semibold mb-6">Benefits for Owners</h2>
             <KeyPointsGrid>
@@ -156,21 +157,21 @@ export default function OwnersPage() {
         </SectionWrapper>
 
         {pageCopy.sections?.map((sec, idx) => (
-          <section key={`${idx}-${mode}`} className="mt-10">
-            <div className="glass glass--panel p-6 md:p-8 rounded-xl">
+          <SectionWrapper key={`${idx}-${mode}`} index={7 + idx}>
+            <Card tint={idx % 2 === 0 ? "amber" : "teal"}>
               <ModeTextSwap
                 as="h2"
                 depKey={`owners-sec-${idx}-heading-${mode}`}
-                className="text-xl md:text-2xl font-semibold h-on-gradient"
+                className="text-xl md:text-2xl font-semibold mb-6"
                 content={sec.heading[mode]}
               />
-              <div className="mt-4 space-y-4 sub-on-gradient">
+              <div className="space-y-4">
                 {sec.paragraphs[mode].map((p, i) => (
                   <ModeTextSwap
                     key={i}
                     as="p"
                     depKey={`owners-sec-${idx}-p-${i}-${mode}`}
-                    className="leading-relaxed"
+                    className="leading-relaxed text-muted"
                     content={p}
                   />
                 ))}
@@ -185,8 +186,8 @@ export default function OwnersPage() {
                   />
                 </div>
               ) : null}
-            </div>
-          </section>
+            </Card>
+          </SectionWrapper>
         ))}
 
           

@@ -11,7 +11,7 @@ import BackgroundPhoto from '@/components/visuals/BackgroundPhoto'
 export default function MediaPage() {
   const { mode, pageCopy } = useCopy('media')
   return (
-    <PageTheme ink="light" lift="M" glass="soft">
+    <PageTheme ink="light" lift="H" glass="soft">
       <BackgroundPhoto variant="media" />
       <PageHero>
         <div className="relative">
@@ -83,62 +83,62 @@ export default function MediaPage() {
                   <div>
                     <h3 className="font-semibold mb-2">Whitepaper</h3>
                     <p className="text-muted text-sm mb-4">Technical documentation and methodology</p>
-                    <BasePathLink className="btn-link" to="whitepaper">Read Whitepaper</BasePathLink>
+                    <BasePathLink className="btn-link btn-sm" to="whitepaper">Read Whitepaper</BasePathLink>
                   </div>
                   <div>
                     <h3 className="font-semibold mb-2">Transparency</h3>
                     <p className="text-muted text-sm mb-4">On-chain data and verification sources</p>
-                    <BasePathLink className="btn-link" to="transparency">View Transparency</BasePathLink>
+                    <BasePathLink className="btn-link btn-sm" to="transparency">View Transparency</BasePathLink>
                   </div>
                   <div>
                     <h3 className="font-semibold mb-2">Roadmap</h3>
                     <p className="text-muted text-sm mb-4">Development milestones and timeline</p>
-                    <BasePathLink className="btn-link" to="roadmap">See Roadmap</BasePathLink>
+                    <BasePathLink className="btn-link btn-sm" to="roadmap">See Roadmap</BasePathLink>
                   </div>
                   <div>
                     <h3 className="font-semibold mb-2">MXTK Gives</h3>
                     <p className="text-muted text-sm mb-4">Nonprofit initiative and impact</p>
-                    <BasePathLink className="btn-link" to="mxtk-cares">Learn More</BasePathLink>
+                    <BasePathLink className="btn-link btn-sm" to="mxtk-cares">Learn More</BasePathLink>
                   </div>
                 </div>
               </Card>
             </SectionWrapper>
+            {pageCopy.sections?.map((sec, idx) => (
+              <SectionWrapper key={`${idx}-${mode}`} index={4 + idx}>
+                <Card tint={idx % 2 === 0 ? "amber" : "navy"}>
+                  <ModeTextSwap
+                    as="h2"
+                    depKey={`media-sec-${idx}-heading-${mode}`}
+                    className="text-xl md:text-2xl font-semibold mb-6"
+                    content={sec.heading[mode]}
+                  />
+                  <div className="space-y-4">
+                    {sec.paragraphs[mode].map((p, i) => (
+                      <ModeTextSwap
+                        key={i}
+                        as="p"
+                        depKey={`media-sec-${idx}-p-${i}-${mode}`}
+                        className="leading-relaxed text-muted"
+                        content={p}
+                      />
+                    ))}
+                  </div>
+                  {sec.highlight?.[mode] ? (
+                    <div className="mt-5 rounded-lg px-4 py-3" style={{ background: 'rgba(255,255,255,0.10)' }}>
+                      <ModeTextSwap
+                        as="div"
+                        depKey={`media-sec-${idx}-hl-${mode}`}
+                        className="text-sm opacity-90"
+                        content={sec.highlight[mode]}
+                      />
+                    </div>
+                  ) : null}
+                </Card>
+              </SectionWrapper>
+            ))}
           </div>
         </div>
       </PageHero>
-      {pageCopy.sections?.map((sec, idx) => (
-        <section key={`${idx}-${mode}`} className="mt-10">
-          <div className="glass glass--panel p-6 md:p-8 rounded-xl">
-            <ModeTextSwap
-              as="h2"
-              depKey={`media-sec-${idx}-heading-${mode}`}
-              className="text-xl md:text-2xl font-semibold h-on-gradient"
-              content={sec.heading[mode]}
-            />
-            <div className="mt-4 space-y-4 sub-on-gradient">
-              {sec.paragraphs[mode].map((p, i) => (
-                <ModeTextSwap
-                  key={i}
-                  as="p"
-                  depKey={`media-sec-${idx}-p-${i}-${mode}`}
-                  className="leading-relaxed"
-                  content={p}
-                />
-              ))}
-            </div>
-            {sec.highlight?.[mode] ? (
-              <div className="mt-5 rounded-lg px-4 py-3" style={{ background: 'rgba(255,255,255,0.10)' }}>
-                <ModeTextSwap
-                  as="div"
-                  depKey={`media-sec-${idx}-hl-${mode}`}
-                  className="text-sm opacity-90"
-                  content={sec.highlight[mode]}
-                />
-              </div>
-            ) : null}
-          </div>
-        </section>
-      ))}
     </PageTheme>
   )
 }

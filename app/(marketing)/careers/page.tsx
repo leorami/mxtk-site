@@ -5,15 +5,15 @@ import SectionWrapper from '@/components/SectionWrapper'
 import { useCopy } from '@/components/copy/Copy'
 import ModeTextSwap from '@/components/experience/ModeTextSwap'
 import PageTheme from '@/components/theme/PageTheme'
+import { BulletList } from '@/components/ui/BulletList'
 import Card from '@/components/ui/Card'
-import { FeatureRow } from '@/components/ui/List'
 import PhotoBackdrop from '@/components/visuals/PhotoBackdrop'
 
 export default function Careers() {
   const { mode, pageCopy } = useCopy('careers');
 
   return (
-    <PageTheme ink="dark" lift="M" glass="soft">
+    <PageTheme ink="light" lift="H" glass="soft">
       <PhotoBackdrop src="art/photos/careers_amber.jpg" />
       <PageHero>
         <SectionWrapper index={0} className="text-center">
@@ -39,14 +39,26 @@ export default function Careers() {
           </p>
           
           <h3 className="text-lg font-semibold mb-4">Benefits include:</h3>
-          <FeatureRow cols={3} items={[
-            { title: 'Competitive compensation' },
-            { title: 'Health, dental, vision' },
-            { title: 'Equity participation' },
-            { title: 'Professional growth' },
-            { title: 'Flexible work' },
-            { title: 'Collaborative culture' },
-          ]} />
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <BulletList 
+              items={[
+                { title: 'Competitive compensation' },
+                { title: 'Health, dental, vision' },
+              ]} 
+            />
+            <BulletList 
+              items={[
+                { title: 'Equity participation' },
+                { title: 'Professional growth' },
+              ]} 
+            />
+            <BulletList 
+              items={[
+                { title: 'Flexible work' },
+                { title: 'Collaborative culture' },
+              ]} 
+            />
+          </div>
         </Card>
       </SectionWrapper>
 
@@ -88,35 +100,43 @@ export default function Careers() {
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
                   <h5 className="font-semibold mb-2">Technical Leadership</h5>
-                  <FeatureRow cols={2} items={[
-                    { title: 'Strategic technical leadership' },
-                    { title: 'Innovation & trends' },
-                    { title: 'Financial markets fluency' },
-                  ]} />
+                  <BulletList 
+                    items={[
+                      { title: 'Strategic technical leadership' },
+                      { title: 'Innovation & trends' },
+                      { title: 'Financial markets fluency' },
+                    ]} 
+                  />
                 </div>
                 <div>
                   <h5 className="font-semibold mb-2">Team Development</h5>
-                  <FeatureRow cols={2} items={[
-                    { title: 'Hire & mentor' },
-                    { title: 'Talent development' },
-                    { title: 'Culture of excellence' },
-                  ]} />
+                  <BulletList 
+                    items={[
+                      { title: 'Hire & mentor' },
+                      { title: 'Talent development' },
+                      { title: 'Culture of excellence' },
+                    ]} 
+                  />
                 </div>
                 <div>
                   <h5 className="font-semibold mb-2">Product Development</h5>
-                  <FeatureRow cols={2} items={[
-                    { title: 'Cross-functional collaboration' },
-                    { title: 'Full lifecycle ownership' },
-                    { title: 'Timeline & quality' },
-                  ]} />
+                  <BulletList 
+                    items={[
+                      { title: 'Cross-functional collaboration' },
+                      { title: 'Full lifecycle ownership' },
+                      { title: 'Timeline & quality' },
+                    ]} 
+                  />
                 </div>
                 <div>
                   <h5 className="font-semibold mb-2">Technology Stack</h5>
-                  <FeatureRow cols={2} items={[
-                    { title: 'Scalable architectures' },
-                    { title: 'Tech selection' },
-                    { title: 'Operational excellence' },
-                  ]} />
+                  <BulletList 
+                    items={[
+                      { title: 'Scalable architectures' },
+                      { title: 'Tech selection' },
+                      { title: 'Operational excellence' },
+                    ]} 
+                  />
                 </div>
               </div>
             </div>
@@ -150,19 +170,23 @@ export default function Careers() {
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
                   <h5 className="font-semibold mb-2">Risk Strategy</h5>
-                  <FeatureRow cols={2} items={[
-                    { title: 'Risk frameworks' },
-                    { title: 'Asset tracking' },
-                    { title: 'Leverage & trading risks' },
-                  ]} />
+                  <BulletList 
+                    items={[
+                      { title: 'Risk frameworks' },
+                      { title: 'Asset tracking' },
+                      { title: 'Leverage & trading risks' },
+                    ]} 
+                  />
                 </div>
                 <div>
                   <h5 className="font-semibold mb-2">Compliance & Operations</h5>
-                  <FeatureRow cols={2} items={[
-                    { title: 'Regulatory compliance' },
-                    { title: 'Operational risk controls' },
-                    { title: 'Liquidity pool risk' },
-                  ]} />
+                  <BulletList 
+                    items={[
+                      { title: 'Regulatory compliance' },
+                      { title: 'Operational risk controls' },
+                      { title: 'Liquidity pool risk' },
+                    ]} 
+                  />
                 </div>
               </div>
             </div>

@@ -3,6 +3,7 @@ import OrganizationLogoGrid from '@/components/OrganizationLogoGrid'
 import PageHero from '@/components/PageHero'
 import SectionWrapper from '@/components/SectionWrapper'
 import PageTheme from '@/components/theme/PageTheme'
+import { BulletList } from '@/components/ui/BulletList'
 import Card from '@/components/ui/Card'
 import { FeatureRow } from '@/components/ui/List'
 import PhotoBackdrop from '@/components/visuals/PhotoBackdrop'
@@ -10,7 +11,7 @@ import { PLACEHOLDER_PARTNERS_ECOSYSTEM } from '@/lib/placeholders'
 
 export default function Ecosystem() {
   return (
-    <PageTheme ink="dark" lift="M" glass="soft">
+    <PageTheme ink="light" lift="H" glass="soft">
       <PhotoBackdrop src="art/photos/ecosystem_jade.jpg" />
       <PageHero>
         <div className="relative">
@@ -25,23 +26,73 @@ export default function Ecosystem() {
             <SectionWrapper index={1}>
               <Card tint="amber">
                 <h2 className="text-2xl font-semibold mb-6">Core Infrastructure</h2>
-                <FeatureRow cols={3} items={[
-                  { title: 'Blockchain & contracts', body: 'Arbitrum L2, Uniswap v4, governance controls.' },
-                  { title: 'Data & analytics', body: 'Oracles, pool discovery, metrics & logs.' },
-                  { title: 'Developer tools', body: 'APIs, ABIs, docs, and SDKs.' },
-                ]} />
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                  <div className="text-center">
+                    <h3 className="font-semibold mb-3">Blockchain & Contracts</h3>
+                    <BulletList 
+                      centered={true}
+                      items={[
+                        { title: 'Arbitrum L2' },
+                        { title: 'Uniswap v4' },
+                        { title: 'Governance controls' },
+                      ]} 
+                    />
+                  </div>
+                  <div className="text-center">
+                    <h3 className="font-semibold mb-3">Data & Analytics</h3>
+                    <BulletList 
+                      centered={true}
+                      items={[
+                        { title: 'Oracles' },
+                        { title: 'Pool discovery' },
+                        { title: 'Metrics & logs' },
+                      ]} 
+                    />
+                  </div>
+                  <div className="text-center">
+                    <h3 className="font-semibold mb-3">Developer Tools</h3>
+                    <BulletList 
+                      centered={true}
+                      items={[
+                        { title: 'APIs & ABIs' },
+                        { title: 'Documentation' },
+                        { title: 'SDKs' },
+                      ]} 
+                    />
+                  </div>
+                </div>
               </Card>
             </SectionWrapper>
 
             <SectionWrapper index={2}>
               <Card tint="navy">
                 <h2 className="text-2xl font-semibold mb-6">Trading & Liquidity</h2>
-                <FeatureRow cols={2} items={[
-                  { title: 'Primary DEX', body: 'Uniswap v4 on Arbitrum.' },
-                  { title: 'OTC', body: 'Institutional execution and compliant settlement.' },
-                  { title: 'AMM', body: 'Concentrated liquidity; efficient pricing.' },
-                  { title: 'Discovery', body: 'Factory/pool indexing and real-time metrics.' },
-                ]} />
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  <div className="text-center">
+                    <h3 className="font-semibold mb-3">Primary DEX</h3>
+                    <p className="text-muted text-sm mb-4">Uniswap v4 on Arbitrum</p>
+                    <BulletList 
+                      centered={true}
+                      showDescription={false}
+                      items={[
+                        { title: 'Concentrated liquidity' },
+                        { title: 'Efficient pricing' },
+                      ]} 
+                    />
+                  </div>
+                  <div className="text-center">
+                    <h3 className="font-semibold mb-3">OTC Markets</h3>
+                    <p className="text-muted text-sm mb-4">Institutional execution and compliant settlement</p>
+                    <BulletList 
+                      centered={true}
+                      showDescription={false}
+                      items={[
+                        { title: 'Factory/pool indexing' },
+                        { title: 'Real-time metrics' },
+                      ]} 
+                    />
+                  </div>
+                </div>
               </Card>
             </SectionWrapper>
 
@@ -56,11 +107,41 @@ export default function Ecosystem() {
                   columns={4}
                   className="mb-8"
                 />
-                <FeatureRow cols={3} items={[
-                  { title: 'Wallets & trackers', body: 'Web3 wallets, portfolio apps, hardware.' },
-                  { title: 'KYC & compliance', body: 'Identity, AML, audit & reporting.' },
-                  { title: 'Custody & security', body: 'Institutional custody, multi-sig, insurance.' },
-                ]} />
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                  <div className="text-center">
+                    <h3 className="font-semibold mb-3">Wallets & Trackers</h3>
+                    <BulletList 
+                      centered={true}
+                      items={[
+                        { title: 'Web3 wallets' },
+                        { title: 'Portfolio apps' },
+                        { title: 'Hardware wallets' },
+                      ]} 
+                    />
+                  </div>
+                  <div className="text-center">
+                    <h3 className="font-semibold mb-3">KYC & Compliance</h3>
+                    <BulletList 
+                      centered={true}
+                      items={[
+                        { title: 'Identity verification' },
+                        { title: 'AML compliance' },
+                        { title: 'Audit & reporting' },
+                      ]} 
+                    />
+                  </div>
+                  <div className="text-center">
+                    <h3 className="font-semibold mb-3">Custody & Security</h3>
+                    <BulletList 
+                      centered={true}
+                      items={[
+                        { title: 'Institutional custody' },
+                        { title: 'Multi-sig security' },
+                        { title: 'Insurance coverage' },
+                      ]} 
+                    />
+                  </div>
+                </div>
               </Card>
             </SectionWrapper>
 
@@ -70,22 +151,26 @@ export default function Ecosystem() {
                 <div className="grid gap-6 md:grid-cols-2">
                   <div>
                     <h3 className="text-lg font-semibold mb-3">Mining Companies</h3>
-                    <FeatureRow cols={2} items={[
-                      { title: 'Global mining operations' },
-                      { title: 'Resource exploration' },
-                      { title: 'Equipment providers' },
-                      { title: 'Logistics & transport' },
-                    ]} />
+                    <BulletList 
+                      items={[
+                        { title: 'Global mining operations' },
+                        { title: 'Resource exploration' },
+                        { title: 'Equipment providers' },
+                        { title: 'Logistics & transport' },
+                      ]} 
+                    />
                   </div>
                   
                   <div>
                     <h3 className="text-lg font-semibold mb-3">Geological Services</h3>
-                    <FeatureRow cols={2} items={[
-                      { title: 'JORC/NI 43-101 reports' },
-                      { title: 'Independent assessments' },
-                      { title: 'Resource estimation' },
-                      { title: 'Environmental studies' },
-                    ]} />
+                    <BulletList 
+                      items={[
+                        { title: 'JORC/NI 43-101 reports' },
+                        { title: 'Independent assessments' },
+                        { title: 'Resource estimation' },
+                        { title: 'Environmental studies' },
+                      ]} 
+                    />
                   </div>
                 </div>
               </Card>

@@ -30,7 +30,7 @@ export default function PoolTable() {
             </div>
             {error && <div className="text-sm text-red-600">Error: {error}</div>}
             <div className="overflow-x-auto">
-                <table className="table text-sm">
+                <table className="table text-sm md:table-fixed">
                     <thead>
                         <tr>
                             <th>Pool</th>
@@ -46,19 +46,41 @@ export default function PoolTable() {
                     <tbody>
                         {data?.pools?.length
                             ? data.pools.map(p => (
-                                <tr key={p.address}>
-                                    <td><a className="table-link" target="_blank" href={`https://arbiscan.io/address/${p.address}`}>{p.address.slice(0, 6)}…{p.address.slice(-4)}</a></td>
+                                <tr key={p.address} className="align-top">
                                     <td>
+                                        <div className="md:hidden text-[11px] uppercase tracking-wide text-muted mb-1">Pool</div>
+                                        <a className="table-link" target="_blank" href={`https://arbiscan.io/address/${p.address}`}>{p.address.slice(0, 6)}…{p.address.slice(-4)}</a>
+                                    </td>
+                                    <td>
+                                        <div className="md:hidden text-[11px] uppercase tracking-wide text-muted mb-1">Source</div>
                                         <span className="rounded-xl border px-2 py-0.5 text-xs">
                                             {p.source ?? 'n/a'}
                                         </span>
                                     </td>
-                                    <td>{p.token0?.symbol}/{p.token1?.symbol}</td>
-                                    <td>{p.fee ? `${p.fee / 10000}%` : '—'}</td>
-                                    <td>{p.approxMxtkUSD ? `${formatUSD(p.approxMxtkUSD)} / MXTK` : '—'}</td>
-                                    <td>{formatUSD(p.volume24hUSD ?? undefined)}</td>
-                                    <td>{formatUSD(p.tvlUSD ?? undefined)}</td>
-                                    <td>{formatUSD(p.fees24hUSD ?? undefined)}</td>
+                                    <td>
+                                        <div className="md:hidden text-[11px] uppercase tracking-wide text-muted mb-1">Pair</div>
+                                        {p.token0?.symbol}/{p.token1?.symbol}
+                                    </td>
+                                    <td>
+                                        <div className="md:hidden text-[11px] uppercase tracking-wide text-muted mb-1">Fee</div>
+                                        {p.fee ? `${p.fee / 10000}%` : '—'}
+                                    </td>
+                                    <td>
+                                        <div className="md:hidden text-[11px] uppercase tracking-wide text-muted mb-1">Price</div>
+                                        {p.approxMxtkUSD ? `${formatUSD(p.approxMxtkUSD)} / MXTK` : '—'}
+                                    </td>
+                                    <td>
+                                        <div className="md:hidden text-[11px] uppercase tracking-wide text-muted mb-1">24h Volume</div>
+                                        {formatUSD(p.volume24hUSD ?? undefined)}
+                                    </td>
+                                    <td>
+                                        <div className="md:hidden text-[11px] uppercase tracking-wide text-muted mb-1">TVL</div>
+                                        {formatUSD(p.tvlUSD ?? undefined)}
+                                    </td>
+                                    <td>
+                                        <div className="md:hidden text-[11px] uppercase tracking-wide text-muted mb-1">24h Fees</div>
+                                        {formatUSD(p.fees24hUSD ?? undefined)}
+                                    </td>
                                 </tr>
                             ))
                             : <tr><td colSpan={8} className="text-center text-muted py-6">{loading ? 'Loading…' : 'No pools discovered yet'}</td></tr>}

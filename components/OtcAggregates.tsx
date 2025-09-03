@@ -16,7 +16,7 @@ export default function OtcAggregates({
     <Card interactive>
       <div className='text-sm font-semibold'>OTC monthly aggregates (anonymized)</div>
       <div className='mt-2 overflow-x-auto'>
-        <table className='table text-sm'>
+        <table className='table text-sm md:table-fixed'>
           <thead>
             <tr>
               <th>Month</th>
@@ -27,11 +27,23 @@ export default function OtcAggregates({
           </thead>
           <tbody>
             {rows.map((r, i) => (
-              <tr key={i}>
-                <td>{r.month}</td>
-                <td>{r.trades}</td>
-                <td>{r.notionalUsd}</td>
-                <td className='text-muted'>{r.notes ?? '—'}</td>
+              <tr key={i} className='align-top'>
+                <td>
+                  <div className="md:hidden text-[11px] uppercase tracking-wide text-muted mb-1">Month</div>
+                  {r.month}
+                </td>
+                <td>
+                  <div className="md:hidden text-[11px] uppercase tracking-wide text-muted mb-1">Trades</div>
+                  {r.trades}
+                </td>
+                <td>
+                  <div className="md:hidden text-[11px] uppercase tracking-wide text-muted mb-1">Notional (USD)</div>
+                  {r.notionalUsd}
+                </td>
+                <td className='text-muted'>
+                  <div className="md:hidden text-[11px] uppercase tracking-wide text-muted mb-1">Notes</div>
+                  {r.notes ?? '—'}
+                </td>
               </tr>
             ))}
           </tbody>

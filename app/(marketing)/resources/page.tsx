@@ -4,15 +4,15 @@ import SectionWrapper from '@/components/SectionWrapper'
 import { useCopy } from '@/components/copy/Copy'
 import ModeTextSwap from '@/components/experience/ModeTextSwap'
 import PageTheme from '@/components/theme/PageTheme'
+import { BulletList } from '@/components/ui/BulletList'
 import Card from '@/components/ui/Card'
-import { FeatureRow } from '@/components/ui/List'
 import BackgroundPhoto from '@/components/visuals/BackgroundPhoto'
 import Link from 'next/link'
 
 export default function Resources() {
   const { mode, pageCopy } = useCopy('resources')
   return (
-    <PageTheme ink="dark" lift="M" glass="soft">
+    <PageTheme ink="light" lift="H" glass="soft">
       <BackgroundPhoto variant="resources" />
       <PageHero>
         <div className="relative">
@@ -125,24 +125,82 @@ export default function Resources() {
             <SectionWrapper index={2}>
               <Card tint="navy">
                 <h2 className="text-2xl font-semibold mb-6">Educational Resources</h2>
-                <FeatureRow cols={3} items={[
-                  { title: 'Whitepaper', body: 'Technical documentation and tokenomics.' },
-                  { title: 'Transparency hub', body: 'Live data, logs, OTC aggregates.' },
-                  { title: 'Ecosystem', body: 'Partners, integrations, infra.' },
-                ]} />
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                  <div className="text-center">
+                    <h3 className="font-semibold mb-3">Whitepaper</h3>
+                    <p className="text-muted text-sm mb-4">Technical documentation and tokenomics</p>
+                    <BulletList 
+                      centered={true}
+                      showDescription={false}
+                      items={[
+                        { title: 'Technical specs' },
+                        { title: 'Tokenomics model' },
+                        { title: 'Architecture details' },
+                      ]} 
+                    />
+                  </div>
+                  <div className="text-center">
+                    <h3 className="font-semibold mb-3">Transparency Hub</h3>
+                    <p className="text-muted text-sm mb-4">Live data, logs, OTC aggregates</p>
+                    <BulletList 
+                      centered={true}
+                      showDescription={false}
+                      items={[
+                        { title: 'Real-time data' },
+                        { title: 'Oracle logs' },
+                        { title: 'OTC aggregates' },
+                      ]} 
+                    />
+                  </div>
+                  <div className="text-center">
+                    <h3 className="font-semibold mb-3">Ecosystem</h3>
+                    <p className="text-muted text-sm mb-4">Partners, integrations, infrastructure</p>
+                    <BulletList 
+                      centered={true}
+                      showDescription={false}
+                      items={[
+                        { title: 'Strategic partners' },
+                        { title: 'Key integrations' },
+                        { title: 'Infrastructure' },
+                      ]} 
+                    />
+                  </div>
+                </div>
               </Card>
             </SectionWrapper>
 
             <SectionWrapper index={3}>
               <Card tint="teal">
-                <h2 className="text-2xl font-semibold mb-6">Trading Resources</h2>
-                <div className="grid md:grid-cols-2 gap-8">
-            <FeatureRow cols={2} items={[
-              { title: 'Uniswap (Arbitrum)', body: 'Primary DEX for MXTK' },
-              { title: 'CoinGecko', body: 'Price tracking and metadata' },
-              { title: 'Arbiscan', body: 'Token details and holders' },
-              { title: 'Setup guides', body: 'MetaMask, Bitget, Arbitrum network' },
-            ]} />
+                <h2 className="text-2xl font-semibold mb-6 text-center">Trading Resources</h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                  <div className="text-center">
+                    <div className="w-16 h-16 mx-auto mb-3 bg-gradient-to-br from-pink-500 to-purple-600 rounded-xl flex items-center justify-center">
+                      <span className="text-white font-bold text-lg">U</span>
+                    </div>
+                    <h3 className="font-semibold mb-2">Uniswap (Arbitrum)</h3>
+                    <p className="text-sm text-muted">Primary DEX for MXTK</p>
+                  </div>
+                  <div className="text-center">
+                    <div className="w-16 h-16 mx-auto mb-3 bg-gradient-to-br from-green-500 to-teal-600 rounded-xl flex items-center justify-center">
+                      <span className="text-white font-bold text-lg">CG</span>
+                    </div>
+                    <h3 className="font-semibold mb-2">CoinGecko</h3>
+                    <p className="text-sm text-muted">Price tracking and metadata</p>
+                  </div>
+                  <div className="text-center">
+                    <div className="w-16 h-16 mx-auto mb-3 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center">
+                      <span className="text-white font-bold text-lg">A</span>
+                    </div>
+                    <h3 className="font-semibold mb-2">Arbiscan</h3>
+                    <p className="text-sm text-muted">Token details and holders</p>
+                  </div>
+                  <div className="text-center">
+                    <div className="w-16 h-16 mx-auto mb-3 bg-gradient-to-br from-orange-500 to-red-600 rounded-xl flex items-center justify-center">
+                      <span className="text-white font-bold text-lg">📱</span>
+                    </div>
+                    <h3 className="font-semibold mb-2">Setup Guides</h3>
+                    <p className="text-sm text-muted">MetaMask, Bitget, Arbitrum network</p>
+                  </div>
                 </div>
               </Card>
             </SectionWrapper>
@@ -157,42 +215,42 @@ export default function Resources() {
                 </div>
               </Card>
             </SectionWrapper>
+            {pageCopy.sections?.map((sec, idx) => (
+              <SectionWrapper key={`${idx}-${mode}`} index={5 + idx}>
+                <Card tint={idx % 2 === 0 ? "amber" : "teal"}>
+                  <ModeTextSwap
+                    as="h2"
+                    depKey={`resources-sec-${idx}-heading-${mode}`}
+                    className="text-xl md:text-2xl font-semibold mb-6"
+                    content={sec.heading[mode]}
+                  />
+                  <div className="space-y-4">
+                    {sec.paragraphs[mode].map((p, i) => (
+                      <ModeTextSwap
+                        key={i}
+                        as="p"
+                        depKey={`resources-sec-${idx}-p-${i}-${mode}`}
+                        className="leading-relaxed text-muted"
+                        content={p}
+                      />
+                    ))}
+                  </div>
+                  {sec.highlight?.[mode] ? (
+                    <div className="mt-5 rounded-lg px-4 py-3" style={{ background: 'rgba(255,255,255,0.10)' }}>
+                      <ModeTextSwap
+                        as="div"
+                        depKey={`resources-sec-${idx}-hl-${mode}`}
+                        className="text-sm opacity-90"
+                        content={sec.highlight[mode]}
+                      />
+                    </div>
+                  ) : null}
+                </Card>
+              </SectionWrapper>
+            ))}
           </div>
         </div>
       </PageHero>
-      {pageCopy.sections?.map((sec, idx) => (
-        <section key={`${idx}-${mode}`} className="mt-10">
-          <div className="glass glass--panel p-6 md:p-8 rounded-xl">
-            <ModeTextSwap
-              as="h2"
-              depKey={`resources-sec-${idx}-heading-${mode}`}
-              className="text-xl md:text-2xl font-semibold h-on-gradient"
-              content={sec.heading[mode]}
-            />
-            <div className="mt-4 space-y-4 sub-on-gradient">
-              {sec.paragraphs[mode].map((p, i) => (
-                <ModeTextSwap
-                  key={i}
-                  as="p"
-                  depKey={`resources-sec-${idx}-p-${i}-${mode}`}
-                  className="leading-relaxed"
-                  content={p}
-                />
-              ))}
-            </div>
-            {sec.highlight?.[mode] ? (
-              <div className="mt-5 rounded-lg px-4 py-3" style={{ background: 'rgba(255,255,255,0.10)' }}>
-                <ModeTextSwap
-                  as="div"
-                  depKey={`resources-sec-${idx}-hl-${mode}`}
-                  className="text-sm opacity-90"
-                  content={sec.highlight[mode]}
-                />
-              </div>
-            ) : null}
-          </div>
-        </section>
-      ))}
     </PageTheme>
   )
 }

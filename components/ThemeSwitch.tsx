@@ -34,8 +34,8 @@ export default function ThemeSwitch() {
     <button
       onClick={toggle}
       aria-label="Toggle theme"
-      className="inline-flex items-center gap-2 rounded-full border border-[var(--border-soft)] px-3 py-1.5 text-[13px] hover:bg-[color-mix(in_srgb,var(--mxtk-orange)_12%,transparent)] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-400/35"
-      style={{ color: 'var(--ink-strong)' }}
+      className="nav-link nav-pill inline-flex items-center gap-2 border px-3 py-1.5 text-[13px] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-400/35"
+      style={{ ['--hover-bg' as any]: 'var(--mxtk-hover-bg)', color: 'inherit' }}
     >
       <div className={`relative h-5 w-10 rounded-full ${dark ? 'bg-[color-mix(in_srgb,black_25%,transparent)]' : 'bg-[color-mix(in_srgb,black_15%,transparent)]'}`}>
         <div className={`absolute top-0.5 h-4 w-4 rounded-full bg-[var(--surface-card)] shadow-[var(--shadow-lift-sm)] transition-all duration-200 ${dark ? 'right-0.5' : 'left-0.5'}`} />

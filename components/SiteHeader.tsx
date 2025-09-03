@@ -1,5 +1,5 @@
 'use client'
-import ThemeToggle from '@/components/ThemeToggle'
+import ThemeSwitch from '@/components/ThemeSwitch'
 import ExperienceToggle from '@/components/experience/ExperienceToggle'
 
 import { themeForRoute } from '@/lib/brand/theme'
@@ -88,7 +88,7 @@ export default function SiteHeader() {
 
           <div className="hidden lg:flex items-center gap-2">
             <ExperienceToggle />
-            <ThemeToggle />
+            <ThemeSwitch />
           </div>
 
           <button
@@ -157,7 +157,7 @@ export default function SiteHeader() {
             <div className="pt-3 space-y-2">
               <div className="flex items-center gap-2">
                 <ExperienceToggle />
-                <ThemeToggle />
+                <ThemeSwitch />
               </div>
             </div>
           </div>

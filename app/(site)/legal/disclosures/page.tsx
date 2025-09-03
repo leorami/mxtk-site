@@ -8,7 +8,7 @@ import Card from '@/components/ui/Card'
 export default function DisclosuresPage() {
   const { mode, pageCopy } = useCopy('disclosures')
   return (
-    <PageTheme ink="dark" lift="none" glass="soft">
+    <PageTheme ink="light" lift="H" glass="soft">
       <PageHero>
         <SectionWrapper index={0} className="text-center">
           <h1 className="text-4xl md:text-6xl font-bold tracking-tight">{pageCopy.heroTitle[mode]}</h1>
