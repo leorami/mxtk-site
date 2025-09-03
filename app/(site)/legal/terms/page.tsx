@@ -1,15 +1,18 @@
+"use client"
 import PageHero from '@/components/PageHero'
 import SectionWrapper from '@/components/SectionWrapper'
+import { useCopy } from '@/components/copy/Copy'
 import PageTheme from '@/components/theme/PageTheme'
 import Card from '@/components/ui/Card'
 
 export default function TermsPage() {
+  const { mode, pageCopy } = useCopy('terms')
   return (
-    <PageTheme ink="dark" lift="none">
+    <PageTheme ink="dark" lift="none" glass="soft">
       <PageHero>
         <SectionWrapper index={0} className="text-center">
-          <h1 className="text-4xl md:text-6xl font-bold tracking-tight">Terms of Service</h1>
-          <p className="text-xl max-w-3xl mx-auto">Effective date: …</p>
+          <h1 className="text-4xl md:text-6xl font-bold tracking-tight">{pageCopy.heroTitle[mode]}</h1>
+          <p className="text-xl max-w-3xl mx-auto">{pageCopy.heroSub[mode]}</p>
         </SectionWrapper>
 
         <SectionWrapper index={1}>
@@ -167,6 +170,18 @@ export default function TermsPage() {
           </div>
         </Card>
         </SectionWrapper>
+        {pageCopy.sections?.map((sec, idx) => (
+          <section key={`${idx}-${mode}`} className="mt-10">
+            <div className="glass glass--panel p-6 md:p-8 rounded-xl copy-swap">
+              <h2 className="text-xl md:text-2xl font-semibold h-on-gradient">{sec.heading[mode]}</h2>
+              <div className="mt-4 space-y-4 sub-on-gradient">
+                {sec.paragraphs[mode].map((p, i) => (
+                  <p key={i} className="leading-relaxed">{p}</p>
+                ))}
+              </div>
+            </div>
+          </section>
+        ))}
       </PageHero>
     </PageTheme>
   )

@@ -1,18 +1,31 @@
-'use client'
+"use client";
+import Link, { LinkProps } from 'next/link';
+import React from 'react';
 
-import { getRelativePath } from '@/lib/routing/basePath'
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
-import React from 'react'
+type Props = Omit<LinkProps, 'href'> & {
+  href?: LinkProps['href'];
+  to?: string; // convenience prop used across pages
+  className?: string;
+  children: React.ReactNode;
+};
 
-type BasePathLinkProps = Omit<React.ComponentProps<typeof Link>, 'href'> & {
-  to: string
-}
+export default function BasePathLink({ href, to, children, className, ...rest }: Props) {
+  const raw = typeof href !== 'undefined' ? href : to;
 
-export default function BasePathLink({ to, ...rest }: BasePathLinkProps) {
-  const pathname = usePathname() || '/'
-  const href = getRelativePath(to, pathname)
-  return <Link {...rest} href={href} />
+  let target: LinkProps['href'];
+  if (typeof raw === 'string') {
+    target = raw.startsWith('/') ? raw : `/${raw}`;
+  } else if (raw) {
+    target = raw;
+  } else {
+    target = '/' as LinkProps['href'];
+  }
+
+  return (
+    <Link href={target} className={className} {...rest}>
+      {children}
+    </Link>
+  );
 }
 
 

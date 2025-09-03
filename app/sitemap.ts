@@ -1,10 +1,17 @@
-export default function sitemap() {
-  const base = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
-  const routes = ['', '/owners', '/institutions', '/transparency', '/whitepaper', '/roadmap', '/elite-drop', '/elite-drop/nominate', '/media', '/legal/terms', '/legal/privacy', '/legal/disclosures']
-  return routes.map((r) => ({
-    url: `${base}${r || '/'}`,
+import type { MetadataRoute } from "next";
+
+const routes = [
+  "/", "/owners", "/institutions", "/transparency", "/whitepaper",
+  "/mxtk-cares", "/careers", "/roadmap", "/media", "/ecosystem",
+  "/faq", "/resources", "/contact", "/team", "/ai/facts"
+];
+
+export default function sitemap(): MetadataRoute.Sitemap {
+  const origin = process.env.NEXT_PUBLIC_SITE_ORIGIN || "https://mineral-token.com";
+  return routes.map((p) => ({
+    url: `${origin}${p}`,
     lastModified: new Date(),
-    changeFrequency: 'weekly',
-    priority: r === '' ? 1.0 : 0.7,
-  }))
+    changeFrequency: "weekly",
+    priority: p === "/" ? 1 : 0.7
+  }));
 }

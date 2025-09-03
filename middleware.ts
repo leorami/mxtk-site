@@ -2,18 +2,22 @@ import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 
 export function middleware(req: NextRequest) {
-  const url = req.nextUrl;
-  const fwdPrefix = req.headers.get('x-forwarded-prefix');
-  const bp = fwdPrefix === '/mxtk' || url.pathname.startsWith('/mxtk') ? '/mxtk' : '';
-  const res = NextResponse.next();
-  // Persist the base path decision for this visitor so SSR and client share it
-  res.cookies.set('bp', bp, { path: '/', sameSite: 'lax' });
+  // With Next.js basePath configuration, we mostly just need to add headers for ngrok
+  const requestHeaders = new Headers(req.headers);
+  requestHeaders.set('x-current-url', req.url);
+  
+  const res = NextResponse.next({ request: { headers: requestHeaders } });
+  
+  // Add ngrok skip header to prevent browser warning
+  res.headers.set('ngrok-skip-browser-warning', 'true');
+  
   return res;
 }
 
-// Apply to all routes except Next internals and static files we don't need to touch
+// Apply to all routes to ensure ngrok header is added
 export const config = {
   matcher: [
-    '/((?!_next/|favicon|robots|sitemap|manifest).*)'
+    // Match all routes except Next.js internal paths and static files
+    '/((?!_next/static|_next/image|favicon.ico).*)',
   ]
 };

@@ -1,20 +1,23 @@
 'use client';
 
-import { usePublicPath } from '@/lib/routing/getPublicPathClient';
 import Image, { ImageProps } from 'next/image';
 
 /**
  * AppImage wraps Next/Image with:
- * - SSR-safe base path prefixing via getPublicPath
- * - unoptimized mode (to avoid optimizer 400s in proxied /mxtk)
+ * - Simple relative URL handling (no basePath complexity)
+ * - Unoptimized mode (to avoid optimizer issues)
  *
- * Usage: exactly like <Image />, but `src` is relative to /public.
- * Example: <AppImage src="organizations/persona.png" alt="Persona" width={128} height={128} />
+ * Usage: exactly like <Image />, but with unoptimized images
+ * Example: <AppImage src="/organizations/persona.png" alt="Persona" width={128} height={128} />
  */
 export default function AppImage(props: Omit<ImageProps, 'src'> & { src: string }) {
   const { src, ...rest } = props;
-  const url = usePublicPath(src);
-  return <Image {...rest} src={url} unoptimized />;
+
+  // Ensure src starts with / for public assets
+  const normalizedSrc = src.startsWith('/') ? src : `/${src}`;
+
+  // Use plain root-relative paths; proxy handles external prefixing
+  return <Image {...rest} src={normalizedSrc} unoptimized />;
 }
 
 

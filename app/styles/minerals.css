@@ -118,6 +118,7 @@
   content: "";
   position: absolute; inset: 0;
   background-image: url("/art/home_band_light.png");
+  background-image: var(--base-path-url, url("/art/home_band_light.png"));
   background-size: cover; background-position: center;
   opacity: 0.9; pointer-events: none;
   -webkit-mask: url("/art/home_light_wave_top.svg") top / cover no-repeat,

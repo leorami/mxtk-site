@@ -1,27 +1,11 @@
 'use client'
 import { themeForPath, type MineralTheme } from '@/lib/brand/theme'
 import { usePathname } from 'next/navigation'
-import { createContext, useContext, useEffect, useMemo, useState } from 'react'
+import { createContext, useContext, useMemo } from 'react'
 import { ParallaxProvider } from 'react-scroll-parallax'
 
 const Ctx = createContext<MineralTheme | null>(null)
 export const useBrandTheme = () => useContext(Ctx)!
-
-// Helper function to lighten a color for dark mode
-function lightenColor(hex: string, percent: number = 58): string {
-  // Convert hex to RGB
-  const r = parseInt(hex.slice(1, 3), 16)
-  const g = parseInt(hex.slice(3, 5), 16)
-  const b = parseInt(hex.slice(5, 7), 16)
-  
-  // Lighten by mixing with white
-  const lightR = Math.round(r + (255 - r) * (percent / 100))
-  const lightG = Math.round(g + (255 - g) * (percent / 100))
-  const lightB = Math.round(b + (255 - b) * (percent / 100))
-  
-  // Convert back to hex
-  return `#${lightR.toString(16).padStart(2, '0')}${lightG.toString(16).padStart(2, '0')}${lightB.toString(16).padStart(2, '0')}`
-}
 
 // Helper function to convert hex to RGB
 function hexToRgb(hex: string): string {
@@ -31,29 +15,36 @@ function hexToRgb(hex: string): string {
   return `${r}, ${g}, ${b}`
 }
 
+// Compute WCAG contrast ratio helpers
+function luminanceFromHex(hex: string): number {
+  const r = parseInt(hex.slice(1, 3), 16) / 255
+  const g = parseInt(hex.slice(3, 5), 16) / 255
+  const b = parseInt(hex.slice(5, 7), 16) / 255
+  const srgb = [r, g, b].map(c => (c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4))) as [number, number, number]
+  return 0.2126 * srgb[0] + 0.7152 * srgb[1] + 0.0722 * srgb[2]
+}
+
+function contrastRatio(hex1: string, hex2: string): number {
+  const L1 = luminanceFromHex(hex1)
+  const L2 = luminanceFromHex(hex2)
+  const [light, dark] = L1 > L2 ? [L1, L2] : [L2, L1]
+  return (light + 0.05) / (dark + 0.05)
+}
+
+function chooseAccessibleTextColorForAccent(accentHex: string): string {
+  const black = '#0E1116'
+  const white = '#FFFFFF'
+  // Pick the higher contrast between black and white
+  const cBlack = contrastRatio(accentHex, black)
+  const cWhite = contrastRatio(accentHex, white)
+  return cBlack >= cWhite ? black : white
+}
+
 export default function BrandThemeProvider({ children }: { children: React.ReactNode }) {
   const raw = usePathname() || '/'
-  const [mounted, setMounted] = useState(false)
 
   const theme = useMemo(() => themeForPath(raw), [raw])
-
-  // Check for dark mode only after mounting to avoid hydration mismatch
-  useEffect(() => {
-    setMounted(true)
-  }, [])
-
-  // Calculate accent text color based on theme mode
-  const accentTextColor = useMemo(() => {
-    const accentBase = '#040F3D'
-    if (!mounted) {
-      // During SSR and initial render, use the base color to match server
-      return accentBase
-    }
-    
-    // After mounting, check for dark mode
-    const isDark = document.documentElement.classList.contains('dark')
-    return isDark ? lightenColor(accentBase, 58) : accentBase
-  }, [mounted])
+  const accentText = useMemo(() => chooseAccessibleTextColorForAccent(theme.accent), [theme.accent])
 
   return (
     <Ctx.Provider value={theme}>
@@ -61,10 +52,11 @@ export default function BrandThemeProvider({ children }: { children: React.React
         <div
           suppressHydrationWarning
           style={{ 
-            ['--mxtk-accent' as any]: '#040F3D', 
+            // Route-specific accent variables drive buttons, links, outlines, and hovers
+            ['--mxtk-accent' as any]: theme.accent,
             ['--mxtk-hover-bg' as any]: theme.hoverBg,
-            ['--mxtk-accent-text' as any]: accentTextColor,
-            ['--mxtk-accent-rgb' as any]: hexToRgb('#040F3D')
+            ['--mxtk-accent-rgb' as any]: hexToRgb(theme.accent),
+            ['--mxtk-accent-fg' as any]: accentText
           } as React.CSSProperties}
           data-mineral={theme.name}
           data-photo={theme.photo}

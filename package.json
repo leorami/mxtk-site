@@ -19,6 +19,7 @@
     "make:org-logos": "ts-node scripts/make-org-placeholders.ts || node -e \"require('esbuild-register'); require('./scripts/make-org-placeholders.ts')\" || node -e \"import('./scripts/make-org-placeholders.ts')\""
   },
   "dependencies": {
+    "@types/recharts": "^1.8.29",
     "classnames": "^2.5.1",
     "clsx": "^2.1.1",
     "framer-motion": "^12.23.12",
@@ -26,6 +27,7 @@
     "react": "^18.3.0",
     "react-dom": "^18.3.0",
     "react-scroll-parallax": "^3.4.5",
+    "recharts": "^3.1.2",
     "viem": "^2.7.9"
   },
   "devDependencies": {
@@ -36,9 +38,10 @@
     "eslint": "^9.0.0",
     "eslint-config-next": "^15.0.0",
     "postcss": "^8.4.38",
-    "puppeteer": "^24.17.0",
+    "puppeteer": "^24.17.1",
     "sass": "^1.77.0",
     "tailwindcss": "^3.4.7",
     "typescript": "5.9.2"
-  }
+  },
+  "packageManager": "pnpm@10.15.1+sha512.34e538c329b5553014ca8e8f4535997f96180a1d0f614339357449935350d924e22f8614682191264ec33d1462ac21561aff97f6bb18065351c162c7e8f6de67"
 }

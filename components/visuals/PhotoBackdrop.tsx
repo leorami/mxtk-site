@@ -1,9 +1,10 @@
 "use client";
-import { usePublicPath } from "@/lib/routing/getPublicPathClient";
+
+import AppImage from '@/components/ui/AppImage';
 import cn from "classnames";
 
 export default function PhotoBackdrop({ src, className = "", opacity = 1 }: { src: string; className?: string; opacity?: number }) {
-  const imageSrc = usePublicPath(src);
+  const imageSrc = `/${src}`;
   return (
     <div
       aria-hidden
@@ -11,8 +12,9 @@ export default function PhotoBackdrop({ src, className = "", opacity = 1 }: { sr
         "pointer-events-none fixed inset-x-0 top-[var(--nav-height,theme(spacing.14))] bottom-[var(--footer-height,theme(spacing.20))] -z-10",
         className
       )}
+      suppressHydrationWarning
     >
-      <img src={imageSrc} alt="" className="block w-full h-full object-cover" style={{ opacity }} loading="eager" decoding="async" />
+      <AppImage src={imageSrc} alt="" fill className="object-cover" style={{ opacity }} priority />
     </div>
   );
 }

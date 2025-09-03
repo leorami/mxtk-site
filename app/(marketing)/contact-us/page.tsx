@@ -1,18 +1,22 @@
+"use client"
 import PageHero from '@/components/PageHero'
 import SectionWrapper from '@/components/SectionWrapper'
+import { useCopy } from '@/components/copy/Copy'
+import ModeTextSwap from '@/components/experience/ModeTextSwap'
 import PageTheme from '@/components/theme/PageTheme'
 import BackgroundPhoto from '@/components/visuals/BackgroundPhoto'
 
 export default function Contact() {
+    const { mode, pageCopy } = useCopy('contact')
     return (
-        <PageTheme ink="warm" lift="M">
+        <PageTheme ink="dark" lift="none" glass="soft">
             <BackgroundPhoto variant="contact" />
             <PageHero>
                 <div className="relative">
                     <div className="space-y-0">
                         <SectionWrapper index={0} className="text-center">
-                            <h1 className="text-4xl md:text-6xl font-bold tracking-tight text-slate-900 dark:text-slate-50 drop-shadow-[0_1px_1px_rgba(0,0,0,0.25)]">Contact</h1>
-                            <p className="text-xl text-muted max-w-3xl mx-auto">For owner intake, institutional inquiries, media, or MXTK Gives—reach out and we'll route appropriately.</p>
+                            <ModeTextSwap as="h1" depKey={`contact-hero-title-${mode}`} className="text-4xl md:text-6xl font-bold tracking-tight text-slate-900 dark:text-slate-50 drop-shadow-[0_1px_1px_rgba(0,0,0,0.25)]" content={pageCopy.heroTitle[mode]} />
+                            <ModeTextSwap as="p" depKey={`contact-hero-sub-${mode}`} className="text-xl text-muted max-w-3xl mx-auto" content={pageCopy.heroSub[mode]} />
                         </SectionWrapper>
                         <SectionWrapper index={1}>
                             <form className="grid gap-3 md:grid-cols-2">
@@ -29,6 +33,39 @@ export default function Contact() {
                     </div>
                 </div>
             </PageHero>
+            {pageCopy.sections?.map((sec, idx) => (
+                <section key={`${idx}-${mode}`} className="mt-10">
+                    <div className="glass glass--panel p-6 md:p-8 rounded-xl">
+                        <ModeTextSwap
+                            as="h2"
+                            depKey={`contact-sec-${idx}-heading-${mode}`}
+                            className="text-xl md:text-2xl font-semibold h-on-gradient"
+                            content={sec.heading[mode]}
+                        />
+                        <div className="mt-4 space-y-4 sub-on-gradient">
+                            {sec.paragraphs[mode].map((p, i) => (
+                                <ModeTextSwap
+                                    key={i}
+                                    as="p"
+                                    depKey={`contact-sec-${idx}-p-${i}-${mode}`}
+                                    className="leading-relaxed"
+                                    content={p}
+                                />
+                            ))}
+                        </div>
+                        {sec.highlight?.[mode] ? (
+                            <div className="mt-5 rounded-lg px-4 py-3" style={{ background: 'rgba(255,255,255,0.10)' }}>
+                                <ModeTextSwap
+                                    as="div"
+                                    depKey={`contact-sec-${idx}-hl-${mode}`}
+                                    className="text-sm opacity-90"
+                                    content={sec.highlight[mode]}
+                                />
+                            </div>
+                        ) : null}
+                    </div>
+                </section>
+            ))}
         </PageTheme>
     )
 }

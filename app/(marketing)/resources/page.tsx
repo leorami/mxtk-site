@@ -1,5 +1,8 @@
+"use client"
 import PageHero from '@/components/PageHero'
 import SectionWrapper from '@/components/SectionWrapper'
+import { useCopy } from '@/components/copy/Copy'
+import ModeTextSwap from '@/components/experience/ModeTextSwap'
 import PageTheme from '@/components/theme/PageTheme'
 import Card from '@/components/ui/Card'
 import { FeatureRow } from '@/components/ui/List'
@@ -7,17 +10,16 @@ import BackgroundPhoto from '@/components/visuals/BackgroundPhoto'
 import Link from 'next/link'
 
 export default function Resources() {
+  const { mode, pageCopy } = useCopy('resources')
   return (
-    <PageTheme ink="warm" lift="M">
+    <PageTheme ink="dark" lift="M" glass="soft">
       <BackgroundPhoto variant="resources" />
       <PageHero>
         <div className="relative">
           <div className="space-y-0">
             <SectionWrapper index={0} className="text-center">
-              <h1 className="text-4xl md:text-6xl font-bold tracking-tight text-slate-900 dark:text-slate-50 drop-shadow-[0_1px_1px_rgba(0,0,0,0.25)]">Resources</h1>
-              <p className="text-xl text-muted max-w-3xl mx-auto">
-                Educational content, research, and insights about Mineral Token and the future of asset-backed securities.
-              </p>
+              <ModeTextSwap as="h1" depKey={`resources-hero-title-${mode}`} className="text-4xl md:text-6xl font-bold tracking-tight text-slate-900 dark:text-slate-50 drop-shadow-[0_1px_1px_rgba(0,0,0,0.25)]" content={pageCopy.heroTitle[mode]} />
+              <ModeTextSwap as="p" depKey={`resources-hero-sub-${mode}`} className="text-xl text-muted max-w-3xl mx-auto" content={pageCopy.heroSub[mode]} />
             </SectionWrapper>
 
             <SectionWrapper index={1}>
@@ -26,7 +28,7 @@ export default function Resources() {
                 <div className="grid md:grid-cols-2 gap-8">
             {/* Article 1 */}
             <div className="space-y-4">
-              <div className="flex items-center gap-2 text-sm text-muted">
+              <div className="flex items-center gap-2 text-sm" style={{color:'var(--ink-muted)'}}>
                 <span>Bo Vargas</span>
                 <span>•</span>
                 <span>5/7/25</span>
@@ -44,7 +46,7 @@ export default function Resources() {
 
             {/* Article 2 */}
             <div className="space-y-4">
-              <div className="flex items-center gap-2 text-sm text-muted">
+              <div className="flex items-center gap-2 text-sm" style={{color:'var(--ink-muted)'}}>
                 <span>Todd Davison</span>
                 <span>•</span>
                 <span>4/21/25</span>
@@ -62,7 +64,7 @@ export default function Resources() {
 
             {/* Article 3 */}
             <div className="space-y-4">
-              <div className="flex items-center gap-2 text-sm text-muted">
+              <div className="flex items-center gap-2 text-sm" style={{color:'var(--ink-muted)'}}>
                 <span>Todd Davison</span>
                 <span>•</span>
                 <span>4/21/25</span>
@@ -80,7 +82,7 @@ export default function Resources() {
 
             {/* Article 4 */}
             <div className="space-y-4">
-              <div className="flex items-center gap-2 text-sm text-muted">
+              <div className="flex items-center gap-2 text-sm" style={{color:'var(--ink-muted)'}}>
                 <span>Todd Davison</span>
                 <span>•</span>
                 <span>6/19/24</span>
@@ -158,6 +160,39 @@ export default function Resources() {
           </div>
         </div>
       </PageHero>
+      {pageCopy.sections?.map((sec, idx) => (
+        <section key={`${idx}-${mode}`} className="mt-10">
+          <div className="glass glass--panel p-6 md:p-8 rounded-xl">
+            <ModeTextSwap
+              as="h2"
+              depKey={`resources-sec-${idx}-heading-${mode}`}
+              className="text-xl md:text-2xl font-semibold h-on-gradient"
+              content={sec.heading[mode]}
+            />
+            <div className="mt-4 space-y-4 sub-on-gradient">
+              {sec.paragraphs[mode].map((p, i) => (
+                <ModeTextSwap
+                  key={i}
+                  as="p"
+                  depKey={`resources-sec-${idx}-p-${i}-${mode}`}
+                  className="leading-relaxed"
+                  content={p}
+                />
+              ))}
+            </div>
+            {sec.highlight?.[mode] ? (
+              <div className="mt-5 rounded-lg px-4 py-3" style={{ background: 'rgba(255,255,255,0.10)' }}>
+                <ModeTextSwap
+                  as="div"
+                  depKey={`resources-sec-${idx}-hl-${mode}`}
+                  className="text-sm opacity-90"
+                  content={sec.highlight[mode]}
+                />
+              </div>
+            ) : null}
+          </div>
+        </section>
+      ))}
     </PageTheme>
   )
 }

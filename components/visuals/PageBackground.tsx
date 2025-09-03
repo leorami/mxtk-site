@@ -1,5 +1,6 @@
 "use client";
-import { usePublicPath } from "@/lib/routing/getPublicPathClient";
+
+import AppImage from '@/components/ui/AppImage';
 
 type PageKey =
   | "home" | "owners" | "institutions" | "transparency"
@@ -25,10 +26,10 @@ const MAP: Record<PageKey, string> = {
 };
 
 export default function PageBackground({ page }: { page: PageKey }) {
-  const src = usePublicPath(MAP[page]);
+  const src = `/${MAP[page]}`;
   return (
     <div aria-hidden className="fixed inset-0 -z-10">
-      <img src={src} alt="" className="w-full h-full object-cover" />
+      <AppImage src={src} alt="" fill className="object-cover" priority />
     </div>
   );
 }

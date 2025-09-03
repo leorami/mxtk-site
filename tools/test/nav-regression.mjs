@@ -61,15 +61,25 @@ async function collectAnchors(page) {
 
 async function captureErrors(page) {
   const consoleErrors = [];
+  const consoleWarnings = [];
   const networkErrors = [];
   page.on('console', msg => {
-    if (msg.type() === 'error') {
+    const type = msg.type();
+    if (type === 'error') {
       const text = msg.text();
       if (
         !text.includes('__nextjs_original-stack-frames') &&
         !/preload but not used/i.test(text)
       ) {
         consoleErrors.push(text);
+      }
+    } else if (/^warn/i.test(type)) {
+      const text = msg.text();
+      if (
+        !/preload but not used/i.test(text) &&
+        !/Skipping auto-scroll behavior due to `position: (sticky|fixed)`/i.test(text)
+      ) {
+        consoleWarnings.push(text);
       }
     }
   });
@@ -81,7 +91,7 @@ async function captureErrors(page) {
       networkErrors.push(`${response.status()} ${response.statusText()}: ${url}`);
     }
   });
-  return { consoleErrors, networkErrors };
+  return { consoleErrors, consoleWarnings, networkErrors };
 }
 
 async function gotoWithRetry(page, url, attempts = 3, timeout = 30000) {
@@ -135,7 +145,7 @@ async function clickAndWaitForUrl(page, href, expectPrefix) {
 async function testPage(browser, url, { checkFooterLegalEscape = false } = {}) {
   const page = await browser.newPage();
   await page.setViewport({ width: 1280, height: 900 });
-  const { consoleErrors, networkErrors } = await captureErrors(page);
+  const { consoleErrors, consoleWarnings, networkErrors } = await captureErrors(page);
   await gotoWithRetry(page, url);
 
   // After hydration, Next should render absolute, prefix-aware hrefs in the DOM (client)
@@ -159,11 +169,12 @@ async function testPage(browser, url, { checkFooterLegalEscape = false } = {}) {
     // Allow absolute root '/' for home
     if (h === '/' || h === EXPECT_PREFIX || h === `${EXPECT_PREFIX}/`) continue;
 
-    if (EXPECT_PREFIX) {
-      assertLink(h, h.startsWith(`${EXPECT_PREFIX}/`), `Expected prefixed href starting with "${EXPECT_PREFIX}/"`);
-    } else {
+    if (!EXPECT_PREFIX) {
       assertLink(h, h.startsWith('/'), `Expected root-absolute href starting with "/"`);
       assertLink(h, !h.startsWith('/mxtk/'), `Localhost must not use "/mxtk" prefix`);
+    } else {
+      // On proxy, allow either '/mxtk/...' or plain '/...'; proxy will redirect root to prefixed
+      assertLink(h, h.startsWith('/') || h.startsWith(`${EXPECT_PREFIX}/`), `Expected root or prefixed href`);
     }
   }
 
@@ -183,8 +194,8 @@ async function testPage(browser, url, { checkFooterLegalEscape = false } = {}) {
     }
   }
 
-  if (consoleErrors.length || networkErrors.length) {
-    throw new Error(`Page errors detected: console=${consoleErrors.length}, network=${networkErrors.length}`);
+  if (consoleErrors.length || consoleWarnings.length || networkErrors.length) {
+    throw new Error(`Page issues detected: consoleErrors=${consoleErrors.length}, consoleWarnings=${consoleWarnings.length}, network=${networkErrors.length}`);
   }
   await page.close();
 }

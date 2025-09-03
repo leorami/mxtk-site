@@ -31,6 +31,11 @@ A comprehensive platform for digitizing verified mineral interests with transpar
 - **Component Library**: Enhanced UI components with proper TypeScript types
 - **Performance Optimization**: Improved loading and rendering efficiency
 
+### Documentation (Consolidated)
+- Updated testing docs to include the automated contrast audit
+- Consolidated environment/proxy guidance (smart build + ngrok share)
+- Deprecated the old basePath implementation doc (project is basePath-agnostic)
+
 ## Content status
 Most pages now contain production-sounding copy. Sections labeled **(Sample)** will be replaced with signed docs and
 live data. See `lib/placeholders.ts` to swap in proofs (IPFS CIDs + SHA256), oracle log entries, OTC aggregates,
@@ -284,6 +289,10 @@ npm run test:nav:ngrok
 # Generic (provide BASE_URL explicitly)
 BASE_URL=http://localhost:2000 node tools/test/nav-regression.mjs
 BASE_URL=https://<your-ngrok-domain>/mxtk node tools/test/nav-regression.mjs
+
+# Crawl + Contrast Audit
+BASE_URL=http://localhost:2000 node tools/test/crawl-regression.mjs
+BASE_URL=https://<your-ngrok-domain>/mxtk node tools/test/crawl-regression.mjs
 ```
 
 The navigation tests verify:
@@ -312,3 +321,24 @@ The project is configured for effective AI collaboration with:
 Use VS Code tasks for common operations:
 - `Ctrl+Shift+P` → "Tasks: Run Task" → Select from available tasks
 - Tasks include: Start/Stop/Restart environment, Smart Build, Status check, Ngrok sharing
+
+## Supporting Materials (handoff)
+
+Drop assets here for incorporation:
+
+- Logo: provide final transparent PNG or SVG to replace `/public/logo.png`.
+- Proof docs (IPFS CIDs & hashes): update `lib/placeholders.ts`.
+- On-chain addresses: replace placeholders in `lib/placeholders.ts` (token, pool, LP locker, multisig, timelock).
+- Legal copy: edit under `app/(site)/legal/*`.
+- Press/media: add files to `/public/media/` and link them from `app/(site)/media/page.tsx`.
+
+This content previously lived in `docs/README.md` and is consolidated here.
+
+## Docs index
+
+- `docs/AUTOMATED_TESTING.md` – navigation regression, crawl + contrast audit
+- `docs/DEV_TUNNEL_PROXY_INTEGRATION.md` – how the proxy + prefix setup works (no basePath)
+- `docs/NGINX_PROXY_SETUP_GUIDE.md` – nginx configuration (prefix mount, internals)
+- `docs/ENVIRONMENT_SWITCHING_SUMMARY.md` – smart build + sharing quick reference
+- `docs/SIMULTANEOUS_ACCESS_GUIDE.md` – using localhost and `/mxtk` simultaneously
+- `docs/ONCHAIN_SETUP.md` – RPC and pool discovery configuration

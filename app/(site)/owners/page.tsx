@@ -3,18 +3,32 @@
 import PageHero from '@/components/PageHero';
 import SectionWrapper from '@/components/SectionWrapper';
 // FullBleed removed per revert
+import { useCopy } from '@/components/copy/Copy';
+import ModeTextSwap from '@/components/experience/ModeTextSwap';
+import JsonLd from '@/components/seo/JsonLd';
+import { faqJsonLd } from '@/components/seo/faq';
 import PageTheme from '@/components/theme/PageTheme';
 import Card from '@/components/ui/Card';
 import FeatureGrid from '@/components/ui/FeatureGrid';
 import { KeyPoint, KeyPointsGrid } from '@/components/ui/KeyPoints';
 import PageBackground from '@/components/visuals/PageBackground';
-import { usePublicPath } from '@/lib/routing/getPublicPathClient';
+
 import { usePathname } from 'next/navigation';
 
 export default function OwnersPage() {
   const pathname = usePathname() || '/'
+  const { mode, pageCopy } = useCopy('owners')
+  const faq = faqJsonLd(
+    '/owners',
+    [
+      { q: 'Who is this for?', a: 'Mineral owners and operators seeking compliant tokenization pathways.' },
+      { q: 'What do we consider?', a: 'Aligned incentives, flexible terms, and project-backed mechanics.' },
+      { q: 'What is the process?', a: 'Discovery, independent verification, then onboarding.' }
+    ]
+  )
   return (
-    <PageTheme ink="light" lift="M">
+    <PageTheme ink="dark" lift="M" glass="soft">
+      <JsonLd data={faq} />
       <PageBackground page="owners" />
       <PageHero>
         <div className="relative">
@@ -24,11 +38,6 @@ export default function OwnersPage() {
           <h1 className="text-4xl md:text-6xl font-bold tracking-tight">
             For Mineral Owners
           </h1>
-          <div className="flex justify-center items-center gap-4 mt-4">
-            <img src={usePublicPath('icons/mineral/icon-bands.svg')} alt="" role="presentation" aria-hidden="true" className="w-6 h-6 opacity-70" />
-            <img src={usePublicPath('icons/mineral/icon-droplet.svg')} alt="" role="presentation" aria-hidden="true" className="w-6 h-6 opacity-70" />
-            <img src={usePublicPath('icons/mineral/icon-facet.svg')} alt="" role="presentation" aria-hidden="true" className="w-6 h-6 opacity-70" />
-          </div>
           <p className="text-xl max-w-3xl mx-auto">
             MXTK offers a compliant, confidential intake path for owners and operators seeking to digitize mineral interests and participate in a transparent, governed token economy.
           </p>
@@ -37,13 +46,13 @@ export default function OwnersPage() {
         {/* What We Consider */}
         <SectionWrapper index={1}>
           <Card tint="amber">
-            <h2 className="text-2xl font-semibold mb-6">What We Consider</h2>
+            <ModeTextSwap as="h2" depKey={`owners-p0-title-${mode}`} className="text-2xl font-semibold mb-6" content={pageCopy.pillars?.[0]?.title[mode] || 'What We Consider'} />
             <FeatureGrid
               cols={3}
               items={[
-                { title: 'Aligned incentives', body: 'Structures designed to protect long-term asset value.' },
-                { title: 'Flexible repayment', body: 'Terms optimized for project reality and timing.' },
-                { title: 'No personal guarantees', body: 'Project-backed mechanics without personal liability.' },
+                { title: 'Aligned incentives', body: pageCopy.pillars?.[0]?.body[mode] || 'Structures designed to protect long-term asset value.' },
+                { title: 'Flexible repayment', body: pageCopy.pillars?.[1]?.body[mode] || 'Terms optimized for project reality and timing.' },
+                { title: 'No personal guarantees', body: pageCopy.pillars?.[2]?.body[mode] || 'Project-backed mechanics without personal liability.' },
               ]}
             />
             
@@ -57,7 +66,7 @@ export default function OwnersPage() {
         {/* What You Provide */}
         <SectionWrapper index={2}>
           <Card tint="teal">
-            <h2 className="text-2xl font-semibold mb-6">What You Provide</h2>
+            <ModeTextSwap as="h2" depKey={`owners-p1-title-${mode}`} className="text-2xl font-semibold mb-6" content={pageCopy.pillars?.[1]?.title[mode] || 'What You Provide'} />
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
               <div className="text-center">
                 <div className="text-3xl font-bold mb-2">📋</div>
@@ -81,7 +90,7 @@ export default function OwnersPage() {
         {/* Process Steps */}
         <SectionWrapper index={3}>
           <Card tint="navy">
-            <h2 className="text-2xl font-semibold mb-6">Our Process</h2>
+            <ModeTextSwap as="h2" depKey={`owners-p2-title-${mode}`} className="text-2xl font-semibold mb-6" content={pageCopy.pillars?.[2]?.title[mode] || 'Our Process'} />
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
               <div className="text-center">
                 <div className="text-4xl font-bold mb-4 text-accent">🔍</div>
@@ -145,6 +154,40 @@ export default function OwnersPage() {
             </KeyPointsGrid>
           </Card>
         </SectionWrapper>
+
+        {pageCopy.sections?.map((sec, idx) => (
+          <section key={`${idx}-${mode}`} className="mt-10">
+            <div className="glass glass--panel p-6 md:p-8 rounded-xl">
+              <ModeTextSwap
+                as="h2"
+                depKey={`owners-sec-${idx}-heading-${mode}`}
+                className="text-xl md:text-2xl font-semibold h-on-gradient"
+                content={sec.heading[mode]}
+              />
+              <div className="mt-4 space-y-4 sub-on-gradient">
+                {sec.paragraphs[mode].map((p, i) => (
+                  <ModeTextSwap
+                    key={i}
+                    as="p"
+                    depKey={`owners-sec-${idx}-p-${i}-${mode}`}
+                    className="leading-relaxed"
+                    content={p}
+                  />
+                ))}
+              </div>
+              {sec.highlight?.[mode] ? (
+                <div className="mt-5 rounded-lg px-4 py-3" style={{ background: 'rgba(255,255,255,0.10)' }}>
+                  <ModeTextSwap
+                    as="div"
+                    depKey={`owners-sec-${idx}-hl-${mode}`}
+                    className="text-sm opacity-90"
+                    content={sec.highlight[mode]}
+                  />
+                </div>
+              ) : null}
+            </div>
+          </section>
+        ))}
 
           
           </div>

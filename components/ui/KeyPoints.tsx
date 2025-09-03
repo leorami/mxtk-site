@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import React from 'react';
 
 export function KeyPointsGrid({ children }: React.PropsWithChildren) {
@@ -19,13 +20,13 @@ export function KeyPoint({
     <div className="rounded-xl bg-[--surface]/60 shadow-sm ring-1 ring-black/5 p-5">
       <div className="flex items-center gap-3 mb-2">
         <span className="inline-flex h-6 w-6 rounded-full ring-1 ring-[var(--accent)]/30 bg-[var(--accent)]/12 items-center justify-center">
-          <img
-            src="/icons/mxtk-micro.svg"
-            width={14}
-            height={14}
-            alt=""
-            className="opacity-80"
-          />
+                  <Image
+          src="/icons/mxtk-micro.svg"
+          width={14}
+          height={14}
+          alt=""
+          className="opacity-80"
+        />
         </span>
         <div className="font-semibold tracking-tight text-[--ink-strong]">
           {label}

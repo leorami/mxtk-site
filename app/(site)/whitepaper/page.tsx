@@ -1,44 +1,45 @@
+"use client"
 import PageHero from '@/components/PageHero'
 import SectionWrapper from '@/components/SectionWrapper'
+import { useCopy } from '@/components/copy/Copy'
+import ModeTextSwap from '@/components/experience/ModeTextSwap'
+import PageTheme from '@/components/theme/PageTheme'
 import Card from '@/components/ui/Card'
 import { FeatureRow } from '@/components/ui/List'
 import BackgroundPhoto from '@/components/visuals/BackgroundPhoto'
 
 export default function WhitepaperPage() {
+  const { mode, pageCopy } = useCopy('whitepaper')
   return (
-    <>
+    <PageTheme ink="dark" lift="M" glass="soft">
       <BackgroundPhoto variant="whitepaper" />
       <PageHero>
         <div className="relative">
           <div className="space-y-0">
             <SectionWrapper index={0} className="text-center">
-              <h1 className="text-4xl md:text-6xl font-bold tracking-tight text-slate-900 dark:text-slate-50 drop-shadow-[0_1px_1px_rgba(0,0,0,0.25)]">
-                Whitepaper
-              </h1>
-              <p className="text-xl text-muted max-w-3xl mx-auto">
-                This page summarizes the structure, oracle methodology, and market plumbing behind MXTK. A signed MDX/PDF will replace this sample content.
-              </p>
+              <ModeTextSwap as="h1" depKey={`wp-hero-title-${mode}`} className="text-4xl md:text-6xl font-bold tracking-tight text-slate-900 dark:text-slate-50 drop-shadow-[0_1px_1px_rgba(0,0,0,0.25)]" content={pageCopy.heroTitle[mode]} />
+              <ModeTextSwap as="p" depKey={`wp-hero-sub-${mode}`} className="text-xl text-muted max-w-3xl mx-auto" content={pageCopy.heroSub[mode]} />
             </SectionWrapper>
 
             <SectionWrapper index={1}>
               <Card tint="amber">
-                <h2 className="text-2xl font-semibold mb-6">Design Goals</h2>
+                <ModeTextSwap as="h2" depKey={`wp-p0-title-${mode}`} className="text-2xl font-semibold mb-6" content={pageCopy.pillars?.[0]?.title[mode] || 'Design Goals'} />
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   <div>
                     <h3 className="font-semibold mb-3">Transparency</h3>
-                    <p className="text-muted">Every material statement about MXTK maps to a verifiable source: on-chain data, IPFS files, or documented methods.</p>
+                    <p className="text-muted">{pageCopy.pillars?.[0]?.body[mode] || 'Every material statement about MXTK maps to a verifiable source.'}</p>
                   </div>
                   <div>
                     <h3 className="font-semibold mb-3">Compliance</h3>
-                    <p className="text-muted">Built for regulated markets with proper KYC/AML, custody, and reporting frameworks.</p>
+                    <p className="text-muted">{pageCopy.pillars?.[1]?.body[mode] || 'Built for regulated markets with proper KYC/AML, custody, and reporting frameworks.'}</p>
                   </div>
                   <div>
                     <h3 className="font-semibold mb-3">Liquidity</h3>
-                    <p className="text-muted">Deep, stable markets through multiple venue support and institutional-grade infrastructure.</p>
+                    <p className="text-muted">{pageCopy.pillars?.[2]?.body[mode] || 'Deep, stable markets through multiple venue support and institutional-grade infrastructure.'}</p>
                   </div>
                   <div>
                     <h3 className="font-semibold mb-3">Governance</h3>
-                    <p className="text-muted">Community-driven evolution with transparent decision-making and clear upgrade paths.</p>
+                    <p className="text-muted">Change controls, multisig approvals, and transparent change logs.</p>
                   </div>
                 </div>
               </Card>
@@ -103,9 +104,43 @@ export default function WhitepaperPage() {
                 </div>
               </Card>
             </SectionWrapper>
+
+            {pageCopy.sections?.map((sec, idx) => (
+              <section key={`${idx}-${mode}`} className="mt-10">
+                <div className="glass glass--panel p-6 md:p-8 rounded-xl">
+                  <ModeTextSwap
+                    as="h2"
+                    depKey={`wp-sec-${idx}-heading-${mode}`}
+                    className="text-xl md:text-2xl font-semibold h-on-gradient"
+                    content={sec.heading[mode]}
+                  />
+                  <div className="mt-4 space-y-4 sub-on-gradient">
+                    {sec.paragraphs[mode].map((p, i) => (
+                      <ModeTextSwap
+                        key={i}
+                        as="p"
+                        depKey={`wp-sec-${idx}-p-${i}-${mode}`}
+                        className="leading-relaxed"
+                        content={p}
+                      />
+                    ))}
+                  </div>
+                  {sec.highlight?.[mode] ? (
+                    <div className="mt-5 rounded-lg px-4 py-3" style={{ background: 'rgba(255,255,255,0.10)' }}>
+                      <ModeTextSwap
+                        as="div"
+                        depKey={`wp-sec-${idx}-hl-${mode}`}
+                        className="text-sm opacity-90"
+                        content={sec.highlight[mode]}
+                      />
+                    </div>
+                  ) : null}
+                </div>
+              </section>
+            ))}
           </div>
         </div>
       </PageHero>
-    </>
+    </PageTheme>
   )
 }

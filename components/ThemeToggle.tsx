@@ -3,30 +3,65 @@
 import { useEffect, useState } from 'react'
 
 export default function ThemeToggle() {
-  const [dark, setDark] = useState<boolean | null>(null)
+  const [theme, setTheme] = useState<'light' | 'dark' | null>(null)
 
   useEffect(() => {
-    const saved = typeof window !== 'undefined' ? localStorage.getItem('theme') : null
-    const isDark = saved === 'dark'
-    document.documentElement.classList.toggle('dark', isDark)
-    setDark(isDark)
+    const mq = window.matchMedia('(prefers-color-scheme: dark)')
+    const systemDark = mq.matches
+    const stored = (localStorage.getItem('theme') as 'light' | 'dark' | null)
+    const initial = stored ?? (systemDark ? 'dark' : 'light')
+    setTheme(initial)
+    document.documentElement.classList.toggle('dark', initial === 'dark')
   }, [])
 
-  if (dark === null) return null
+  useEffect(() => {
+    if (!theme) return
+    localStorage.setItem('theme', theme)
+    document.documentElement.classList.toggle('dark', theme === 'dark')
+    
+    // Add sparkle effect on theme change
+    const sparkleEl = document.querySelector('.sparkle-once');
+    if (sparkleEl) {
+      sparkleEl.classList.remove('sparkle-once');
+      setTimeout(() => sparkleEl.classList.add('sparkle-once'), 10);
+    }
+  }, [theme])
 
-  const toggle = () => {
-    const next = !dark
-    document.documentElement.classList.toggle('dark', next)
-    localStorage.setItem('theme', next ? 'dark' : 'light')
-    setDark(next)
-  }
+  if (theme === null) return null
 
   return (
-    <button 
-      onClick={toggle} 
-      className='rounded-xl border px-3 py-1 text-sm transition-colors bg-[var(--surface-2)] border-[var(--border-soft)] hover:bg-[color-mix(in_srgb,var(--mxtk-orange)_10%,transparent)]'
+    <div
+      className={[
+        'flex items-center gap-1 rounded-full px-1 py-1 glass',
+        'bg-[var(--accent,#ffb84d)]/10',
+        'border border-[var(--accent,#ffb84d)]/25',
+        'shadow-sm'
+      ].join(' ')}
+      role="group"
+      aria-label="Theme"
     >
-      {dark ? 'Light' : 'Dark'} mode
-    </button>
+      <button
+        onClick={() => setTheme('light')}
+        aria-pressed={theme === 'light'}
+        className={[
+          'px-3 py-1 rounded-full text-sm transition',
+          'focus:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--mxtk-orange)_60%,transparent)]',
+          theme === 'light' ? 'bg-[color-mix(in_srgb,var(--mxtk-orange)_30%,transparent)] dark:bg-[color-mix(in_srgb,var(--mxtk-orange)_34%,transparent)] shadow-sm' : 'opacity-85 hover:opacity-100'
+        ].join(' ')}
+      >
+        Light
+      </button>
+      <button
+        onClick={() => setTheme('dark')}
+        aria-pressed={theme === 'dark'}
+        className={[
+          'px-3 py-1 rounded-full text-sm transition',
+          'focus:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--mxtk-orange)_60%,transparent)]',
+          theme === 'dark' ? 'bg-[color-mix(in_srgb,var(--mxtk-orange)_30%,transparent)] dark:bg-[color-mix(in_srgb,var(--mxtk-orange)_34%,transparent)] shadow-sm' : 'opacity-85 hover:opacity-100'
+        ].join(' ')}
+      >
+        Dark
+      </button>
+    </div>
   )
 }

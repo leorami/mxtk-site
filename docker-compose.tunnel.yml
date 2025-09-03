@@ -2,10 +2,10 @@ version: '3.8'
 
 services:
   web:
+    container_name: mxtk-site-dev
     build: .
-    ports:
-      - "2000:2000"
     environment:
+      - PORT=2000
       - BASIC_AUTH_ENABLED=1       # enable auth over tunnel (optional)
     networks:
       - devproxy
@@ -13,4 +13,5 @@ services:
 networks:
   devproxy:
     external: true
+    name: devproxy
 

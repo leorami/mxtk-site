@@ -1,10 +1,15 @@
+'use client'
+
 import PageHero from '@/components/PageHero'
 import SectionWrapper from '@/components/SectionWrapper'
+import { useCopy } from '@/components/copy/Copy'
+import ModeTextSwap from '@/components/experience/ModeTextSwap'
 import Card from '@/components/ui/Card'
 import { FeatureRow } from '@/components/ui/List'
 import BackgroundPhoto from '@/components/visuals/BackgroundPhoto'
 
 export default function RoadmapPage() {
+  const { mode, pageCopy } = useCopy('roadmap')
   return (
     <>
       <BackgroundPhoto variant="roadmap" />
@@ -12,17 +17,13 @@ export default function RoadmapPage() {
         <div className="relative">
           <div className="space-y-0">
             <SectionWrapper index={0} className="text-center">
-              <h1 className="text-4xl md:text-6xl font-bold tracking-tight text-slate-900 dark:text-slate-50 drop-shadow-[0_1px_1px_rgba(0,0,0,0.25)]">
-                Roadmap
-              </h1>
-              <p className="text-xl text-muted max-w-3xl mx-auto">
-                Indicative milestones subject to verification and partner timelines. Our path to building the future of mineral tokenization.
-              </p>
+              <ModeTextSwap as="h1" depKey={`roadmap-hero-title-${mode}`} className="text-4xl md:text-6xl font-bold tracking-tight text-slate-900 dark:text-slate-50 drop-shadow-[0_1px_1px_rgba(0,0,0,0.25)]" content={pageCopy.heroTitle[mode]} />
+              <ModeTextSwap as="p" depKey={`roadmap-hero-sub-${mode}`} className="text-xl text-muted max-w-3xl mx-auto" content={pageCopy.heroSub[mode]} />
             </SectionWrapper>
 
             <SectionWrapper index={1}>
               <Card tint="amber">
-                <h2 className="text-2xl font-semibold mb-6">Q3-Q4 2025</h2>
+                <ModeTextSwap as="h2" depKey={`roadmap-p0-title-${mode}`} className="text-2xl font-semibold mb-6" content={pageCopy.pillars?.[0]?.title[mode] || 'Q3-Q4 2025'} />
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   <div className="text-center">
                     <div className="text-3xl font-bold mb-2">📋</div>
@@ -82,6 +83,39 @@ export default function RoadmapPage() {
           </div>
         </div>
       </PageHero>
+      {pageCopy.sections?.map((sec, idx) => (
+        <section key={`${idx}-${mode}`} className="mt-10">
+          <div className="glass glass--panel p-6 md:p-8 rounded-xl">
+            <ModeTextSwap
+              as="h2"
+              depKey={`roadmap-sec-${idx}-heading-${mode}`}
+              className="text-xl md:text-2xl font-semibold h-on-gradient"
+              content={sec.heading[mode]}
+            />
+            <div className="mt-4 space-y-4 sub-on-gradient">
+              {sec.paragraphs[mode].map((p, i) => (
+                <ModeTextSwap
+                  key={i}
+                  as="p"
+                  depKey={`roadmap-sec-${idx}-p-${i}-${mode}`}
+                  className="leading-relaxed"
+                  content={p}
+                />
+              ))}
+            </div>
+            {sec.highlight?.[mode] ? (
+              <div className="mt-5 rounded-lg px-4 py-3" style={{ background: 'rgba(255,255,255,0.10)' }}>
+                <ModeTextSwap
+                  as="div"
+                  depKey={`roadmap-sec-${idx}-hl-${mode}`}
+                  className="text-sm opacity-90"
+                  content={sec.highlight[mode]}
+                />
+              </div>
+            ) : null}
+          </div>
+        </section>
+      ))}
     </>
   )
 }

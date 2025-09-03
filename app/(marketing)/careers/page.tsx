@@ -1,18 +1,34 @@
+'use client'
+
 import PageHero from '@/components/PageHero'
 import SectionWrapper from '@/components/SectionWrapper'
+import { useCopy } from '@/components/copy/Copy'
+import ModeTextSwap from '@/components/experience/ModeTextSwap'
 import PageTheme from '@/components/theme/PageTheme'
 import Card from '@/components/ui/Card'
 import { FeatureRow } from '@/components/ui/List'
 import PhotoBackdrop from '@/components/visuals/PhotoBackdrop'
 
 export default function Careers() {
+  const { mode, pageCopy } = useCopy('careers');
+
   return (
-    <PageTheme ink="warm" lift="M">
+    <PageTheme ink="dark" lift="M" glass="soft">
       <PhotoBackdrop src="art/photos/careers_amber.jpg" />
       <PageHero>
         <SectionWrapper index={0} className="text-center">
-          <h1 className="text-4xl md:text-6xl font-bold tracking-tight">Careers</h1>
-          <p className="text-xl max-w-3xl mx-auto">Employment opportunities with Mineral Token.</p>
+          <ModeTextSwap
+            as="h1"
+            depKey={`careers-hero-title-${mode}`}
+            className="text-4xl md:text-6xl font-bold tracking-tight"
+            content={pageCopy.heroTitle[mode]}
+          />
+          <ModeTextSwap
+            as="p"
+            depKey={`careers-hero-sub-${mode}`}
+            className="text-xl max-w-3xl mx-auto"
+            content={pageCopy.heroSub[mode]}
+          />
         </SectionWrapper>
 
       <SectionWrapper index={1}>

@@ -1,0 +1,31 @@
+version: "3.9"
+
+services:
+  # Second dev server that "lives" under /mxtk
+  web_mxtk:
+    container_name: mxtk-site-dev-mxtk
+    image: node:20-alpine
+    working_dir: /app
+    command: [ "sh", "-lc", "corepack enable || true; if command -v pnpm >/dev/null 2>&1; then pnpm install; pnpm dev; elif command -v yarn >/dev/null 2>&1; then yarn; yarn dev; else npm i; npm run dev; fi" ]
+    environment:
+      - NODE_ENV=development
+      - HOST=0.0.0.0
+      - PORT=2000
+      - NEXT_PUBLIC_BASE_PATH=/mxtk
+      - NEXT_DIST_DIR=.next-mxtk
+      - NGROK_SKIP_BROWSER_WARNING=true
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - /app/.next-mxtk
+    expose:
+      - "2000"  # only to docker networks; not published to host
+    networks:
+      default: {}
+      devproxy:
+        aliases:
+          - mxtk-app    # stable upstream hostname for the proxy
+
+networks:
+  devproxy:
+    external: true

@@ -1,6 +1,6 @@
 'use client';
 
-import { usePublicPath } from '@/lib/routing/getPublicPathClient';
+
 import clsx from 'clsx';
 import React from 'react';
 
@@ -58,7 +58,7 @@ export default function BackgroundImage({
   overlayClassName,
   ...rest
 }: BackgroundImageProps) {
-  const url = usePublicPath(src);
+  const url = src;
 
   return (
     <div className={clsx('relative', className)} {...rest}>

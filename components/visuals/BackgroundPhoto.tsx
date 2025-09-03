@@ -1,6 +1,8 @@
 'use client';
-import { usePublicPath } from "@/lib/routing/getPublicPathClient";
+
 import cn from "classnames";
+import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 
 type Variant =
   | "home"
@@ -45,15 +47,22 @@ export default function BackgroundPhoto({
   opacity?: number; // 0–1 in case we ever need a dimmer
 }) {
   const file = MAP[variant];
-  const src = file ? usePublicPath(`art/photos/${file}`) : "";
+  const src = file ? `/art/photos/${file}` : "";
 
-  return (
+  // Render the fixed background via a portal so it doesn't become the
+  // first child in the route segment (avoids Next auto-scroll warning).
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => { setMounted(true); }, []);
+  if (!mounted) return null;
+
+  return createPortal(
     <div
       aria-hidden
       className={cn(
         "pointer-events-none fixed inset-x-0 top-[var(--nav-height,theme(spacing.14))] bottom-[var(--footer-height,theme(spacing.20))] -z-10",
         className
       )}
+      suppressHydrationWarning
     >
       {src ? (
         <img
@@ -67,7 +76,8 @@ export default function BackgroundPhoto({
       ) : (
         <div className="w-full h-full bg-[radial-gradient(1200px_600px_at_50%_-200px,rgba(255,184,77,.35),transparent),linear-gradient(180deg,rgba(0,0,0,.05),transparent)] dark:bg-[radial-gradient(1200px_600px_at_50%_-200px,rgba(88,120,255,.18),transparent),linear-gradient(180deg,rgba(255,255,255,.04),transparent)]" />
       )}
-    </div>
+    </div>,
+    document.body
   );
 }
 

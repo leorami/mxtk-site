@@ -1,7 +1,11 @@
+'use client'
+
 import BasePathLink from '@/components/BasePathLink'
 import OrganizationLogoGrid from '@/components/OrganizationLogoGrid'
 import PageHero from '@/components/PageHero'
 import SectionWrapper from '@/components/SectionWrapper'
+import { useCopy } from '@/components/copy/Copy'
+import ModeTextSwap from '@/components/experience/ModeTextSwap'
 import PageTheme from '@/components/theme/PageTheme'
 import Card from '@/components/ui/Card'
 import { FeatureRow } from '@/components/ui/List'
@@ -9,6 +13,7 @@ import PhotoBackdrop from '@/components/visuals/PhotoBackdrop'
 import { PLACEHOLDER_ORGANIZATIONS } from '@/lib/placeholders'
 
 export default function MXTKCaresPage() {
+  const { mode, pageCopy } = useCopy('mxtk-cares');
 
   // Filter organizations for success stories (health and disaster relief categories)
   const successStoryOrganizations = PLACEHOLDER_ORGANIZATIONS.filter(
@@ -16,12 +21,22 @@ export default function MXTKCaresPage() {
   )
 
   return (
-    <PageTheme ink="warm" lift="M">
+    <PageTheme ink="warm" lift="M" glass="soft">
       <PhotoBackdrop src="art/photos/mxtk_cares_amethyst.jpg" />
       <PageHero>
         <SectionWrapper index={0} className="text-center">
-          <h1 className="text-4xl md:text-6xl font-bold tracking-tight">MXTK Cares</h1>
-          <p className="text-xl max-w-3xl mx-auto">Up to $10M in MXTK tokens to 100 nonprofits—innovative funding that works for you during lockup.</p>
+          <ModeTextSwap
+            as="h1"
+            depKey={`mxtk-cares-hero-title-${mode}`}
+            className="text-4xl md:text-6xl font-bold tracking-tight"
+            content={pageCopy.heroTitle[mode]}
+          />
+          <ModeTextSwap
+            as="p"
+            depKey={`mxtk-cares-hero-sub-${mode}`}
+            className="text-xl max-w-3xl mx-auto"
+            content={pageCopy.heroSub[mode]}
+          />
         </SectionWrapper>
 
         <SectionWrapper index={1}>
@@ -30,15 +45,15 @@ export default function MXTKCaresPage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div>
               <h3 className="font-semibold mb-3 text-lg">Nominate</h3>
-              <p className="text-muted text-sm">Submit nonprofit candidates for consideration. We're looking for organizations ready to innovate with token-based funding.</p>
+              <p className="text-sm" style={{color:'var(--ink-muted)'}}>Submit nonprofit candidates for consideration. We're looking for organizations ready to innovate with token-based funding.</p>
             </div>
             <div>
               <h3 className="font-semibold mb-3 text-lg">Vote</h3>
-              <p className="text-muted text-sm">Community selects the top 100 organizations based on impact potential, transparency, and innovation readiness.</p>
+              <p className="text-sm" style={{color:'var(--ink-muted)'}}>Community selects the top 100 organizations based on impact potential, transparency, and innovation readiness.</p>
             </div>
             <div>
               <h3 className="font-semibold mb-3 text-lg">Distribute & Leverage</h3>
-              <p className="text-muted text-sm">MXTK tokens distributed to selected nonprofits with our team's support to maximize their utility during lockup.</p>
+              <p className="text-sm" style={{color:'var(--ink-muted)'}}>MXTK tokens distributed to selected nonprofits with our team's support to maximize their utility during lockup.</p>
             </div>
           </div>
         </Card>
@@ -136,7 +151,7 @@ export default function MXTKCaresPage() {
             </div>
           </div>
 
-          <div className="glass p-6">
+          <div className="glass glass--panel p-6">
             <h3 className="font-semibold mb-3">Success Stories</h3>
             <p className="text-muted text-sm mb-6">
               Organizations in our pilot program have successfully leveraged their MXTK grants to:
@@ -167,7 +182,7 @@ export default function MXTKCaresPage() {
             Ready to transform how your organization accesses and leverages funding? 
             Join the next generation of nonprofit financing.
           </p>
-                        <BasePathLink to="elite-drop/nominate" className="btn-primary">
+          <BasePathLink to="mxtk-cares#nominate" className="btn-primary">
             Nominate a nonprofit
           </BasePathLink>
         </Card>

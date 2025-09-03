@@ -32,7 +32,7 @@
     /* navy tint */
 
     --ink-strong: #0E1116;
-    --ink-muted: #5B6572;
+    --ink-muted: #334155; /* darker muted for WCAG AA on light surfaces */
     --border-soft: #E5E9F0;
 
     /* Shadows / radii */
@@ -44,8 +44,9 @@
 
     /* Typography */
     --h-color: var(--mxtk-navy);
-    --link: #2563eb; /* Better blue for light mode */
-    --link-hover: #1d4ed8;
+    /* Link defaults; will be overridden by ink + mineral */
+    --link: #2448b3;
+    --link-hover: #1a35a0;
     --mxtk-accent-text: var(--mxtk-accent);
 }
 
@@ -58,12 +59,36 @@ html.dark {
     --surface-section-3: rgba(11, 28, 74, .20);
 
     --ink-strong: #E6EAF2;
-    --ink-muted: #9AA3AE;
+    --ink-muted: #C8D1DC; /* lighter muted for WCAG AA on dark surfaces */
     --border-soft: #1E2430;
     --h-color: #F4F7FD;
-    --link: #E6EAF2; /* Same as ink-strong for maximum contrast in dark mode */
+    --link: #E6EAF2; /* matches ink-strong for contrast */
     --link-hover: #F4F7FD;
     --mxtk-accent-text: color-mix(in srgb, var(--mxtk-accent) 58%, #ffffff);
+}
+
+/* Dev Theme Switcher ink mapping -> adjust core color tokens on the fly */
+/* Ink controls TEXT tokens only (not light/dark surfaces) */
+html[data-ink="light"] {
+  --ink-strong: #E6EAF2;   /* bright text */
+  --ink-muted:  #CBD5E1;   /* adjusted for contrast */
+  --h-color:    #F4F7FD;   /* heading tint */
+  --link: #F4F7FD;         /* ensure legible on dark surfaces */
+  --link-hover: #FFFFFF;
+}
+html[data-ink="dark"] {
+  --ink-strong: #0E1116;   /* deep graphite */
+  --ink-muted:  #334155;   /* darker slate for contrast */
+  --h-color:    #0B1C4A;   /* brand navy */
+  --link: #2448b3;
+  --link-hover: #1a35a0;
+}
+html[data-ink="warm"] {
+  --ink-strong: #351E0C;   /* warm espresso */
+  --ink-muted:  #654B37;   /* darker ochre for contrast */
+  --h-color:    #5C3718;   /* rich umber */
+  --link: #4A2F12;
+  --link-hover: #2F1E0B;
 }
 
 /* Mineral "texture" gradient (no heavy images needed) */
@@ -345,6 +370,15 @@ table a:hover {
   border-radius: 16px;
 }
 
+/* High-contrast panel variant for dense backgrounds */
+.glass--panel {
+  /* Raise opacity to ensure WCAG AA against busy photos */
+  --glass-bg: rgba(255, 255, 255, 0.90);
+}
+.dark .glass--panel {
+  --glass-bg: rgba(18, 22, 28, 0.86);
+}
+
 /* Dark mode tune */
 @media (prefers-color-scheme: dark) {
   .glass {
@@ -356,7 +390,7 @@ table a:hover {
 
 /* Cards inside glass sections stay legible */
 .card {
-  background: color-mix(in srgb, var(--glass-bg) 90%, transparent);
+  background: color-mix(in srgb, var(--glass-bg) 96%, transparent);
   border: 1px solid color-mix(in srgb, var(--glass-border) 80%, transparent);
 }
 
@@ -450,14 +484,22 @@ table a:hover {
     border-collapse: collapse;
 }
 
+.table tbody tr:nth-child(even) {
+    background: color-mix(in srgb, var(--surface-page) 90%, #000000 10%);
+}
+
+.table tbody tr:hover {
+    background: color-mix(in srgb, var(--surface-page) 82%, #000000 18%);
+}
+
 .table th,
 .table td {
     border: 1px solid var(--border-soft);
-    padding: .5rem .75rem;
+    padding: .75rem 1rem;
 }
 
 .table thead th {
-    background: rgba(255, 255, 255, .65);
+    background: rgba(255, 255, 255, .85);
 }
 
 html.dark .table thead th {
@@ -521,7 +563,12 @@ html.dark .table thead th {
 /* Ensure header nav links (anchors and buttons) inherit header color, not global link blue */
 .brand-header .nav-link,
 .brand-header a.nav-link {
-    color: inherit;
+    color: var(--ink-strong, #0B0E12) !important;
+}
+
+.dark .brand-header .nav-link,
+.dark .brand-header a.nav-link {
+    color: rgba(255, 255, 255, .92) !important;
 }
 
 /* Keep the accent line slim and elegant */
@@ -687,7 +734,7 @@ html body [data-mineral] h3 {
     font-weight: 600;
     transition: transform .15s, box-shadow .15s, background-color .15s, color .15s;
     background: var(--mxtk-accent);
-    color: #fff;
+    color: var(--mxtk-accent-fg, #0E1116);
 }
 
 .btn-primary:hover {
@@ -756,7 +803,7 @@ html body [data-mineral] h3 {
 [data-mineral] table thead th,
 [data-mineral] th {
     box-shadow: inset 0 -2px 0 var(--mxtk-accent);
-    color: var(--mxtk-accent-text) !important;
+    color: var(--mxtk-accent-fg, var(--mxtk-accent-text)) !important;
 }
 
 [data-mineral] .glass,
@@ -792,7 +839,7 @@ html body [data-mineral] h3 {
 /* Enhanced dark mode primary button contrast */
 .dark .btn-primary {
     background: var(--accent, var(--mxtk-accent));
-    color: #0E1116;
+    color: var(--mxtk-accent-fg, #0E1116);
     border: 1px solid rgba(255, 255, 255, 0.18);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
@@ -964,7 +1011,7 @@ html body [data-mineral] h3 {
 .textarea,
 .glass,
 .card-outline {
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.12);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.15);
@@ -1272,32 +1319,14 @@ h3 + .btn-link {
   background: rgba(255, 255, 255, 0.15);
 }
 
-/* Enhanced navigation with glass effects and proper dark mode highlighting */
+/* Navigation links inherit header colors and use theme-based hover */
 .nav-link {
-  background: rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: inherit;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  border-radius: 10px;
-  padding: 0.5rem 1rem;
 }
 
 .nav-link:hover {
   background: var(--hover-bg);
-  transform: translateY(-0.5px) scale(1.01);
-  box-shadow: 
-    0 3px 8px rgba(0, 0, 0, 0.08),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2);
-  border-color: rgba(255, 255, 255, 0.25);
-}
-
-/* Dark mode navigation with lighter hover colors */
-.dark .nav-link:hover {
-  background: rgba(255, 255, 255, 0.25);
-  color: #0E1116;
-  border-color: rgba(255, 255, 255, 0.4);
-  font-weight: 600;
 }
 
 /* brand background images (full-bleed, behind content) */
@@ -1461,38 +1490,10 @@ h3 + .btn-link {
   color: #F8FAFC !important;
 }
 
-/* Enhanced navigation highlighting for dark mode */
-.dark .nav-link {
-  background: rgba(255, 255, 255, 0.08);
-  color: rgba(255, 255, 255, 0.9);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.dark .nav-link:hover {
-  background: rgba(255, 255, 255, 0.25);
-  color: #0E1116;
-  border-color: rgba(255, 255, 255, 0.4);
-  font-weight: 600;
-}
-
 /* Active page navigation uses the page's theme color */
-.dark .nav-link[aria-current="page"] {
-  background: var(--mxtk-hover-bg);
-  color: var(--mxtk-accent-text);
-  border-color: rgba(var(--mxtk-accent-rgb, 224, 147, 43), 0.4);
+.nav-link[aria-current="page"] {
+  background: var(--hover-bg);
   font-weight: 600;
-  box-shadow: 
-    0 4px 12px rgba(var(--mxtk-accent-rgb, 224, 147, 43), 0.2),
-    inset 0 1px 0 rgba(var(--mxtk-accent-rgb, 224, 147, 43), 0.3);
-}
-
-/* Ensure only the current page gets highlighted, not all pages */
-.dark .nav-link:not([aria-current="page"]):not(:hover) {
-  background: rgba(255, 255, 255, 0.08);
-  color: rgba(255, 255, 255, 0.9);
-  border-color: rgba(255, 255, 255, 0.15);
-  font-weight: normal;
 }
 
 /* Enhanced typography for Ecosystem page and consistency */
@@ -1541,40 +1542,84 @@ h3 + .btn-link {
 
 /* Wave 9: glass tokens consolidated into .glass above */
 
-/* === INK (per-page text color) ========================================== */
-:root {
-  /* default (dark ink on light-ish photos) */
-  --ink-strong: #0f1a2b;
-  --ink:        #1b2434;
-  --ink-weak:   #49566e;
+/* === INK SYSTEM REMOVED TO PREVENT THEME CONFLICTS ===
+   The PageTheme ink system was overriding the main theme toggle system.
+   Pages that need custom text colors should use CSS classes directly. */
 
-  /* light ink for dark photos */
-  --ink-strong-light: #ffffff;
-  --ink-light:        #edf2f7;
-  --ink-weak-light:   #dbe5f3;
-
-  /* warm headings on dark photos (brand-y) */
-  --ink-strong-warm:  #ffc37a;
-  --ink-warm-body:    #ffffff;
+/* === MOBILE LAYOUT IMPROVEMENTS ========================================= */
+/* Consistent mobile spacing and padding */
+@media (max-width: 768px) {
+  /* Ensure proper container padding on mobile */
+  .container {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+  
+  /* Section spacing fixes */
+  .page section,
+  .page .glass {
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+  }
+  
+  /* Card padding improvements */
+  .glass {
+    padding: 1.5rem !important;
+  }
+  
+  /* Text spacing from borders */
+  .glass h1,
+  .glass h2,
+  .glass h3,
+  .glass p {
+    margin-left: 0;
+    margin-right: 0;
+  }
+  
+  /* Hero section mobile spacing */
+  .page .space-y-0 > * + * {
+    margin-top: 2rem;
+  }
+  
+  /* Mobile grid improvements */
+  .grid {
+    gap: 1rem !important;
+  }
+  
+  /* Feature rows mobile layout */
+  .grid.md\\:grid-cols-2,
+  .grid.md\\:grid-cols-3,
+  .grid.md\\:grid-cols-4 {
+    grid-template-columns: 1fr !important;
+  }
+  
+  /* Mobile navigation improvements */
+  .lg\\:hidden .space-y-1 > * + * {
+    margin-top: 0.25rem;
+  }
+  
+  /* Mobile hero text size adjustments */
+  .text-4xl.md\\:text-6xl {
+    font-size: 2.5rem !important;
+    line-height: 1.2 !important;
+  }
+  
+  /* Mobile card spacing */
+  .space-y-0 > section {
+    margin-top: 1.5rem;
+  }
+  
+  /* Ensure mobile tables are responsive */
+  .table {
+    font-size: 0.875rem;
+  }
+  
+  /* Mobile button spacing */
+  .space-y-4.sm\\:space-y-0.sm\\:flex.sm\\:gap-4 {
+    flex-direction: column !important;
+    gap: 1rem !important;
+  }
 }
-
-/* switch via <html data-ink="dark|light|warm"> */
-html[data-ink="dark"]  { --ink-strong:#0f1a2b; --ink:#1b2434; --ink-weak:#49566e; --ink-muted: var(--ink-weak); }
-html[data-ink="light"] { --ink-strong:var(--ink-strong-light); --ink:var(--ink-light); --ink-weak:var(--ink-weak-light); --ink-muted: var(--ink-weak); }
-html[data-ink="warm"]  { --ink-strong:var(--ink-strong-warm); --ink:var(--ink-warm-body); --ink-weak:var(--ink-weak-light); --ink-muted: var(--ink-weak); }
-
-body { color: var(--ink); }
-.h1, h1, .ink-strong { color: var(--ink-strong); }
-.muted, .ink-weak    { color: var(--ink-weak); }
-
-/* Ensure PageTheme ink affects headings and body copy across sections */
-html[data-ink] .page h1,
-html[data-ink] .page h2,
-html[data-ink] .page h3 { color: var(--ink-strong) !important; }
-html[data-ink] .page p,
-html[data-ink] .page li,
-html[data-ink] .page td,
-html[data-ink] .page th { color: var(--ink); }
 
 /* === GLASS TOKENS ======================================================== */
 :root {
@@ -1607,6 +1652,25 @@ html[data-ink] .page th { color: var(--ink); }
   backdrop-filter: blur(var(--glass-strong-blur)) saturate(var(--glass-saturate));
   -webkit-backdrop-filter: blur(var(--glass-strong-blur)) saturate(var(--glass-saturate));
   box-shadow: var(--glass-strong-shadow);
+}
+
+/* Allow the Dev Theme Switcher to control glass intensity via html[data-glass] */
+html[data-glass="soft"] {
+  --glass-bg-alpha: 0.06;
+  --glass-blur: 12px;
+  --glass-border-alpha: 0.08;
+}
+html[data-glass="standard"] {
+  --glass-bg-alpha: 0.08;
+  --glass-blur: 18px;
+  --glass-border-alpha: 0.10;
+  --glass-shadow-main: 0 8px 24px rgba(0,0,0,.18);
+}
+html[data-glass="strong"] {
+  --glass-bg-alpha: var(--glass-strong-bg-alpha);
+  --glass-blur: var(--glass-strong-blur);
+  --glass-border-alpha: 0.14;
+  --glass-shadow-main: var(--glass-strong-shadow);
 }
 
 /* === LIFT (optional brightness mask) ===================================== */

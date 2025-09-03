@@ -1,15 +1,9 @@
-import { getServerPublicPath } from '@/lib/routing/getPublicPathServer';
-
-export default async function Favicons() {
-  const svg = await getServerPublicPath('favicon.svg');
-  const ico = await getServerPublicPath('favicon.ico');
-
+export default function Favicons() {
+  const base = process.env.NEXT_PUBLIC_BASE_PATH || '';
   return (
     <>
-      <link rel="icon" type="image/svg+xml" href={svg} />
-      <link rel="alternate icon" type="image/x-icon" sizes="32x32" href={ico} />
-      <link rel="shortcut icon" href={svg} />
-      <link rel="apple-touch-icon" href={svg} />
+      <link rel="icon" href={`${base}/favicon.ico`} sizes="any" />
+      <link rel="shortcut icon" href={`${base}/favicon.ico`} />
     </>
   );
 }

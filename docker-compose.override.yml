@@ -1,0 +1,13 @@
+version: '3.8'
+services:
+  web:
+    environment:
+      # Free Arbitrum RPC (Premium Alchemy integration coming soon!)
+      - ARBITRUM_RPC_URL=https://arbitrum-one.public.blastapi.io
+      - MXTK_TOKEN_ADDRESS=0x3e4Ffeb394B371AAaa0998488046Ca19d870d9Ba
+      - AUTO_DISCOVER_POOLS=1
+      - DISCOVERY_FEES=100,500,3000,10000
+      - DISCOVERY_QUOTES=0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8,0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9,0xDA10009cBd5D07dd0CeCc66161FC93D7c9000da1
+      - CACHE_TTL_SECONDS=30
+      - STABLE_SYMBOLS=USDC,USDC.e,USDT,DAI
+      - DEXSCREENER_BASE=https://api.dexscreener.com/latest/dex

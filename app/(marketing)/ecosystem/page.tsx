@@ -5,13 +5,13 @@ import SectionWrapper from '@/components/SectionWrapper'
 import PageTheme from '@/components/theme/PageTheme'
 import Card from '@/components/ui/Card'
 import { FeatureRow } from '@/components/ui/List'
-import BackgroundPhoto from '@/components/visuals/BackgroundPhoto'
+import PhotoBackdrop from '@/components/visuals/PhotoBackdrop'
 import { PLACEHOLDER_PARTNERS_ECOSYSTEM } from '@/lib/placeholders'
 
 export default function Ecosystem() {
   return (
-    <PageTheme ink="warm" lift="M">
-      <BackgroundPhoto variant="ecosystem" />
+    <PageTheme ink="dark" lift="M" glass="soft">
+      <PhotoBackdrop src="art/photos/ecosystem_jade.jpg" />
       <PageHero>
         <div className="relative">
           <div className="space-y-0">
@@ -129,7 +129,7 @@ export default function Ecosystem() {
             <SectionWrapper index={7}>
               <Card tint="amber">
                 <h2 className="text-2xl font-semibold mb-6">Join the Ecosystem</h2>
-                <p className="text-muted mb-6">
+                <p className="mb-6" style={{color:'var(--ink-muted)'}}>
                   Interested in partnering with Mineral Token? We're always looking for innovative companies and developers to join our ecosystem.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4">

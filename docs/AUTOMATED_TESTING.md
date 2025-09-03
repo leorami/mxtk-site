@@ -1,6 +1,6 @@
 # Automated Testing for MXTK Site
 
-This document consolidates our testing approach, commands, and troubleshooting for prefix-agnostic navigation and overall site health.
+This document consolidates our testing approach, commands, and troubleshooting for prefix-agnostic navigation, visual accessibility, and overall site health.
 
 ## Overview
 
@@ -10,6 +10,7 @@ Our automated tests verify that:
 - Click-through navigation works across key routes
 - Footer links from legal pages do not incorrectly include `/legal/`
 - Pages load without console or network errors above thresholds
+- Page text meets WCAG 2.1 AA contrast requirements (see Crawl + Contrast Audit below)
 
 ## Test Commands
 
@@ -43,6 +44,19 @@ Primary file: `tools/test/nav-regression.mjs`
 - Verifies footer links on legal pages escape `/legal/`
 - Fails if console/network error counts exceed thresholds
 
+### Crawl + Contrast Audit
+
+Primary file: `tools/test/crawl-regression.mjs`
+
+- Recursively crawls internal links starting from `BASE_URL`
+- Records console/network errors and docker logs for the last window
+- Computes text contrast for common text elements (`a, button, p, h1-3, th, td`), using dynamic background detection per element
+- Fails when any page has contrast below WCAG 2.1 AA:
+  - Normal text: 4.5:1
+  - Large/bold text (>= 24px or >= 18.66px bold): 3.0:1
+  
+Artifacts are written to `tools/debug/output/reports/*.json` with a `contrastTotals.violations` count per run.
+
 Additional debug utilities live in `tools/debug/`:
 - `debug.js`: theme/CSS variable checks, screenshots, and error thresholding
 - `debug-links.js`: prints links currently rendered in the DOM (manual inspection)
@@ -60,8 +74,13 @@ Artifacts (screenshots/reports) are written under `tools/debug/output/`.
 
 Recommended pre-deploy checks:
 ```bash
+# Navigation (localhost + ngrok)
 npm run test:nav:localhost
 npm run test:nav:ngrok
+
+# Crawl + contrast
+BASE_URL=http://localhost:2000 node tools/test/crawl-regression.mjs
+BASE_URL=https://<your-ngrok-domain>/mxtk node tools/test/crawl-regression.mjs
 ```
 You can also run the full debug suite via `npm run test:full`.
 

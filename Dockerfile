@@ -7,8 +7,13 @@ WORKDIR /app
 
 # Install libc dependencies commonly required by Next.js sharp/og, etc.
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    ca-certificates git curl openssl libc6-dev \
+  ca-certificates git curl openssl libc6-dev \
   && rm -rf /var/lib/apt/lists/*
+
+# Ensure both corepack pnpm and a global pnpm binary are available
+RUN corepack enable || true \
+  && corepack prepare pnpm@10.15.1 --activate || true \
+  && npm i -g pnpm@10.15.1 || true
 
 # -------- deps layer (with npm ci) --------
 FROM base AS deps
@@ -20,15 +25,18 @@ RUN --mount=type=cache,target=/root/.npm npm ci --no-audit --no-fund
 FROM base AS dev
 ENV NODE_ENV=development
 WORKDIR /app
-COPY --from=deps /app/node_modules ./node_modules
 COPY . .
+
+# Ensure devDependencies are present for Next.js dev (TypeScript types, tooling)
+RUN npm ci --no-audit --no-fund
 
 # Expose Next dev server
 EXPOSE 2000
 
 # Use HOST 0.0.0.0 for container access
 ENV HOST=0.0.0.0
-CMD ["npm","run","dev","--","-p","2000","-H","0.0.0.0"]
+# Ensure deps are installed into the runtime volume before starting dev server
+CMD ["sh","-lc","npm ci --no-audit --no-fund || npm install; npm run dev -- -p 2000 -H 0.0.0.0"]
 
 # -------- build layer --------
 FROM base AS build

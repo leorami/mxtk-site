@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Manual Redirect Test</title>
+    <script>
+        // Capture all network errors including redirects
+        window.addEventListener('error', (e) => {
+            console.log('🔥 WINDOW ERROR:', e.error?.message || e.message);
+            console.log('   Stack:', e.error?.stack);
+        });
+
+        window.addEventListener('unhandledrejection', (e) => {
+            console.log('💀 UNHANDLED REJECTION:', e.reason);
+        });
+
+        // Override fetch to catch network errors
+        const originalFetch = window.fetch;
+        window.fetch = function(...args) {
+            console.log('📤 FETCH:', args[0]);
+            return originalFetch.apply(this, arguments)
+                .catch(error => {
+                    console.log('❌ FETCH ERROR:', error);
+                    if (error.message.includes('ERR_TOO_MANY_REDIRECTS')) {
+                        console.log('🚨 REDIRECT LOOP DETECTED IN FETCH:', args[0]);
+                    }
+                    throw error;
+                });
+        };
+
+        // Test specific _next URLs that might be causing issues
+        function testNextUrls() {
+            const testUrls = [
+                'https://ramileo.ngrok.app/_next/',
+                'https://ramileo.ngrok.app/_next/static/chunks/webpack.js',
+                'https://ramileo.ngrok.app/_next/static/chunks/main-app.js'
+            ];
+
+            testUrls.forEach(url => {
+                console.log(`\n🔍 Testing: ${url}`);
+                fetch(url)
+                    .then(response => {
+                        console.log(`✅ ${response.status} ${response.statusText} - ${url}`);
+                    })
+                    .catch(error => {
+                        console.log(`❌ ERROR - ${url}:`, error);
+                        if (error.message.includes('ERR_TOO_MANY_REDIRECTS')) {
+                            console.log(`🚨 CONFIRMED REDIRECT LOOP: ${url}`);
+                        }
+                    });
+            });
+        }
+
+        // Load the institutions page in an iframe to catch errors
+        function loadInstitutionsPage() {
+            console.log('\n🔍 Loading institutions page in iframe...');
+            const iframe = document.createElement('iframe');
+            iframe.src = 'https://ramileo.ngrok.app/mxtk/institutions';
+            iframe.style.width = '100%';
+            iframe.style.height = '600px';
+            iframe.onload = () => {
+                console.log('✅ Institutions page loaded successfully');
+            };
+            iframe.onerror = (error) => {
+                console.log('❌ Institutions page failed to load:', error);
+            };
+            document.body.appendChild(iframe);
+        }
+    </script>
+</head>
+<body>
+    <h1>Manual Redirect Loop Test</h1>
+    <p>Open browser console to see results</p>
+    <button onclick="testNextUrls()">Test _next URLs</button>
+    <button onclick="loadInstitutionsPage()">Load Institutions Page</button>
+    
+    <script>
+        console.log('🚀 Manual redirect test loaded');
+        console.log('User Agent:', navigator.userAgent);
+        console.log('Location:', window.location.href);
+    </script>
+</body>
+</html>
