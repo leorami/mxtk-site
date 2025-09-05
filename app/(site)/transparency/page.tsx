@@ -33,9 +33,9 @@ export default function TransparencyPage() {
                 Trust & Transparency
               </h1>
               <div className="flex justify-center items-center gap-4 mt-4">
-                <AppImage src={getPublicPath('icons/mineral/icon-lattice.svg', pathname)} alt="" width={24} height={24} role="presentation" aria-hidden className="w-6 h-6 opacity-70" />
-                <AppImage src={getPublicPath('icons/mineral/icon-sparkle.svg', pathname)} alt="" width={24} height={24} role="presentation" aria-hidden className="w-6 h-6 opacity-70" />
-                <AppImage src={getPublicPath('icons/mineral/icon-bands.svg', pathname)} alt="" width={24} height={24} role="presentation" aria-hidden className="w-6 h-6 opacity-70" />
+                <AppImage src="icons/mineral/icon-lattice.svg" alt="" width={24} height={24} role="presentation" aria-hidden className="w-6 h-6 opacity-70" />
+                <AppImage src="icons/mineral/icon-sparkle.svg" alt="" width={24} height={24} role="presentation" aria-hidden className="w-6 h-6 opacity-70" />
+                <AppImage src="icons/mineral/icon-bands.svg" alt="" width={24} height={24} role="presentation" aria-hidden className="w-6 h-6 opacity-70" />
               </div>
               <p className="text-xl max-w-3xl mx-auto">
                 Every material statement about MXTK should map to a source: a file, an address, or a method. Until a claim is evidenced, it stays clearly labeled as preview.

@@ -4,7 +4,6 @@ import AppImage from '@/components/ui/AppImage';
 import cn from "classnames";
 
 export default function PhotoBackdrop({ src, className = "", opacity = 1 }: { src: string; className?: string; opacity?: number }) {
-  const imageSrc = `/${src}`;
   return (
     <div
       aria-hidden
@@ -14,7 +13,7 @@ export default function PhotoBackdrop({ src, className = "", opacity = 1 }: { sr
       )}
       suppressHydrationWarning
     >
-      <AppImage src={imageSrc} alt="" fill className="object-cover" style={{ opacity }} priority />
+      <AppImage src={src} alt="" fill className="object-cover" style={{ opacity }} priority />
     </div>
   );
 }

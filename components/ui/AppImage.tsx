@@ -1,10 +1,11 @@
 'use client';
 
+import { useBasePath } from '@/lib/basepath';
 import Image, { ImageProps } from 'next/image';
 
 /**
  * AppImage wraps Next/Image with:
- * - Simple relative URL handling (no basePath complexity)
+ * - Base-path-aware URL handling (respects Next.js basePath)
  * - Unoptimized mode (to avoid optimizer issues)
  *
  * Usage: exactly like <Image />, but with unoptimized images
@@ -12,12 +13,16 @@ import Image, { ImageProps } from 'next/image';
  */
 export default function AppImage(props: Omit<ImageProps, 'src'> & { src: string }) {
   const { src, ...rest } = props;
+  const basePath = useBasePath();
 
   // Ensure src starts with / for public assets
   const normalizedSrc = src.startsWith('/') ? src : `/${src}`;
+  
+  // Apply base path to public assets
+  const basePathAwareSrc = `${basePath}${normalizedSrc}`;
 
-  // Use plain root-relative paths; proxy handles external prefixing
-  return <Image {...rest} src={normalizedSrc} unoptimized />;
+  // Let Next.js Image component handle the rest
+  return <Image {...rest} src={basePathAwareSrc} unoptimized />;
 }
 
 

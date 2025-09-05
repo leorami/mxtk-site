@@ -3,6 +3,7 @@
 import cn from "classnames";
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
+import { useBasePath } from '@/lib/basepath';
 
 type Variant =
   | "home"
@@ -47,7 +48,8 @@ export default function BackgroundPhoto({
   opacity?: number; // 0–1 in case we ever need a dimmer
 }) {
   const file = MAP[variant];
-  const src = file ? `/art/photos/${file}` : "";
+  const basePath = useBasePath();
+  const src = file ? `${basePath}/art/photos/${file}` : "";
 
   // Render the fixed background via a portal so it doesn't become the
   // first child in the route segment (avoids Next auto-scroll warning).

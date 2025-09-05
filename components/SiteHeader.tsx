@@ -4,6 +4,7 @@ import ThemeSwitch from '@/components/ThemeSwitch'
 // import GuideHeaderButton from '@/components/ai/GuideHeaderButton'
 import ExperienceToggle from '@/components/experience/ExperienceToggle'
 
+import { useBasePath } from '@/lib/basepath'
 import { themeForRoute } from '@/lib/brand/theme'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -35,6 +36,8 @@ export default function SiteHeader({ hasHome }: { hasHome?: boolean }) {
   const [open, setOpen] = useState(false)
   const [mounted, setMounted] = useState(false)
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null)
+  const [hoverTimeout, setHoverTimeout] = useState<NodeJS.Timeout | null>(null)
+  const basePath = useBasePath()
   // Use SVG logo for better scaling and base path support
 
   const isHome = (() => {
@@ -47,6 +50,15 @@ export default function SiteHeader({ hasHome }: { hasHome?: boolean }) {
   useEffect(() => {
     setMounted(true)
   }, [])
+
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (hoverTimeout) {
+        clearTimeout(hoverTimeout)
+      }
+    }
+  }, [hoverTimeout])
 
   const getActiveState = (href: string) => {
     const currentPath = pathname || '/'
@@ -61,11 +73,20 @@ export default function SiteHeader({ hasHome }: { hasHome?: boolean }) {
   }
 
   const handleDropdownMouseEnter = (groupName: string) => {
+    // Clear any pending timeout
+    if (hoverTimeout) {
+      clearTimeout(hoverTimeout)
+      setHoverTimeout(null)
+    }
     setActiveDropdown(groupName)
   }
 
   const handleDropdownMouseLeave = () => {
-    setActiveDropdown(null)
+    // Add a small delay before closing to allow moving to dropdown items
+    const timeout = setTimeout(() => {
+      setActiveDropdown(null)
+    }, 150)
+    setHoverTimeout(timeout)
   }
 
   return (
@@ -76,7 +97,7 @@ export default function SiteHeader({ hasHome }: { hasHome?: boolean }) {
             <Link href="/" className="flex items-center justify-center" aria-label="MXTK Home" suppressHydrationWarning>
               <div className="flex items-center justify-center" style={{ position: 'relative', width: 120, height: 36 }}>
                 <Image
-                  src="/logo-horizontal.png"
+                  src={`${basePath}/logo-horizontal.png`}
                   alt="MXTK logo"
                   fill
                   sizes="120px"
@@ -127,7 +148,7 @@ export default function SiteHeader({ hasHome }: { hasHome?: boolean }) {
                   </button>
                   
                   {isDropdownOpen && (
-                    <div className="absolute top-full left-0 mt-1 bg-[var(--surface-card)] border border-[var(--border-soft)] rounded-lg shadow-lg py-1 min-w-[180px] z-50">
+                    <div className="absolute top-full left-0 bg-[var(--surface-card)] border border-[var(--border-soft)] rounded-lg shadow-lg py-1 min-w-[180px] z-50">
                       {groupItems.map(({ href, label }) => {
                         const t = themeForRoute(href)
                         const isItemActive = getActiveState(href)
