@@ -87,17 +87,12 @@ location /mxtk/_next/ {
   proxy_pass http://mxtk-app:2000/mxtk/_next/;
 }
 
-# Convenience for absolute-root public assets
-location /icons/ {
-  proxy_http_version 1.1;
-  proxy_set_header Host $host;
-  proxy_pass http://mxtk-app:2000/icons/;
-}
 
 location ~ ^/((robots\.txt|sitemap\.xml|manifest\.json|site\.webmanifest|apple-touch-icon\.png|favicon\.(ico|png|svg)))$ {
   proxy_http_version 1.1;
   proxy_set_header Host $host;
-  proxy_pass http://mxtk-app:2000/$1;
+  proxy_set_header X-Forwarded-Prefix /mxtk;
+  proxy_pass http://mxtk-app:2000/mxtk/$1;
 }
 
 # Pages/RSC/data
