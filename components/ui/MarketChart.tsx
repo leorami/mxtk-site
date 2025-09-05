@@ -2,6 +2,7 @@
 
 import { useExperience } from '@/components/experience/ClientExperience'
 import { apiGet } from '@/lib/api'
+import AppImage from '@/components/ui/AppImage'
 import { useEffect, useState } from 'react'
 
 interface MarketData {
@@ -144,7 +145,10 @@ export default function MarketChart() {
       {/* Educational Note */}
       {experienceLevel === 'beginner' && (
         <div className="glass p-4 rounded-xl bg-blue-50 border-l-4 border-blue-400">
-          <h4 className="font-semibold text-blue-900 mb-2">💡 New to Token Trading?</h4>
+          <h4 className="font-semibold text-blue-900 mb-2 flex items-center gap-2">
+            <AppImage src="icons/ui/icon-lightbulb.svg" alt="" width={16} height={16} className="w-4 h-4" />
+            New to Token Trading?
+          </h4>
           <p className="text-sm text-blue-800">
             These metrics show how MXTK performs in the market. 
             Higher volume usually means more people are interested in trading. 

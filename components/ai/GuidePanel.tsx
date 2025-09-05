@@ -3,6 +3,7 @@
 // Pin-to-Home removed per UI request
 import Card from '@/components/ui/Card';
 import { getApiPath } from '@/lib/basepath';
+import AppImage from '@/components/ui/AppImage';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -152,12 +153,12 @@ export function GuidePanel({ className, onClose, embedded, prefillPrompt }: Guid
     return (
       <button
         onClick={() => setIsOpen(true)}
-        className="fixed bottom-4 right-16 w-12 h-12 rounded-full shadow-lg text-lg border-2 border-white/20 bg-blue-500 text-white hover:bg-blue-600 transition-colors flex items-center justify-center z-[99]"
+        className="fixed bottom-4 right-16 w-12 h-12 rounded-full shadow-lg border-2 border-white/20 bg-blue-500 text-white hover:bg-blue-600 transition-colors flex items-center justify-center z-[99]"
         aria-label="Open Sherpa"
         data-embedded-hide
         title="Sherpa - Chat with MXTK AI"
       >
-        🤖
+        <AppImage src="icons/ai/icon-sherpa.svg" alt="" width={20} height={20} className="w-5 h-5" />
       </button>
     );
   }
@@ -197,7 +198,7 @@ export function GuidePanel({ className, onClose, embedded, prefillPrompt }: Guid
               }`}
             >
               <div className="text-sm">
-                <strong className={message.role === 'user' ? 'text-gray-900 dark:text-white' : 'text-gray-800 dark:text-gray-800'}>
+                <strong className="chat-sender-text">
                   {message.role === 'user' ? 'You' : 'Sherpa'}:
                 </strong>
                 <div className={`mt-1 prose prose-sm dark:prose-invert leading-relaxed ${message.role === 'user' ? 'text-white' : 'text-gray-800 dark:text-gray-800'}`}>

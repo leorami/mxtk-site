@@ -3,6 +3,7 @@
 // Wave 4: Guide dock and ModeBroker moved into GuideDrawer
 import WhatsNext from '@/components/ai/WhatsNext';
 import { getBasePathUrl } from '@/lib/basepath';
+import AppImage from '@/components/ui/AppImage';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
@@ -71,8 +72,9 @@ export default function JourneyBootstrap() {
             <p className="text-gray-600 dark:text-gray-400 mb-6 max-w-lg mx-auto">
               Your AI guide is ready to help you explore MXTK. Ask your first question to start building your personalized journey.
             </p>
-            <div className="text-sm text-gray-500 dark:text-gray-500">
-              💡 Tip: Try asking "What is MXTK?" or "How do validator incentives work?"
+            <div className="text-sm text-gray-500 dark:text-gray-500 flex items-center gap-1">
+              <AppImage src="icons/ui/icon-lightbulb.svg" alt="" width={16} height={16} className="w-4 h-4" />
+              Tip: Try asking "What is MXTK?" or "How do validator incentives work?"
             </div>
             <div className="mt-6">
               <button
@@ -82,7 +84,8 @@ export default function JourneyBootstrap() {
                 className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 text-sm"
                 aria-label="Open Sherpa"
               >
-                🤖 Open Sherpa
+                <AppImage src="icons/ai/icon-sherpa.svg" alt="" width={16} height={16} className="w-4 h-4" />
+                Open Sherpa
               </button>
             </div>
           </div>

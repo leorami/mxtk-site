@@ -1,10 +1,11 @@
 "use client";
+import AppImage from "@/components/ui/AppImage";
 import { useExperience } from "./ClientExperience";
 
 const modes = [
-  { value: "learn",   label: "Learn",   icon: () => <span aria-hidden>📘</span> },
-  { value: "build",   label: "Build",   icon: () => <span aria-hidden>🚜</span> },
-  { value: "operate", label: "Operate", icon: () => <span aria-hidden>🚛</span> },
+  { value: "learn",   label: "Learn",   icon: () => <AppImage src="icons/experience/icon-learn.svg" alt="" width={16} height={16} className="w-4 h-4" /> },
+  { value: "build",   label: "Build",   icon: () => <AppImage src="icons/experience/icon-build.svg" alt="" width={16} height={16} className="w-4 h-4" /> },
+  { value: "operate", label: "Operate", icon: () => <AppImage src="icons/experience/icon-operate.svg" alt="" width={16} height={16} className="w-4 h-4" /> },
 ] as const;
 
 export default function ExperienceToggle() {
