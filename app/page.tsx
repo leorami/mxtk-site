@@ -25,6 +25,9 @@ export default function Home() {
 
   const href = (path: string) => `/${path}`.replace(/\/{2,}/g, '/')
   const { mode, pageCopy } = useCopy('home')
+  
+  // For AI mode, fall back to build mode content until AI-specific content is added
+  const contentMode = (mode === 'ai') ? 'build' : mode
   const faq = faqJsonLd(
     '/',
     [
@@ -49,18 +52,18 @@ export default function Home() {
             as="h1"
             depKey={`hero-title-${mode}`}
             className="text-4xl md:text-6xl font-bold tracking-tight"
-            content={pageCopy.heroTitle[mode]}
+            content={pageCopy.heroTitle[contentMode]}
           />
           <ModeTextSwap
             as="p"
             depKey={`hero-sub-${mode}`}
             className="text-xl max-w-3xl mx-auto"
-            content={pageCopy.heroSub[mode]}
+            content={pageCopy.heroSub[contentMode]}
           />
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link className="btn-soft" href={href('owners')} suppressHydrationWarning>Mineral Owners</Link>
-            <Link className="btn-soft" href={href('transparency')} suppressHydrationWarning>Trust & Transparency</Link>
-            <Link className="btn-soft" href={href('ecosystem')} suppressHydrationWarning>See the Ecosystem</Link>
+            <Link className="btn-primary" href={href('owners')} suppressHydrationWarning style={{ ['--accent' as any]: 'var(--mxtk-orange)' }}>Mineral Owners</Link>
+            <Link className="btn-primary" href={href('transparency')} suppressHydrationWarning style={{ ['--accent' as any]: 'var(--mxtk-orange)' }}>Trust & Transparency</Link>
+            <Link className="btn-primary" href={href('ecosystem')} suppressHydrationWarning style={{ ['--accent' as any]: 'var(--mxtk-orange)' }}>See the Ecosystem</Link>
           </div>
           
         </SectionWrapper>
@@ -74,13 +77,13 @@ export default function Home() {
                   as="h2"
                   depKey={`p0-title-${mode}`}
                   className="text-2xl font-semibold mb-4"
-                  content={pageCopy.pillars?.[0]?.title[mode]}
+                  content={pageCopy.pillars?.[0]?.title[contentMode]}
                 />
                 <ModeTextSwap
                   as="p"
                   depKey={`p0-body-${mode}`}
                   className="text-muted mb-4"
-                  content={pageCopy.pillars?.[0]?.body[mode]}
+                  content={pageCopy.pillars?.[0]?.body[contentMode]}
                 />
                 <div className="mt-2">
                   <Link className="btn-link" href={href('whitepaper')} suppressHydrationWarning>How MXTK works</Link>
@@ -91,13 +94,13 @@ export default function Home() {
                   as="h2"
                   depKey={`p1-title-${mode}`}
                   className="text-2xl font-semibold mb-4"
-                  content={pageCopy.pillars?.[1]?.title[mode]}
+                  content={pageCopy.pillars?.[1]?.title[contentMode]}
                 />
                 <ModeTextSwap
                   as="p"
                   depKey={`p1-body-${mode}`}
                   className="text-muted mb-4"
-                  content={pageCopy.pillars?.[1]?.body[mode]}
+                  content={pageCopy.pillars?.[1]?.body[contentMode]}
                 />
                 <div className="mt-2">
                   <Link className="btn-link" href={href('transparency')} suppressHydrationWarning>Visit hub</Link>
@@ -141,10 +144,10 @@ export default function Home() {
                 as="h2"
                 depKey={`sec-${idx}-heading-${mode}`}
                 className="text-xl md:text-2xl font-semibold mb-6"
-                content={sec.heading[mode]}
+                content={sec.heading[contentMode]}
               />
               <div className="space-y-4">
-                {sec.paragraphs[mode].map((p, i) => (
+                {(sec.paragraphs[contentMode] || []).map((p, i) => (
                   <ModeTextSwap
                     key={i}
                     as="p"
@@ -154,14 +157,14 @@ export default function Home() {
                   />
                 ))}
               </div>
-              {sec.highlight?.[mode] ? (
+              {sec.highlight?.[contentMode] ? (
                 <div className="mt-5 rounded-lg px-4 py-3"
                      style={{ background: "rgba(255,255,255,0.10)" }}>
                   <ModeTextSwap
                     as="div"
                     depKey={`sec-${idx}-hl-${mode}`}
                     className="text-sm opacity-90"
-                    content={sec.highlight[mode]}
+                    content={sec.highlight[contentMode]}
                   />
                 </div>
               ) : null}

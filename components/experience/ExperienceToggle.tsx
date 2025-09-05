@@ -2,9 +2,9 @@
 import { useExperience } from "./ClientExperience";
 
 const modes = [
-  { value: "learn",   label: "Learn" },
-  { value: "build",   label: "Build" },
-  { value: "operate", label: "Operate" },
+  { value: "learn",   label: "Learn",   icon: () => <span aria-hidden>📘</span> },
+  { value: "build",   label: "Build",   icon: () => <span aria-hidden>🚜</span> },
+  { value: "operate", label: "Operate", icon: () => <span aria-hidden>🚛</span> },
 ] as const;
 
 export default function ExperienceToggle() {
@@ -37,7 +37,10 @@ export default function ExperienceToggle() {
                 : "opacity-85 hover:opacity-100"
             ].join(" ")}
           >
-            {m.label}
+            <span className="inline-flex items-center justify-center w-6">
+              <m.icon />
+              <span className="sr-only">{m.label}</span>
+            </span>
           </button>
         );
       })}

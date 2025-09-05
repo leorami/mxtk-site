@@ -7,7 +7,7 @@ async function runFocusedDiagnostic() {
   console.log('==========================\n');
   
   const browser = await puppeteer.launch({
-    headless: false, // Show browser for debugging
+    headless: 'new', // Always headless
     args: ['--no-sandbox', '--disable-setuid-sandbox']
   });
 
@@ -35,20 +35,19 @@ async function runFocusedDiagnostic() {
   });
 
   try {
-    console.log('Loading https://ramileo.ngrok.app/mxtk...');
-    await page.goto('https://ramileo.ngrok.app/mxtk', { 
+    const target = process.env.DEBUG_URL || 'http://localhost:2000';
+    console.log('Loading ' + target + ' ...');
+    await page.goto(target, { 
       waitUntil: 'domcontentloaded',
       timeout: 15000 
     });
     
-    console.log('Page loaded, waiting for network idle...');
-    await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {
-      console.log('Network idle timeout - continuing anyway');
-    });
+    // Wait a short, bounded time for network to settle (Puppeteer Page API uses setTimeout fallback)
+    await new Promise(r => setTimeout(r, 1500));
 
     // Check for critical elements
     const nav = await page.$('header nav');
-    const themeToggle = await page.$('[aria-label="Theme"]');
+    const themeToggle = await page.$('[aria-label="Theme"], [aria-label="Toggle theme"]');
     const expToggle = await page.$('[aria-label="Experience mode"]');
     const h1 = await page.$('h1');
 
@@ -59,7 +58,7 @@ async function runFocusedDiagnostic() {
     console.log(`H1 Element: ${h1 ? '✅ Found' : '❌ Missing'}`);
 
     if (h1) {
-      const h1Text = await h1.textContent();
+      const h1Text = await page.evaluate(el => el.textContent || '', h1);
       console.log(`H1 Text: "${h1Text}"`);
     }
 
@@ -97,13 +96,26 @@ async function runFocusedDiagnostic() {
       }
     }
 
-    console.log('\n🔍 CHECKING CHUNK LOADING:');
-    // Check for chunk loading errors in console
-    const logs = await page.evaluate(() => {
-      return window.console.history || [];
+    // Capture computed styles for critical layout elements
+    console.log('\n🔍 COMPUTED STYLES:');
+    const dump = await page.evaluate(() => {
+      const sels = ['.guide-drawer', '[data-shiftable-root]', '.brand-footer'];
+      const fields = ['position','right','left','top','bottom','width','height','marginRight','paddingRight','marginBottom'];
+      const out = {};
+      for (const sel of sels) {
+        const el = document.querySelector(sel);
+        if (!el) { out[sel] = { present:false }; continue; }
+        const cs = getComputedStyle(el);
+        const box = el.getBoundingClientRect();
+        const rec = { present:true, rect:{ x:box.x, y:box.y, w:box.width, h:box.height } };
+        for (const f of fields) rec[f] = cs[f];
+        out[sel] = rec;
+      }
+      return out;
     });
+    console.log(JSON.stringify(dump, null, 2));
 
-    console.log('Test completed successfully');
+    console.log('\nTest completed successfully');
 
   } catch (error) {
     console.error(`\n❌ CRITICAL ERROR: ${error.message}`);

@@ -4,11 +4,13 @@ import SectionWrapper from '@/components/SectionWrapper'
 import { useCopy } from '@/components/copy/Copy'
 import ModeTextSwap from '@/components/experience/ModeTextSwap'
 import PageTheme from '@/components/theme/PageTheme'
+import { BulletList } from '@/components/ui/BulletList'
 import Card from '@/components/ui/Card'
 import BackgroundPhoto from '@/components/visuals/BackgroundPhoto'
 
 export default function FAQ() {
   const { mode, pageCopy } = useCopy('faq')
+  const contentMode = (mode === 'ai') ? 'build' : mode;
   return (
     <PageTheme ink="warm" lift="H" glass="soft">
       <BackgroundPhoto variant="faq" />
@@ -16,8 +18,8 @@ export default function FAQ() {
         <div className="relative">
           <div className="space-y-0">
             <SectionWrapper index={0} className="text-center">
-              <ModeTextSwap as="h1" depKey={`faq-hero-title-${mode}`} className="text-4xl md:text-6xl font-bold tracking-tight text-slate-900 dark:text-slate-50 drop-shadow-[0_1px_1px_rgba(0,0,0,0.25)]" content={pageCopy.heroTitle[mode]} />
-              <ModeTextSwap as="p" depKey={`faq-hero-sub-${mode}`} className="text-xl text-muted max-w-3xl mx-auto" content={pageCopy.heroSub[mode]} />
+              <ModeTextSwap as="h1" depKey={`faq-hero-title-${mode}`} className="text-4xl md:text-6xl font-bold tracking-tight text-slate-900 dark:text-slate-50 drop-shadow-[0_1px_1px_rgba(0,0,0,0.25)]" content={pageCopy.heroTitle[contentMode]} />
+              <ModeTextSwap as="p" depKey={`faq-hero-sub-${mode}`} className="text-xl text-muted max-w-3xl mx-auto" content={pageCopy.heroSub[contentMode]} />
             </SectionWrapper>
 
             <SectionWrapper index={1}>
@@ -174,10 +176,10 @@ export default function FAQ() {
               as="h2"
               depKey={`faq-sec-${idx}-heading-${mode}`}
               className="text-xl md:text-2xl font-semibold h-on-gradient"
-              content={sec.heading[mode]}
+              content={sec.heading[contentMode]}
             />
             <div className="mt-4 space-y-4 sub-on-gradient">
-              {sec.paragraphs[mode].map((p, i) => (
+              {sec.paragraphs[contentMode].map((p, i) => (
                 <ModeTextSwap
                   key={i}
                   as="p"
@@ -187,13 +189,13 @@ export default function FAQ() {
                 />
               ))}
             </div>
-            {sec.highlight?.[mode] ? (
+            {sec.highlight?.[contentMode] ? (
               <div className="mt-5 rounded-lg px-4 py-3" style={{ background: 'rgba(255,255,255,0.10)' }}>
                 <ModeTextSwap
                   as="div"
                   depKey={`faq-sec-${idx}-hl-${mode}`}
                   className="text-sm opacity-90"
-                  content={sec.highlight[mode]}
+                  content={sec.highlight[contentMode]}
                 />
               </div>
             ) : null}

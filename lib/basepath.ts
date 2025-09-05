@@ -52,3 +52,10 @@ export function useBasePath(): string {
   if (typeof window === 'undefined') return ''
   return detectBasePath()
 }
+
+/**
+ * Get API path with base path awareness (for fetch requests)
+ */
+export function getApiPath(path: string): string {
+  return getBasePathUrl(path)
+}

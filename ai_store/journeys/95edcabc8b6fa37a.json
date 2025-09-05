@@ -1,0 +1,18 @@
+{
+  "id": "95edcabc8b6fa37a",
+  "createdAt": "2025-09-04T01:16:25.427Z",
+  "updatedAt": "2025-09-04T01:16:25.434Z",
+  "blocks": [
+    {
+      "id": "tmp",
+      "topicKey": "validators",
+      "section": "overview",
+      "title": "Validators",
+      "body": "body with [redacted-email]",
+      "citations": [
+        "X#0"
+      ],
+      "confidence": 0.8
+    }
+  ]
+}

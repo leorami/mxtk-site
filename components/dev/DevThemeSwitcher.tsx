@@ -98,7 +98,7 @@ export default function DevThemeSwitcher() {
 
   // minimal UI
   return (
-    <div className="fixed z-[100] bottom-4 left-1/2 -translate-x-1/2">
+    <div className="fixed z-[100] top-20 left-4">
       {!open ? (
         <button
           onClick={() => setOpen(true)}

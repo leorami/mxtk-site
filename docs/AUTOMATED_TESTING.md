@@ -44,6 +44,17 @@ Primary file: `tools/test/nav-regression.mjs`
 - Verifies footer links on legal pages escape `/legal/`
 - Fails if console/network error counts exceed thresholds
 
+### Guide Drawer + Footer Chat Alignment (New)
+
+Primary file: `tools/test/guide-alignment.mjs`
+
+- Captures `getBoundingClientRect()` for the footer chat input and send button
+- Dispatches `mxtk:guide:open` and re-measures after the drawer opens
+- Asserts:
+  - Input.left equals `drawer.left + --drawer-inner-x` and is unchanged before/after (±1px)
+  - Send button right edge equals viewport right and is unchanged before/after (±1–2px)
+- Verifies copyright line remains single-line (nowrap) with ellipsis on overflow
+
 ### Crawl + Contrast Audit
 
 Primary file: `tools/test/crawl-regression.mjs`

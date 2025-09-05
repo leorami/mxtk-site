@@ -35,6 +35,11 @@ run_nav() {
   BASE_URL="$BASE_URL" node "$(dirname "$0")/test/nav-regression.mjs"
 }
 
+run_guide_alignment() {
+  echo "==> Running guide-alignment.mjs"
+  BASE_URL="$BASE_URL" node "$(dirname "$0")/test/guide-alignment.mjs"
+}
+
 run_crawl() {
   echo "==> Running crawl-regression.mjs"
   BASE_URL="$BASE_URL" node "$(dirname "$0")/test/crawl-regression.mjs"
@@ -43,7 +48,8 @@ run_crawl() {
 case "$MODE" in
   nav) wait_for_health; run_nav;;
   crawl) wait_for_health; run_crawl;;
-  all) wait_for_health; run_nav; run_crawl;;
+  guide) wait_for_health; run_guide_alignment;;
+  all) wait_for_health; run_nav; run_crawl; run_guide_alignment;;
   *) echo "Unknown mode: $MODE" >&2; exit 2;;
 esac
 

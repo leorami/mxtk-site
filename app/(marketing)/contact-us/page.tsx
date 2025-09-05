@@ -9,6 +9,7 @@ import BackgroundPhoto from '@/components/visuals/BackgroundPhoto'
 
 export default function Contact() {
     const { mode, pageCopy } = useCopy('contact')
+    const contentMode = (mode === 'ai') ? 'build' : mode;
     return (
         <PageTheme ink="light" lift="H" glass="soft">
             <BackgroundPhoto variant="contact" />
@@ -16,8 +17,8 @@ export default function Contact() {
                 <div className="relative">
                     <div className="space-y-0">
                         <SectionWrapper index={0} className="text-center">
-                            <ModeTextSwap as="h1" depKey={`contact-hero-title-${mode}`} className="text-4xl md:text-6xl font-bold tracking-tight text-slate-900 dark:text-slate-50 drop-shadow-[0_1px_1px_rgba(0,0,0,0.25)]" content={pageCopy.heroTitle[mode]} />
-                            <ModeTextSwap as="p" depKey={`contact-hero-sub-${mode}`} className="text-xl text-muted max-w-3xl mx-auto" content={pageCopy.heroSub[mode]} />
+                            <ModeTextSwap as="h1" depKey={`contact-hero-title-${mode}`} className="text-4xl md:text-6xl font-bold tracking-tight text-slate-900 dark:text-slate-50 drop-shadow-[0_1px_1px_rgba(0,0,0,0.25)]" content={pageCopy.heroTitle[contentMode]} />
+                            <ModeTextSwap as="p" depKey={`contact-hero-sub-${mode}`} className="text-xl text-muted max-w-3xl mx-auto" content={pageCopy.heroSub[contentMode]} />
                         </SectionWrapper>
                         <SectionWrapper index={1}>
                             <form className="grid gap-3 md:grid-cols-2">
@@ -39,10 +40,10 @@ export default function Contact() {
                                         as="h2"
                                         depKey={`contact-sec-${idx}-heading-${mode}`}
                                         className="text-xl md:text-2xl font-semibold mb-6"
-                                        content={sec.heading[mode]}
+                                        content={sec.heading[contentMode]}
                                     />
                                     <div className="space-y-4">
-                                        {sec.paragraphs[mode].map((p, i) => (
+                                        {sec.paragraphs[contentMode].map((p, i) => (
                                             <ModeTextSwap
                                                 key={i}
                                                 as="p"
@@ -52,13 +53,13 @@ export default function Contact() {
                                             />
                                         ))}
                                     </div>
-                                    {sec.highlight?.[mode] ? (
+                                    {sec.highlight?.[contentMode] ? (
                                         <div className="mt-5 rounded-lg px-4 py-3" style={{ background: 'rgba(255,255,255,0.10)' }}>
                                             <ModeTextSwap
                                                 as="div"
                                                 depKey={`contact-sec-${idx}-hl-${mode}`}
                                                 className="text-sm opacity-90"
-                                                content={sec.highlight[mode]}
+                                                content={sec.highlight[contentMode]}
                                             />
                                         </div>
                                     ) : null}

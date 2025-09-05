@@ -108,7 +108,7 @@ EOF2
 }
 
 main() {
-  local cmd="${1:-all}"; shift || true
+  local cmd="${1:-apply}"; shift || true
   case "$cmd" in
     install|typecheck|lint|build|clean|format|status|all) "cmd_${cmd}" "$@";;
     apply) cmd_apply "${1:-}";;

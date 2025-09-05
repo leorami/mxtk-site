@@ -49,8 +49,8 @@
     --border-soft: #E5E9F0;
 
     /* Shadows / radii */
-    --radius-xl: 1rem;
-    --radius-2xl: 1.25rem;
+    --radius-xl: 1.25rem;
+    --radius-2xl: 1.5rem;
     --shadow-inner-top: 0 1px 0 rgba(255, 255, 255, .35);
     --shadow-lift: 0 16px 42px -20px rgba(0, 0, 0, .22), 0 8px 18px -10px rgba(0, 0, 0, .14);
     --shadow-lift-sm: 0 8px 20px -12px rgba(0, 0, 0, .18), 0 4px 10px -6px rgba(0, 0, 0, .12);
@@ -629,6 +629,46 @@ html.dark .table thead th {
 
 .brand-footer a:hover {
     color: #fff;
+}
+
+/* Visual tie between drawer and footer: create a subtle cap behind footer chat */
+.brand-footer .footer-chat-dock {
+    background: rgba(255,255,255,.06);
+    border: 0;
+    border-radius: 0;
+    padding: 0; /* full-width alignment with drawer */
+    display: flex;
+    align-items: center;
+    justify-content: flex-start; /* align form to left edge */
+    border-left: 1px solid rgba(255,255,255,.10); /* match drawer border */
+}
+
+/* Center controls vertically and match container height */
+.brand-footer .footer-chat-dock form { width: 100%; }
+.brand-footer .footer-chat-dock form>div { height: 100%; align-items: center; }
+.brand-footer .footer-chat-dock input { height: calc(var(--footer-height) - 12px); border-radius: 0.75rem !important; }
+.brand-footer .footer-chat-dock button { height: calc(var(--footer-height) - 24px); width: calc(var(--footer-height) - 24px); border-radius: 0.75rem !important; }
+
+/* Absolutely pin chat dock to the right of footer and prevent shifts */
+.brand-footer .footer-chat-absolute {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    z-index: 60;
+    /* Width equals drawer width; left inset handled by inner padding */
+    width: var(--guide-width);
+    height: var(--footer-height);
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+.brand-footer .footer-chat-absolute .footer-chat-dock { width: 100%; height: 100%; padding-left: var(--drawer-inner-x); padding-right: 0; }
+
+/* Keep copyright on one line; hide overflow on tight layouts */
+.brand-footer .footer-copyright {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 /* Headings & key links derive from page accent */

@@ -1,0 +1,18 @@
+{
+  "id": "ebbd6c95b11ea2e8",
+  "createdAt": "2025-09-03T22:21:04.834Z",
+  "updatedAt": "2025-09-03T22:21:04.834Z",
+  "blocks": [
+    {
+      "id": "7c1a2610-5ca0-40a5-b181-d4b954d4d480",
+      "topicKey": "mxtk-s-validator-system-is-designed-with-sophisticated-game-theory",
+      "section": "validation",
+      "title": "MXTK's validator system is designed with sophisticated game theory:",
+      "body": "MXTK's validator system is designed with sophisticated game theory:\n\n• **Staking Requirements**: Validators must stake MXTK tokens proportional to asset complexity\n• **Reputation System**: Multi-faceted, on-chain profiles that resist manipulation\n• **Dual Rewards**: Both integrity fees and minting bonuses incentivize honest participation\n• **Slashing Penalties**: Dynamic penalties that increase exponentially for coordinated attacks\n\nThis creates a self-regulating ecosystem where honest validation is the most profitable strategy.\n\nThese concepts form the foundation of MXTK's approach to institutional-grade tokenized assets.",
+      "citations": [
+        "Forging a New Asset Class.docx"
+      ],
+      "confidence": 0.8
+    }
+  ]
+}

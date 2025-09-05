@@ -279,6 +279,9 @@ async function testPage(browser, url, { checkFooterLegalEscape = false } = {}) {
       await page.close();
     }
 
+    // 5) MXTK Wave1 additions: Test Guide and Dev Ingest pages
+    await testMXTKWave1(browser, BASE_URL);
+
     console.log('✅ nav-regression: all checks passed');
     process.exit(0);
   } catch (err) {
@@ -288,3 +291,152 @@ async function testPage(browser, url, { checkFooterLegalEscape = false } = {}) {
     await browser.close();
   }
 })();
+
+// MXTK Wave1 additions
+import fs from 'node:fs';
+
+async function testGuide(browser, base) {
+  const page = await browser.newPage();
+  await page.setViewport({ width: 1280, height: 900 });
+  
+  // Capture console errors
+  const consoleErrors = [];
+  page.on('console', msg => { 
+    const t = msg.type(); 
+    if(t === 'error' || t === 'warning') { 
+      consoleErrors.push(`Console ${t}: ${msg.text()}`);
+    } 
+  });
+
+  await gotoWithRetry(page, `${base}/guide`);
+  
+  // Look for the Sherpa button
+  const btn = await page.$('button[aria-label="Open Sherpa"]');
+  if(!btn) throw new Error('Guide launcher button not found on /guide page');
+  
+  // Get computed styles
+  const styles = await page.evaluate(el => {
+    const s = getComputedStyle(el); 
+    return { position: s.position, zIndex: s.zIndex, borderRadius: s.borderRadius };
+  }, btn);
+  
+  // Ensure temp directory exists
+  fs.mkdirSync('.tmp/mxtk', { recursive: true });
+  fs.writeFileSync('.tmp/mxtk/guide-launcher-styles.json', JSON.stringify(styles, null, 2));
+  
+  // Take screenshot
+  await page.screenshot({ path: '.tmp/mxtk/guide-page.png', fullPage: true });
+  
+  if (consoleErrors.length > 0) {
+    throw new Error(`Guide page console errors: ${consoleErrors.join('; ')}`);
+  }
+  
+  await page.close();
+}
+
+async function testHome(browser, base) {
+  const page = await browser.newPage();
+  await page.setViewport({ width: 1280, height: 900 });
+  
+  await gotoWithRetry(page, base);
+  await page.screenshot({ path: '.tmp/mxtk/home.png', fullPage: true });
+  
+  await page.close();
+}
+
+async function testMXTKWave1(browser, base) {
+  console.log('Running MXTK Wave1 tests...');
+  await testGuide(browser, base);
+  await testHome(browser, base);
+  console.log('✅ MXTK Wave1 tests passed');
+}
+
+// Wave 2 checks
+async function assertVisible(page, sel){ await page.waitForSelector(sel,{timeout:5000}); const box=await page.$eval(sel,el=>({d: getComputedStyle(el).display, v: !!(el.offsetWidth||el.offsetHeight)})); if(box.d==='none'||!box.v) throw new Error(`${sel} not visible`); }
+async function assertHidden(page, sel){ await page.waitForSelector(sel,{timeout:5000}); const d=await page.$eval(sel,el=>getComputedStyle(el).display); if(d!=='none') throw new Error(`${sel} not hidden`); }
+export async function runWave2(page, base){
+  page.on('console', msg=>{ const t=msg.type(); if(t==='error'||t==='warning'){ throw new Error('Console '+t+': '+msg.text()); } });
+  // Desktop
+  await page.setViewport({ width:1366, height:900, deviceScaleFactor: 1 });
+  await page.goto(base, { waitUntil:'networkidle0' });
+  await assertVisible(page, '[data-testid="nav-links"]');
+  await assertHidden(page, '[data-testid="nav-toggle"]');
+  await assertVisible(page, '[data-testid="experience-controls-desktop"]');
+  await assertVisible(page, '[data-testid="ai-button"]');
+  await page.screenshot({ path: '.tmp/mxtk/w2-desktop.png', fullPage:true });
+  // iPad portrait (820 x 1180)
+  await page.setViewport({ width:820, height:1180, deviceScaleFactor: 1 });
+  await page.goto(base, { waitUntil:'networkidle0' });
+  await assertHidden(page, '[data-testid="nav-links"]');
+  await assertVisible(page, '[data-testid="nav-toggle"]');
+  await page.click('[data-testid="nav-toggle"]');
+  // After mobile menu opens, experience controls should be present
+  await assertVisible(page, '[data-testid="experience-controls-mobile"]');
+  await assertVisible(page, '[data-testid="ai-button"]');
+  await page.screenshot({ path: '.tmp/mxtk/w2-ipad-portrait.png', fullPage:true });
+  // iPad landscape (1024 x 768)
+  await page.setViewport({ width:1024, height:768, deviceScaleFactor: 1 });
+  await page.goto(base, { waitUntil:'networkidle0' });
+  await assertHidden(page, '[data-testid="nav-links"]');
+  await assertVisible(page, '[data-testid="nav-toggle"]');
+  await page.screenshot({ path: '.tmp/mxtk/w2-ipad-landscape.png', fullPage:true });
+}
+
+// Wave 3 flow
+export async function runWave3(page, base) {
+  page.on('console', msg => { 
+    const t = msg.type(); 
+    if(t === 'error' || t === 'warning') { 
+      throw new Error('Console '+t+': '+msg.text()); 
+    } 
+  });
+  
+  // Desktop
+  await page.setViewport({ width: 1366, height: 900, deviceScaleFactor: 1 });
+  await page.goto(base, { waitUntil: 'networkidle0' });
+  
+  // Click AI button in experience controls
+  await page.click('button[aria-pressed]:has-text("AI")');
+  
+  // Wait for AI panel to open
+  const inputSel = 'input[placeholder^="Ask about MXTK"],textarea';
+  await page.waitForSelector(inputSel);
+  
+  // Type a question that should trigger auto-append
+  await page.type(inputSel, 'explain validator incentives');
+  await page.keyboard.press('Enter');
+  
+  // Wait for response
+  await page.waitForTimeout(1500);
+  
+  // Find Journey link and click
+  const [link] = await page.$x("//a[contains(., 'Journey') or contains(., 'journey')]");
+  if (!link) throw new Error('Journey link not found');
+  await link.click();
+  
+  // Wait for navigation and check footnotes
+  await page.waitForNavigation({ waitUntil: 'networkidle0' });
+  await page.waitForSelector('aside h3');
+  
+  await page.screenshot({ path: '.tmp/mxtk/w3-journey-desktop.png', fullPage: true });
+  
+  // iPad
+  await page.setViewport({ width: 820, height: 1180, deviceScaleFactor: 1 });
+  await page.goto(base, { waitUntil: 'networkidle0' });
+  
+  // Click AI button in experience controls
+  await page.click('button[aria-pressed]:has-text("AI")');
+  
+  // Wait for AI panel to open
+  await page.waitForSelector(inputSel);
+  
+  await page.screenshot({ path: '.tmp/mxtk/w3-journey-ipad.png', fullPage: true });
+}
+
+if (import.meta.main) {
+  const puppeteer = await import('puppeteer');
+  const base = process.env.BASE_URL || 'http://localhost:2000';
+  const browser = await puppeteer.launch({ headless: 'new' });
+  const page = await browser.newPage();
+  try { await runWave3(page, base); } finally { await browser.close(); }
+}

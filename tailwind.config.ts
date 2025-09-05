@@ -39,6 +39,9 @@ const config: Config = {
       },
       backdropBlur: { xs: '2px' },
       transitionTimingFunction: { 'out-soft': 'cubic-bezier(.22,.61,.36,1)' },
+      screens: {
+        'nav': '985px', // Custom breakpoint for navigation - 40px narrower than lg (1024px)
+      },
     },
   },
   plugins: [],

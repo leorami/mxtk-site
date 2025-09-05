@@ -11,8 +11,8 @@ export default function TermsPage() {
     <PageTheme ink="light" lift="H" glass="soft">
       <PageHero>
         <SectionWrapper index={0} className="text-center">
-          <h1 className="text-4xl md:text-6xl font-bold tracking-tight">{pageCopy.heroTitle[mode]}</h1>
-          <p className="text-xl max-w-3xl mx-auto">{pageCopy.heroSub[mode]}</p>
+          <h1 className="text-4xl md:text-6xl font-bold tracking-tight">{pageCopy.heroTitle[mode === 'ai' ? 'build' : mode]}</h1>
+          <p className="text-xl max-w-3xl mx-auto">{pageCopy.heroSub[mode === 'ai' ? 'build' : mode]}</p>
         </SectionWrapper>
 
         <SectionWrapper index={1}>
@@ -173,9 +173,9 @@ export default function TermsPage() {
         {pageCopy.sections?.map((sec, idx) => (
           <section key={`${idx}-${mode}`} className="mt-10">
             <div className="glass glass--panel p-6 md:p-8 rounded-xl copy-swap">
-              <h2 className="text-xl md:text-2xl font-semibold h-on-gradient">{sec.heading[mode]}</h2>
+              <h2 className="text-xl md:text-2xl font-semibold h-on-gradient">{sec.heading[mode === 'ai' ? 'build' : mode]}</h2>
               <div className="mt-4 space-y-4 sub-on-gradient">
-                {sec.paragraphs[mode].map((p, i) => (
+                {sec.paragraphs[mode === 'ai' ? 'build' : mode].map((p, i) => (
                   <p key={i} className="leading-relaxed">{p}</p>
                 ))}
               </div>

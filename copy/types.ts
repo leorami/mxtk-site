@@ -1,4 +1,7 @@
-export type XMode = "learn" | "build" | "operate";
+export type XMode = "ai" | "learn" | "build" | "operate";
+export type Quadlet<T = string> = { ai: T; learn: T; build: T; operate: T };
+
+// Legacy support - use Quadlet for new content
 export type Triplet<T = string> = { learn: T; build: T; operate: T };
 
 export type Pillar = {

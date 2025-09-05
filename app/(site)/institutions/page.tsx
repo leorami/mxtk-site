@@ -33,13 +33,13 @@ export default function InstitutionsPage() {
             as="h1"
             depKey={`institutions-hero-title-${mode}`}
             className="text-4xl md:text-6xl font-bold tracking-tight"
-            content={pageCopy.heroTitle[mode]}
+            content={pageCopy.heroTitle[mode === 'ai' ? 'build' : mode]}
           />
           <ModeTextSwap
             as="p"
             depKey={`institutions-hero-sub-${mode}`}
             className="text-xl max-w-3xl mx-auto"
-            content={pageCopy.heroSub[mode]}
+            content={pageCopy.heroSub[mode === 'ai' ? 'build' : mode]}
           />
         </SectionWrapper>
 
@@ -115,13 +115,13 @@ export default function InstitutionsPage() {
                     as="h3"
                     depKey={`institutions-pillar-${idx}-title-${mode}`}
                     className="text-ink font-semibold mb-3"
-                    content={pillar.title[mode]}
+                    content={pillar.title[mode === 'ai' ? 'build' : mode]}
                   />
                   <ModeTextSwap
                     as="p"
                     depKey={`institutions-pillar-${idx}-body-${mode}`}
                     className="text-ink-subtle"
-                    content={pillar.body[mode]}
+                    content={pillar.body[mode === 'ai' ? 'build' : mode]}
                   />
                 </div>
               ))}
@@ -137,10 +137,10 @@ export default function InstitutionsPage() {
                 as="h2"
                 depKey={`institutions-section-${idx}-heading-${mode}`}
                 className="text-2xl font-semibold mb-6"
-                content={section.heading[mode]}
+                content={section.heading[mode === 'ai' ? 'build' : mode]}
               />
               <div className="space-y-4">
-                {section.paragraphs[mode].map((paragraph, pIdx) => (
+                {section.paragraphs[mode === 'ai' ? 'build' : mode].map((paragraph, pIdx) => (
                   <ModeTextSwap
                     key={pIdx}
                     as="p"
@@ -150,13 +150,13 @@ export default function InstitutionsPage() {
                   />
                 ))}
               </div>
-              {section.highlight?.[mode] && (
+              {section.highlight?.[mode === 'ai' ? 'build' : mode] && (
                 <div className="mt-6 p-4 rounded-lg bg-black/10 dark:bg-white/10">
                   <ModeTextSwap
                     as="p"
                     depKey={`institutions-section-${idx}-highlight-${mode}`}
                     className="text-sm font-medium"
-                    content={section.highlight[mode]}
+                    content={section.highlight[mode === 'ai' ? 'build' : mode]}
                   />
                 </div>
               )}

@@ -3,14 +3,19 @@ import BrandThemeProvider from '@/components/BrandThemeProvider'
 import Favicons from '@/components/Favicons'
 import SiteFooter from '@/components/SiteFooter'
 import SiteHeader from '@/components/SiteHeader'
+// FooterChatBarMountEffect removed - chat moved to drawer
+import PageChromeVars from '@/components/chrome/PageChromeVars'
 import DevThemeSwitcher from '@/components/dev/DevThemeSwitcher'
 import ExperienceProvider from '@/components/experience/ExperienceProvider'
 
+import GuideHost from '@/components/ai/GuideHost'
 import JsonLd from '@/components/seo/JsonLd'
 import type { Metadata } from 'next'
 import { Roboto, Space_Grotesk } from 'next/font/google'
+import { cookies } from 'next/headers'
 import Script from 'next/script'
 import './globals.css'
+import './styles/guide-drawer.css'
 import './styles/minerals.css'
 import './styles/motion.css'
 
@@ -33,8 +38,10 @@ export const metadata: Metadata = {
     description: 'Digitizing verified mineral interests with transparent, governed market plumbing.',
 }
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
     const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
+    const cookieStore = await cookies();
+    const hasHome = Boolean(cookieStore.get('mxtk_home_id')?.value)
     
     return (
         <html lang="en" className={`${roboto.variable} ${roboto.className} ${grotesk.variable}`} suppressHydrationWarning>
@@ -139,17 +146,21 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             </head>
             <body className="page min-h-dvh flex flex-col">
                 <ExperienceProvider>
-                    <SiteHeader />
-                    <main className="relative z-10 flex-1 min-h-0">
+                    <PageChromeVars />
+                    <SiteHeader hasHome={hasHome} />
+                    <main data-shiftable-root className="relative z-10 flex-1 min-h-0">
                         <BrandThemeProvider>
                             {children}
                         </BrandThemeProvider>
                     </main>
                     <SiteFooter />
+                    {/* FooterChatBarMountEffect removed - chat moved to drawer */}
                     {/* Lift overlay behind content (driven by html[data-lift]) */}
                     <div aria-hidden className="page-lift" />
                     {/* Dev switcher (hidden in production) */}
                     <DevThemeSwitcher />
+                    {/* Wave 4: Floating CTA + Drawer host */}
+                    <GuideHost />
                 </ExperienceProvider>
             </body>
         </html>

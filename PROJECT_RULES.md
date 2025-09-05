@@ -77,6 +77,7 @@
    - Write or update unit tests (Jest) and integration tests _before_ or _immediately after_ implementing functionality.
    - Use React Testing Library for component testing.
    - Test user interactions and accessibility.
+   - After any Guide drawer/footer chat change, run `tools/test_runner.sh guide` to verify alignment and console cleanliness.
 
 4. **Component Testing**  
    - Test React components in isolation (unit tests) and in end-to-end scenarios.

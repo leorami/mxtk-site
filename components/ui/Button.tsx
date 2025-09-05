@@ -11,6 +11,7 @@ export default function Button({
   className,
   disabled,
   type = 'button',
+  style,
 }: {
   children: React.ReactNode
   onClick?: () => void
@@ -19,6 +20,7 @@ export default function Button({
   className?: string
   disabled?: boolean
   type?: 'button' | 'submit' | 'reset'
+  style?: React.CSSProperties
 }) {
   const sizeCls =
     size === 'sm' ? 'px-3 py-1.5 text-xs min-h-[32px]'
@@ -39,6 +41,7 @@ export default function Button({
       type={type}
       onClick={onClick}
       disabled={disabled}
+      style={style}
       className={cn(
         'btn inline-flex items-center justify-center font-medium transition-transform duration-[120ms] ease-out-soft hover:scale-105 focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-400/35 disabled:opacity-60 disabled:cursor-not-allowed',
         sizeCls,

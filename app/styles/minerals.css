@@ -1,3 +1,11 @@
+/* Wave 3.1: ensure header cluster wraps gracefully */
+@media (max-width: 1024px){
+  [data-testid="experience-controls"],
+  [data-testid="experience-controls-desktop"],
+  [data-testid="experience-controls-mobile"]{
+    gap: .5rem;
+  }
+}
 /* --- Full-bleed gradient tokens (low-contrast, modern) --- */
 .bg-amber {
   background:
@@ -142,3 +150,13 @@
         url("/art/owners_light_wave_bottom.svg") bottom / cover no-repeat;
 }
 .dark .band-owners::before { background-image: url("/art/owners_band_dark.png"); }
+
+/* Wave 2: iPad hamburger enforcement */
+@media (max-width: 1024px){
+  [data-testid="nav-links"]{ display:none !important; }
+  [data-testid="nav-toggle"]{ display:inline-flex !important; }
+}
+@media (min-width: 1025px){
+  [data-testid="nav-links"]{ display:flex !important; }
+  [data-testid="nav-toggle"]{ display:none !important; }
+}

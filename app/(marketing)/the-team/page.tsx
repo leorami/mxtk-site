@@ -73,8 +73,8 @@ export default function Team() {
                 <div className="relative">
                     <div className="space-y-0">
                         <SectionWrapper index={0} className="text-center space-y-6">
-                            <ModeTextSwap as="h1" depKey={`team-hero-title-${mode}`} className="text-4xl md:text-6xl font-bold tracking-tight text-slate-900 dark:text-slate-50 drop-shadow-[0_1px_1px_rgba(0,0,0,0.25)]" content={pageCopy.heroTitle[mode]} />
-                            <ModeTextSwap as="p" depKey={`team-hero-sub-${mode}`} className="text-xl max-w-3xl mx-auto" content={pageCopy.heroSub[mode]} />
+                            <ModeTextSwap as="h1" depKey={`team-hero-title-${mode}`} className="text-4xl md:text-6xl font-bold tracking-tight text-slate-900 dark:text-slate-50 drop-shadow-[0_1px_1px_rgba(0,0,0,0.25)]" content={pageCopy.heroTitle[mode === 'ai' ? 'build' : mode]} />
+                            <ModeTextSwap as="p" depKey={`team-hero-sub-${mode}`} className="text-xl max-w-3xl mx-auto" content={pageCopy.heroSub[mode === 'ai' ? 'build' : mode]} />
                         </SectionWrapper>
 
                         <SectionWrapper index={1}>
@@ -201,10 +201,10 @@ export default function Team() {
                                         as="h2"
                                         depKey={`team-sec-${idx}-heading-${mode}`}
                                         className="text-xl md:text-2xl font-semibold mb-6"
-                                        content={sec.heading[mode]}
+                                        content={sec.heading[mode === 'ai' ? 'build' : mode]}
                                     />
                                     <div className="space-y-4">
-                                        {sec.paragraphs[mode].map((p, i) => (
+                                        {sec.paragraphs[mode === 'ai' ? 'build' : mode].map((p, i) => (
                                             <ModeTextSwap
                                                 key={i}
                                                 as="p"
@@ -214,13 +214,13 @@ export default function Team() {
                                             />
                                         ))}
                                     </div>
-                                    {sec.highlight?.[mode] ? (
+                                    {sec.highlight?.[mode === 'ai' ? 'build' : mode] ? (
                                         <div className="mt-5 rounded-lg px-4 py-3" style={{ background: 'rgba(255,255,255,0.10)' }}>
                                             <ModeTextSwap
                                                 as="div"
                                                 depKey={`team-sec-${idx}-hl-${mode}`}
                                                 className="text-sm opacity-90"
-                                                content={sec.highlight[mode]}
+                                                content={sec.highlight[mode === 'ai' ? 'build' : mode]}
                                             />
                                         </div>
                                     ) : null}

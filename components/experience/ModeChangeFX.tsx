@@ -14,7 +14,7 @@ export default function ModeChangeFX({ mode }: { mode: XMode }) {
     setFlash(true);
     const t = setTimeout(() => setFlash(false), 900);
     return () => clearTimeout(t);
-  }, [mode]);
+  }, []); // Remove mode dependency to prevent infinite loop
 
   return (
     <>

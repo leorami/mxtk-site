@@ -4,16 +4,33 @@ import { useEffect, useState } from 'react'
 
 function SunIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
-    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.75" {...props}>
-      <circle cx="12" cy="12" r="4" />
-      <path d="M12 2v2m0 16v2m10-10h-2M4 12H2m15.5 6.5-1.4-1.4M7.9 7.9 6.5 6.5m11 0-1.4 1.4M7.9 16.1 6.5 17.5" />
+    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" {...props}>
+      {/* Main sun body with gradient-like effect */}
+      <circle cx="12" cy="12" r="4" fill="#FFD700" stroke="#FFA500" strokeWidth="0.5" />
+      <circle cx="12" cy="12" r="3" fill="#FFED4A" />
+      <circle cx="12" cy="12" r="2" fill="#FFF59D" />
+      
+      {/* Sun rays - longer and more prominent */}
+      <g fill="#E8A53A" stroke="#E8A53A" strokeWidth="0.5">
+        {/* Cardinal directions - longer rays */}
+        <rect x="11.5" y="1" width="1" height="4" rx="0.5" />
+        <rect x="11.5" y="19" width="1" height="4" rx="0.5" />
+        <rect x="1" y="11.5" width="4" height="1" rx="0.5" />
+        <rect x="19" y="11.5" width="4" height="1" rx="0.5" />
+        
+        {/* Diagonal rays */}
+        <rect x="4.5" y="4.5" width="1" height="3" rx="0.5" transform="rotate(45 5 6)" />
+        <rect x="18.5" y="4.5" width="1" height="3" rx="0.5" transform="rotate(135 19 6)" />
+        <rect x="4.5" y="16.5" width="1" height="3" rx="0.5" transform="rotate(-45 5 18)" />
+        <rect x="18.5" y="16.5" width="1" height="3" rx="0.5" transform="rotate(-135 19 18)" />
+      </g>
     </svg>
   )
 }
 function MoonIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
-    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.75" {...props}>
-      <path d="M21 12.8A8.5 8.5 0 0 1 11.2 3 7.5 7.5 0 1 0 21 12.8z" />
+    <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor" {...props}>
+      <path d="M21 12.8A9 9 0 1 1 11.2 3 7.5 7.5 0 0 0 21 12.8z" />
     </svg>
   )
 }
@@ -34,12 +51,10 @@ export default function ThemeSwitch() {
     <button
       onClick={toggle}
       aria-label="Toggle theme"
-      className="nav-link nav-pill inline-flex items-center gap-2 border px-3 py-1.5 text-[13px] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-400/35"
-      style={{ ['--hover-bg' as any]: 'var(--mxtk-hover-bg)', color: 'inherit' }}
+      className="nav-link nav-pill inline-flex items-center justify-center w-9 h-9"
+      style={{ ['--hover-bg' as any]: 'var(--mxtk-hover-bg)', color: dark ? '#FFFFFF' : '#E8A53A' }}
+      title={dark ? 'Switch to light' : 'Switch to dark'}
     >
-      <div className={`relative h-5 w-10 rounded-full ${dark ? 'bg-[color-mix(in_srgb,black_25%,transparent)]' : 'bg-[color-mix(in_srgb,black_15%,transparent)]'}`}>
-        <div className={`absolute top-0.5 h-4 w-4 rounded-full bg-[var(--surface-card)] shadow-[var(--shadow-lift-sm)] transition-all duration-200 ${dark ? 'right-0.5' : 'left-0.5'}`} />
-      </div>
       {dark ? <MoonIcon /> : <SunIcon />}
     </button>
   )

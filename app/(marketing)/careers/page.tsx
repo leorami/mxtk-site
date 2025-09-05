@@ -11,6 +11,7 @@ import PhotoBackdrop from '@/components/visuals/PhotoBackdrop'
 
 export default function Careers() {
   const { mode, pageCopy } = useCopy('careers');
+  const contentMode = (mode === 'ai') ? 'build' : mode;
 
   return (
     <PageTheme ink="light" lift="H" glass="soft">
@@ -21,13 +22,13 @@ export default function Careers() {
             as="h1"
             depKey={`careers-hero-title-${mode}`}
             className="text-4xl md:text-6xl font-bold tracking-tight"
-            content={pageCopy.heroTitle[mode]}
+            content={pageCopy.heroTitle[contentMode]}
           />
           <ModeTextSwap
             as="p"
             depKey={`careers-hero-sub-${mode}`}
             className="text-xl max-w-3xl mx-auto"
-            content={pageCopy.heroSub[mode]}
+            content={pageCopy.heroSub[contentMode]}
           />
         </SectionWrapper>
 

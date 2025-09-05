@@ -1,5 +1,7 @@
 'use client'
 import ThemeSwitch from '@/components/ThemeSwitch'
+
+// import GuideHeaderButton from '@/components/ai/GuideHeaderButton'
 import ExperienceToggle from '@/components/experience/ExperienceToggle'
 
 import { themeForRoute } from '@/lib/brand/theme'
@@ -10,21 +12,29 @@ import { CSSProperties, useEffect, useState } from 'react'
 
 type Item = { href: string; label: string }
 
-const TOP_ORDER: Item[] = [
-  { href: 'owners', label: 'Owners' },
-  { href: 'institutions', label: 'Institutions' },
-  { href: 'transparency', label: 'Transparency' },
-  { href: 'ecosystem', label: 'Ecosystem' },
-  { href: 'whitepaper', label: 'Whitepaper' },
-  { href: 'faq', label: 'FAQ' },
-  { href: 'mxtk-cares', label: 'MXTK Cares' },
-  { href: 'resources', label: 'Resources' },
-]
+// Navigation groups for dropdown menus
+const NAVIGATION_GROUPS = {
+  "Who's it for": [
+    { href: 'owners', label: 'Owners' },
+    { href: 'institutions', label: 'Institutions' },
+  ],
+  "Transparency": [
+    { href: 'ecosystem', label: 'Ecosystem' },
+    { href: 'transparency', label: 'Trust & Verification' },
+    { href: 'whitepaper', label: 'Whitepaper' },
+    { href: 'resources', label: 'Resources' },
+    { href: 'faq', label: 'FAQ' },
+  ],
+  "Programs": [
+    { href: 'mxtk-cares', label: 'MXTK Cares' },
+  ]
+}
 
-export default function SiteHeader() {
+export default function SiteHeader({ hasHome }: { hasHome?: boolean }) {
   const pathname = usePathname() || '/'
   const [open, setOpen] = useState(false)
   const [mounted, setMounted] = useState(false)
+  const [activeDropdown, setActiveDropdown] = useState<string | null>(null)
   // Use SVG logo for better scaling and base path support
 
   const isHome = (() => {
@@ -46,53 +56,111 @@ export default function SiteHeader() {
     return currentPath.endsWith(`/${leaf}`) || currentPath.includes(`/${leaf}/`)
   }
 
+  const isGroupActive = (groupItems: Item[]) => {
+    return groupItems.some(item => getActiveState(item.href))
+  }
+
+  const handleDropdownMouseEnter = (groupName: string) => {
+    setActiveDropdown(groupName)
+  }
+
+  const handleDropdownMouseLeave = () => {
+    setActiveDropdown(null)
+  }
+
   return (
     <header className="sticky top-0 z-50" suppressHydrationWarning>
       <div className="brand-header">
         <div className="mx-auto flex max-w-none items-center justify-between px-4" style={{ height: '76px' }}>
           <div className="flex items-center gap-3">
-            <Link href="/" className="flex items-center" aria-label="MXTK Home" suppressHydrationWarning>
-              <div style={{ position: 'relative', width: 120, height: 32 }}>
+            <Link href="/" className="flex items-center justify-center" aria-label="MXTK Home" suppressHydrationWarning>
+              <div className="flex items-center justify-center" style={{ position: 'relative', width: 120, height: 36 }}>
                 <Image
                   src="/logo-horizontal.png"
                   alt="MXTK logo"
                   fill
                   sizes="120px"
                   priority
+                  style={{ objectFit: 'contain' }}
                 />
               </div>
             </Link>
+            {/* GuideHeaderButton removed per Wave 4 */}
           </div>
 
-          <nav className="hidden lg:flex items-center gap-1">
-            {TOP_ORDER.map(({ href, label }) => {
-              const t = themeForRoute(href)
-              const isActive = getActiveState(href)
-              // Let Next.js basePath handle prefixing automatically
-              const navHref = `/${href}`
-
+          <nav data-testid="nav-links" className="hidden nav:flex items-center justify-center gap-1 relative">
+            {hasHome && (
+              <Link
+                href="/home"
+                className="nav-link nav-pill px-3 py-2 rounded-lg transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-400/35"
+                suppressHydrationWarning
+              >
+                Home
+              </Link>
+            )}
+            
+            {Object.entries(NAVIGATION_GROUPS).map(([groupName, groupItems]) => {
+              const isActive = isGroupActive(groupItems)
+              const isDropdownOpen = activeDropdown === groupName
+              
               return (
-                <Link
-                  key={href}
-                  href={navHref}
-                  aria-current={isActive ? 'page' : undefined}
-                  className="nav-link nav-pill px-3 py-2 rounded-lg transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-400/35"
-                  style={{ ['--hover-bg' as any]: t.hoverBg } as CSSProperties}
-                  suppressHydrationWarning
+                <div 
+                  key={groupName}
+                  className="relative"
+                  onMouseEnter={() => handleDropdownMouseEnter(groupName)}
+                  onMouseLeave={handleDropdownMouseLeave}
                 >
-                  {label}
-                </Link>
+                  <button
+                    className={`nav-link nav-pill px-3 py-2 rounded-lg transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-400/35 flex items-center gap-1 ${isActive ? 'font-semibold' : ''}`}
+                    aria-expanded={isDropdownOpen}
+                    aria-haspopup="true"
+                  >
+                    {groupName}
+                    <svg 
+                      className={`w-4 h-4 transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`} 
+                      fill="none" 
+                      stroke="currentColor" 
+                      viewBox="0 0 24 24"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </button>
+                  
+                  {isDropdownOpen && (
+                    <div className="absolute top-full left-0 mt-1 bg-[var(--surface-card)] border border-[var(--border-soft)] rounded-lg shadow-lg py-1 min-w-[180px] z-50">
+                      {groupItems.map(({ href, label }) => {
+                        const t = themeForRoute(href)
+                        const isItemActive = getActiveState(href)
+                        const navHref = `/${href}`
+
+                        return (
+                          <Link
+                            key={href}
+                            href={navHref}
+                            aria-current={isItemActive ? 'page' : undefined}
+                            className={`block px-3 py-2 text-sm hover:bg-[var(--hover-bg)] transition-colors ${isItemActive ? 'font-semibold bg-[var(--hover-bg)]' : ''}`}
+                            style={{ ['--hover-bg' as any]: t.hoverBg } as CSSProperties}
+                            suppressHydrationWarning
+                          >
+                            {label}
+                          </Link>
+                        )
+                      })}
+                    </div>
+                  )}
+                </div>
               )
             })}
           </nav>
 
-          <div className="hidden lg:flex items-center gap-2">
+          <div data-testid="experience-controls-desktop" className="hidden nav:flex items-center justify-center gap-2">
             <ExperienceToggle />
             <ThemeSwitch />
           </div>
 
           <button
-            className="lg:hidden inline-flex items-center justify-center rounded-md border border-[var(--border-soft)] px-4 py-3 text-xl"
+            data-testid="nav-toggle"
+            className="nav:hidden inline-flex items-center justify-center rounded-md border border-[var(--border-soft)] px-4 py-2 text-xl min-h-[36px]"
             aria-label="Toggle menu"
             onClick={() => setOpen(!open)}
           >
@@ -103,28 +171,43 @@ export default function SiteHeader() {
       <div className="brand-accent-line"></div>
 
       {open && (
-        <div className="lg:hidden border-t border-[var(--border-soft)] bg-[var(--surface-2)]">
+        <div className="nav:hidden border-t border-[var(--border-soft)] bg-[var(--surface-2)]">
           <div className="mx-auto max-w-none px-3 py-2 space-y-0.5 overflow-y-auto max-h-[calc(100dvh-90px)]">
-            <div className="grid grid-cols-2 gap-1">
-            {TOP_ORDER.map(({ href, label }) => {
-              const isActive = getActiveState(href)
-              // Let Next.js basePath handle prefixing automatically for mobile
-              const navHref = `/${href}`
-              return (
-                <Link
-                  key={href}
-                  href={navHref}
-                  className="block px-3 py-1 rounded-lg hover:bg-[var(--hover-bg)]"
-                  style={{ ['--hover-bg' as any]: themeForRoute(href).hoverBg } as CSSProperties}
-                  onClick={() => setOpen(false)}
-                  aria-current={isActive ? 'page' : undefined}
-                  suppressHydrationWarning
-                >
-                  {label}
-                </Link>
-              )
-            })}
-            </div>
+            {hasHome && (
+              <Link
+                href="/home"
+                className="block px-3 py-2 rounded-lg hover:bg-[var(--hover-bg)] font-medium"
+                onClick={() => setOpen(false)}
+                suppressHydrationWarning
+              >
+                Home
+              </Link>
+            )}
+            
+            {Object.entries(NAVIGATION_GROUPS).map(([groupName, groupItems]) => (
+              <div key={groupName} className="py-2">
+                <div className="text-sm font-semibold text-muted mb-2 px-3">{groupName}</div>
+                <div className="space-y-1">
+                  {groupItems.map(({ href, label }) => {
+                    const isActive = getActiveState(href)
+                    const navHref = `/${href}`
+                    return (
+                      <Link
+                        key={href}
+                        href={navHref}
+                        className={`block px-3 py-2 text-sm rounded-lg hover:bg-[var(--hover-bg)] transition-colors ${isActive ? 'font-semibold bg-[var(--hover-bg)]' : ''}`}
+                        style={{ ['--hover-bg' as any]: themeForRoute(href).hoverBg } as CSSProperties}
+                        onClick={() => setOpen(false)}
+                        aria-current={isActive ? 'page' : undefined}
+                        suppressHydrationWarning
+                      >
+                        {label}
+                      </Link>
+                    )
+                  })}
+                </div>
+              </div>
+            ))}
             
             {/* Legal Links Section */}
             <div className="pt-4 border-t border-[var(--border-soft)]/30">
@@ -155,9 +238,8 @@ export default function SiteHeader() {
             </div>
             
             <div className="pt-3 space-y-2">
-              <div className="flex items-center gap-2">
+              <div data-testid="experience-controls-mobile" className="flex items-center gap-2">
                 <ExperienceToggle />
-                <ThemeSwitch />
               </div>
             </div>
           </div>

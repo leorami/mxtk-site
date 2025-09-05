@@ -1,0 +1,18 @@
+{
+  "id": "2fb67194220f4ee8",
+  "createdAt": "2025-09-04T01:25:52.365Z",
+  "updatedAt": "2025-09-04T01:25:52.366Z",
+  "blocks": [
+    {
+      "id": "2bf13d46-1149-451b-8013-de55caca7286",
+      "topicKey": "mxtk-uses-decentralized-oracle-networks-dons-to-ensure-data-integrity",
+      "section": "overview",
+      "title": "MXTK uses Decentralized Oracle Networks (DONs) to ensure data integrity:",
+      "body": "MXTK uses Decentralized Oracle Networks (DONs) to ensure data integrity:\n\n• **Multiple Sources**: Data aggregated from dozens of independent sources\n• **Tamper Resistance**: Cryptographic verification prevents manipulation\n• **Real-time Updates**: Continuous monitoring of asset valuations and status\n• **Insurance Backing**: Specialized oracle manipulation insurance provides additional coverage\n\nThis multi-layered approach ensures reliable, verifiable data feeds for all tokenized assets.\n\nThese concepts form the foundation of MXTK's approach to institutional-grade tokenized assets.",
+      "citations": [
+        "Forging a New Asset Class.docx"
+      ],
+      "confidence": 0.8
+    }
+  ]
+}
