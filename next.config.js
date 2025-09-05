@@ -5,8 +5,15 @@ const DIST_DIR = process.env.NEXT_DIST_DIR || undefined;
 const nextConfig = {
   // Use basePath only when running under /mxtk (set via env in the mxtk dev container)
   basePath: BASE_PATH || undefined,
+  // CRITICAL: assetPrefix ensures static assets are served from the correct path
+  // When basePath is set, assetPrefix must also be set to the same value
+  assetPrefix: BASE_PATH || undefined,
   distDir: DIST_DIR,
-  images: { unoptimized: true },
+  images: { 
+    unoptimized: true,
+    // Ensure images are served from the correct base path
+    path: BASE_PATH ? `${BASE_PATH}/_next/image` : '/_next/image',
+  },
   experimental: { optimizePackageImports: [] },
 
   async headers() {

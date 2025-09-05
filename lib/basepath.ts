@@ -4,23 +4,12 @@
 
 /**
  * Detect if we're running behind the /mxtk proxy
- * Uses headers on server-side, pathname on client-side
+ * Uses environment variable on server-side, pathname on client-side
  */
 export function detectBasePath(): string {
   if (typeof window === 'undefined') {
-    // Server-side: check if we have proxy headers
-    try {
-      // In Next.js middleware, we can access headers
-      const { headers } = require('next/headers')
-      const headersList = headers()
-      const forwardedPrefix = headersList.get('x-forwarded-prefix')
-      if (forwardedPrefix === '/mxtk') {
-        return '/mxtk'
-      }
-    } catch (e) {
-      // Headers not available, assume direct access
-    }
-    return ''
+    // Server-side: use environment variable
+    return process.env.NEXT_PUBLIC_BASE_PATH || ''
   }
   
   const pathname = window.location.pathname
@@ -49,7 +38,10 @@ export function getBasePathUrl(path: string): string {
  * Hook for React components to get current base path
  */
 export function useBasePath(): string {
-  if (typeof window === 'undefined') return ''
+  if (typeof window === 'undefined') {
+    // Server-side: use environment variable
+    return process.env.NEXT_PUBLIC_BASE_PATH || ''
+  }
   return detectBasePath()
 }
 
