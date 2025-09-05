@@ -23,17 +23,17 @@
 
 :root {
     /* Brand core */
-    --mxtk-orange: #E0932B;
+    --mxtk-orange: rgb(223, 145, 42);
     /* logo orange */
-    --mxtk-navy: #0B1C4A;
+    --mxtk-navy: rgb(11, 28, 74);
     /* logo navy */
-    --mxtk-teal: #0FBF9F;
+    --mxtk-teal: rgb(15, 189, 157);
     /* accent */
-    --mxtk-copper: #C97E3D;
+    --mxtk-copper: rgb(201, 126, 61);
     /* secondary accent */
 
     /* Neutrals / surfaces (light) */
-    --surface-page: #F6F8FC;
+    --surface-page: rgb(246, 248, 252);
     /* quartz */
     --surface-card: rgba(255, 255, 255, .78);
     --surface-card-emb: rgba(255, 255, 255, .88);
@@ -44,9 +44,9 @@
     --surface-section-3: rgba(11, 28, 74, .06);
     /* navy tint */
 
-    --ink-strong: #0E1116;
-    --ink-muted: #334155; /* darker muted for WCAG AA on light surfaces */
-    --border-soft: #E5E9F0;
+    --ink-strong: rgb(14, 17, 22);
+    --ink-muted: rgb(51, 65, 85); /* darker muted for WCAG AA on light surfaces */
+    --border-soft: rgb(229, 233, 240);
 
     /* Shadows / radii */
     --radius-xl: 1.25rem;
@@ -57,51 +57,66 @@
 
     /* Typography */
     --h-color: var(--mxtk-navy);
+    /* Header hierarchy - MXTK orange base with subtle variations */
+    --h1-color: rgb(241, 206, 172);
+    --h2-color: rgb(235, 200, 166);
+    --h3-color: rgb(229, 194, 160);
     /* Link defaults; will be overridden by ink + mineral */
-    --link: #2448b3;
-    --link-hover: #1a35a0;
-    --mxtk-accent-text: var(--mxtk-accent);
+    --link: rgb(36, 72, 179);
+    --link-hover: rgb(26, 53, 160);
+    --mxtk-accent: var(--mxtk-orange)
+;
 }
 
 html.dark {
-    --surface-page: #0B0E12;
+    --surface-page: rgb(11, 14, 18);
     --surface-card: rgba(18, 22, 28, .66);
     --surface-card-emb: rgba(18, 22, 28, .72);
     --surface-section-1: rgba(15, 191, 159, .16);
     --surface-section-2: rgba(224, 147, 43, .16);
     --surface-section-3: rgba(11, 28, 74, .20);
 
-    --ink-strong: #E6EAF2;
-    --ink-muted: #C8D1DC; /* lighter muted for WCAG AA on dark surfaces */
-    --border-soft: #1E2430;
-    --h-color: #F4F7FD;
-    --link: #E6EAF2; /* matches ink-strong for contrast */
-    --link-hover: #F4F7FD;
+    --ink-strong: rgb(230, 234, 242);
+    --ink-muted: rgb(200, 209, 220); /* lighter muted for WCAG AA on dark surfaces */
+    --border-soft: rgb(30, 36, 48);
+    --h-color: rgb(244, 247, 253);
+    --link: rgb(230, 234, 242); /* matches ink-strong for contrast */
+    --link-hover: rgb(244, 247, 253);
     --mxtk-accent-text: color-mix(in srgb, var(--mxtk-accent) 58%, #ffffff);
 }
 
 /* Dev Theme Switcher ink mapping -> adjust core color tokens on the fly */
 /* Ink controls TEXT tokens only (not light/dark surfaces) */
 html[data-ink="light"] {
-  --ink-strong: #E6EAF2;   /* bright text */
-  --ink-muted:  #CBD5E1;   /* adjusted for contrast */
-  --h-color:    #F4F7FD;   /* heading tint */
-  --link: #F4F7FD;         /* ensure legible on dark surfaces */
-  --link-hover: #FFFFFF;
+  --mxtk-accent-text: var(--mxtk-accent);
+  --ink-strong: rgb(230, 234, 242);   /* bright text */
+  --ink-muted:  rgb(203, 213, 225);   /* adjusted for contrast */
+  --h-color:    rgb(244, 247, 253);   /* heading tint */
+  --h1-color: rgba(var(--mxtk-accent-text), 1.1);  /* MXTK orange for h1 */
+  --h2-color: rgba(var(--mxtk-accent-text), 1.05);  /* MXTK orange for h2 */
+  --h3-color: rgba(var(--mxtk-accent-text), 1.0);  /* MXTK orange for h3 */
+  --link: rgb(244, 247, 253);         /* ensure legible on dark surfaces */
+  --link-hover: rgb(255, 255, 255);
 }
 html[data-ink="dark"] {
-  --ink-strong: #0E1116;   /* deep graphite */
-  --ink-muted:  #334155;   /* darker slate for contrast */
-  --h-color:    #0B1C4A;   /* brand navy */
-  --link: #2448b3;
-  --link-hover: #1a35a0;
+  --ink-strong: rgb(14, 17, 22);   /* deep graphite */
+  --ink-muted:  rgb(51, 65, 85);   /* darker slate for contrast */
+  --h-color:    rgb(11, 28, 74);   /* brand navy */
+  --h1-color: rgb(241, 206, 172);  /* MXTK orange for h1 */
+  --h2-color: rgb(235, 200, 166);  /* MXTK orange for h2 */
+  --h3-color: rgb(229, 194, 160);  /* MXTK orange for h3 */
+  --link: rgb(36, 72, 179);
+  --link-hover: rgb(26, 53, 160);
 }
 html[data-ink="warm"] {
-  --ink-strong: #351E0C;   /* warm espresso */
-  --ink-muted:  #654B37;   /* darker ochre for contrast */
-  --h-color:    #5C3718;   /* rich umber */
-  --link: #4A2F12;
-  --link-hover: #2F1E0B;
+  --ink-strong: rgb(53, 30, 12);   /* warm espresso */
+  --ink-muted:  rgb(101, 75, 55);   /* darker ochre for contrast */
+  --h-color:    rgb(92, 55, 24);   /* rich umber */
+  --h1-color: rgb(241, 206, 172);  /* MXTK orange for h1 */
+  --h2-color: rgb(235, 200, 166);  /* MXTK orange for h2 */
+  --h3-color: rgb(229, 194, 160);  /* MXTK orange for h3 */
+  --link: rgb(74, 47, 18);
+  --link-hover: rgb(47, 30, 11);
 }
 
 /* Mineral "texture" gradient (no heavy images needed) */
@@ -167,7 +182,7 @@ html.dark body.page {
 }
 
 [data-mineral]>.space-y-16>section:first-child h1 {
-    color: var(--mxtk-accent-text);
+    color: var(--h1-color);
 }
 
 /* Headings / text (default) */
@@ -585,15 +600,15 @@ html.dark .table thead th {
     backdrop-filter: saturate(1.2) blur(8px);
 }
 
-/* Ensure header nav links inherit header color (ignore page ink tokens) */
+/* Ensure header nav links have proper contrast in both modes */
 .brand-header .nav-link,
 .brand-header a.nav-link {
-    color: inherit !important;
+    color: #0B0E12 !important; /* Dark text for light mode */
 }
 
 .dark .brand-header .nav-link,
 .dark .brand-header a.nav-link {
-    color: inherit !important;
+    color: #E6EAF2 !important; /* Light text for dark mode */
 }
 
 /* Keep the accent line slim and elegant */
@@ -604,13 +619,55 @@ html.dark .table thead th {
 
 /* Dropdown base colors */
 :root {
-    --surface-2: rgba(255, 255, 255, .9);
+    --surface-2: rgba(255, 255, 255, .95);
     --border-soft: rgba(0, 0, 0, .08);
 }
 
 .dark {
     --surface-2: rgba(18, 22, 28, .95);
     --border-soft: rgba(255, 255, 255, .12);
+}
+
+/* Dropdown menu item styling for proper contrast */
+.brand-header .nav-link + div a,
+.brand-header .nav-link + div button {
+    color: #0B0E12 !important; /* Dark text for light mode dropdowns */
+}
+
+.dark .brand-header .nav-link + div a,
+.dark .brand-header .nav-link + div button {
+    color: #E6EAF2 !important; /* Light text for dark mode dropdowns */
+}
+
+/* Ensure dropdown containers have proper background contrast */
+.brand-header .absolute {
+    background: rgba(255, 255, 255, 0.95) !important;
+    border: 1px solid rgba(0, 0, 0, 0.1) !important;
+}
+
+.dark .brand-header .absolute {
+    background: rgba(18, 22, 28, 0.95) !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+}
+
+/* Mobile navigation menu styling */
+.brand-header .nav\\:hidden {
+    background: rgba(255, 255, 255, 0.95) !important;
+    border-top: 1px solid rgba(0, 0, 0, 0.1) !important;
+}
+
+.dark .brand-header .nav\\:hidden {
+    background: rgba(18, 22, 28, 0.95) !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.15) !important;
+}
+
+/* Mobile menu links */
+.brand-header .nav\\:hidden a {
+    color: #0B0E12 !important;
+}
+
+.dark .brand-header .nav\\:hidden a {
+    color: #E6EAF2 !important;
 }
 
 /* Footer (anchored via sticky layout in layout.tsx) */
@@ -673,7 +730,7 @@ html.dark .table thead th {
 
 /* Headings & key links derive from page accent */
 [data-mineral] a.btn-link {
-    color: var(--mxtk-accent-text);
+    color: rgba(var(--mxtk-accent-text), .1);
 }
 
 /* Prevent tailwind base from forcing black headings (but allow themed overrides) */
@@ -799,7 +856,7 @@ html body [data-mineral] h3 {
     font-weight: 600;
     transition: transform .15s, box-shadow .15s, background-color .15s, color .15s;
     background: var(--mxtk-accent);
-    color: var(--mxtk-accent-fg, #0E1116);
+    color: var(--mxtk-accent-fg, var(--mxtk-orange));
 }
 
 .btn-primary:hover {
@@ -893,18 +950,40 @@ html body [data-mineral] h3 {
     box-shadow: var(--shadow-lift-sm);
 }
 
-.btn-primary {
-    @apply btn-base;
-    background: var(--accent, var(--mxtk-accent));
-    color: #0E1116;
+
+
+/* Header hierarchy styling with MXTK orange variations */
+h1 {
+    color: var(--h1-color);
+    filter: brightness(1.1) contrast(1.05);
 }
 
-.btn-primary:hover { filter: brightness(1.04); }
+h2 {
+    color: var(--h2-color);
+    filter: brightness(1.05) contrast(1.02);
+}
+
+h3 {
+    color: var(--h3-color);
+    filter: brightness(1.0) contrast(1.0);
+}
+
+/* Chat sender text styling - warm ink theme with WCAG compliance */
+.chat-sender-text {
+    color: rgb(241, 206, 172);
+    font-weight: 600;
+    filter: contrast(80%);
+}
+
+.chat-sender-text:hover {
+    color: rgb(245, 210, 176);
+    filter: contrast(90%);
+}
 
 /* Enhanced dark mode primary button contrast */
 .dark .btn-primary {
     background: var(--accent, var(--mxtk-accent));
-    color: var(--mxtk-accent-fg, #0E1116);
+    color: var(--mxtk-accent-fg, var(--mxtk-orange));
     border: 1px solid rgba(255, 255, 255, 0.18);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
@@ -971,7 +1050,7 @@ html body [data-mineral] h3 {
     @apply btn-base;
     padding: .25rem 0;
     border-radius: .4rem;
-    color: var(--mxtk-accent);
+    color: rgba(var(--mxtk-accent), .3);
 }
 
 .btn-link:hover {
@@ -1569,8 +1648,16 @@ h3 + .btn-link {
   color: rgba(255, 255, 255, 0.7) !important;
 }
 
-.dark h1, .dark h2, .dark h3 {
-  color: #F8FAFC !important;
+.dark h1 {
+  color: var(--h1-color) !important;
+}
+
+.dark h2 {
+  color: var(--h2-color) !important;
+}
+
+.dark h3 {
+  color: var(--h3-color) !important;
 }
 
 /* Active page navigation uses the page's theme color */

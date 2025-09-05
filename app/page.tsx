@@ -76,7 +76,7 @@ export default function Home() {
                 <ModeTextSwap
                   as="h2"
                   depKey={`p0-title-${mode}`}
-                  className="text-2xl font-semibold mb-4"
+                  className="text-2xl font-semibold mb-6"
                   content={pageCopy.pillars?.[0]?.title[contentMode]}
                 />
                 <ModeTextSwap
@@ -93,7 +93,7 @@ export default function Home() {
                 <ModeTextSwap
                   as="h2"
                   depKey={`p1-title-${mode}`}
-                  className="text-2xl font-semibold mb-4"
+                  className="text-2xl font-semibold mb-6"
                   content={pageCopy.pillars?.[1]?.title[contentMode]}
                 />
                 <ModeTextSwap
