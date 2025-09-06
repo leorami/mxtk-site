@@ -65,7 +65,37 @@ cmd_install()   { pm_run install; }
 cmd_typecheck() { pm_run typecheck || true; }
 cmd_lint()      { pm_run lint || true; }
 cmd_build()     { pm_run build; }
-cmd_clean()     { rm -rf .next .next-mxtk node_modules/.cache || true; }
+cmd_clean()     {
+  echo "==> Cleaning build caches (.next, .next-mxtk, node_modules/.cache)..."
+  # Try host cleanup first
+  if rm -rf .next .next-mxtk node_modules/.cache 2>/dev/null; then
+    return
+  fi
+  echo "Host cleanup failed (likely permissions). Attempting container cleanup..."
+
+  # Track running state so we can restore
+  local WEB_RUNNING=0 MXTk_RUNNING=0
+  if docker compose ps | grep -q "web.*running"; then WEB_RUNNING=1; fi
+  if [ -f "docker-compose.mxtk.yml" ] && docker compose -f docker-compose.yml -f docker-compose.mxtk.yml ps | grep -q "web_mxtk.*running"; then MXTk_RUNNING=1; fi
+
+  # Stop containers to release file locks
+  docker compose stop web >/dev/null 2>&1 || true
+  if [ -f "docker-compose.mxtk.yml" ]; then
+    docker compose -f docker-compose.yml -f docker-compose.mxtk.yml stop web_mxtk >/dev/null 2>&1 || true
+  fi
+
+  # Use ephemeral root container to clean mounted paths (avoids permissions issues)
+  docker compose run --rm -T -u root web sh -lc 'rm -rf /app/.next /app/.next-mxtk /app/node_modules/.cache || true' >/dev/null 2>&1 || true
+  if [ -f "docker-compose.mxtk.yml" ]; then
+    docker compose -f docker-compose.yml -f docker-compose.mxtk.yml run --rm -T -u root web_mxtk sh -lc 'rm -rf /app/.next /app/.next-mxtk /app/node_modules/.cache || true' >/dev/null 2>&1 || true
+  fi
+
+  # Start containers back to their prior state
+  if [ "$WEB_RUNNING" = "1" ]; then docker compose start web >/dev/null 2>&1 || true; fi
+  if [ -f "docker-compose.mxtk.yml" ] && [ "$MXTk_RUNNING" = "1" ]; then
+    docker compose -f docker-compose.yml -f docker-compose.mxtk.yml start web_mxtk >/dev/null 2>&1 || true
+  fi
+}
 cmd_format()    { pm_run format || true; }
 cmd_all()       { cmd_install; cmd_typecheck; cmd_lint; cmd_build; }
 
