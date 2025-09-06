@@ -1,5 +1,5 @@
 'use client'
-import ThemeSwitch from '@/components/ThemeSwitch'
+import HeaderSherpa from '@/components/ai/HeaderSherpa'
 
 // import GuideHeaderButton from '@/components/ai/GuideHeaderButton'
 import ExperienceToggle from '@/components/experience/ExperienceToggle'
@@ -49,6 +49,8 @@ export default function SiteHeader({ hasHome }: { hasHome?: boolean }) {
 
   useEffect(() => {
     setMounted(true)
+    // Ensure closed padding on first paint (SSR mismatch guard)
+    try { document.documentElement.classList.remove('guide-open') } catch {}
   }, [])
 
   // Cleanup timeout on unmount
@@ -91,7 +93,7 @@ export default function SiteHeader({ hasHome }: { hasHome?: boolean }) {
 
   return (
     <header className="sticky top-0 z-50" suppressHydrationWarning>
-      <div className="brand-header">
+      <div className="brand-header header-container">
         <div className="mx-auto flex max-w-none items-center justify-between px-4" style={{ height: '76px' }}>
           <div className="flex items-center gap-3">
             <Link href="/" className="flex items-center justify-center" aria-label="MXTK Home" suppressHydrationWarning>
@@ -106,87 +108,89 @@ export default function SiteHeader({ hasHome }: { hasHome?: boolean }) {
                 />
               </div>
             </Link>
-            {/* GuideHeaderButton removed per Wave 4 */}
-          </div>
-
-          <nav data-testid="nav-links" className="hidden nav:flex items-center justify-center gap-1 relative">
-            {hasHome && (
-              <Link
-                href="/home"
-                className="nav-link nav-pill px-3 py-2 rounded-lg transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-400/35"
-                suppressHydrationWarning
-              >
-                Home
-              </Link>
-            )}
-            
-            {Object.entries(NAVIGATION_GROUPS).map(([groupName, groupItems]) => {
-              const isActive = isGroupActive(groupItems)
-              const isDropdownOpen = activeDropdown === groupName
-              
-              return (
-                <div 
-                  key={groupName}
-                  className="relative"
-                  onMouseEnter={() => handleDropdownMouseEnter(groupName)}
-                  onMouseLeave={handleDropdownMouseLeave}
+            {/* Add a Home link next to the logo (left cluster). BasePathLink/Link keeps basePath honored. */}
+            <nav data-testid="nav-links" className="hidden nav:flex items-center justify-center gap-1 relative">
+              {(hasHome ?? true) && (
+                <Link
+                  href="/home"
+                  className="nav-link nav-pill px-3 py-2 rounded-lg transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-400/35"
+                  suppressHydrationWarning
                 >
-                  <button
-                    className={`nav-link nav-pill px-3 py-2 rounded-lg transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-400/35 flex items-center gap-1 ${isActive ? 'font-semibold' : ''}`}
-                    aria-expanded={isDropdownOpen}
-                    aria-haspopup="true"
+                  Home
+                </Link>
+              )}
+              {Object.entries(NAVIGATION_GROUPS).map(([groupName, groupItems]) => {
+                const isActive = isGroupActive(groupItems)
+                const isDropdownOpen = activeDropdown === groupName
+                return (
+                  <div 
+                    key={groupName}
+                    className="relative"
+                    onMouseEnter={() => handleDropdownMouseEnter(groupName)}
+                    onMouseLeave={handleDropdownMouseLeave}
                   >
-                    {groupName}
-                    <svg 
-                      className={`w-4 h-4 transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`} 
-                      fill="none" 
-                      stroke="currentColor" 
-                      viewBox="0 0 24 24"
+                    <button
+                      className={`nav-link nav-pill px-3 py-2 rounded-lg transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-400/35 flex items-center gap-1 ${isActive ? 'font-semibold' : ''}`}
+                      aria-expanded={isDropdownOpen}
+                      aria-haspopup="true"
                     >
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                    </svg>
-                  </button>
-                  
-                  {isDropdownOpen && (
-                    <div className="absolute top-full left-0 bg-[var(--surface-card)] border border-[var(--border-soft)] rounded-lg shadow-lg py-1 min-w-[180px] z-50">
-                      {groupItems.map(({ href, label }) => {
-                        const t = themeForRoute(href)
-                        const isItemActive = getActiveState(href)
-                        const navHref = `/${href}`
-
-                        return (
-                          <Link
-                            key={href}
-                            href={navHref}
-                            aria-current={isItemActive ? 'page' : undefined}
-                            className={`block px-3 py-2 text-sm hover:bg-[var(--hover-bg)] transition-colors ${isItemActive ? 'font-semibold bg-[var(--hover-bg)]' : ''}`}
-                            style={{ ['--hover-bg' as any]: t.hoverBg } as CSSProperties}
-                            suppressHydrationWarning
-                          >
-                            {label}
-                          </Link>
-                        )
-                      })}
-                    </div>
-                  )}
-                </div>
-              )
-            })}
-          </nav>
+                      {groupName}
+                      <svg 
+                        className={`w-4 h-4 transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`} 
+                        fill="none" 
+                        stroke="currentColor" 
+                        viewBox="0 0 24 24"
+                      >
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                      </svg>
+                    </button>
+                    {isDropdownOpen && (
+                      <div className="absolute top-full left-0 bg-[var(--surface-card)] border border-[var(--border-soft)] rounded-lg shadow-lg py-1 min-w-[180px] z-50">
+                        {groupItems.map(({ href, label }) => {
+                          const t = themeForRoute(href)
+                          const isItemActive = getActiveState(href)
+                          const navHref = `/${href}`
+                          return (
+                            <Link
+                              key={href}
+                              href={navHref}
+                              aria-current={isItemActive ? 'page' : undefined}
+                              className={`block px-3 py-2 text-sm hover:bg-[var(--hover-bg)] transition-colors ${isItemActive ? 'font-semibold bg-[var(--hover-bg)]' : ''}`}
+                              style={{ ['--hover-bg' as any]: t.hoverBg } as CSSProperties}
+                              suppressHydrationWarning
+                            >
+                              {label}
+                            </Link>
+                          )
+                        })}
+                      </div>
+                    )}
+                  </div>
+                )
+              })}
+            </nav>
+          </div>
 
           <div data-testid="experience-controls-desktop" className="hidden nav:flex items-center justify-center gap-2">
-            <ExperienceToggle />
-            <ThemeSwitch />
+            <div className="flex items-center gap-2" data-testid="sherpa-cluster">
+              <div data-testid="experience-icons" className="mr-1"><ExperienceToggle /></div>
+              <HeaderSherpa />
+            </div>
+            {/* ThemeSwitch moved to footer */}
           </div>
 
-          <button
-            data-testid="nav-toggle"
-            className="nav:hidden inline-flex items-center justify-center rounded-md border border-[var(--border-soft)] px-4 py-2 text-xl min-h-[36px]"
-            aria-label="Toggle menu"
-            onClick={() => setOpen(!open)}
-          >
-            ☰
-          </button>
+          <div className="nav:hidden flex items-center gap-2">
+            <button
+              data-testid="nav-toggle"
+              className="inline-flex items-center justify-center rounded-md border border-[var(--border-soft)] px-4 py-2 text-xl min-h-[36px]"
+              aria-label="Toggle menu"
+              onClick={() => setOpen(!open)}
+            >
+              ☰
+            </button>
+            {/* Mobile: keep Sherpa pinned to right, experience toggle remains in menu */}
+            <HeaderSherpa />
+          </div>
         </div>
       </div>
       <div className="brand-accent-line"></div>
