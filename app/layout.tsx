@@ -1,3 +1,4 @@
+import Script from "next/script";
 import '@/app/styles/design-tokens.scss'
 import BrandThemeProvider from '@/components/BrandThemeProvider'
 import Favicons from '@/components/Favicons'
@@ -9,11 +10,11 @@ import DevThemeSwitcher from '@/components/dev/DevThemeSwitcher'
 import ExperienceProvider from '@/components/experience/ExperienceProvider'
 
 import GuideHost from '@/components/ai/GuideHost'
+import GuideBootStyle from '@/components/chrome/GuideBootStyle'
 import JsonLd from '@/components/seo/JsonLd'
 import type { Metadata } from 'next'
 import { Roboto, Space_Grotesk } from 'next/font/google'
 import { cookies } from 'next/headers'
-import Script from 'next/script'
 import './globals.css'
 import './styles/guide-drawer.css'
 import './styles/minerals.css'
@@ -46,6 +47,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     return (
         <html lang="en" className={`${roboto.variable} ${roboto.className} ${grotesk.variable}`} suppressHydrationWarning>
             <head>
+        <GuideBootStyle />
                 <Favicons />
                 {/* Ensure preloaded fonts carry crossorigin hints to satisfy Chrome */}
                 <Script id="font-preload-cors" strategy="beforeInteractive">{`
@@ -144,22 +146,25 @@ export default async function RootLayout({ children }: { children: React.ReactNo
                   }}
                 />
             </head>
-            <body className="page min-h-dvh flex flex-col">
+            <body className="page min-h-dvh flex flex-col" suppressHydrationWarning>
                 <ExperienceProvider>
                     <PageChromeVars />
                     <SiteHeader hasHome={hasHome} />
-                    <main data-shiftable-root className="relative z-10 flex-1 min-h-0">
-                        <BrandThemeProvider>
+                    <main data-shiftable-root style={{ overflowX: "visible" }} className="relative z-10 flex-1 min-h-0">
+        <div className="site-container mx-auto w-full max-w-screen-xl px-4 sm:px-6 lg:px-8">
+<BrandThemeProvider>
                             {children}
                         </BrandThemeProvider>
-                    </main>
+                    
+        </div>
+      </main>
                     <SiteFooter />
                     {/* FooterChatBarMountEffect removed - chat moved to drawer */}
                     {/* Lift overlay behind content (driven by html[data-lift]) */}
                     <div aria-hidden className="page-lift" />
                     {/* Dev switcher (hidden in production) */}
                     <DevThemeSwitcher />
-                    {/* Wave 4: Floating CTA + Drawer host */}
+                    {/* Wave 4/5: Drawer host only (top-right panel disabled) */}
                     <GuideHost />
                 </ExperienceProvider>
             </body>
