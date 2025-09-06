@@ -1,71 +1,60 @@
-/* Body/content shift when guide drawer is open (desktop-first, right-pinned) */
-:root { --guide-width: 420px; --nav-height: 76px; --footer-height: 64px; --drawer-inner-x: 12px; }
-html[data-guide-open="true"] [data-shiftable-root] {
-  padding-right: calc(var(--guide-width) + 2rem);
-  transition: padding-right .28s ease;
-}
-/* Do not shift footer when drawer opens; chat is absolutely pinned on right */
-/* html[data-guide-open="true"] .brand-footer { padding-right: calc(var(--guide-width) + 2rem); } */
+/* Drawer + layout shift (right rail) — minimal, class-driven, SSR-safe */
 
-/* Tablet */
-@media (max-width: 1024px){
-  :root{ --guide-width: 360px; }
-  html[data-guide-open="true"] [data-shiftable-root] { padding-right: calc(var(--guide-width) + 1rem); }
-  /* html[data-guide-open="true"] .brand-footer { padding-right: calc(var(--guide-width) + 1rem); } */
+:root {
+  --guide-width: 420px;
+  --nav-height: 76px;
+  --footer-height: 64px;
 }
 
-/* Drawer: pinned to right, fills between header and footer, animates up */
+/* 0) Smooth shift for the content wrapper */
+[data-shiftable-root] {
+  padding-right: 0;
+  transition: padding-right .32s cubic-bezier(.22,.61,.36,1);
+  box-sizing: border-box;
+}
+
+/* 1) Drawer is inert unless html.guide-open */
+html:not(.guide-open) .guide-drawer {
+  transform: translateX(100%) !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+/* 2) When open, reserve space on the right for the drawer */
+html.guide-open [data-shiftable-root] {
+  padding-right: calc(var(--guide-width, 420px) + 2rem);
+  will-change: padding-right;
+}
+
+/* 3) Tablet: slightly narrower drawer */
+@media (max-width: 1024px) {
+  :root { --guide-width: 360px; }
+  html.guide-open [data-shiftable-root] {
+    padding-right: calc(var(--guide-width, 360px) + 1rem);
+  }
+}
+
+/* 4) Drawer occupies the vertical strip between header and footer */
 .guide-drawer {
   position: fixed;
+  inset-inline-end: 0;
   top: var(--nav-height);
   bottom: var(--footer-height);
-  right: 0;
   width: var(--guide-width);
-  max-height: calc(100dvh - var(--nav-height) - var(--footer-height));
+  height: auto;
+  display: flex;
+  flex-direction: column;
 }
 
-/* Provide an inner padding variable to align with footer chat inset */
-.guide-drawer .drawer-body{ padding-left: 0; padding-right: 0; overflow-y: auto; }
-.guide-drawer .conversation{ padding: 8px var(--drawer-inner-x) 12px; }
-
-@keyframes guide-enter {
-  from { transform: translateY(12px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
+/* === fix-left-shift: footer pad only when drawer open + no horizontal scroll === */
+html:not(.guide-open) .footer-container { padding-right: 0 !important; }
+html.guide-open .footer-container { padding-right: calc(var(--guide-width, 420px) + 2rem); }
+@media (max-width: 1024px){
+  html.guide-open .footer-container { padding-right: calc(var(--guide-width, 360px) + 1rem); }
 }
-
-.animate-guide-enter { animation: guide-enter .24s ease-out; }
-
-/* Footer chat dock: pinned width matches drawer, visually integrates */
-.footer-chat-dock { width: var(--guide-width); }
-html[data-guide-open="true"] .footer-chat-dock { width: var(--guide-width); }
-
-/* Remove bottom radii from drawer so it visually meets footer */
-.guide-drawer { border-bottom-left-radius: 0 !important; border-bottom-right-radius: 0 !important; border-bottom: 0 !important; border-top-right-radius: 0 !important; }
-
-/* Suggested header divider */
-.guide-drawer .suggested-header{ padding: 6px var(--drawer-inner-x); border-bottom: none; }
-.dark .guide-drawer .suggested-header{ border-bottom-color: var(--border-soft); }
-.guide-drawer .suggested-list{ padding: 8px var(--drawer-inner-x); }
-.guide-drawer .suggested-sticky{
-  position: sticky;
-  top: 0;
-  z-index: 1;
-  /* Gentle scrim to increase label contrast on busy photos */
-  background: linear-gradient(
-    to bottom,
-    rgba(255,255,255,0.85) 0%,
-    rgba(255,255,255,0.70) 75%,
-    rgba(255,255,255,0.40) 100%
-  );
-  backdrop-filter: blur(3px);
-}
-.dark .guide-drawer .suggested-sticky{
-  background: linear-gradient(
-    to bottom,
-    rgba(18,22,28,0.90) 0%,
-    rgba(18,22,28,0.80) 75%,
-    rgba(18,22,28,0.55) 100%
-  );
-}
-
-
+/* kill accidental horizontal gutters on first paint */
+html, body { overflow-x: hidden; }
+:root { --drawer-w: 0px; }
+html.guide-open { --drawer-w: var(--guide-width, 420px); }
+.guide-drawer { width: var(--drawer-w); transform: none !important; transition: width .28s ease; overflow: hidden; }
+[data-shiftable-root] { box-sizing: border-box !important; inline-size: 100%; max-inline-size: 100%; padding-right: calc(var(--drawer-w) + 2rem) !important; }
