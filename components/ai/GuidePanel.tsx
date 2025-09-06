@@ -1,9 +1,9 @@
 'use client';
 
 // Pin-to-Home removed per UI request
+import AppImage from '@/components/ui/AppImage';
 import Card from '@/components/ui/Card';
 import { getApiPath } from '@/lib/basepath';
-import AppImage from '@/components/ui/AppImage';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -30,6 +30,18 @@ export function GuidePanel({ className, onClose, embedded, prefillPrompt }: Guid
   const [isLoading, setIsLoading] = useState(false);
   const [journeyId, setJourneyId] = useState<string | null>(null);
   const bottomRef = useRef<HTMLDivElement | null>(null);
+  const scrollToBottom = useCallback((behavior: ScrollBehavior = 'smooth') => {
+    try {
+      const scroller = document.querySelector('.guide-drawer .drawer-body') as HTMLElement | null;
+      if (bottomRef.current) {
+        bottomRef.current.scrollIntoView({ behavior, block: 'end' });
+        // Ensure container also snaps exactly to bottom in case of rounding
+        if (scroller) scroller.scrollTop = scroller.scrollHeight;
+        return;
+      }
+      if (scroller) scroller.scrollTo({ top: scroller.scrollHeight, behavior });
+    } catch {}
+  }, []);
   
   // Minimal markdown-like formatter (bold, italic, lists, line breaks)
   const formatMessageHtml = (text: string): string => {
@@ -63,6 +75,10 @@ export function GuidePanel({ className, onClose, embedded, prefillPrompt }: Guid
     setMessages(prev => [...prev, userMessage]);
     setInput('');
     setIsLoading(true);
+    try {
+      const n = Number(localStorage.getItem('mxtk_sherpa_interactions') || '0') + 1;
+      localStorage.setItem('mxtk_sherpa_interactions', String(n));
+    } catch {}
 
     try {
       const response = await fetch(getApiPath('/api/ai/chat'), {
@@ -82,13 +98,6 @@ export function GuidePanel({ className, onClose, embedded, prefillPrompt }: Guid
       };
 
       setMessages(prev => [...prev, assistantMessage]);
-      // Auto-scroll to bottom when a new message arrives
-      try {
-        requestAnimationFrame(() => {
-          const scroller = document.querySelector('.guide-drawer .drawer-body');
-          if (scroller) (scroller as HTMLElement).scrollTop = (scroller as HTMLElement).scrollHeight;
-        });
-      } catch {}
       
       // Auto-append to journey if server indicates
       try {
@@ -134,14 +143,23 @@ export function GuidePanel({ className, onClose, embedded, prefillPrompt }: Guid
     e.preventDefault();
     sendMessage(input);
   };
-  // Scroll on any message change (user or assistant)
+  // Scroll on any message change (user or assistant) with RAF for layout settle
   useEffect(() => {
     try {
-      const scroller = document.querySelector('.guide-drawer .drawer-body') as HTMLElement | null;
-      if (scroller) scroller.scrollTop = scroller.scrollHeight;
-      bottomRef.current?.scrollIntoView({ block: 'end' });
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          scrollToBottom('smooth');
+        });
+      });
     } catch {}
-  }, [messages.length]);
+  }, [messages.length, scrollToBottom]);
+
+  // When drawer opens, snap to bottom
+  useEffect(() => {
+    const handleOpen = () => scrollToBottom('auto');
+    window.addEventListener('mxtk:guide:open', handleOpen as EventListener);
+    return () => window.removeEventListener('mxtk:guide:open', handleOpen as EventListener);
+  }, [scrollToBottom]);
 
   const quickQuestions = [
     'What is MXTK?',
@@ -166,32 +184,14 @@ export function GuidePanel({ className, onClose, embedded, prefillPrompt }: Guid
   return (
     <div className="h-full w-full bg-transparent flex flex-col">
 
-      <div className="flex-1 overflow-y-auto pt-0 px-0 pb-3 space-y-0">
-        <div className="hidden md:block suggested-sticky">
-          <div className="suggested-header flex items-center justify-between">
-            <p className="text-gray-700 dark:text-gray-200 text-xs font-medium">
-              Suggested questions:
-            </p>
-          </div>
-          <div className="suggested-list space-y-2">
-            {quickQuestions.map((question) => (
-              <button
-                key={question}
-                onClick={() => sendMessage(question)}
-                className="w-full text-left p-2 text-xs bg-white/80 dark:bg-gray-700/60 rounded hover:bg-gray-100 dark:hover:bg-gray-600/80 transition-colors border border-gray-200/60 dark:border-gray-600/60 text-gray-800 dark:text-gray-200"
-              >
-                {question}
-              </button>
-            ))}
-          </div>
-          {/* separator removed per design */}
-        </div>
+      <div className="min-h-0 flex-1 overflow-y-auto pt-0 px-0 pb-3 flex flex-col">
+        <div className="flex-1"></div>
         <div className="conversation space-y-3">
           {messages.map((message, index) => (
             <Card
               key={index}
               data-role={message.role}
-              className={`p-3 ${
+              className={`p-3 animate-message-in ${
                 message.role === 'user'
                   ? 'bg-blue-700 text-white dark:bg-blue-700/70 ml-8'
                   : 'bg-blue-200/90 text-blue-950 border border-blue-300/60 dark:bg-blue-500/30 dark:text-blue-50 mr-8'
@@ -219,22 +219,57 @@ export function GuidePanel({ className, onClose, embedded, prefillPrompt }: Guid
               </div>
             </Card>
           ))}
-          <div ref={bottomRef} />
+            {isLoading && (
+              <Card className="p-3 bg-gray-50 dark:bg-gray-800 mr-8 animate-message-in">
+                <div className="text-sm">
+                  <strong className="text-gray-900 dark:text-white">Sherpa:</strong>
+                  <p className="mt-1 text-gray-500 dark:text-gray-400">
+                    Thinking...
+                  </p>
+                </div>
+              </Card>
+            )}
+            <div ref={bottomRef} />
         </div>
-        
-        {isLoading && (
-          <Card className="p-3 bg-gray-50 dark:bg-gray-800 mr-8">
-            <div className="text-sm">
-              <strong className="text-gray-900 dark:text-white">Sherpa:</strong>
-              <p className="mt-1 text-gray-500 dark:text-gray-400">
-                Thinking...
-              </p>
-            </div>
-          </Card>
-        )}
       </div>
 
-      {/* Input removed - only footer chat now */}
+      {/* Optional helper row to add widgets to Home without blocking typing */}
+      {/* <div className="px-3 py-2 text-xs opacity-80 flex gap-2">
+        <button onClick={()=>window.dispatchEvent(new CustomEvent('mxtk:home:add',{ detail:{ widget:{ type:'summary', title:'MXTK Overview' } } }))} className="underline">Add Overview</button>
+        <button onClick={()=>window.dispatchEvent(new CustomEvent('mxtk:home:add',{ detail:{ widget:{ type:'glossary', title:'Glossary' } } }))} className="underline">Add Glossary</button>
+        <button onClick={()=>window.dispatchEvent(new CustomEvent('mxtk:home:add',{ detail:{ widget:{ type:'resources', title:'Resources' } } }))} className="underline">Add Resources</button>
+      </div> */}
+
+      <div className="border-t border-white/10 bg-glass/70 backdrop-blur px-3 py-2">
+        <div className="flex flex-wrap gap-2 mb-2">
+          {quickQuestions.map((q, i) => (
+            <button
+              key={q}
+              data-testid={`chip-${i}`}
+              onClick={() => sendMessage(q)}
+              className="text-xs rounded-full px-3 py-1 bg-white text-slate-900 border border-gray-300 hover:bg-gray-100 dark:bg-gray-700/70 dark:text-white dark:border-white/20 dark:hover:bg-gray-600/80"
+            >
+              {q}
+            </button>
+          ))}
+        </div>
+        <form onSubmit={handleSubmit} className="flex items-center gap-2">
+          <input
+            data-testid="guide-input"
+            value={input}
+            onChange={(e)=>setInput(e.target.value)}
+            placeholder="Ask Sherpa about MXTK…"
+            className="flex-1 rounded-lg px-3 py-2 bg-white text-slate-900 placeholder:text-gray-500 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          <button
+            type="submit"
+            className="h-9 px-3 rounded-lg bg-ink-900 text-white disabled:opacity-50"
+            disabled={!input.trim()}
+          >
+            Send
+          </button>
+        </form>
+      </div>
     </div>
   );
 }

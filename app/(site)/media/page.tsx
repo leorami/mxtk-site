@@ -10,6 +10,7 @@ import BackgroundPhoto from '@/components/visuals/BackgroundPhoto'
 
 export default function MediaPage() {
   const { mode, pageCopy } = useCopy('media')
+  const mode3 = (mode === 'ai' ? 'learn' : mode) as 'learn' | 'build' | 'operate'
   return (
     <PageTheme ink="light" lift="H" glass="soft">
       <BackgroundPhoto variant="media" />
@@ -17,18 +18,18 @@ export default function MediaPage() {
         <div className="relative">
           <div className="space-y-0">
             <SectionWrapper index={0} className="text-center">
-              <ModeTextSwap as="h1" depKey={`media-hero-title-${mode}`} className="text-4xl md:text-6xl font-bold tracking-tight text-slate-900 dark:text-slate-50 drop-shadow-[0_1px_1px_rgba(0,0,0,0.25)]" content={pageCopy.heroTitle[mode]} />
-              <ModeTextSwap as="p" depKey={`media-hero-sub-${mode}`} className="text-xl text-muted max-w-3xl mx-auto" content={pageCopy.heroSub[mode]} />
+              <ModeTextSwap as="h1" depKey={`media-hero-title-${mode}`} className="text-4xl md:text-6xl font-bold tracking-tight text-slate-900 dark:text-slate-50 drop-shadow-[0_1px_1px_rgba(0,0,0,0.25)]" content={pageCopy.heroTitle[mode3]} />
+              <ModeTextSwap as="p" depKey={`media-hero-sub-${mode}`} className="text-xl text-muted max-w-3xl mx-auto" content={pageCopy.heroSub[mode3]} />
             </SectionWrapper>
 
             <SectionWrapper index={1}>
               <Card tint="amber">
-                <ModeTextSwap as="h2" depKey={`media-p0-title-${mode}`} className="text-2xl font-semibold mb-6" content={pageCopy.pillars?.[0]?.title[mode] || 'Press Kit'} />
+                <ModeTextSwap as="h2" depKey={`media-p0-title-${mode}`} className="text-2xl font-semibold mb-6" content={pageCopy.pillars?.[0]?.title[mode3] || 'Press Kit'} />
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   <div className="text-center">
                     <div className="text-3xl font-bold mb-2">🎨</div>
                     <h3 className="font-semibold mb-2">Brand Assets</h3>
-                    <p className="text-muted text-sm mb-4">{pageCopy.pillars?.[0]?.body[mode] || 'Official logos, color palettes, and visual guidelines'}</p>
+                    <p className="text-muted text-sm mb-4">{pageCopy.pillars?.[0]?.body[mode3] || 'Official logos, color palettes, and visual guidelines'}</p>
                     <BasePathLink className="btn-soft" to="resources">
                       View Brand Assets
                     </BasePathLink>
@@ -110,10 +111,10 @@ export default function MediaPage() {
                     as="h2"
                     depKey={`media-sec-${idx}-heading-${mode}`}
                     className="text-xl md:text-2xl font-semibold mb-6"
-                    content={sec.heading[mode]}
+                    content={sec.heading[mode3]}
                   />
                   <div className="space-y-4">
-                    {sec.paragraphs[mode].map((p, i) => (
+                    {sec.paragraphs[mode3].map((p, i) => (
                       <ModeTextSwap
                         key={i}
                         as="p"
@@ -123,13 +124,13 @@ export default function MediaPage() {
                       />
                     ))}
                   </div>
-                  {sec.highlight?.[mode] ? (
+                  {sec.highlight?.[mode3] ? (
                     <div className="mt-5 rounded-lg px-4 py-3" style={{ background: 'rgba(255,255,255,0.10)' }}>
                       <ModeTextSwap
                         as="div"
                         depKey={`media-sec-${idx}-hl-${mode}`}
                         className="text-sm opacity-90"
-                        content={sec.highlight[mode]}
+                        content={sec.highlight[mode3]}
                       />
                     </div>
                   ) : null}

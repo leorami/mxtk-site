@@ -1,6 +1,21 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@font-face{font-family:Geist;src:local("Inter"),local("system-ui"),local("Segoe UI"),local("Roboto");font-weight:100 900;font-style:normal;font-display:swap}
+@font-face{font-family:"Geist Mono";src:local("ui-monospace"),local("SFMono-Regular"),local("Menlo"),local("Monaco"),local("Consolas"),local("Liberation Mono");font-weight:100 900;font-style:normal;font-display:swap}
+
+
+/* Root scroll behavior guard: prevent Chrome from restoring horizontal scroll at first paint. */
+html, body {
+  overflow-x: clip;
+  scrollbar-gutter: stable both-edges;
+}
+
+/* Ensure the main shiftable root never creates horizontal overflow. */
+[data-shiftable-root] { max-width: 100%; }
+
+/* Defensive: centered container shouldn't overflow viewport width. */
+.site-container { max-width: 100%; }
 
 /* Section spacing standardization */
 .section-spacing {

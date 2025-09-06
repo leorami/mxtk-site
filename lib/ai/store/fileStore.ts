@@ -44,3 +44,5 @@ export async function saveJourney(doc: JourneyDoc) {
   doc.updatedAt = new Date().toISOString();
   await fs.writeFile(p, JSON.stringify(doc, null, 2), 'utf8');
 }
+
+export type StoredChunk = { id: string; text: string; meta: any; embedding?: number[]; quarantined?: boolean };

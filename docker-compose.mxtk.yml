@@ -1,5 +1,3 @@
-version: "3.9"
-
 services:
   # Second dev server that "lives" under /mxtk
   web_mxtk:

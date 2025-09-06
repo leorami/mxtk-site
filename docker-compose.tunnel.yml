@@ -1,17 +1,51 @@
-version: '3.8'
+// File: components/chrome/LeftShiftGuard.tsx
+export default function LeftShiftGuard() {
+  return (
+    <script
+      dangerouslySetInnerHTML={{
+        __html: `
+          try{ history.scrollRestoration = "manual"; }catch{}
+          (function(){
+            function fix(){
+              try{
+                var root = document.querySelector('[data-shiftable-root]');
+                var el = document.querySelector('[data-shiftable-root] > .site-container') || root;
+                if(!root||!el) return;
+                var r = el.getBoundingClientRect();
+                var guideOpen = document.documentElement.classList.contains('guide-open');
+                var pr = getComputedStyle(root).paddingRight;
+                if(!guideOpen && (pr === '0px' || pr === '0')){
+                  if (Math.round(r.left) < -4) {
+                    try{ if (document.scrollingElement) document.scrollingElement.scrollLeft = 0; }catch{}
+                    try{ document.documentElement.scrollLeft = 0; }catch{}
+                    try{ document.body.scrollLeft = 0; }catch{}
+                  }
+                }
+                try{ (root as HTMLElement).style.overflowX = 'visible'; }catch{}
+              }catch{}
+            }
+            fix();
+            try{ addEventListener('pageshow', fix, { once:true }); }catch{}
+            try{ addEventListener('load', fix, { once:true }); }catch{}
+          })();
+        `,
+      }}
+    />
+  );
+}
 
-services:
-  web:
-    container_name: mxtk-site-dev
-    build: .
-    environment:
-      - PORT=2000
-      - BASIC_AUTH_ENABLED=1       # enable auth over tunnel (optional)
-    networks:
-      - devproxy
+// File: app/layout.tsx
+import LeftShiftGuard from "@/components/chrome/LeftShiftGuard";
+import React from "react";
 
-networks:
-  devproxy:
-    external: true
-    name: devproxy
-
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="en">
+      <head>
+        <LeftShiftGuard />
+        {/* existing head content */}
+      </head>
+      <body>{children}</body>
+    </html>
+  );
+}

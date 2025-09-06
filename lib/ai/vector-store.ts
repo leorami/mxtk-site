@@ -6,7 +6,7 @@ const STORE_DIR = process.env.AI_VECTOR_DIR || './ai_store';
 
 export interface VectorStore {
   chunks: Chunk[];
-  embeddings: EmbeddingVector[];
+  embeddings: (EmbeddingVector | null)[];
 }
 
 export async function loadVectorStore(): Promise<VectorStore> {
@@ -22,7 +22,7 @@ export async function loadVectorStore(): Promise<VectorStore> {
     return {
       chunks: JSON.parse(chunksData),
       embeddings: JSON.parse(embeddingsData),
-    };
+    } as VectorStore;
   } catch (error) {
     console.warn('Vector store not found, returning empty store:', error);
     return { chunks: [], embeddings: [] };
@@ -78,10 +78,12 @@ export async function searchSimilar(
   
   const [queryEmbedding] = await embedder.embed([query]);
   
-  const results = store.chunks.map((chunk, index) => ({
-    chunk,
-    score: cosineSimilarity(queryEmbedding, store.embeddings[index]),
-  }));
+  const results = store.chunks
+    .map((chunk, index) => ({
+      chunk,
+      score: cosineSimilarity(queryEmbedding, store.embeddings[index]),
+    }))
+    .filter(r => r.score > 0); // drop quarantined (null embedding)
   
   return results
     .sort((a, b) => b.score - a.score)

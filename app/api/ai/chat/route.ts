@@ -1,7 +1,9 @@
-import { ChatMessageSchema, getEmbedder, type ChatResponse } from '@/lib/ai/models';
+import { blockFromAnswer } from '@/lib/ai/journey';
+import { ChatMessageSchema, getChatModel, getEmbedder, type ChatResponse } from '@/lib/ai/models';
+import { getBudget, getTodayUSD } from '@/lib/ai/ops/budget';
+import { estimateUSD, logCost } from '@/lib/ai/ops/costs';
 import { searchSimilar } from '@/lib/ai/vector-store';
 import { NextRequest, NextResponse } from 'next/server';
-import { blockFromAnswer } from '@/lib/ai/journey';
 
 export const runtime = 'nodejs';
 
@@ -9,14 +11,34 @@ export async function POST(request: NextRequest): Promise<NextResponse<ChatRespo
   try {
     const body = await request.json();
     const parsed = ChatMessageSchema.parse(body);
+    const requestedTier = (body?.tier as 'suggest' | 'answer' | 'deep' | undefined) || undefined;
+    const defaultTier = parsed.mode === 'learn' ? 'suggest' : parsed.mode === 'analyze' ? 'deep' : 'answer';
+    let tier: 'suggest' | 'answer' | 'deep' = requestedTier || defaultTier;
+    const model = getChatModel(tier);
+    // Soft budget guard
+    const budget = getBudget();
+    const today = await getTodayUSD();
+    if (budget.limit > 0 && today >= budget.limit) {
+      if (budget.mode === 'degrade' && tier !== 'suggest') {
+        tier = 'suggest';
+      } else if (budget.mode === 'block') {
+        // For public chat, auto-degrade; reserve hard block for admin routes
+        tier = 'suggest';
+      }
+    }
     
     const embedder = getEmbedder();
     const similarChunks = await searchSimilar(parsed.message, embedder, 5);
     
     if (similarChunks.length === 0) {
+      const fallback = "I don't have specific information about that topic in my knowledge base. Could you try rephrasing your question or ask about MXTK's core features like validator incentives, transparency mechanisms, or institutional features?";
+      const inTok0 = Math.ceil((parsed.message || '').length / 4);
+      const outTok0 = Math.ceil(fallback.length / 4);
+      const usd0 = estimateUSD(inTok0, outTok0, model.pricing);
+      await logCost({ ts: new Date().toISOString(), kind: 'chat', model: model.name, tier, tokens: { in: inTok0, out: outTok0 }, usd: usd0, route: '/api/ai/chat' });
       return NextResponse.json({
         ok: true,
-        answer: "I don't have specific information about that topic in my knowledge base. Could you try rephrasing your question or ask about MXTK's core features like validator incentives, transparency mechanisms, or institutional features?",
+        answer: fallback,
         citations: [],
         sources: [],
       });
@@ -50,7 +72,7 @@ export async function POST(request: NextRequest): Promise<NextResponse<ChatRespo
     
     const autoAppend = /^(explain|define|teach\s+me)/i.test(parsed.message || '');
     
-    return NextResponse.json({
+    const res = NextResponse.json({
       ok: true,
       answer,
       citations: sources.map(s => s.source),
@@ -58,6 +80,12 @@ export async function POST(request: NextRequest): Promise<NextResponse<ChatRespo
       journeyBlock: block,
       autoAppend,
     });
+    // Rough usage estimate by characters (dev-mode mock)
+    const inTok = Math.ceil((parsed.message || '').length / 4);
+    const outTok = Math.ceil(answer.length / 4);
+    const usd = estimateUSD(inTok, outTok, model.pricing);
+    await logCost({ ts: new Date().toISOString(), kind: 'chat', model: model.name, tier, tokens: { in: inTok, out: outTok }, usd, route: '/api/ai/chat' });
+    return res;
   } catch (error) {
     console.error('AI chat error:', error);
     return NextResponse.json({

@@ -1,0 +1,16 @@
+{
+  "id": "h_h976bowl6cn",
+  "updatedAt": "2025-09-06T04:25:50.375Z",
+  "widgets": [
+    {
+      "id": "w_1ivo988vc8w",
+      "order": 1,
+      "type": "summary",
+      "title": "MXTK Overview",
+      "data": {
+        "text": "hello"
+      },
+      "pinned": false
+    }
+  ]
+}

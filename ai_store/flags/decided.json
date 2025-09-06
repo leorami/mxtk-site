@@ -1,0 +1,21 @@
+[
+  {
+    "id": "note.md-0",
+    "meta": {
+      "source": "note.md",
+      "section": "Internal draft"
+    },
+    "risk": 0.5,
+    "reasons": [
+      "policy (confidential)",
+      "patent (patent)"
+    ],
+    "labels": [
+      "needs-review",
+      "patent"
+    ],
+    "textHash": "72-IyBJbnRlcm5hbCBkcmFmdApUaGlzIGluY2x1ZGVzIHBhdGVudCBjbGFpbXMgYW5kIHNob3VsZCBiZSBjb25maQ==",
+    "action": "approve",
+    "at": "2025-09-06T03:14:51.477Z"
+  }
+]
