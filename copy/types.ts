@@ -2,7 +2,9 @@ export type XMode = "ai" | "learn" | "build" | "operate";
 export type Quadlet<T = string> = { ai: T; learn: T; build: T; operate: T };
 
 // Legacy support - use Quadlet for new content
-export type Triplet<T = string> = { learn: T; build: T; operate: T };
+// Allow indexing with XMode (including 'ai') while content remains triplet-based.
+// At runtime, pages may index with 'ai'; treat it as equivalent to 'learn' in copy sources.
+export type Triplet<T = string> = { learn: T; build: T; operate: T } & Partial<Record<'ai', T>>;
 
 export type Pillar = {
   title: Triplet;

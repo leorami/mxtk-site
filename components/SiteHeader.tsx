@@ -110,7 +110,7 @@ export default function SiteHeader({ hasHome }: { hasHome?: boolean }) {
             </Link>
             {/* Add a Home link next to the logo (left cluster). BasePathLink/Link keeps basePath honored. */}
             <nav data-testid="nav-links" className="hidden nav:flex items-center justify-center gap-1 relative">
-              {(hasHome ?? true) && (
+              {hasHome && (
                 <Link
                   href="/home"
                   className="nav-link nav-pill px-3 py-2 rounded-lg transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-400/35"

@@ -1,24 +1,21 @@
 'use client'
 
-import FooterChatBar from '@/components/ai/FooterChatBar'
+import ThemeSwitch from '@/components/ThemeSwitch'
 import Link from 'next/link'
 
 export default function SiteFooter() {
 
   return (
-    <footer className="brand-footer relative z-10" style={{ minHeight: '64px' }}>
+    <footer className="brand-footer relative z-10 footer-container" style={{ minHeight: '64px' }}>
       <div className="mx-auto max-w-none px-4 py-3 relative">
-        {/* Absolute-pinned chat dock on the right */}
-        <div className="footer-chat-absolute" aria-hidden>
-          <div className="footer-chat-dock"><FooterChatBar /></div>
-        </div>
+        {/* Footer Sherpa chat removed; header dropdown is primary */}
 
-        <div className="hidden md:flex items-center justify-between gap-4 w-full pr-[calc(var(--guide-width)+1rem)]">
+        <div className="hidden md:flex items-center justify-between gap-4 w-full ">
           {/* Left: Copyright */}
           <div className="text-sm text-muted footer-copyright">© 2025 Mineral Token (MXTK).</div>
 
           {/* Right: Legal links (reserve space with padding-right to avoid overlap) */}
-          <nav className="flex items-center gap-4 text-sm ml-auto">
+          <nav className="flex items-center gap-4 text-sm ml-auto"><ThemeSwitch aria-label="Toggle theme" />
             <Link href="/legal/terms" suppressHydrationWarning>Terms</Link>
             <Link href="/legal/privacy" suppressHydrationWarning>Privacy</Link>
             <Link href="/legal/disclosures" suppressHydrationWarning>Disclosures</Link>
@@ -30,8 +27,8 @@ export default function SiteFooter() {
         </div>
 
         {/* Mobile layout: Chat stays pinned absolutely; links + copyright inline */}
-        <div className="md:hidden w-full space-y-4 pr-[calc(var(--guide-width)+.75rem)]">
-          <nav className="flex flex-wrap gap-3 text-sm justify-center">
+        <div className="md:hidden w-full space-y-4 ">
+          <nav className="flex flex-wrap gap-3 text-sm justify-center"><ThemeSwitch aria-label="Toggle theme" />
             <Link href="/legal/terms" suppressHydrationWarning>Terms</Link>
             <Link href="/legal/privacy" suppressHydrationWarning>Privacy</Link>
             <Link href="/legal/disclosures" suppressHydrationWarning>Disclosures</Link>

@@ -2,6 +2,7 @@
 
 // Pin-to-Home removed per UI request
 import AppImage from '@/components/ui/AppImage';
+import AddToHomeButton from '@/components/ai/AddToHomeButton';
 import Card from '@/components/ui/Card';
 import { getApiPath } from '@/lib/basepath';
 import { useCallback, useEffect, useRef, useState } from 'react';
@@ -24,6 +25,7 @@ interface GuidePanelProps {
 export function GuidePanel({ className, onClose, embedded, prefillPrompt }: GuidePanelProps & { embedded?: boolean; prefillPrompt?: string }) {
   const [isOpen, setIsOpen] = useState(onClose ? true : false);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const [suggestHome, setSuggestHome] = useState(false);
   const [input, setInput] = useState('');
   // Mode controls removed from panel; keep default context internal
   const [mode] = useState<'learn' | 'explore' | 'analyze'>('learn');
@@ -114,6 +116,12 @@ export function GuidePanel({ className, onClose, embedded, prefillPrompt }: Guid
               localStorage.setItem('mxtkJourneyId', j.id);
             } catch {}
           }
+        }
+      } catch {}
+
+      try {
+        if (data?.meta?.suggestHome === true || data?.autoAppend === true) {
+          setSuggestHome(true);
         }
       } catch {}
     } catch (error) {
@@ -241,6 +249,13 @@ export function GuidePanel({ className, onClose, embedded, prefillPrompt }: Guid
       </div> */}
 
       <div className="border-t border-white/10 bg-glass/70 backdrop-blur px-3 py-2">
+        {suggestHome && (
+          <div className="mb-2 text-xs flex items-center gap-2">
+            <span className="opacity-70">Looks useful?</span>
+            {/* @ts-expect-error client in client */}
+            <AddToHomeButton kind="getting-started" />
+          </div>
+        )}
         <div className="flex flex-wrap gap-2 mb-2">
           {quickQuestions.map((q, i) => (
             <button

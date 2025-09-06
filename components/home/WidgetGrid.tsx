@@ -4,6 +4,7 @@ import { useState } from 'react';
 import GlossaryCard from './widgets/GlossaryCard';
 import ResourcesCard from './widgets/ResourcesCard';
 import SummaryCard from './widgets/SummaryCard';
+// Legacy file kept for earlier waves; new grid uses Grid/WidgetFrame components.
 
 export default function WidgetGrid({ doc }: { doc: HomeDoc }){
   const [widgets, setWidgets] = useState<Widget[]>([...doc.widgets].sort((a,b)=>a.order-b.order));

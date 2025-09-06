@@ -79,6 +79,7 @@ export async function POST(request: NextRequest): Promise<NextResponse<ChatRespo
       sources,
       journeyBlock: block,
       autoAppend,
+      meta: { suggestHome: autoAppend === true },
     });
     // Rough usage estimate by characters (dev-mode mock)
     const inTok = Math.ceil((parsed.message || '').length / 4);
