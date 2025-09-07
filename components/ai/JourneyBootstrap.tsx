@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
 // Wave 4: Guide dock and ModeBroker moved into GuideDrawer
 import WhatsNext from '@/components/ai/WhatsNext';
-import { getBasePathUrl } from '@/lib/basepath';
 import AppImage from '@/components/ui/AppImage';
+import { getBasePathUrl } from '@/lib/basepath';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 

@@ -1,8 +1,10 @@
 'use client'
 
+import { GuidePanel } from '@/components/ai/GuidePanel'
 import AppImage from '@/components/ui/AppImage'
 
 export default function GuideHeaderButton() {
+  void GuidePanel
   return (
     <button
       data-testid="ai-button"

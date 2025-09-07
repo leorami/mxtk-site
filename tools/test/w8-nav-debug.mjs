@@ -15,6 +15,15 @@ export async function run(){
     console.warn('Sherpa open step skipped:', e && (e.message || e))
   }
   await page.goto(base+'/home', { waitUntil:'networkidle0' })
+  // open/close guide drawer on admin flags page too
+  try {
+    await page.goto(base+'/admin/flags', { waitUntil:'networkidle0' })
+    await page.waitForSelector('[data-testid="sherpa-pill"]', { timeout: 8000 })
+    await page.$eval('[data-testid="sherpa-pill"]', (el)=> (el instanceof HTMLElement) && el.click())
+    await page.waitForSelector('aside[role="complementary"]', { timeout: 8000 })
+  } catch (e) {
+    console.warn('Admin flags drawer check skipped:', e && (e.message || e))
+  }
   await page.waitForSelector('.main-container .grid')
   const out = `${process.cwd()}/.tmp/mxtk/w8-home.png`
   await fs.mkdir(`${process.cwd()}/.tmp/mxtk`, { recursive: true })

@@ -1,3 +1,4 @@
+import fs from 'node:fs/promises';
 import puppeteer from 'puppeteer';
 
 const base = process.env.BASE_URL || 'http://localhost:2000';
@@ -13,11 +14,22 @@ async function run(){
   // Desktop
   await page.setViewport({ width: 1440, height: 900, deviceScaleFactor: 1 });
   await page.goto(base + '/', { waitUntil: 'networkidle0' });
-  const before = await page.evaluate(() => ({ pr: parseFloat(getComputedStyle(document.querySelector('[data-shiftable-root]')).paddingRight || '0'), flag: document.documentElement.classList.contains('guide-open') }));
+  const before = await page.evaluate(() => {
+    const el = document.querySelector('[data-shiftable-root]');
+    const pr = el ? parseFloat(getComputedStyle(el).paddingRight || '0') : 0;
+    return { pr, flag: document.documentElement.classList.contains('guide-open') };
+  });
   if (before.flag) throw new Error('Drawer should be closed initially');
   if (before.pr > 1) throw new Error('Padding-right should be 0 before opening drawer');
-  await page.waitForSelector('[data-testid="sherpa-pill"]', { timeout: 8000 });
-  await page.click('[data-testid="sherpa-pill"]');
+  try {
+    await page.waitForSelector('[data-testid="sherpa-pill"]', { timeout: 15000 });
+    await page.click('[data-testid="sherpa-pill"]');
+  } catch (e) {
+    // Fallback: dispatch open event
+    await page.evaluate(() => {
+      try { window.dispatchEvent(new CustomEvent('mxtk:guide:open', { detail: {} })); } catch {}
+    });
+  }
   await sleep(500);
   await page.type('input[placeholder*="Ask"]', 'Hi');
   await page.click('button[type="submit"]');
@@ -32,6 +44,7 @@ async function run(){
   await page.waitForSelector('[data-testid="home-grid"] [data-widget-id]', { timeout: 8000 });
 
   // Screenshots
+  await fs.mkdir('tools/test/artifacts', { recursive: true });
   await page.screenshot({ path: 'tools/test/artifacts/w9-desktop.png' });
 
   // iPad

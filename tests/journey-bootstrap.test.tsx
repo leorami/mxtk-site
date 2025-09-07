@@ -1,4 +1,3 @@
-import React from 'react';
 import JourneyBootstrap from '@/components/ai/JourneyBootstrap';
 import { render, screen } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
@@ -125,10 +124,8 @@ describe('JourneyBootstrap', () => {
     expect(screen.getByText('Ready to Begin?')).toBeDefined();
     expect(screen.getByText(/Your AI guide is ready to help/)).toBeDefined();
 
-    // Check for component placeholders (these will be rendered by child components)
+    // Check What's Next placeholder only; guide dock/mode broker moved to drawer host
     expect(screen.getByTestId('whats-next')).toBeDefined();
-    expect(screen.getByTestId('guide-dock')).toBeDefined();
-    expect(screen.getByTestId('mode-broker')).toBeDefined();
   });
 
   it('renders main content structure correctly', async () => {

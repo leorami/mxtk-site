@@ -1,0 +1,309 @@
+{
+  "items": [
+    {
+      "id": "30b1d606-7e9f-4492-a69f-7e340b21d9e5",
+      "createdAt": 1757213741011,
+      "status": "open",
+      "category": "pii",
+      "reason": "pii",
+      "labels": []
+    },
+    {
+      "id": "bf1d4ad9-faf0-40a3-929b-91d0b1c3546a",
+      "createdAt": 1757213741020,
+      "updatedAt": 1757213741037,
+      "status": "resolved",
+      "category": "policy",
+      "severity": 1,
+      "reason": "policy hit",
+      "labels": []
+    },
+    {
+      "id": "ab7384c6-0ce9-45d7-8a69-19c29c1361e9",
+      "createdAt": 1757213741026,
+      "status": "open",
+      "category": "spam",
+      "severity": 3,
+      "reason": "spam content",
+      "labels": []
+    },
+    {
+      "id": "e107d62d-3bb1-4c19-be98-8b69b0c32a2b",
+      "createdAt": 1757213741045,
+      "status": "open",
+      "category": "other",
+      "reason": "check",
+      "labels": []
+    },
+    {
+      "id": "923bc4c3-b916-4498-8954-b2a5e8473631",
+      "createdAt": 1757214054051,
+      "status": "open",
+      "category": "pii",
+      "reason": "pii",
+      "labels": []
+    },
+    {
+      "id": "ac7e8461-150f-4e0a-9ee0-7eb6d321f98e",
+      "createdAt": 1757214054068,
+      "updatedAt": 1757214054149,
+      "status": "resolved",
+      "category": "policy",
+      "severity": 1,
+      "reason": "policy hit",
+      "labels": []
+    },
+    {
+      "id": "9e95a401-db89-4c59-a683-9c1efb1075aa",
+      "createdAt": 1757214054079,
+      "status": "open",
+      "category": "spam",
+      "severity": 3,
+      "reason": "spam content",
+      "labels": []
+    },
+    {
+      "id": "e053ec4b-6afd-47af-9f86-1b323abcae72",
+      "createdAt": 1757214054165,
+      "status": "open",
+      "category": "other",
+      "reason": "check",
+      "labels": []
+    },
+    {
+      "id": "e3b959d9-68ba-4775-b5fb-d23556c38929",
+      "createdAt": 1757214199825,
+      "status": "open",
+      "category": "pii",
+      "reason": "pii",
+      "labels": []
+    },
+    {
+      "id": "d7b43f3f-cd8e-44e2-aa34-a2838bb19519",
+      "createdAt": 1757214199915,
+      "updatedAt": 1757214199960,
+      "status": "resolved",
+      "category": "policy",
+      "severity": 1,
+      "reason": "policy hit",
+      "labels": []
+    },
+    {
+      "id": "ee83a909-84eb-446d-9ffa-78dfaf8f65a0",
+      "createdAt": 1757214199939,
+      "status": "open",
+      "category": "spam",
+      "severity": 3,
+      "reason": "spam content",
+      "labels": []
+    },
+    {
+      "id": "d62b0036-50e8-4b0c-b3a9-33c17d645772",
+      "createdAt": 1757214199978,
+      "status": "open",
+      "category": "other",
+      "reason": "check",
+      "labels": []
+    },
+    {
+      "id": "3ef7c864-699c-4511-8985-3f167e83fd91",
+      "createdAt": 1757214349766,
+      "status": "open",
+      "category": "policy",
+      "severity": 2,
+      "reason": "policy breach",
+      "labels": []
+    },
+    {
+      "id": "b0a2657d-71c3-46a9-a214-a4dde276df0c",
+      "createdAt": 1757214349773,
+      "status": "open",
+      "category": "spam",
+      "severity": 3,
+      "reason": "spam terms detected",
+      "labels": []
+    },
+    {
+      "id": "478b32ff-49ab-4609-b233-1d9917356ec0",
+      "createdAt": 1757214349779,
+      "status": "open",
+      "category": "pii",
+      "severity": 1,
+      "reason": "possible pii",
+      "labels": []
+    },
+    {
+      "id": "fe3031ca-56b0-48c2-93cd-ed2c6ecf13a4",
+      "createdAt": 1757214382811,
+      "status": "open",
+      "category": "policy",
+      "reason": "t",
+      "labels": []
+    },
+    {
+      "id": "1cb6ddba-68d5-48e0-a9b3-4174a3297487",
+      "createdAt": 1757214388235,
+      "status": "open",
+      "category": "policy",
+      "severity": 2,
+      "reason": "policy breach",
+      "labels": []
+    },
+    {
+      "id": "7207e962-1514-4ebd-86da-08d1cb61c5ad",
+      "createdAt": 1757214388243,
+      "status": "open",
+      "category": "spam",
+      "severity": 3,
+      "reason": "spam terms detected",
+      "labels": []
+    },
+    {
+      "id": "75e83668-31ac-4fe5-9ea7-30079058831f",
+      "createdAt": 1757214388250,
+      "status": "open",
+      "category": "pii",
+      "severity": 1,
+      "reason": "possible pii",
+      "labels": []
+    },
+    {
+      "id": "34ccd6df-48c6-488d-8473-1e8dbcc7454d",
+      "createdAt": 1757214434548,
+      "status": "open",
+      "category": "policy",
+      "severity": 2,
+      "reason": "policy breach",
+      "labels": []
+    },
+    {
+      "id": "110b5a7b-10d3-4f77-a7a4-93e437b14263",
+      "createdAt": 1757214434569,
+      "status": "open",
+      "category": "spam",
+      "severity": 3,
+      "reason": "spam terms detected",
+      "labels": []
+    },
+    {
+      "id": "4d4f8742-9587-4036-b877-8c88988a2ba7",
+      "createdAt": 1757214434577,
+      "status": "open",
+      "category": "pii",
+      "severity": 1,
+      "reason": "possible pii",
+      "labels": []
+    },
+    {
+      "id": "0f126974-38fa-4610-8fc9-8cba6ab39a3c",
+      "createdAt": 1757214468264,
+      "status": "open",
+      "category": "policy",
+      "severity": 2,
+      "reason": "policy breach",
+      "labels": []
+    },
+    {
+      "id": "ab05bdbd-7553-4789-bbda-93a8339bf54d",
+      "createdAt": 1757214468273,
+      "status": "open",
+      "category": "spam",
+      "severity": 3,
+      "reason": "spam terms detected",
+      "labels": []
+    },
+    {
+      "id": "3dce46fa-4897-4378-ae07-4f93b3ad3ae3",
+      "createdAt": 1757214468279,
+      "status": "open",
+      "category": "pii",
+      "severity": 1,
+      "reason": "possible pii",
+      "labels": []
+    },
+    {
+      "id": "0e70ddb3-9e4e-4017-95e7-6031af2d2eb9",
+      "createdAt": 1757214529937,
+      "status": "open",
+      "category": "policy",
+      "severity": 2,
+      "reason": "policy breach",
+      "labels": []
+    },
+    {
+      "id": "152e8f9a-3b4b-4af0-a8fc-773290f63f44",
+      "createdAt": 1757214529944,
+      "status": "open",
+      "category": "spam",
+      "severity": 3,
+      "reason": "spam terms detected",
+      "labels": []
+    },
+    {
+      "id": "adb2bfb9-242a-4cbb-afef-c4a62f91fd3f",
+      "createdAt": 1757214529950,
+      "status": "open",
+      "category": "pii",
+      "severity": 1,
+      "reason": "possible pii",
+      "labels": []
+    },
+    {
+      "id": "703eb4d0-00ce-4b02-9cb4-0faba4b7eb7f",
+      "createdAt": 1757214569530,
+      "status": "open",
+      "category": "policy",
+      "severity": 2,
+      "reason": "policy breach",
+      "labels": []
+    },
+    {
+      "id": "dbfeef47-4ebe-4dc4-b87d-170b6b47b232",
+      "createdAt": 1757214569536,
+      "status": "open",
+      "category": "spam",
+      "severity": 3,
+      "reason": "spam terms detected",
+      "labels": []
+    },
+    {
+      "id": "03a45956-8ce5-4761-8403-e8e22fbe0038",
+      "createdAt": 1757214569541,
+      "updatedAt": 1757214574547,
+      "status": "resolved",
+      "category": "pii",
+      "severity": 1,
+      "reason": "possible pii",
+      "labels": []
+    },
+    {
+      "id": "6f96b821-a677-4669-b690-29df4cda0a77",
+      "createdAt": 1757214612048,
+      "status": "open",
+      "category": "policy",
+      "severity": 2,
+      "reason": "policy breach",
+      "labels": []
+    },
+    {
+      "id": "614f87a2-a0e8-4d0b-bf6b-611abbdb2184",
+      "createdAt": 1757214612056,
+      "status": "open",
+      "category": "spam",
+      "severity": 3,
+      "reason": "spam terms detected",
+      "labels": []
+    },
+    {
+      "id": "7ae8535d-a0ff-4d26-abc9-b0f2e82dbaf7",
+      "createdAt": 1757214612062,
+      "updatedAt": 1757214615690,
+      "status": "resolved",
+      "category": "pii",
+      "severity": 1,
+      "reason": "possible pii",
+      "labels": []
+    }
+  ],
+  "builtAt": 1757214615694
+}

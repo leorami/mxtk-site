@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { useBasePath } from '@/lib/basepath';
 import Image, { ImageProps } from 'next/image';
@@ -13,7 +13,12 @@ import Image, { ImageProps } from 'next/image';
  */
 export default function AppImage(props: Omit<ImageProps, 'src'> & { src: string }) {
   const { src, ...rest } = props;
-  const basePath = useBasePath();
+  let basePath = '';
+  try {
+    basePath = useBasePath() || '';
+  } catch {
+    basePath = '';
+  }
 
   // Ensure src starts with / for public assets
   const normalizedSrc = src.startsWith('/') ? src : `/${src}`;
