@@ -27,7 +27,7 @@ get_ngrok_url() {
 }
 
 show_access_info() {
-  echo "\n🌐 ACCESS INFORMATION\n======================================"
+  echo "🌐 ACCESS INFORMATION======================================"
   echo "Local:   http://localhost:2000"
   local ngrok
   ngrok=$(get_ngrok_url)

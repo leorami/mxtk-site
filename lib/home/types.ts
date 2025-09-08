@@ -3,3 +3,5 @@ export type Widget = { id: string; type: WidgetType; title?: string; data?: any;
 export type HomeDoc = { id: string; updatedAt: string; widgets: Widget[] }
 
 
+
+

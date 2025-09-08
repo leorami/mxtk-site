@@ -28,15 +28,15 @@ async function getRecentLines(limit = 50) {
   }
 }
 
-function authed(): boolean {
-  const h = headers();
+async function authed(): Promise<boolean> {
+  const h = await headers();
   const t = h.get('authorization') || '';
   const admin = process.env.ADMIN_TOKEN || 'dev';
   return t === 'Bearer ' + admin;
 }
 
 export default async function Page() {
-  if (!authed()) {
+  if (!(await authed())) {
     return <div className="max-w-3xl mx-auto p-6"><h1 className="text-xl font-semibold">Unauthorized</h1><p className="opacity-70">Missing or invalid ADMIN_TOKEN.</p></div>;
   }
   const daily = await getDaily();

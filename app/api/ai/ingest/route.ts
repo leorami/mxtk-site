@@ -1,7 +1,7 @@
 import { textToChunks } from '@/lib/ai/chunk';
 import { embedAndLog } from '@/lib/ai/embed';
 import { flagText } from '@/lib/ai/govern/flag';
-import { upsertPending } from '@/lib/ai/govern/store';
+import { createFlag, upsertPending } from '@/lib/ai/govern/store';
 import { IngestRequestSchema } from '@/lib/ai/models';
 import { loadVectorStore, saveVectorStore } from '@/lib/ai/vector-store';
 import { NextRequest, NextResponse } from 'next/server';
@@ -10,9 +10,16 @@ export const runtime = 'nodejs';
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
-    const body = await request.json();
+    // Support both JSON and form submission from admin tools
+    const ct = request.headers.get('content-type') || '';
+    let body: any;
+    if (ct.includes('application/json')) body = await request.json();
+    else if (ct.includes('application/x-www-form-urlencoded')) {
+      const form = await request.formData();
+      body = { content: String(form.get('content') || ''), source: String(form.get('source') || 'admin') };
+    } else body = await request.json();
     const parsed = IngestRequestSchema.parse(body);
-    
+
     // Create chunks from content
     const chunks = textToChunks(parsed.content, parsed.source);
 
@@ -32,6 +39,16 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
             textHash: String((c.text || '').length) +
               '-' + Buffer.from((c.text || '').slice(0, 64)).toString('base64'),
           });
+          // Also record governance Flag, including journey/message identifiers if present
+          const textHash = String((c.text || '').length) + '-' + Buffer.from((c.text || '').slice(0, 64)).toString('base64');
+          await createFlag({
+            source: 'ingest',
+            reason: (res.reasons || []).join('; ') || 'Flagged during ingest',
+            labels: res.labels,
+            journeyId: (c as any)?.meta?.journeyId,
+            messageId: (c as any)?.meta?.messageId,
+            metadata: { meta: c.meta, textHash },
+          } as any);
         }
       })
     );
@@ -57,10 +74,10 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
         store.embeddings.push(embeddings[eIdx++] || null);
       }
     }
-    
+
     // Save updated store
     await saveVectorStore(store);
-    
+
     return NextResponse.json({
       ok: true,
       message: `Ingested ${chunks.length} chunks from ${parsed.source}`,

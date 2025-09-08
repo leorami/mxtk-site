@@ -16,18 +16,23 @@ function parseList(v?: string) {
 }
 
 const PROVIDER = (process.env.AI_PROVIDER as 'openai' | 'openrouter') || 'openai';
-const TIERS: Record<Tier, string[]> = {
-  suggest: parseList(process.env.AI_MODEL_TIER_SUGGEST) || [],
-  answer: parseList(process.env.AI_MODEL_TIER_ANSWER) || parseList(process.env.AI_MODEL) || [],
-  deep: parseList(process.env.AI_MODEL_TIER_DEEP) || [],
+const DEFAULT_MODELS: Record<Tier, string[]> = {
+  suggest: ['gpt-4o-mini'],
+  answer: ['gpt-4o'],
+  deep: ['gpt-4.1'],
 };
-const EMBEDS = process.env.AI_EMBED_MODEL || 'text-embedding-3-small';
+const TIERS: Record<Tier, string[]> = {
+  suggest: parseList(process.env.AI_MODEL_TIER_SUGGEST) || DEFAULT_MODELS.suggest,
+  answer: parseList(process.env.AI_MODEL_TIER_ANSWER) || parseList(process.env.AI_MODEL) || DEFAULT_MODELS.answer,
+  deep: parseList(process.env.AI_MODEL_TIER_DEEP) || DEFAULT_MODELS.deep,
+};
+const EMBEDS = process.env.AI_EMBED_MODEL || 'text-embedding-3-large';
 
 const PRICING: Record<string, { in: number; out: number }> = {
-  'gpt-4.1-mini': { in: 0.3, out: 0.6 },
   'gpt-4o-mini': { in: 0.15, out: 0.6 },
   'gpt-4o': { in: 5.0, out: 15.0 },
   'gpt-4.1': { in: 5.0, out: 15.0 },
+  'text-embedding-3-large': { in: 0.13, out: 0 },
 };
 
 export function getHeaders(): IncomingHttpHeaders {
@@ -37,7 +42,8 @@ export function getHeaders(): IncomingHttpHeaders {
       'HTTP-Referer': process.env.OPENROUTER_SITE || 'https://mxtk',
       'X-Title': 'MXTK Sherpa',
     } as unknown as IncomingHttpHeaders;
-  return { Authorization: `Bearer ${process.env.OPENAI_API_KEY || ''}` } as unknown as IncomingHttpHeaders;
+  const openaiKey = process.env.OPENAI_API_KEY || process.env.openai_api_key || '';
+  return { Authorization: `Bearer ${openaiKey}` } as unknown as IncomingHttpHeaders;
 }
 
 export function getChatModel(tier: Tier = 'answer'): ModelMeta {
@@ -56,7 +62,30 @@ export function getEmbedder() {
     name: EMBEDS,
     pricing: { in: 0.02, out: 0 },
     async embed(texts: string[]): Promise<number[][]> {
-      // Deterministic mock embeddings for dev/test to avoid external calls
+      const useLive = Boolean(process.env.OPENAI_API_KEY || process.env.openai_api_key) && process.env.NODE_ENV !== 'test';
+      if (useLive) {
+        const controller = new AbortController();
+        const timer = setTimeout(() => controller.abort(), 10_000);
+        try {
+          const r = await fetch('https://api.openai.com/v1/embeddings', {
+            method: 'POST',
+            headers: {
+              'content-type': 'application/json',
+              ...(getHeaders() as any),
+            },
+            body: JSON.stringify({ model: EMBEDS, input: texts }),
+            signal: controller.signal,
+          } as any);
+          clearTimeout(timer);
+          if (!r.ok) throw new Error(`embed ${r.status}`);
+          const j = (await r.json()) as any;
+          const data = Array.isArray(j.data) ? j.data : [];
+          return data.map((d: any) => (d.embedding as number[]) || []);
+        } catch {
+          // fall through to mock on error/timeout
+        }
+      }
+      // Deterministic mock embeddings (dev/test or on failure)
       return texts.map((text) => {
         let hash = 0;
         for (let i = 0; i < text.length; i++) {
@@ -89,4 +118,9 @@ export interface ChatResponse {
 export const ChatMessageSchema = z.object({
   message: z.string().min(1).max(1000),
   mode: z.enum(['learn', 'explore', 'analyze']),
+});
+
+export const IngestRequestSchema = z.object({
+  content: z.string().min(1),
+  source: z.string().min(1).max(120),
 });

@@ -10,11 +10,11 @@ function isSecure(req: NextRequest) {
 export async function POST(req: NextRequest) {
   const body = await req.json().catch(() => ({}));
   const token = (body && body.token) || '';
-  const expected = process.env.MXTK_ADMIN_TOKEN || '';
-  if (!expected || token !== expected) {
+  const expected = (process.env.MXTK_ADMIN_TOKEN || process.env.ADMIN_TOKEN || process.env.NEXT_PUBLIC_ADMIN_TOKEN || '').trim();
+  if (!expected || token.trim() !== expected) {
     return NextResponse.json({ ok: false }, { status: 401, headers: { 'Cache-Control': 'no-store' } });
   }
-  const res = NextResponse.json({}, { status: 204, headers: { 'Cache-Control': 'no-store' } });
+  const res = NextResponse.json({ ok: true }, { status: 200, headers: { 'Cache-Control': 'no-store' } });
   res.cookies.set('mxtk_admin', '1', {
     path: '/',
     sameSite: 'lax',

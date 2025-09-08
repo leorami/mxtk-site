@@ -30,6 +30,13 @@ export async function run(){
   await page.screenshot({ path: out, fullPage:true })
   await fs.stat(out)
   console.log('screenshot saved', out)
+
+  // New: navigate to /facts and assert no horizontal scroll
+  await page.goto(base+'/facts', { waitUntil:'networkidle0' })
+  await page.waitForSelector('[data-testid="facts-view"]', { timeout: 8000 })
+  const hasHScroll = await page.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth)
+  if (hasHScroll) throw new Error('Horizontal scroll detected on /facts')
+
   await browser.close()
 }
 // Execute by default when invoked via `node tools/test/w8-nav-debug.mjs`

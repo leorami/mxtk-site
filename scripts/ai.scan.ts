@@ -1,5 +1,5 @@
 import { flagText } from '@/lib/ai/govern/flag';
-import { upsertPending } from '@/lib/ai/govern/store';
+import { createFlag, upsertPending } from '@/lib/ai/govern/store';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 
@@ -32,6 +32,19 @@ const base = process.env.AI_VECTOR_DIR || './ai_store';
           '-' +
           Buffer.from((c.text || '').slice(0, 64)).toString('base64'),
       });
+      // Also persist governance flag with optional journey/message references
+      const textHash =
+        String((c.text || '').length) +
+        '-' +
+        Buffer.from((c.text || '').slice(0, 64)).toString('base64');
+      await createFlag({
+        source: 'system',
+        reason: (res.reasons || []).join('; ') || 'Flagged during scan',
+        labels: res.labels,
+        journeyId: (c as any)?.meta?.journeyId,
+        messageId: (c as any)?.meta?.messageId,
+        metadata: { meta: c.meta, textHash },
+      } as any);
     }
   }
   console.log('Scan complete. Flagged:', flagged);
@@ -39,5 +52,7 @@ const base = process.env.AI_VECTOR_DIR || './ai_store';
   console.error(e);
   process.exit(1);
 });
+
+
 
 

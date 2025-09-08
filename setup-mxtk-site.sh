@@ -132,7 +132,7 @@ cmd_share() {
   echo "==> restarting dev proxy..."
   restart_proxy
   local u; u=$(get_ngrok_url)
-  echo "\n🌐 ACCESS INFORMATION\n======================================"
+  echo "🌐 ACCESS INFORMATION======================================"
   echo "Local:  http://localhost:2000"
   if [ -n "$u" ]; then
     echo "Proxy:  ${u}/mxtk"

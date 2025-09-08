@@ -1,12 +1,12 @@
-import 'server-only';
-import { cookies } from 'next/headers';
 import AdminSignin from '@/components/admin/AdminSignin';
 import FlagsClient from '@/components/admin/FlagsClient';
+import { cookies } from 'next/headers';
+import 'server-only';
 
 export const dynamic = 'force-dynamic';
 
-export default function Page() {
-  const ck = cookies();
+export default async function Page() {
+  const ck = await cookies();
   const authed = ck.get('mxtk_admin')?.value === '1';
   return (
     <div className="max-w-6xl mx-auto p-6">
@@ -15,5 +15,7 @@ export default function Page() {
     </div>
   );
 }
+
+
 
 
