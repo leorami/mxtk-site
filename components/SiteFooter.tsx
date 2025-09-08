@@ -6,14 +6,14 @@ import Link from 'next/link'
 export default function SiteFooter() {
 
   return (
-    <footer className="brand-footer relative z-10 footer-container" style={{ minHeight: '64px' }}>
+    <footer className="brand-footer relative z-10 footer-container site-footer" style={{ minHeight: '64px' }}>
       <div className="mx-auto max-w-none px-4 py-3 relative">
         {/* Footer Sherpa chat removed; header dropdown is primary */}
 
         <div className="hidden md:flex items-center justify-between gap-4 w-full ">
           {/* Left: Copyright + Theme switcher */}
           <div className="flex items-center gap-2">
-            <div className="text-sm text-muted footer-copyright">© 2025 Mineral Token (MXTK).</div>
+            <div className="footer-brand text-sm">© 2025 Mineral Token (MXTK).</div>
             <div className="hidden md:block ml-3"><ThemeSwitch aria-label="Toggle theme" /></div>
           </div>
 

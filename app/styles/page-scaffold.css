@@ -105,3 +105,31 @@
     inline-size: 40px;
     block-size: 40px;
 }
+
+/* Themed page backgrounds */
+.mxtk-bg-mineral {
+    background: var(--bg-mineral, var(--surface-page));
+}
+
+html.light .mxtk-bg-mineral {
+    --bg-mineral: linear-gradient(180deg, rgba(255, 206, 115, .15), rgba(0, 0, 0, 0) 20%), var(--gold-grain, #faf5ea);
+}
+
+html.dark .mxtk-bg-mineral {
+    --bg-mineral: linear-gradient(180deg, rgba(255, 255, 255, .04), rgba(0, 0, 0, 0) 25%), var(--diamond-sheen, #0e141a);
+}
+
+/* Section header scale/alignment */
+.section-header {
+    padding: .6rem 1rem;
+}
+
+.section-title h2 {
+    font-size: clamp(1.05rem, 1.2vw, 1.25rem);
+    font-weight: 700;
+}
+
+.section-actions .icon-btn {
+    inline-size: 32px;
+    block-size: 32px;
+}

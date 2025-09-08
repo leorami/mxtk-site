@@ -1,4 +1,5 @@
 import Grid from '@/components/home/Grid'
+import StarterPanel from '@/components/home/StarterPanel'
 import PageScaffold from '@/components/layout/PageScaffold'
 import { getApiUrl } from '@/lib/api'
 import { cookies } from 'next/headers'
@@ -17,22 +18,25 @@ export default async function Page() {
     } catch { }
   }
 
+  const widgets = (initialDoc?.widgets || initialDoc?.doc?.widgets || [])
+  const hasWidgets = widgets.length > 0
   const sections = [
     {
       id: 'home-grid',
       title: 'Your Home',
-      description: 'Pin helpful widgets, drag to arrange, and resize as you learn. Ask the AI Guide for suggestions.',
-      children: <Grid doc={{ id: id || 'guest', widgets: (initialDoc?.widgets || initialDoc?.doc?.widgets || []), layoutVersion: 1 }} />
+      description: 'Pin helpful widgets, drag to arrange, and resize as you learn. Use the buttons below or ask the AI Guide for suggestions.',
+      children: hasWidgets
+        ? <Grid doc={{ id: id || 'guest', widgets, layoutVersion: 1 }} />
+        : <StarterPanel homeId={id || undefined} />
     }
   ]
 
   return (
     <PageScaffold
       title="Home"
-      subtitle={id ? undefined : 'Your Home will appear here'}
-      description={id ? undefined : 'Use the AI Guide to add a starter widget.'}
+      description={!hasWidgets ? 'Your Home is empty. Add a starter widget or ask Sherpa to help.' : undefined}
       sections={sections}
-      backgroundClass="mineral-sheen"
+      backgroundClass="mxtk-bg-mineral"
     />
   )
 }

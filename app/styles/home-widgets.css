@@ -31,3 +31,45 @@
     background: var(--surface-elev-1);
     margin-block: .5rem;
 }
+
+/* StarterPanel */
+.starter-panel {
+    display: grid;
+    gap: .75rem;
+    padding: 1rem;
+    border: 1px solid var(--border-soft);
+    border-radius: var(--radius-2xl);
+    background: var(--surface-elev-1);
+    box-shadow: var(--shadow-lift-sm);
+}
+
+.starter-panel .starter-hint {
+    text-align: center;
+    color: var(--ink-strong);
+}
+
+.chip-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .5rem;
+    justify-content: center;
+}
+
+.chip-row.subtle {
+    opacity: .9
+}
+
+.chip {
+    padding: .4rem .75rem;
+    border-radius: 999px;
+    border: 1px solid var(--border-soft);
+    background: var(--glass-70);
+    box-shadow: var(--shadow-inner-top);
+    font-weight: 600;
+}
+
+.chip.primary {
+    background: var(--accent-warm);
+    color: var(--ink-invert);
+    border-color: transparent;
+}
