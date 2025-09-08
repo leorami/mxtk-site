@@ -1,8 +1,8 @@
 'use client';
 
 // Pin-to-Home removed per UI request
-import AppImage from '@/components/ui/AppImage';
 import AddToHomeButton from '@/components/ai/AddToHomeButton';
+import AppImage from '@/components/ui/AppImage';
 import Card from '@/components/ui/Card';
 import { getApiPath } from '@/lib/basepath';
 import { useCallback, useEffect, useRef, useState } from 'react';
@@ -31,6 +31,12 @@ export function GuidePanel({ className, onClose, embedded, prefillPrompt }: Guid
   const [mode] = useState<'learn' | 'explore' | 'analyze'>('learn');
   const [isLoading, setIsLoading] = useState(false);
   const [journeyId, setJourneyId] = useState<string | null>(null);
+  const [quickQuestions, setQuickQuestions] = useState<string[]>([
+    'What is MXTK?',
+    'How does MXTK ensure transparency?',
+    'Who can use MXTK?',
+  ]);
+  const messageRefs = useRef<Array<HTMLDivElement | null>>([]);
   const bottomRef = useRef<HTMLDivElement | null>(null);
   const scrollToBottom = useCallback((behavior: ScrollBehavior = 'smooth') => {
     try {
@@ -42,9 +48,9 @@ export function GuidePanel({ className, onClose, embedded, prefillPrompt }: Guid
         return;
       }
       if (scroller) scroller.scrollTo({ top: scroller.scrollHeight, behavior });
-    } catch {}
+    } catch { }
   }, []);
-  
+
   // Minimal markdown-like formatter (bold, italic, lists, line breaks)
   const formatMessageHtml = (text: string): string => {
     const escaped = text
@@ -56,19 +62,134 @@ export function GuidePanel({ className, onClose, embedded, prefillPrompt }: Guid
     const lines = italic.split('\n');
     const isList = lines.every(l => !l.trim() || /^[-*]\s+/.test(l.trim()));
     if (isList) {
-      const items = lines.filter(l=>l.trim()).map(l => l.replace(/^[-*]\s+/, ''));
-      return `<ul>${items.map(i=>`<li>${i}</li>`).join('')}</ul>`;
+      const items = lines.filter(l => l.trim()).map(l => l.replace(/^[-*]\s+/, ''));
+      return `<ul>${items.map(i => `<li>${i}</li>`).join('')}</ul>`;
     }
     return lines.map(l => `<p>${l || ''}</p>`).join('');
   };
-  
+
+  // Normalize assistant content to ensure lists/paragraphs render as markdown
+  function normalizeAssistantContent(input: string): string {
+    try {
+      let s = String(input || '');
+      // 1) Ensure numbers start on new lines: 1. / 1)
+      s = s.replace(/(?<!^|\n)(\d+)[\.|\)]\s/g, '\n$1. ');
+      // 2) Ensure hyphen bullets start on new lines
+      s = s.replace(/(?<!\n)\s-\s/g, '\n- ');
+      // 3) Lightly collapse triple+ newlines
+      s = s.replace(/\n{3,}/g, '\n\n');
+      // 4) Indent bullets under immediately preceding numbered list item (4 spaces for CommonMark)
+      const lines = s.split('\n');
+      let lastWasNumber = false;
+      for (let i = 0; i < lines.length; i++) {
+        const line = lines[i];
+        const isNumber = /^\s*\d+[\.|\)]\s/.test(line);
+        if (!isNumber && /^-\s/.test(line) && lastWasNumber) {
+          lines[i] = '    ' + line; // indent nested bullet under number
+        }
+        // Reset when hitting a blank line or a non-list paragraph
+        if (!line.trim()) {
+          lastWasNumber = false;
+        } else if (isNumber) {
+          lastWasNumber = true;
+        } else if (/^\s{4,}-\s/.test(line)) {
+          lastWasNumber = true; // keep within nested block
+        } else if (/^[-*]\s/.test(line)) {
+          // a top-level bullet ends the numbered context
+          lastWasNumber = false;
+        } else if (!/^\s{2,}/.test(line)) {
+          // plain paragraph ends the numbered context
+          lastWasNumber = false;
+        }
+      }
+      s = lines.join('\n');
+      // 5) Add paragraph spacing by ensuring a blank line after non-list paragraphs
+      s = s.replace(/([^\n])\n(?!\n)(?!\s*[-*]|\s*\d+\.)/g, '$1\n\n');
+      return s;
+    } catch {
+      return input;
+    }
+  }
+
   // Restore journeyId from localStorage
   useEffect(() => {
     try {
       const stored = localStorage.getItem('mxtkJourneyId');
       if (stored) setJourneyId(stored);
-    } catch {}
+    } catch { }
   }, []);
+
+  // Ensure a stable chat cookie id exists for cross-visit continuity
+  useEffect(() => {
+    try {
+      const hasId = document.cookie.split(';').some(c => c.trim().startsWith('mxtk_chat_id='));
+      if (!hasId) {
+        const id = (globalThis.crypto?.randomUUID?.() ?? 'c_' + Math.random().toString(36).slice(2));
+        document.cookie = `mxtk_chat_id=${id}; path=/; max-age=31536000; samesite=lax`;
+      }
+    } catch { }
+  }, []);
+
+  // Restore chat history
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem('mxtk_sherpa_chat');
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (Array.isArray(parsed)) setMessages(parsed);
+      }
+    } catch { }
+  }, []);
+
+  // Persist chat history on change
+  useEffect(() => {
+    try { localStorage.setItem('mxtk_sherpa_chat', JSON.stringify(messages.slice(-100))); } catch { }
+  }, [messages]);
+
+  // Apply prefill prompt if provided
+  useEffect(() => {
+    if (prefillPrompt) setInput(prefillPrompt);
+  }, [prefillPrompt]);
+
+  // Rotate/update suggested questions based on conversation
+  useEffect(() => {
+    try {
+      const last = messages[messages.length - 1];
+      const seeds: string[] = [];
+      const text = (last?.content || '').toLowerCase();
+      if (/fraud|kyc|aml|whistle|bounty|acs|validator/.test(text)) {
+        seeds.push('How do validators join and stay compliant?');
+        seeds.push('What is the Asset Complexity Score?');
+        seeds.push('How do rewards and penalties work?');
+      }
+      if (/token|mint|leverage|stability|back(ed|ing)/.test(text)) {
+        seeds.push('How is MXTK backed by minerals?');
+        seeds.push('What drives MXTK stability?');
+        seeds.push('How does minting and redemption work?');
+      }
+      if (/transparen|ipfs|oracle|log|otc|aggregate/.test(text)) {
+        seeds.push('Where can I see transparency logs?');
+        seeds.push('How are oracle updates published?');
+        seeds.push('What OTC aggregates are available?');
+      }
+      if (/owner|wallet|custody|institution|market/.test(text)) {
+        seeds.push('How do owners participate?');
+        seeds.push('How do institutions integrate with MXTK?');
+        seeds.push('What markets list MXTK data?');
+      }
+      const base = seeds.length ? seeds : [
+        'Show me how validation works',
+        'Explain MXTK tokenomics simply',
+        'What are the main risks and mitigations?',
+      ];
+      // Deterministic rotation based on interaction count
+      let interactions = 0;
+      try { interactions = Number(localStorage.getItem('mxtk_sherpa_interactions') || '0'); } catch { }
+      const start = interactions % base.length;
+      const next = [base[start], base[(start + 1) % base.length], base[(start + 2) % base.length]];
+      setQuickQuestions(Array.from(new Set(next)));
+    } catch { }
+  }, [messages.length]);
 
   const sendMessage = useCallback(async (message: string) => {
     if (!message.trim() || isLoading) return;
@@ -80,7 +201,7 @@ export function GuidePanel({ className, onClose, embedded, prefillPrompt }: Guid
     try {
       const n = Number(localStorage.getItem('mxtk_sherpa_interactions') || '0') + 1;
       localStorage.setItem('mxtk_sherpa_interactions', String(n));
-    } catch {}
+    } catch { }
 
     try {
       const response = await fetch(getApiPath('/api/ai/chat'), {
@@ -100,7 +221,7 @@ export function GuidePanel({ className, onClose, embedded, prefillPrompt }: Guid
       };
 
       setMessages(prev => [...prev, assistantMessage]);
-      
+
       // Auto-append to journey if server indicates
       try {
         if (data.journeyBlock && data.autoAppend) {
@@ -114,16 +235,23 @@ export function GuidePanel({ className, onClose, embedded, prefillPrompt }: Guid
             setJourneyId(j.id);
             try {
               localStorage.setItem('mxtkJourneyId', j.id);
-            } catch {}
+            } catch { }
           }
         }
-      } catch {}
+      } catch { }
 
       try {
         if (data?.meta?.suggestHome === true || data?.autoAppend === true) {
           setSuggestHome(true);
         }
-      } catch {}
+        if (data?.meta?.homeWidget) {
+          await fetch(getApiPath('/api/ai/home/add'), {
+            method: 'POST',
+            headers: { 'content-type': 'application/json' },
+            body: JSON.stringify({ widget: data.meta.homeWidget })
+          });
+        }
+      } catch { }
     } catch (error) {
       const errorMessage: ChatMessage = {
         role: 'assistant',
@@ -151,16 +279,31 @@ export function GuidePanel({ className, onClose, embedded, prefillPrompt }: Guid
     e.preventDefault();
     sendMessage(input);
   };
-  // Scroll on any message change (user or assistant) with RAF for layout settle
+  // Scroll behavior: align to top when assistant replies; keep bottom for user sends
   useEffect(() => {
     try {
+      const lastIndex = messages.length - 1;
+      if (lastIndex < 0) return;
+      const last = messages[lastIndex];
+      const scroller = document.querySelector('.guide-drawer .drawer-body') as HTMLElement | null;
+      if (!scroller) return;
       requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          scrollToBottom('smooth');
-        });
+        if (last?.role === 'assistant') {
+          const el = messageRefs.current[lastIndex];
+          if (el) {
+            el.scrollIntoView({ behavior: 'auto', block: 'start' });
+            try { scroller.scrollTop = Math.max(0, scroller.scrollTop - 8); } catch { }
+            try {
+              el.classList.add('new-answer');
+              window.setTimeout(() => { try { el.classList.remove('new-answer'); } catch { } }, 1400);
+            } catch { }
+            return;
+          }
+        }
+        scrollToBottom('smooth');
       });
-    } catch {}
-  }, [messages.length, scrollToBottom]);
+    } catch { }
+  }, [messages.length, scrollToBottom, messages]);
 
   // When drawer opens, snap to bottom
   useEffect(() => {
@@ -169,11 +312,7 @@ export function GuidePanel({ className, onClose, embedded, prefillPrompt }: Guid
     return () => window.removeEventListener('mxtk:guide:open', handleOpen as EventListener);
   }, [scrollToBottom]);
 
-  const quickQuestions = [
-    'What is MXTK?',
-    'How does MXTK ensure transparency?',
-    'Who can use MXTK?',
-  ];
+  // quickQuestions now dynamic
 
   if (!isOpen && !embedded) {
     return (
@@ -196,48 +335,64 @@ export function GuidePanel({ className, onClose, embedded, prefillPrompt }: Guid
         <div className="flex-1"></div>
         <div className="conversation space-y-3">
           {messages.map((message, index) => (
-            <Card
+            <div
               key={index}
-              data-role={message.role}
-              className={`p-3 animate-message-in ${
-                message.role === 'user'
+              ref={(el: HTMLDivElement | null) => { messageRefs.current[index] = el; }}
+            >
+              <Card
+                data-role={message.role}
+                className={`p-3 animate-message-in ${message.role === 'user'
                   ? 'bg-blue-700 text-white dark:bg-blue-700/70 ml-8'
                   : 'bg-blue-200/90 text-blue-950 border border-blue-300/60 dark:bg-blue-500/30 dark:text-blue-50 mr-8'
-              }`}
-            >
-              <div className="text-sm">
-                <strong className="chat-sender-text">
-                  {message.role === 'user' ? 'You' : 'Sherpa'}:
-                </strong>
-                <div className={`mt-1 prose prose-sm dark:prose-invert leading-relaxed ${message.role === 'user' ? 'text-white' : 'text-gray-800 dark:text-gray-800'}`}>
-                  <ReactMarkdown
-                    remarkPlugins={[remarkGfm]}
-                    components={{
-                      ul: ({node, ...props}) => <ul className="list-disc pl-5 space-y-1" {...props} />,
-                      ol: ({node, ...props}) => <ol className="list-decimal pl-5 space-y-1" {...props} />,
-                      li: ({node, ...props}) => <li className="leading-relaxed" {...props} />,
-                      p: ({node, ...props}) => <p className="mb-2" {...props} />,
-                      strong: ({node, ...props}) => <strong className="font-semibold" {...props} />,
-                      em: ({node, ...props}) => <em className="italic" {...props} />,
-                    }}
-                  >
-                    {message.content}
-                  </ReactMarkdown>
-                </div>
-              </div>
-            </Card>
-          ))}
-            {isLoading && (
-              <Card className="p-3 bg-gray-50 dark:bg-gray-800 mr-8 animate-message-in">
+                  }`}
+              >
                 <div className="text-sm">
-                  <strong className="text-gray-900 dark:text-white">Sherpa:</strong>
-                  <p className="mt-1 text-gray-500 dark:text-gray-400">
-                    Thinking...
-                  </p>
+                  <strong className="chat-sender-text">
+                    {message.role === 'user' ? 'You' : 'Sherpa'}:
+                  </strong>
+                  <div className={`mt-1 prose prose-sm dark:prose-invert leading-relaxed ${message.role === 'user' ? 'text-white' : 'text-gray-800 dark:text-gray-800'}`}>
+                    <ReactMarkdown
+                      remarkPlugins={[remarkGfm]}
+                      components={{
+                        a: ({ node, ...props }) => <a className="underline text-blue-700 dark:text-blue-300 hover:opacity-80" target="_blank" rel="noopener noreferrer" {...props} />,
+                        table: ({ node, ...props }) => <div className="overflow-auto"><table className="table-auto border-collapse w-full text-sm" {...props} /></div>,
+                        th: ({ node, ...props }) => <th className="border px-2 py-1 text-left" {...props} />,
+                        td: ({ node, ...props }) => <td className="border px-2 py-1 align-top" {...props} />,
+                        code: ({ inline, className, children, ...props }: any) => {
+                          const isInline = inline || String(children).includes('`');
+                          if (isInline) return <code className="px-1 py-0.5 rounded bg-black/10 dark:bg-white/10" {...props}>{children}</code>;
+                          return (
+                            <pre className="rounded bg-black/80 text-white p-3 overflow-auto">
+                              <code {...props}>{children}</code>
+                            </pre>
+                          );
+                        },
+                        ul: ({ node, ...props }) => <ul className="list-disc pl-5 space-y-1" {...props} />,
+                        ol: ({ node, ...props }) => <ol className="list-decimal pl-5 space-y-1" {...props} />,
+                        li: ({ node, ...props }) => <li className="leading-relaxed" {...props} />,
+                        p: ({ node, ...props }) => <p className="mb-3" {...props} />,
+                        strong: ({ node, ...props }) => <strong className="font-semibold" {...props} />,
+                        em: ({ node, ...props }) => <em className="italic" {...props} />,
+                      }}
+                    >
+                      {message.role === 'assistant' ? normalizeAssistantContent(message.content) : message.content}
+                    </ReactMarkdown>
+                  </div>
                 </div>
               </Card>
-            )}
-            <div ref={bottomRef} />
+            </div>
+          ))}
+          {isLoading && (
+            <Card className="p-3 bg-gray-50 dark:bg-gray-800 mr-8 animate-message-in">
+              <div className="text-sm">
+                <strong className="text-gray-900 dark:text-white">Sherpa:</strong>
+                <p className="mt-1 text-gray-500 dark:text-gray-400">
+                  Thinking...
+                </p>
+              </div>
+            </Card>
+          )}
+          <div ref={bottomRef} />
         </div>
       </div>
 
@@ -252,7 +407,6 @@ export function GuidePanel({ className, onClose, embedded, prefillPrompt }: Guid
         {suggestHome && (
           <div className="mb-2 text-xs flex items-center gap-2">
             <span className="opacity-70">Looks useful?</span>
-            {/* @ts-expect-error client in client */}
             <AddToHomeButton kind="getting-started" />
           </div>
         )}
@@ -272,7 +426,7 @@ export function GuidePanel({ className, onClose, embedded, prefillPrompt }: Guid
           <input
             data-testid="guide-input"
             value={input}
-            onChange={(e)=>setInput(e.target.value)}
+            onChange={(e) => setInput(e.target.value)}
             placeholder="Ask Sherpa about MXTK…"
             className="flex-1 rounded-lg px-3 py-2 bg-white text-slate-900 placeholder:text-gray-500 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />

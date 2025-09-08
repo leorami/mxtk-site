@@ -9,7 +9,7 @@
 /* 0) Smooth shift for the content wrapper */
 [data-shiftable-root] {
   padding-right: 0;
-  transition: padding-right .32s cubic-bezier(.22,.61,.36,1);
+  transition: padding-right .32s cubic-bezier(.22, .61, .36, 1);
   box-sizing: border-box;
 }
 
@@ -28,7 +28,10 @@ html.guide-open [data-shiftable-root] {
 
 /* 3) Tablet: slightly narrower drawer */
 @media (max-width: 1024px) {
-  :root { --guide-width: 360px; }
+  :root {
+    --guide-width: 360px;
+  }
+
   html.guide-open [data-shiftable-root] {
     padding-right: calc(var(--guide-width, 360px) + 1rem);
   }
@@ -47,14 +50,75 @@ html.guide-open [data-shiftable-root] {
 }
 
 /* === fix-left-shift: footer pad only when drawer open + no horizontal scroll === */
-html:not(.guide-open) .footer-container { padding-right: 0 !important; }
-html.guide-open .footer-container { padding-right: calc(var(--guide-width, 420px) + 2rem); }
-@media (max-width: 1024px){
-  html.guide-open .footer-container { padding-right: calc(var(--guide-width, 360px) + 1rem); }
+html:not(.guide-open) .footer-container {
+  padding-right: 0 !important;
 }
+
+html.guide-open .footer-container {
+  padding-right: calc(var(--guide-width, 420px) + 2rem);
+}
+
+@media (max-width: 1024px) {
+  html.guide-open .footer-container {
+    padding-right: calc(var(--guide-width, 360px) + 1rem);
+  }
+}
+
 /* kill accidental horizontal gutters on first paint */
-html, body { overflow-x: hidden; }
-:root { --drawer-w: 0px; }
-html.guide-open { --drawer-w: var(--guide-width, 420px); }
-.guide-drawer { width: var(--drawer-w); transform: none !important; transition: width .28s ease; overflow: hidden; }
-[data-shiftable-root] { box-sizing: border-box !important; inline-size: 100%; max-inline-size: 100%; padding-right: calc(var(--drawer-w) + 2rem) !important; }
+html,
+body {
+  overflow-x: hidden;
+}
+
+:root {
+  --drawer-w: 0px;
+}
+
+html.guide-open {
+  --drawer-w: var(--guide-width, 420px);
+}
+
+.guide-drawer {
+  width: var(--drawer-w);
+  transform: none !important;
+  transition: width .28s ease;
+  overflow: hidden;
+}
+
+[data-shiftable-root] {
+  box-sizing: border-box !important;
+  inline-size: 100%;
+  max-inline-size: 100%;
+  padding-right: calc(var(--drawer-w) + 2rem) !important;
+}
+
+/* Subtle highlight for new assistant answers */
+.conversation .new-answer {
+  scroll-margin-top: 8px;
+}
+
+.conversation .new-answer>div {
+  position: relative;
+}
+
+.conversation .new-answer>div::after {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  border-radius: 12px;
+  box-shadow: 0 0 0 8px rgba(59, 130, 246, 0.10);
+  pointer-events: none;
+  animation: mxtkAnswerGlow 1.2s ease-out forwards;
+}
+
+@keyframes mxtkAnswerGlow {
+  0% {
+    box-shadow: 0 0 0 8px rgba(59, 130, 246, 0.10);
+    opacity: 1;
+  }
+
+  100% {
+    box-shadow: 0 0 0 0 rgba(59, 130, 246, 0);
+    opacity: 1;
+  }
+}
