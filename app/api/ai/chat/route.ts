@@ -1,5 +1,5 @@
 import { blockFromAnswer } from '@/lib/ai/journey';
-import { ChatMessageSchema, getChatModel, getEmbedder, type ChatResponse } from '@/lib/ai/models';
+import { ChatMessageSchema, getChatModel, getEmbedder, getHeaders, type ChatResponse } from '@/lib/ai/models';
 import { getBudget, getTodayUSD } from '@/lib/ai/ops/budget';
 import { estimateUSD, logCost } from '@/lib/ai/ops/costs';
 import { searchSimilar } from '@/lib/ai/vector-store';
@@ -26,10 +26,10 @@ export async function POST(request: NextRequest): Promise<NextResponse<ChatRespo
         tier = 'suggest';
       }
     }
-    
+
     const embedder = getEmbedder();
     const similarChunks = await searchSimilar(parsed.message, embedder, 5);
-    
+
     if (similarChunks.length === 0) {
       const fallback = "I don't have specific information about that topic in my knowledge base. Could you try rephrasing your question or ask about MXTK's core features like validator incentives, transparency mechanisms, or institutional features?";
       const inTok0 = Math.ceil((parsed.message || '').length / 4);
@@ -43,10 +43,83 @@ export async function POST(request: NextRequest): Promise<NextResponse<ChatRespo
         sources: [],
       });
     }
-    
-    // Mock AI response generation (in production, this would use an LLM)
-    const answer = generateMockResponse(parsed.message, parsed.mode, similarChunks);
-    
+
+    // Live LLM when OpenAI key is present (supports OPENAI_API_KEY or openai_api_key) and not in test
+    const useLive = Boolean(process.env.OPENAI_API_KEY || (process as any).env?.openai_api_key) && process.env.NODE_ENV !== 'test';
+    let answer: string;
+    if (useLive) {
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), 12_000);
+      const context = similarChunks.length
+        ? sanitizePublicText(similarChunks.map(s => s.chunk.text).join('\n\n').slice(0, 1800))
+        : '';
+      const siteOrigin = (process.env.NEXT_PUBLIC_SITE_ORIGIN || 'https://mineral-token.com').trim();
+      let siteHost = '';
+      try { siteHost = new URL(siteOrigin).host; } catch { }
+      const rawLinks: string[] = Array.from(new Set(
+        similarChunks
+          .map(s => (s as any)?.chunk?.meta?.url as string | undefined)
+          .filter((u): u is string => typeof u === 'string' && u.length > 0)
+      ));
+      const internal: string[] = [];
+      const external: string[] = [];
+      for (const u of rawLinks) {
+        try {
+          const h = new URL(u).host;
+          if (siteHost && h === siteHost) internal.push(u);
+          else external.push(u);
+        } catch { external.push(u); }
+      }
+      const linksList: string[] = [...internal, ...external].slice(0, 6);
+      const tone = parsed.mode === 'learn'
+        ? 'Be a friendly teacher. Define terms simply, avoid jargon, give short step-by-step explanations, and build understanding layer by layer without sounding condescending.'
+        : parsed.mode === 'explore'
+          ? 'Be concise and helpful. Focus on concepts and comparisons with light examples.'
+          : 'Be precise and structured. State assumptions, trade-offs, and references to context.';
+      const domainGuide = 'Explain MXTK using: conservative geology estimates; long extraction timelines; anti-fraud validation; token leverage and stability; tech-driven efficiency; context of minerals-backed assets vs fiat. Never claim features beyond MXTK scope.';
+      const formatting = 'Return answers in clean markdown suitable for `remark-gfm`: use short paragraphs, bullet and numbered lists (with proper indentation for nested items), tables only when helpful, and code fences for snippets. Prefer internal site links when relevant.';
+      const boundaries = 'Only answer using the provided Context and known MXTK site knowledge. If the answer is not in Context or known MXTK materials, say you do not know and suggest a related, on-track question.';
+      const sys = `You are MXTK Sherpa, a trustworthy, experienced guide for Mineral Token (MXTK). Use the Context faithfully and follow the tone.
+
+Context:
+${context}
+
+Links:
+${linksList.map(u => `- ${u}`).join('\n')}
+
+Guidelines:
+- ${tone}
+- ${domainGuide}
+- ${formatting}
+- ${boundaries}
+- Only include a link if it directly helps the user.`;
+      try {
+        const r = await fetch('https://api.openai.com/v1/chat/completions', {
+          method: 'POST',
+          headers: { 'content-type': 'application/json', ...(getHeaders() as any) },
+          body: JSON.stringify({
+            model: getChatModel().name,
+            messages: [
+              { role: 'system', content: sys },
+              { role: 'user', content: parsed.message },
+            ],
+            temperature: 0.3,
+            max_tokens: 400,
+          }),
+          signal: controller.signal,
+        } as any);
+        clearTimeout(timer);
+        if (!r.ok) throw new Error(`chat ${r.status}`);
+        const j = await r.json();
+        answer = sanitizePublicText(j.choices?.[0]?.message?.content || '');
+        if (!answer) answer = generateMockResponse(parsed.message, parsed.mode, similarChunks);
+      } catch {
+        answer = generateMockResponse(parsed.message, parsed.mode, similarChunks);
+      }
+    } else {
+      answer = generateMockResponse(parsed.message, parsed.mode, similarChunks);
+    }
+
     // Deduplicate sources and keep highest relevance score for each
     const sourceMap = new Map<string, number>();
     similarChunks.forEach(result => {
@@ -54,12 +127,12 @@ export async function POST(request: NextRequest): Promise<NextResponse<ChatRespo
       const currentScore = sourceMap.get(source) || 0;
       sourceMap.set(source, Math.max(currentScore, result.score));
     });
-    
+
     const sources = Array.from(sourceMap.entries()).map(([source, relevance]) => ({
       source,
       relevance,
     }));
-    
+
     // Infer section from user prompt and create journey block
     let section: 'overview' | 'how-it-works' | 'risks' | 'tokenomics' | 'validation' | 'faq' | 'glossary' | 'resources' = 'overview';
     if (/how\s+it\s+works|architecture|flow/i.test(parsed.message)) section = 'how-it-works';
@@ -67,11 +140,12 @@ export async function POST(request: NextRequest): Promise<NextResponse<ChatRespo
     if (/tokenomics|vesting|distribution/i.test(parsed.message)) section = 'tokenomics';
     if (/validate|validator|attest/i.test(parsed.message)) section = 'validation';
     if (/glossary|define|term/i.test(parsed.message)) section = 'glossary';
-    
+
     const block = blockFromAnswer(answer, sources.map(s => s.source), { section, confidence: 0.8 });
-    
+
     const autoAppend = /^(explain|define|teach\s+me)/i.test(parsed.message || '');
-    
+    const homeWidget = autoAppend ? { type: 'summary', title: 'MXTK Overview', data: { text: answer.slice(0, 400) } } : null;
+
     const res = NextResponse.json({
       ok: true,
       answer,
@@ -79,7 +153,7 @@ export async function POST(request: NextRequest): Promise<NextResponse<ChatRespo
       sources,
       journeyBlock: block,
       autoAppend,
-      meta: { suggestHome: autoAppend === true },
+      meta: { suggestHome: autoAppend === true, homeWidget },
     });
     // Rough usage estimate by characters (dev-mode mock)
     const inTok = Math.ceil((parsed.message || '').length / 4);
@@ -97,24 +171,32 @@ export async function POST(request: NextRequest): Promise<NextResponse<ChatRespo
   }
 }
 
+function sanitizePublicText(text: string): string {
+  // Remove common internal/disclaimer phrases and markdown headings
+  const forbidden = /(internal\s+draft|confidential|proprietary|do\s*not\s*distribute|internal\s*only|nda|patent\s*claims?)/gi;
+  const noHeadings = text.replace(/^\s{0,3}#{1,6}\s+.*$/gm, '').trim();
+  const cleaned = noHeadings.replace(forbidden, '').replace(/\s{2,}/g, ' ').replace(/\s+[,.;:]/g, (m) => m.trim().slice(-1));
+  return cleaned.trim();
+}
+
 function generateMockResponse(
-  message: string, 
-  mode: string, 
+  message: string,
+  mode: string,
   chunks: Array<{ chunk: any; score: number }>
 ): string {
   const lowerMessage = message.toLowerCase();
   const topChunk = chunks[0]?.chunk.text || '';
-  
+
   // Extract key concepts from the query and chunks
   const isAboutTransparency = lowerMessage.includes('transparency') || topChunk.toLowerCase().includes('transparency');
   const isAboutValidators = lowerMessage.includes('validator') || topChunk.toLowerCase().includes('validator');
   const isAboutOracles = lowerMessage.includes('oracle') || topChunk.toLowerCase().includes('oracle');
   const isAboutTokenization = lowerMessage.includes('tokeniz') || topChunk.toLowerCase().includes('tokeniz');
   const isAboutRisk = lowerMessage.includes('risk') || topChunk.toLowerCase().includes('risk');
-  
+
   // Generate contextual response based on what we found
   let coreAnswer = '';
-  
+
   if (isAboutTransparency) {
     coreAnswer = `MXTK ensures transparency through several key mechanisms:
 
@@ -162,29 +244,34 @@ This enables traditional financial institutions to safely interact with tokenize
 Each risk is mitigated through both technical and financial safeguards.`;
   } else {
     // Generic response using actual content
-    const snippet = topChunk.substring(0, 300).trim();
-    coreAnswer = `Based on the MXTK documentation: ${snippet}${snippet.length < topChunk.length ? '...' : ''}`;
+    const raw = topChunk.substring(0, 300).trim();
+    const snippet = sanitizePublicText(raw);
+    if (snippet.length < 10) {
+      coreAnswer = "I don't have specific details to share on that. Could you rephrase or ask a more specific question about MXTK's features (validators, transparency, oracles, or tokenization)?";
+    } else {
+      coreAnswer = `${snippet}${raw.length < topChunk.length ? '...' : ''}`;
+    }
   }
-  
+
   // Add mode-specific framing
   switch (mode) {
     case 'learn':
       return `${coreAnswer}
 
 These concepts form the foundation of MXTK's approach to institutional-grade tokenized assets.`;
-    
+
     case 'explore':
       return `${coreAnswer}
 
 Would you like me to dive deeper into any of these mechanisms or explore related aspects?`;
-    
+
     case 'analyze':
       return `From a technical and market perspective:
 
 ${coreAnswer}
 
 This multi-layered approach positions MXTK to bridge traditional finance and decentralized systems effectively.`;
-    
+
     default:
       return coreAnswer;
   }
