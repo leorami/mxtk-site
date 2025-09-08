@@ -1,69 +1,69 @@
 const base = process.env.BASE_URL || 'http://localhost:2000'
 export async function run() {
-  const puppeteer = await import('puppeteer')
-  const fs = await import('node:fs/promises')
-  const browser = await puppeteer.launch({ headless: 'new' })
-  const page = await browser.newPage()
-  await page.setViewport({ width: 1366, height: 900 })
-  page.on('console', m => { const t = m.type(); if (t === 'error') { throw new Error('Console error: ' + m.text()) } })
+    const puppeteer = await import('puppeteer')
+    const fs = await import('node:fs/promises')
+    const browser = await puppeteer.launch({ headless: 'new' })
+    const page = await browser.newPage()
+    await page.setViewport({ width: 1366, height: 900 })
+    page.on('console', m => { const t = m.type(); if (t === 'error') { throw new Error('Console error: ' + m.text()) } })
 
-  // 1) Open root, open Guide, ask a question
-  await page.goto(base + '/', { waitUntil: 'networkidle0' })
-  await page.waitForSelector('[data-testid="sherpa-pill"]', { timeout: 8000 })
-  await page.$eval('[data-testid="sherpa-pill"]', (el) => (el instanceof HTMLElement) && el.click())
-  await page.waitForSelector('.guide-drawer', { timeout: 8000 })
-  await page.waitForSelector('input[data-testid="guide-input"]', { timeout: 8000 })
-  await page.type('input[data-testid="guide-input"]', 'Show me something useful for Home')
-  await page.keyboard.press('Enter')
-  await page.waitForTimeout(1500)
+    // 1) Open root, open Guide, ask a question
+    await page.goto(base + '/', { waitUntil: 'networkidle0' })
+    await page.waitForSelector('[data-testid="sherpa-pill"]', { timeout: 8000 })
+    await page.$eval('[data-testid="sherpa-pill"]', (el) => (el instanceof HTMLElement) && el.click())
+    await page.waitForSelector('.guide-drawer', { timeout: 8000 })
+    await page.waitForSelector('input[data-testid="guide-input"]', { timeout: 8000 })
+    await page.type('input[data-testid="guide-input"]', 'Show me something useful for Home')
+    await page.keyboard.press('Enter')
+    await page.waitForTimeout(1500)
 
-  // 2) Verify CTA row logic (present when applicable, removed otherwise)
-  const ctaVisible = await page.$eval('.guide-drawer', el => !!el.querySelector('span.opacity-70'))
-  if (!ctaVisible) console.warn('CTA row not visible (may depend on AI response).')
+    // 2) Verify CTA row logic (present when applicable, removed otherwise)
+    const ctaVisible = await page.$eval('.guide-drawer', el => !!el.querySelector('span.opacity-70'))
+    if (!ctaVisible) console.warn('CTA row not visible (may depend on AI response).')
 
-  // 3) Click Add to Home -> navigate to /home -> scaffold renders with title/desc/section
-  try {
-    const addBtn = await page.$('button:has-text("Add to Home"), a:has-text("Open Home")')
-    if (addBtn) {
-      await addBtn.click()
-      await page.waitForTimeout(800)
+    // 3) Click Add to Home -> navigate to /home -> scaffold renders with title/desc/section
+    try {
+        const addBtn = await page.$('button:has-text("Add to Home"), a:has-text("Open Home")')
+        if (addBtn) {
+            await addBtn.click()
+            await page.waitForTimeout(800)
+        }
+    } catch { }
+    await page.goto(base + '/home', { waitUntil: 'networkidle0' })
+    await page.waitForSelector('[data-testid="page-scaffold"]', { timeout: 8000 })
+    await page.waitForSelector('section.section-card', { timeout: 8000 })
+
+    // 4) Hover a widget -> content scrolls; click Refresh/Learn More
+    const widget = await page.$('[data-testid="widget-frame"]')
+    if (widget) {
+        await widget.hover()
+        await page.waitForTimeout(250)
+        await page.$eval('[data-testid="refresh-widget"]', (el) => (el instanceof HTMLElement) && el.click())
+        await page.$eval('[data-testid="learn-widget"]', (el) => (el instanceof HTMLElement) && el.click())
     }
-  } catch {}
-  await page.goto(base + '/home', { waitUntil: 'networkidle0' })
-  await page.waitForSelector('[data-testid="page-scaffold"]', { timeout: 8000 })
-  await page.waitForSelector('section.section-card', { timeout: 8000 })
 
-  // 4) Hover a widget -> content scrolls; click Refresh/Learn More
-  const widget = await page.$('[data-testid="widget-frame"]')
-  if (widget) {
-    await widget.hover()
-    await page.waitForTimeout(250)
-    await page.$eval('[data-testid="refresh-widget"]', (el) => (el instanceof HTMLElement) && el.click())
-    await page.$eval('[data-testid="learn-widget"]', (el) => (el instanceof HTMLElement) && el.click())
-  }
+    // 5) Assert header icons color equals text color (computed)
+    const colorOk = await page.evaluate(() => {
+        const header = document.querySelector('.brand-header')
+        if (!header) return true
+        const cs = getComputedStyle(header)
+        const textColor = cs.color
+        const icon = document.querySelector('[data-testid="experience-controls-desktop"] [data-testid="experience-icons"]')
+        if (!icon) return true
+        const iconColor = getComputedStyle(icon).color
+        return textColor === iconColor
+    })
+    if (!colorOk) throw new Error('Header icon color does not match text color')
 
-  // 5) Assert header icons color equals text color (computed)
-  const colorOk = await page.evaluate(() => {
-    const header = document.querySelector('.brand-header')
-    if (!header) return true
-    const cs = getComputedStyle(header)
-    const textColor = cs.color
-    const icon = document.querySelector('[data-testid="experience-controls-desktop"] [data-testid="experience-icons"]')
-    if (!icon) return true
-    const iconColor = getComputedStyle(icon).color
-    return textColor === iconColor
-  })
-  if (!colorOk) throw new Error('Header icon color does not match text color')
+    // 6) Capture screenshots (desktop/iPad/mobile)
+    await fs.mkdir(`${process.cwd()}/.tmp/mxtk`, { recursive: true })
+    await page.screenshot({ path: `${process.cwd()}/.tmp/mxtk/w12-desktop.png`, fullPage: true })
+    await page.setViewport({ width: 1024, height: 800 })
+    await page.screenshot({ path: `${process.cwd()}/.tmp/mxtk/w12-ipad.png`, fullPage: true })
+    await page.setViewport({ width: 390, height: 800 })
+    await page.screenshot({ path: `${process.cwd()}/.tmp/mxtk/w12-mobile.png`, fullPage: true })
 
-  // 6) Capture screenshots (desktop/iPad/mobile)
-  await fs.mkdir(`${process.cwd()}/.tmp/mxtk`, { recursive: true })
-  await page.screenshot({ path: `${process.cwd()}/.tmp/mxtk/w12-desktop.png`, fullPage: true })
-  await page.setViewport({ width: 1024, height: 800 })
-  await page.screenshot({ path: `${process.cwd()}/.tmp/mxtk/w12-ipad.png`, fullPage: true })
-  await page.setViewport({ width: 390, height: 800 })
-  await page.screenshot({ path: `${process.cwd()}/.tmp/mxtk/w12-mobile.png`, fullPage: true })
-
-  await browser.close()
+    await browser.close()
 }
 
 run().catch(e => { console.error(e); process.exit(1); })

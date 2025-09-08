@@ -17,10 +17,10 @@ import { Roboto, Space_Grotesk } from 'next/font/google';
 import { cookies } from 'next/headers';
 import './globals.css';
 import './styles/guide-drawer.css';
+import './styles/home-widgets.css';
 import './styles/minerals.css';
 import './styles/motion.css';
 import './styles/page-scaffold.css';
-import './styles/home-widgets.css';
 
 const roboto = Roboto({
   subsets: ['latin'],

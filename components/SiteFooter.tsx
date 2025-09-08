@@ -11,8 +11,11 @@ export default function SiteFooter() {
         {/* Footer Sherpa chat removed; header dropdown is primary */}
 
         <div className="hidden md:flex items-center justify-between gap-4 w-full ">
-          {/* Left: Copyright */}
-          <div className="text-sm text-muted footer-copyright">© 2025 Mineral Token (MXTK).</div>
+          {/* Left: Copyright + Theme switcher */}
+          <div className="flex items-center gap-2">
+            <div className="text-sm text-muted footer-copyright">© 2025 Mineral Token (MXTK).</div>
+            <div className="hidden md:block ml-3"><ThemeSwitch aria-label="Toggle theme" /></div>
+          </div>
 
           {/* Right: Legal links (reserve space with padding-right to avoid overlap) */}
           <nav className="flex items-center gap-4 text-sm ml-auto">
@@ -23,7 +26,6 @@ export default function SiteFooter() {
             <Link href="/the-team" suppressHydrationWarning>Team</Link>
             <Link href="/careers" suppressHydrationWarning>Careers</Link>
             <Link href="/contact-us" suppressHydrationWarning>Contact</Link>
-            <div className="hidden md:block"><ThemeSwitch aria-label="Toggle theme" /></div>
           </nav>
         </div>
 

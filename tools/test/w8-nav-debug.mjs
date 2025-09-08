@@ -25,15 +25,16 @@ export async function run() {
   }
   // Verify padding-right on [data-shiftable-root] matches --drawer-w
   try {
-    const padOk = await page.evaluate(() => {
+    const mismatch = await page.evaluate(() => {
       const el = document.querySelector('[data-shiftable-root]') as HTMLElement | null
-      if (!el) return false
-      const pr = getComputedStyle(el).paddingRight
+      if (!el) return 'no-root'
+      const pr = getComputedStyle(el).paddingRight.trim()
       const dw = getComputedStyle(document.documentElement).getPropertyValue('--drawer-w').trim()
-      // Parse CSS calc result and variable; accept when both are non-zero
-      return pr !== '0px' && !!dw && dw !== '0px'
+      if (!pr || pr === '0px') return 'no-padding'
+      if (!dw || dw === '0px') return 'no-var'
+      return null
     })
-    if (!padOk) throw new Error('Shiftable root padding-right does not match --drawer-w')
+    if (mismatch) throw new Error('Shiftable root padding check failed: ' + mismatch)
   } catch (e) {
     console.warn('Drawer padding check skipped:', e && (e.message || e))
   }

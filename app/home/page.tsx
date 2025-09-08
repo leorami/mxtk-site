@@ -1,8 +1,8 @@
-import 'server-only'
-import { cookies } from 'next/headers'
-import { getApiUrl } from '@/lib/api'
-import PageScaffold from '@/components/layout/PageScaffold'
 import Grid from '@/components/home/Grid'
+import PageScaffold from '@/components/layout/PageScaffold'
+import { getApiUrl } from '@/lib/api'
+import { cookies } from 'next/headers'
+import 'server-only'
 
 export const dynamic = 'force-dynamic'
 
@@ -14,7 +14,7 @@ export default async function Page() {
     try {
       const res = await fetch(getApiUrl(`/ai/home/${id}`), { cache: 'no-store', headers: { 'ngrok-skip-browser-warning': 'true' } })
       if (res.ok) initialDoc = await res.json()
-    } catch {}
+    } catch { }
   }
 
   const sections = [

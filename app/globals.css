@@ -1618,8 +1618,13 @@ h3+.btn-link {
 }
 
 /* Icons in header follow text color */
-.site-header .icon { color: var(--ink-strong); }
-html.dark .site-header .icon { color: #fff; }
+.site-header .icon {
+  color: var(--ink-strong);
+}
+
+html.dark .site-header .icon {
+  color: #fff;
+}
 
 /* brand background images (full-bleed, behind content) */
 .brand-bg {

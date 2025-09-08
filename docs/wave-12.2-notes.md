@@ -1,0 +1,25 @@
+# Wave 12.2 — Live widgets + PATCH persistence (hardened)
+
+- PATCH schema (zod):
+  - `zWidgetPatch`: `{ id, size?, pos?, pinned?, data? }`
+  - `zHomePatch`: `{ widgets: zWidgetPatch[] }`
+  - Located in `lib/home/schema.ts`
+- API: `PATCH /api/ai/home/[id]`
+  - Accepts batch `zHomePatch` and legacy `{ widgetId, pos/size/pin/remove/data }`
+  - Applies reducers `moveWidget`, `resizeWidget`, `pinWidget`, `upsertWidgetData`, `removeWidget`
+  - Atomic save via `putHome()`, returns `{ ok, doc }` with `Cache-Control: no-store`
+- Widgets:
+  - `RecentAnswers`: server-only fetch of recent assistant outputs (up to 5), styled via `.widget-recent-answers .answer-card`
+  - `GlossarySpotlight`: server-side pick by day; button dispatches `mxtk:guide:prefill`
+  - `CustomNote`: client text area with 600ms debounce; PATCHes `{ widgets:[{ id, data:{ note } } ] }`
+- Guide prefill:
+  - `window.dispatchEvent(new CustomEvent('mxtk:guide:prefill', { detail:{ prompt } }))`
+  - `components/ai/GuideDrawer.tsx` listens, opens drawer, seeds `GuidePanel` input
+- Footer:
+  - Theme switcher placed to the right of the footer logo/copyright; hidden on mobile
+  - Hit area enlarged via `.theme-switch` CSS in `app/styles/page-scaffold.css`
+- Constraints honored:
+  - No basePath changes; used `getApiUrl`/existing helpers
+  - SSR-safe: server components avoid `window`; client-only effects isolated
+  - No proxy/middleware changes; Guide width-driven drawer preserved
+  - Light mode default; tokens respected

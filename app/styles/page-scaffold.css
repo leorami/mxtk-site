@@ -98,3 +98,10 @@
         align-items: flex-end;
     }
 }
+
+/* Wave 12.2: larger hit area for theme control */
+.theme-switch button,
+.theme-switch {
+    inline-size: 40px;
+    block-size: 40px;
+}

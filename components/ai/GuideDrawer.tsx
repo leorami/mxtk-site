@@ -27,6 +27,19 @@ export default function GuideDrawer() {
     return () => { try { root.classList.remove('guide-open'); } catch { } };
   }, [open]);
 
+  // Wave 12.2: Support 'mxtk:guide:prefill' to open drawer and seed input
+  useEffect(() => {
+    const handler = (e: Event) => {
+      try {
+        const d = (e as CustomEvent).detail || {};
+        if (d.prompt) setPrefill(String(d.prompt));
+        setOpen(true);
+      } catch { }
+    };
+    window.addEventListener('mxtk:guide:prefill', handler as EventListener);
+    return () => window.removeEventListener('mxtk:guide:prefill', handler as EventListener);
+  }, []);
+
   useEffect(() => {
     const h = (e: Event) => {
       const d = (e as CustomEvent).detail || {};

@@ -2,11 +2,10 @@
 
 // Pin-to-Home removed per UI request
 import AddToHomeButton from '@/components/ai/AddToHomeButton';
-import Link from 'next/link';
-import { getBasePathUrl } from '@/lib/basepath';
 import AppImage from '@/components/ui/AppImage';
 import Card from '@/components/ui/Card';
-import { getApiPath } from '@/lib/basepath';
+import { getApiPath, getBasePathUrl } from '@/lib/basepath';
+import Link from 'next/link';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -432,7 +431,7 @@ export function GuidePanel({ className, onClose, embedded, prefillPrompt }: Guid
         {/* CTA logic: show only when applicable; Open Home hidden on /home */}
         {(() => {
           let onHome = false
-          try { onHome = typeof window !== 'undefined' && (location.pathname.endsWith('/home') || location.pathname === '/home') } catch {}
+          try { onHome = typeof window !== 'undefined' && (location.pathname.endsWith('/home') || location.pathname === '/home') } catch { }
           const canAdd = suggestHome && !onHome
           const canOpenHome = !onHome
           const showCtaRow = canAdd || canOpenHome

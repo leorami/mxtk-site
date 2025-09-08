@@ -1,6 +1,33 @@
-.widget-frame { padding-top: 2.25rem; }
-.widget-frame .widget-actions { position: absolute; top: .5rem; right: .5rem; display: inline-flex; gap: .4rem; }
-.widget-frame .widget-body { max-block-size: 18rem; overflow: hidden; }
-.widget-frame:hover .widget-body { overflow: auto; }
-.widget-frame .widget-body { scrollbar-gutter: stable; }
+.widget-frame {
+    padding-top: 2.25rem;
+}
 
+.widget-frame .widget-actions {
+    position: absolute;
+    top: .5rem;
+    right: .5rem;
+    display: inline-flex;
+    gap: .4rem;
+}
+
+.widget-frame .widget-body {
+    max-block-size: 18rem;
+    overflow: hidden;
+}
+
+.widget-frame:hover .widget-body {
+    overflow: auto;
+}
+
+.widget-frame .widget-body {
+    scrollbar-gutter: stable;
+}
+
+/* Wave 12.2 recent answers styling */
+.widget-recent-answers .answer-card {
+    padding: .6rem .75rem;
+    border: 1px solid var(--border-soft);
+    border-radius: 12px;
+    background: var(--surface-elev-1);
+    margin-block: .5rem;
+}

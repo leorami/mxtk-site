@@ -1,5 +1,5 @@
 "use client";
-import { getApiPath } from '@/lib/basepath';
+import { getApiUrl } from '@/lib/api';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 export default function CustomNote({ widgetId }: { widgetId?: string }) {
@@ -8,7 +8,6 @@ export default function CustomNote({ widgetId }: { widgetId?: string }) {
     const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
     useEffect(() => {
-        // Try to load from local snapshot first
         try {
             const raw = localStorage.getItem('mxtk_home_note');
             if (raw) setNote(raw);
@@ -22,11 +21,11 @@ export default function CustomNote({ widgetId }: { widgetId?: string }) {
             try {
                 let homeId: string | null = null;
                 try { homeId = localStorage.getItem('mxtk_home_id'); } catch { }
-                if (!homeId) { setStatus('error'); return; }
-                const res = await fetch(getApiPath(`/api/ai/home/${encodeURIComponent(homeId)}`), {
+                if (!homeId || !widgetId) { setStatus('error'); return; }
+                const res = await fetch(getApiUrl(`/ai/home/${encodeURIComponent(homeId)}`), {
                     method: 'PATCH',
                     headers: { 'content-type': 'application/json' },
-                    body: JSON.stringify({ widgetId, data: { note: value } })
+                    body: JSON.stringify({ widgets: [{ id: widgetId, data: { note: value } }] })
                 });
                 if (!res.ok) throw new Error('save failed');
                 try { localStorage.setItem('mxtk_home_note', value); } catch { }
@@ -34,7 +33,7 @@ export default function CustomNote({ widgetId }: { widgetId?: string }) {
             } catch {
                 setStatus('error');
             }
-        }, 500);
+        }, 600);
     }, [widgetId]);
 
     return (

@@ -48,3 +48,15 @@ export function safeParseWidgetAdd(input: unknown) {
 }
 
 
+// Wave 12.2: PATCH schemas for partial widget updates (batch-friendly)
+export const zWidgetPatch = z.object({
+  id: z.string().min(1),
+  size: z.object({ w: z.number().int().min(1).max(12), h: z.number().int().min(1).max(24) }).optional(),
+  pos: z.object({ x: z.number().int().min(0).max(11), y: z.number().int().min(0).max(2000) }).optional(),
+  pinned: z.boolean().optional(),
+  data: z.record(z.unknown()).optional(),
+}).refine(v => v.size || v.pos || typeof v.pinned === 'boolean' || v.data, { message: 'No changes provided' });
+
+export const zHomePatch = z.object({ widgets: z.array(zWidgetPatch).min(1) });
+export type HomePatch = z.infer<typeof zHomePatch>;
+
