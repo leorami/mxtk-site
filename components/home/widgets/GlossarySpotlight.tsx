@@ -1,20 +1,28 @@
-import { getApiUrl } from '@/lib/api'
-import 'server-only'
+"use client";
+import { getApiPath } from '@/lib/basepath';
+import { useEffect, useState } from 'react';
 
-async function getGlossary() {
-  try {
-    const res = await fetch(getApiUrl('/ai/glossary'), { cache: 'force-cache', headers: { 'ngrok-skip-browser-warning': 'true' } })
-    if (!res.ok) return []
-    const data = await res.json()
-    return data.items || []
-  } catch { return [] }
-}
+type GlossaryTerm = { term: string; definition: string };
 
-export default async function GlossarySpotlight() {
-  const items = await getGlossary()
-  if (!items.length) return <p className="opacity-70">No glossary data yet.</p>
-  const day = Math.floor(Date.now() / 86400000)
-  const pick = items[day % items.length]
+export default function GlossarySpotlight() {
+  const [items, setItems] = useState<GlossaryTerm[]>([]);
+
+  useEffect(() => {
+    let aborted = false;
+    (async () => {
+      try {
+        const res = await fetch(getApiPath('/api/ai/glossary'), { cache: 'no-store', headers: { 'ngrok-skip-browser-warning': 'true' } });
+        if (!res.ok) { if (!aborted) setItems([]); return; }
+        const data = await res.json();
+        if (!aborted) setItems(Array.isArray(data.items) ? data.items : []);
+      } catch { if (!aborted) setItems([]); }
+    })();
+    return () => { aborted = true; };
+  }, []);
+
+  if (!items.length) return <p className="opacity-70">No glossary data yet.</p>;
+  const day = Math.floor(Date.now() / 86400000);
+  const pick = items[day % items.length];
   return (
     <div className="text-sm leading-relaxed">
       <div className="font-semibold mb-1">{pick.term}</div>
@@ -25,7 +33,7 @@ export default async function GlossarySpotlight() {
         aria-label="Learn more in Guide"
       >Learn more…</button>
     </div>
-  )
+  );
 }
 
 
