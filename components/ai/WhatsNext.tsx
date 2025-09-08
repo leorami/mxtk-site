@@ -92,21 +92,21 @@ export default function WhatsNext() {
     };
 
     let steps = baseSteps[currentMode] || [];
-    
+
     // Apply signal-based filtering if available
     if (currentSignals) {
       // Remove recently viewed sections
-      steps = steps.filter(step => 
+      steps = steps.filter(step =>
         !currentSignals.viewedSections.includes(step.link)
       );
-      
+
       // Rotate categories if we have multiple recent views
       if (currentSignals.viewedSections.length > 2) {
         const recentCategories = currentSignals.viewedSections
           .slice(-3)
           .map(link => steps.find(s => s.link === link)?.category)
           .filter(Boolean);
-        
+
         // Prioritize different categories
         steps.sort((a, b) => {
           const aRecent = recentCategories.includes(a.category);
@@ -124,7 +124,7 @@ export default function WhatsNext() {
   // Generate AI-powered next step if no deterministic rules fire
   const generateAIStep = useCallback(async () => {
     if (isLoading) return;
-    
+
     setIsLoading(true);
     try {
       const response = await fetch(getBasePathUrl('/api/ai/chat'), {
@@ -159,7 +159,7 @@ export default function WhatsNext() {
   // Update next steps when mode or signals change
   useEffect(() => {
     const deterministicSteps = generateDeterministicSteps(mode, signals);
-    
+
     if (deterministicSteps.length > 0) {
       setNextSteps(deterministicSteps);
     } else {
@@ -203,7 +203,7 @@ export default function WhatsNext() {
     captureSignal('click', step.link);
     try {
       window.dispatchEvent(new CustomEvent('mxtk:guide:open', { detail: { prompt: `${step.title}: ${step.description}` } }));
-    } catch {}
+    } catch { }
   }, [captureSignal]);
 
   // Show error state if something went wrong
@@ -239,7 +239,7 @@ export default function WhatsNext() {
           {mode} mode
         </div>
       </div>
-      
+
       <div className="space-y-3">
         {nextSteps.map((step, index) => (
           <div
@@ -255,13 +255,13 @@ export default function WhatsNext() {
                 {step.description}
               </p>
             </div>
-            <div className="text-gray-400 dark:text-gray-500">
+            <div className="text-gray-400 dark:text-gray-300">
               →
             </div>
           </div>
         ))}
       </div>
-      
+
       {isLoading && (
         <div className="mt-3 text-center">
           <div className="inline-flex items-center text-sm text-gray-500 dark:text-gray-400">

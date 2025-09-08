@@ -1,0 +1,6 @@
+.widget-frame { padding-top: 2.25rem; }
+.widget-frame .widget-actions { position: absolute; top: .5rem; right: .5rem; display: inline-flex; gap: .4rem; }
+.widget-frame .widget-body { max-block-size: 18rem; overflow: hidden; }
+.widget-frame:hover .widget-body { overflow: auto; }
+.widget-frame .widget-body { scrollbar-gutter: stable; }
+

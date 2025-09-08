@@ -1,0 +1,18 @@
+{
+  "id": "705fac6b2ad2fe65",
+  "createdAt": "2025-09-08T06:54:43.337Z",
+  "updatedAt": "2025-09-08T06:54:43.337Z",
+  "blocks": [
+    {
+      "id": "cedaf597-10f9-4066-8faa-69166526fc92",
+      "topicKey": "in-plain-words-explain-mxtk-tokenomics-simply",
+      "section": "tokenomics",
+      "title": "In plain words: Explain MXTK tokenomics simply",
+      "body": "In plain words: Explain MXTK tokenomics simply\n\nSure! Let's break down MXTK tokenomics in simple terms: - **Tokenization**: MXTK is a token that represents real-world assets (RWAs), like minerals. This means each token is backed by a tangible asset, providing stability and value. - **Smart Contracts**: These are self-executing contracts with the terms directly written into code. They help automate processes like transactions and agreements, reducing the need for intermediaries. - **Security**: MXTK uses cryptographic security, which means it employs advanced encryption techniques to protect transactions and data. - **Efficiency**: The technology behind MXTK makes financial processes faster and more efficient by eliminating unnecessary steps and reducing fraud. - **Market Reach**: MXTK allows for global participation, meaning people from all over the world can invest and trade using this token. In plain words, MXTK is a digital token that represents real assets, uses smart technology to make finance more efficient and secure, and is accessible to a global audience.",
+      "citations": [
+        "admin"
+      ],
+      "confidence": 0.8
+    }
+  ]
+}

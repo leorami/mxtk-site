@@ -1,42 +1,41 @@
 import 'server-only'
 import { cookies } from 'next/headers'
 import { getApiUrl } from '@/lib/api'
+import PageScaffold from '@/components/layout/PageScaffold'
+import Grid from '@/components/home/Grid'
 
 export const dynamic = 'force-dynamic'
 
 export default async function Page() {
-  const c = await cookies()
-  const id = c.get('mxtk_home_id')?.value
-
+  const c = await cookies();
+  const id = c.get('mxtk_home_id')?.value || null;
   let initialDoc: any | undefined
   if (id) {
     try {
       const res = await fetch(getApiUrl(`/ai/home/${id}`), { cache: 'no-store', headers: { 'ngrok-skip-browser-warning': 'true' } })
-      if (res.ok) {
-        const json = await res.json()
-        initialDoc = json?.doc
-      }
+      if (res.ok) initialDoc = await res.json()
     } catch {}
   }
 
+  const sections = [
+    {
+      id: 'home-grid',
+      title: 'Your Home',
+      description: 'Pin helpful widgets, drag to arrange, and resize as you learn. Ask the AI Guide for suggestions.',
+      children: <Grid doc={{ id: id || 'guest', widgets: (initialDoc?.widgets || initialDoc?.doc?.widgets || []), layoutVersion: 1 }} />
+    }
+  ]
+
   return (
-    <div className="main-container mx-auto max-w-7xl p-4">
-      {id && initialDoc ? (
-        // Client will hydrate and enhance
-        // @ts-expect-error Async boundary not needed
-        <HomeClient id={id} initialDoc={initialDoc} />
-      ) : (
-        <>
-          <div className="rounded-2xl border p-6 text-center text-sm opacity-70">Your Home will appear here</div>
-          {/* @ts-expect-error Async boundary not needed */}
-          <HomeClient />
-        </>
-      )}
-    </div>
+    <PageScaffold
+      title="Home"
+      subtitle={id ? undefined : 'Your Home will appear here'}
+      description={id ? undefined : 'Use the AI Guide to add a starter widget.'}
+      sections={sections}
+      backgroundClass="mineral-sheen"
+    />
   )
 }
 
-// @ts-expect-error RSC importing client component
-import HomeClient from '@/components/home/HomeClient'
 
 

@@ -2,6 +2,8 @@
 
 // Pin-to-Home removed per UI request
 import AddToHomeButton from '@/components/ai/AddToHomeButton';
+import Link from 'next/link';
+import { getBasePathUrl } from '@/lib/basepath';
 import AppImage from '@/components/ui/AppImage';
 import Card from '@/components/ui/Card';
 import { getApiPath } from '@/lib/basepath';
@@ -36,6 +38,7 @@ export function GuidePanel({ className, onClose, embedded, prefillPrompt }: Guid
     'How does MXTK ensure transparency?',
     'Who can use MXTK?',
   ]);
+  const [keyboardVisible, setKeyboardVisible] = useState(false);
   const messageRefs = useRef<Array<HTMLDivElement | null>>([]);
   const bottomRef = useRef<HTMLDivElement | null>(null);
   const scrollToBottom = useCallback((behavior: ScrollBehavior = 'smooth') => {
@@ -78,7 +81,9 @@ export function GuidePanel({ className, onClose, embedded, prefillPrompt }: Guid
       s = s.replace(/(?<!\n)\s-\s/g, '\n- ');
       // 3) Lightly collapse triple+ newlines
       s = s.replace(/\n{3,}/g, '\n\n');
-      // 4) Indent bullets under immediately preceding numbered list item (4 spaces for CommonMark)
+      // 4) Ensure a blank line before any list start for remark-gfm
+      s = s.replace(/(^|\n)([^\n\-\d][^\n]*?)\n(-\s|\d+\.\s)/g, (_, a, b, c) => `${a}${b}\n\n${c}`);
+      // 5) Indent bullets under immediately preceding numbered list item (4 spaces for CommonMark)
       const lines = s.split('\n');
       let lastWasNumber = false;
       for (let i = 0; i < lines.length; i++) {
@@ -87,23 +92,20 @@ export function GuidePanel({ className, onClose, embedded, prefillPrompt }: Guid
         if (!isNumber && /^-\s/.test(line) && lastWasNumber) {
           lines[i] = '    ' + line; // indent nested bullet under number
         }
-        // Reset when hitting a blank line or a non-list paragraph
         if (!line.trim()) {
           lastWasNumber = false;
         } else if (isNumber) {
           lastWasNumber = true;
         } else if (/^\s{4,}-\s/.test(line)) {
-          lastWasNumber = true; // keep within nested block
+          lastWasNumber = true;
         } else if (/^[-*]\s/.test(line)) {
-          // a top-level bullet ends the numbered context
           lastWasNumber = false;
         } else if (!/^\s{2,}/.test(line)) {
-          // plain paragraph ends the numbered context
           lastWasNumber = false;
         }
       }
       s = lines.join('\n');
-      // 5) Add paragraph spacing by ensuring a blank line after non-list paragraphs
+      // 6) Add paragraph spacing by ensuring a blank line after non-list paragraphs
       s = s.replace(/([^\n])\n(?!\n)(?!\s*[-*]|\s*\d+\.)/g, '$1\n\n');
       return s;
     } catch {
@@ -312,6 +314,29 @@ export function GuidePanel({ className, onClose, embedded, prefillPrompt }: Guid
     return () => window.removeEventListener('mxtk:guide:open', handleOpen as EventListener);
   }, [scrollToBottom]);
 
+  // Mobile keyboard detection
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    let initialViewportHeight = window.visualViewport?.height || window.innerHeight;
+
+    const handleViewportChange = () => {
+      const currentHeight = window.visualViewport?.height || window.innerHeight;
+      const heightDiff = initialViewportHeight - currentHeight;
+      // Consider keyboard visible if viewport shrunk by more than 150px
+      setKeyboardVisible(heightDiff > 150);
+    };
+
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener('resize', handleViewportChange);
+      return () => window.visualViewport?.removeEventListener('resize', handleViewportChange);
+    } else {
+      // Fallback for older browsers
+      window.addEventListener('resize', handleViewportChange);
+      return () => window.removeEventListener('resize', handleViewportChange);
+    }
+  }, []);
+
   // quickQuestions now dynamic
 
   if (!isOpen && !embedded) {
@@ -329,7 +354,7 @@ export function GuidePanel({ className, onClose, embedded, prefillPrompt }: Guid
   }
 
   return (
-    <div className="h-full w-full bg-transparent flex flex-col">
+    <div className={`h-full w-full bg-transparent flex flex-col ${keyboardVisible ? 'pb-2' : ''}`}>
 
       <div className="min-h-0 flex-1 overflow-y-auto pt-0 px-0 pb-3 flex flex-col">
         <div className="flex-1"></div>
@@ -350,7 +375,7 @@ export function GuidePanel({ className, onClose, embedded, prefillPrompt }: Guid
                   <strong className="chat-sender-text">
                     {message.role === 'user' ? 'You' : 'Sherpa'}:
                   </strong>
-                  <div className={`mt-1 prose prose-sm dark:prose-invert leading-relaxed ${message.role === 'user' ? 'text-white' : 'text-gray-800 dark:text-gray-800'}`}>
+                  <div className={`mt-1 prose prose-sm dark:prose-invert leading-relaxed ${message.role === 'user' ? 'text-white' : 'text-gray-800 dark:text-gray-200'}`}>
                     <ReactMarkdown
                       remarkPlugins={[remarkGfm]}
                       components={{
@@ -404,13 +429,24 @@ export function GuidePanel({ className, onClose, embedded, prefillPrompt }: Guid
       </div> */}
 
       <div className="border-t border-white/10 bg-glass/70 backdrop-blur px-3 py-2">
-        {suggestHome && (
-          <div className="mb-2 text-xs flex items-center gap-2">
-            <span className="opacity-70">Looks useful?</span>
-            <AddToHomeButton kind="getting-started" />
-          </div>
-        )}
-        <div className="flex flex-wrap gap-2 mb-2">
+        {/* CTA logic: show only when applicable; Open Home hidden on /home */}
+        {(() => {
+          let onHome = false
+          try { onHome = typeof window !== 'undefined' && (location.pathname.endsWith('/home') || location.pathname === '/home') } catch {}
+          const canAdd = suggestHome && !onHome
+          const canOpenHome = !onHome
+          const showCtaRow = canAdd || canOpenHome
+          if (!showCtaRow) return null
+          return (
+            <div className="mb-2 text-xs flex items-center gap-2">
+              <span className="opacity-70">Looks useful?</span>
+              {canAdd && <AddToHomeButton kind="recent-answers" />}
+              {canOpenHome && <Link href={getBasePathUrl('/home')} className="btn btn-sm" aria-label="Open Home">Open Home</Link>}
+            </div>
+          )
+        })()}
+        {/* Hide quick suggestions on small screens or when keyboard is visible */}
+        <div className={`${keyboardVisible ? 'hidden' : 'hidden sm:flex'} flex-wrap gap-2 mb-2`}>
           {quickQuestions.map((q, i) => (
             <button
               key={q}
@@ -422,17 +458,22 @@ export function GuidePanel({ className, onClose, embedded, prefillPrompt }: Guid
             </button>
           ))}
         </div>
+        {/* Hide 'Looks useful?' if neither Add nor Open Home applies */}
+        <style jsx>{`
+          .guide-drawer .action-open-home[aria-hidden="true"],
+          .guide-drawer .action-add-home[aria-hidden="true"] { display: none; }
+        `}</style>
         <form onSubmit={handleSubmit} className="flex items-center gap-2">
           <input
             data-testid="guide-input"
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder="Ask Sherpa about MXTK…"
-            className="flex-1 rounded-lg px-3 py-2 bg-white text-slate-900 placeholder:text-gray-500 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="flex-1 rounded-lg px-3 py-2 bg-white text-slate-900 placeholder:text-gray-500 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-gray-100 dark:placeholder:text-gray-400 dark:border-gray-600"
           />
           <button
             type="submit"
-            className="h-9 px-3 rounded-lg bg-ink-900 text-white disabled:opacity-50"
+            className="h-9 px-3 rounded-lg bg-[var(--mxtk-orange)] text-white hover:bg-[var(--mxtk-orange)]/90 disabled:opacity-50 disabled:hover:bg-[var(--mxtk-orange)] transition-colors"
             disabled={!input.trim()}
           >
             Send

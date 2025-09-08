@@ -10,16 +10,17 @@ export type ModelMeta = {
 
 function parseList(v?: string) {
   return (v || '')
-    .split(',')
+    .split(/[,|]{1,2}|\|\|/g) // support ',', '|', and '||' as separators
     .map((s) => s.trim())
     .filter(Boolean);
 }
 
 const PROVIDER = (process.env.AI_PROVIDER as 'openai' | 'openrouter') || 'openai';
+// Defaults prefer GPT‑5 family when env not set, with backward-compatible fallbacks
 const DEFAULT_MODELS: Record<Tier, string[]> = {
-  suggest: ['gpt-4o-mini'],
-  answer: ['gpt-4o'],
-  deep: ['gpt-4.1'],
+  suggest: ['gpt-5-nano', 'gpt-4o-mini'],
+  answer: ['gpt-5-mini', 'gpt-4o'],
+  deep: ['gpt-5', 'gpt-4.1'],
 };
 const TIERS: Record<Tier, string[]> = {
   suggest: parseList(process.env.AI_MODEL_TIER_SUGGEST) || DEFAULT_MODELS.suggest,
@@ -29,6 +30,10 @@ const TIERS: Record<Tier, string[]> = {
 const EMBEDS = process.env.AI_EMBED_MODEL || 'text-embedding-3-large';
 
 const PRICING: Record<string, { in: number; out: number }> = {
+  // Approx placeholders; adjust when official pricing updates
+  'gpt-5-nano': { in: 0.05, out: 0.15 },
+  'gpt-5-mini': { in: 0.3, out: 0.9 },
+  'gpt-5': { in: 5.0, out: 15.0 },
   'gpt-4o-mini': { in: 0.15, out: 0.6 },
   'gpt-4o': { in: 5.0, out: 15.0 },
   'gpt-4.1': { in: 5.0, out: 15.0 },

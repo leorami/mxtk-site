@@ -15,7 +15,7 @@ export default function SiteFooter() {
           <div className="text-sm text-muted footer-copyright">© 2025 Mineral Token (MXTK).</div>
 
           {/* Right: Legal links (reserve space with padding-right to avoid overlap) */}
-          <nav className="flex items-center gap-4 text-sm ml-auto"><ThemeSwitch aria-label="Toggle theme" />
+          <nav className="flex items-center gap-4 text-sm ml-auto">
             <Link href="/legal/terms" suppressHydrationWarning>Terms</Link>
             <Link href="/legal/privacy" suppressHydrationWarning>Privacy</Link>
             <Link href="/legal/disclosures" suppressHydrationWarning>Disclosures</Link>
@@ -23,22 +23,13 @@ export default function SiteFooter() {
             <Link href="/the-team" suppressHydrationWarning>Team</Link>
             <Link href="/careers" suppressHydrationWarning>Careers</Link>
             <Link href="/contact-us" suppressHydrationWarning>Contact</Link>
+            <div className="hidden md:block"><ThemeSwitch aria-label="Toggle theme" /></div>
           </nav>
         </div>
 
-        {/* Mobile layout: Chat stays pinned absolutely; links + copyright inline */}
-        <div className="md:hidden w-full space-y-4 ">
-          <nav className="flex flex-wrap gap-3 text-sm justify-center"><ThemeSwitch aria-label="Toggle theme" />
-            <Link href="/legal/terms" suppressHydrationWarning>Terms</Link>
-            <Link href="/legal/privacy" suppressHydrationWarning>Privacy</Link>
-            <Link href="/legal/disclosures" suppressHydrationWarning>Disclosures</Link>
-            <Link href="/media" suppressHydrationWarning>Media</Link>
-            <Link href="/the-team" suppressHydrationWarning>Team</Link>
-            <Link href="/careers" suppressHydrationWarning>Careers</Link>
-            <Link href="/contact-us" suppressHydrationWarning>Contact</Link>
-          </nav>
-
-          <div className="text-xs text-muted text-center footer-copyright">© 2025 Mineral Token (MXTK).</div>
+        {/* Mobile layout: keep footer visually empty; reserve height incl. safe area */}
+        <div className="md:hidden w-full" style={{ minHeight: 'calc(56px + env(safe-area-inset-bottom, 0px))', paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}>
+          {/* Intentionally empty on mobile: links live in hamburger; no copyright */}
         </div>
       </div>
     </footer>

@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { getBasePathUrl } from '../../lib/basepath';
 
 function isAdminCookie(): boolean {
@@ -56,29 +56,29 @@ export default function FactsEditor() {
   }
 
   return (
-    <div data-testid="facts-editor" className="rounded-lg border border-neutral-200 dark:border-neutral-800 p-4 space-y-3">
+    <div data-testid="facts-editor" className="rounded-lg border border-neutral-300 dark:border-neutral-700 p-4 space-y-3 bg-[var(--surface-card,#ffffff)]/90 dark:bg-[var(--surface-card,#0b0e12)]/60">
       <div className="flex items-center justify-between">
-        <h2 className="text-lg font-medium">Facts Editor</h2>
-        <span className="text-xs text-neutral-500">ETag: {etag || '—'}</span>
+        <h2 className="text-lg font-medium text-[var(--ink-strong,#0b0e12)] dark:text-[var(--ink-strong,#f8fafc)]">Facts Editor</h2>
+        <span className="text-xs text-neutral-700 dark:text-neutral-300">ETag: {etag || '—'}</span>
       </div>
       {!enabled && (
-        <div className="text-sm text-neutral-500">Admin session not detected. You can view but not edit.</div>
+        <div className="text-sm text-neutral-700 dark:text-neutral-300">Admin session not detected. You can view but not edit.</div>
       )}
       <textarea
         value={value}
         onChange={(e) => setValue(e.target.value)}
-        className="w-full h-64 rounded-md border border-neutral-300 dark:border-neutral-700 bg-transparent p-2 font-mono text-sm"
+        className="w-full h-64 rounded-md border border-neutral-400 dark:border-neutral-600 bg-transparent p-2 font-mono text-sm text-[var(--ink,#0b0e12)] dark:text-[var(--ink,#f8fafc)]"
         spellCheck={false}
       />
       <div className="flex items-center gap-2">
         <button
           onClick={submit}
           disabled={!enabled}
-          className="px-3 py-1 rounded-md border border-neutral-300 text-sm hover:bg-neutral-50 disabled:opacity-50 dark:border-neutral-700 dark:hover:bg-neutral-800"
+          className="px-3 py-1 rounded-md border border-neutral-400 text-sm hover:bg-neutral-50 disabled:opacity-50 dark:border-neutral-600 dark:hover:bg-neutral-800"
         >
           Save
         </button>
-        <span className="text-sm text-neutral-600 dark:text-neutral-400">{status}</span>
+        <span className="text-sm text-neutral-800 dark:text-neutral-200">{status}</span>
       </div>
     </div>
   );

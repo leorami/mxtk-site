@@ -1,5 +1,5 @@
-import type { HomeDoc, Pos, Size, WidgetState, WidgetType, WidgetId } from '@/lib/home/gridTypes';
-import { GRID_COLS } from '@/lib/home/gridTypes';
+import type { HomeDoc, Pos, Size, WidgetId, WidgetState, WidgetType } from '@/lib/home/gridTypes';
+import { GRID_COLS, getMinSizeForWidget } from '@/lib/home/gridTypes';
 
 function deepClone<T>(v: T): T {
   return JSON.parse(JSON.stringify(v));
@@ -89,14 +89,19 @@ export function resizeWidget(doc: HomeDoc, id: WidgetId, size: Size, gridCols: n
   const idx = base.widgets.findIndex(w => w.id === id);
   if (idx < 0) return base;
   const target = base.widgets[idx];
-  const pos = clampToGrid(target.pos, size, gridCols);
-  const proposal = { pos, size };
+  const min = getMinSizeForWidget(target.type);
+  const clampedSize: Size = {
+    w: Math.max(1, min ? Math.max(min.w, size.w) : size.w),
+    h: Math.max(1, min ? Math.max(min.h, size.h) : size.h),
+  };
+  const pos = clampToGrid(target.pos, clampedSize, gridCols);
+  const proposal = { pos, size: clampedSize };
   const others = base.widgets.filter((_, i) => i !== idx);
   let finalPos = pos;
   if (others.some(w => rectsOverlap(proposal, { pos: w.pos, size: w.size }))) {
-    finalPos = nextNonOverlappingPos(others, size, gridCols);
+    finalPos = nextNonOverlappingPos(others, clampedSize, gridCols);
   }
-  const updated: WidgetState = withTimestamps({ ...target, pos: finalPos, size }, target);
+  const updated: WidgetState = withTimestamps({ ...target, pos: finalPos, size: clampedSize }, target);
   const widgets = base.widgets.slice();
   widgets[idx] = updated;
   return { id: base.id, widgets, layoutVersion: 1 };
@@ -117,6 +122,10 @@ export function pinWidget(doc: HomeDoc, id: WidgetId): HomeDoc {
   const widgets = base.widgets.slice();
   widgets[idx] = updated;
   return { id: base.id, widgets, layoutVersion: 1 };
+}
+
+export function togglePinWidget(doc: HomeDoc, id: WidgetId): HomeDoc {
+  return pinWidget(doc, id);
 }
 
 export function upsertWidgetData(doc: HomeDoc, id: WidgetId, data: Record<string, unknown>): HomeDoc {

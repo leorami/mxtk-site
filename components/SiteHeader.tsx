@@ -50,7 +50,7 @@ export default function SiteHeader({ hasHome }: { hasHome?: boolean }) {
   useEffect(() => {
     setMounted(true)
     // Ensure closed padding on first paint (SSR mismatch guard)
-    try { document.documentElement.classList.remove('guide-open') } catch {}
+    try { document.documentElement.classList.remove('guide-open') } catch { }
   }, [])
 
   // Cleanup timeout on unmount
@@ -91,9 +91,12 @@ export default function SiteHeader({ hasHome }: { hasHome?: boolean }) {
     setHoverTimeout(timeout)
   }
 
+  const theme = themeForRoute(pathname)
+  const iconClass = 'text-[var(--ink-strong)] dark:text-white'
+
   return (
     <header className="sticky top-0 z-50" suppressHydrationWarning>
-      <div className="brand-header header-container">
+      <div className="brand-header header-container" style={{ ['--sherpa-pill-bg' as any]: theme?.accent ?? 'var(--mxtk-orange)' }}>
         <div className="mx-auto flex max-w-none items-center justify-between px-4" style={{ height: '76px' }}>
           <div className="flex items-center gap-3">
             <Link href="/" className="flex items-center justify-center" aria-label="MXTK Home" suppressHydrationWarning>
@@ -108,22 +111,21 @@ export default function SiteHeader({ hasHome }: { hasHome?: boolean }) {
                 />
               </div>
             </Link>
-            {/* Add a Home link next to the logo (left cluster). BasePathLink/Link keeps basePath honored. */}
+            {/* Add a Home link next to the logo (left cluster). */}
             <nav data-testid="nav-links" className="hidden nav:flex items-center justify-center gap-1 relative">
-              {hasHome && (
-                <Link
-                  href="/home"
-                  className="nav-link nav-pill px-3 py-2 rounded-lg transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-400/35"
-                  suppressHydrationWarning
-                >
-                  Home
-                </Link>
-              )}
+              <Link
+                href="/home"
+                className="nav-link nav-pill px-3 py-2 rounded-lg transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-400/35 ml-2 mr-1 border border-[var(--border-soft)] bg-[var(--surface-card)]/55 text-[var(--ink-strong)] dark:text-[var(--ink-strong)] shadow-[0_0_8px_rgba(0,0,0,0.06)] dark:shadow-[0_0_10px_rgba(255,255,255,0.14)] hover:bg-[var(--surface-card)]/75"
+                suppressHydrationWarning
+                title="Your adaptive Home"
+              >
+                Home
+              </Link>
               {Object.entries(NAVIGATION_GROUPS).map(([groupName, groupItems]) => {
                 const isActive = isGroupActive(groupItems)
                 const isDropdownOpen = activeDropdown === groupName
                 return (
-                  <div 
+                  <div
                     key={groupName}
                     className="relative"
                     onMouseEnter={() => handleDropdownMouseEnter(groupName)}
@@ -135,10 +137,10 @@ export default function SiteHeader({ hasHome }: { hasHome?: boolean }) {
                       aria-haspopup="true"
                     >
                       {groupName}
-                      <svg 
-                        className={`w-4 h-4 transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`} 
-                        fill="none" 
-                        stroke="currentColor" 
+                      <svg
+                        className={`w-4 h-4 transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`}
+                        fill="none"
+                        stroke="currentColor"
                         viewBox="0 0 24 24"
                       >
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
@@ -173,45 +175,48 @@ export default function SiteHeader({ hasHome }: { hasHome?: boolean }) {
 
           <div data-testid="experience-controls-desktop" className="hidden nav:flex items-center justify-center gap-2">
             <div className="flex items-center gap-2" data-testid="sherpa-cluster">
-              <div data-testid="experience-icons" className="mr-1"><ExperienceToggle /></div>
+              <div data-testid="experience-icons" className={`mr-1 ${iconClass}`}><ExperienceToggle /></div>
               <HeaderSherpa />
             </div>
             {/* ThemeSwitch moved to footer */}
           </div>
 
           <div className="nav:hidden flex items-center gap-2">
+            {/* Mobile order: Experience Controls → Sherpa → Hamburger (far right) */}
+            <div data-testid="experience-controls-mobile" className={`flex items-center gap-2 ${iconClass}`}>
+              <ExperienceToggle />
+            </div>
+            <HeaderSherpa />
             <button
               data-testid="nav-toggle"
-              className="inline-flex items-center justify-center rounded-md border border-[var(--border-soft)] px-4 py-2 text-xl min-h-[36px]"
+              className={`inline-flex items-center justify-center rounded-md border border-[var(--border-soft)] px-4 py-2 text-xl min-h-[36px] ${iconClass}`}
               aria-label="Toggle menu"
               onClick={() => setOpen(!open)}
             >
               ☰
             </button>
-            {/* Mobile: keep Sherpa pinned to right, experience toggle remains in menu */}
-            <HeaderSherpa />
           </div>
         </div>
       </div>
       <div className="brand-accent-line"></div>
 
       {open && (
-        <div className="nav:hidden border-t border-[var(--border-soft)] bg-[var(--surface-2)]">
+        <div className="nav:hidden border-t border-[var(--border-soft)] bg-[var(--surface-2)] relative z-40">
           <div className="mx-auto max-w-none px-3 py-2 space-y-0.5 overflow-y-auto max-h-[calc(100dvh-90px)]">
             {hasHome && (
               <Link
                 href="/home"
-                className="block px-3 py-2 rounded-lg hover:bg-[var(--hover-bg)] font-medium"
+                className="block px-0 py-3 rounded-lg hover:bg-[var(--hover-bg)] font-medium text-base text-[var(--ink-strong)] dark:text-[var(--ink-strong)]"
                 onClick={() => setOpen(false)}
                 suppressHydrationWarning
               >
-                Home
+                <span className="px-3">Home</span>
               </Link>
             )}
-            
+
             {Object.entries(NAVIGATION_GROUPS).map(([groupName, groupItems]) => (
               <div key={groupName} className="py-2">
-                <div className="text-sm font-semibold text-muted mb-2 px-3">{groupName}</div>
+                <div className="text-sm font-semibold text-[var(--ink-muted)] dark:text-[var(--ink-muted)] mb-2 px-3">{groupName}</div>
                 <div className="space-y-1">
                   {groupItems.map(({ href, label }) => {
                     const isActive = getActiveState(href)
@@ -220,48 +225,83 @@ export default function SiteHeader({ hasHome }: { hasHome?: boolean }) {
                       <Link
                         key={href}
                         href={navHref}
-                        className={`block px-3 py-2 text-sm rounded-lg hover:bg-[var(--hover-bg)] transition-colors ${isActive ? 'font-semibold bg-[var(--hover-bg)]' : ''}`}
+                        className={`block px-0 py-3 text-base rounded-lg hover:bg-[var(--hover-bg)] transition-colors text-[var(--ink-strong)] dark:text-[var(--ink-strong)] ${isActive ? 'font-semibold bg-[var(--hover-bg)]' : ''}`}
                         style={{ ['--hover-bg' as any]: themeForRoute(href).hoverBg } as CSSProperties}
                         onClick={() => setOpen(false)}
                         aria-current={isActive ? 'page' : undefined}
                         suppressHydrationWarning
                       >
-                        {label}
+                        <span className="px-3">{label}</span>
                       </Link>
                     )
                   })}
                 </div>
               </div>
             ))}
-            
+
             {/* Legal Links Section */}
             <div className="pt-4 border-t border-[var(--border-soft)]/30">
-              <div className="text-xs font-semibold text-muted mb-2 px-3">Legal</div>
+              <div className="text-xs font-semibold text-[var(--ink-muted)] dark:text-[var(--ink-muted)] mb-2 px-3">Legal</div>
               <div className="space-y-1">
                 <Link
                   href="/legal/terms"
-                  className="block px-3 py-2 text-sm rounded-lg hover:bg-[var(--hover-bg)] opacity-75"
+                  className="block px-0 py-3 text-base rounded-lg hover:bg-[var(--hover-bg)] text-[var(--ink-strong)] dark:text-[var(--ink-strong)] opacity-90"
                   onClick={() => setOpen(false)}
                 >
-                  Terms
+                  <span className="px-3">Terms</span>
                 </Link>
                 <Link
                   href="/legal/privacy"
-                  className="block px-3 py-2 text-sm rounded-lg hover:bg-[var(--hover-bg)] opacity-75"
+                  className="block px-0 py-3 text-base rounded-lg hover:bg-[var(--hover-bg)] text-[var(--ink-strong)] dark:text-[var(--ink-strong)] opacity-90"
                   onClick={() => setOpen(false)}
                 >
-                  Privacy
+                  <span className="px-3">Privacy</span>
                 </Link>
                 <Link
                   href="/legal/disclosures"
-                  className="block px-3 py-2 text-sm rounded-lg hover:bg-[var(--hover-bg)] opacity-75"
+                  className="block px-0 py-3 text-base rounded-lg hover:bg-[var(--hover-bg)] text-[var(--ink-strong)] dark:text-[var(--ink-strong)] opacity-90"
                   onClick={() => setOpen(false)}
                 >
-                  Disclosures
+                  <span className="px-3">Disclosures</span>
                 </Link>
               </div>
             </div>
-            
+
+            {/* Company Links Section (mobile replacement for footer links) */}
+            <div className="pt-4 border-t border-[var(--border-soft)]/30">
+              <div className="text-xs font-semibold text-[var(--ink-muted)] dark:text-[var(--ink-muted)] mb-2 px-3">Company</div>
+              <div className="space-y-1">
+                <Link
+                  href="/media"
+                  className="block px-0 py-3 text-base rounded-lg hover:bg-[var(--hover-bg)] text-[var(--ink-strong)] dark:text-[var(--ink-strong)] opacity-90"
+                  onClick={() => setOpen(false)}
+                >
+                  <span className="px-3">Media</span>
+                </Link>
+                <Link
+                  href="/the-team"
+                  className="block px-0 py-3 text-base rounded-lg hover:bg-[var(--hover-bg)] text-[var(--ink-strong)] dark:text-[var(--ink-strong)] opacity-90"
+                  onClick={() => setOpen(false)}
+                >
+                  <span className="px-3">Team</span>
+                </Link>
+                <Link
+                  href="/careers"
+                  className="block px-0 py-3 text-base rounded-lg hover:bg-[var(--hover-bg)] text-[var(--ink-strong)] dark:text-[var(--ink-strong)] opacity-90"
+                  onClick={() => setOpen(false)}
+                >
+                  <span className="px-3">Careers</span>
+                </Link>
+                <Link
+                  href="/contact-us"
+                  className="block px-0 py-3 text-base rounded-lg hover:bg-[var(--hover-bg)] text-[var(--ink-strong)] dark:text-[var(--ink-strong)] opacity-90"
+                  onClick={() => setOpen(false)}
+                >
+                  <span className="px-3">Contact</span>
+                </Link>
+              </div>
+            </div>
+
             <div className="pt-3 space-y-2">
               <div data-testid="experience-controls-mobile" className="flex items-center gap-2">
                 <ExperienceToggle />

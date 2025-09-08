@@ -322,6 +322,24 @@ Use VS Code tasks for common operations:
 - `Ctrl+Shift+P` → "Tasks: Run Task" → Select from available tasks
 - Tasks include: Start/Stop/Restart environment, Smart Build, Status check, Ngrok sharing
 
+## 🤖 Sherpa AI & Knowledge Management
+
+MXTK Sherpa is our intelligent AI assistant that helps users navigate the platform while protecting proprietary information through multi-layered safeguards.
+
+### Key Features
+- **Smart Content Protection**: Automated flagging and quarantine of sensitive information
+- **Human-in-the-Loop Review**: Admin approval required for all vectorized content
+- **Response Sanitization**: Real-time filtering of AI-generated responses
+- **Transparent by Default**: Open information sharing with bulletproof proprietary protection
+
+### Quick Access
+- **Admin Interface**: `/admin` → Tools & Flags for content management
+- **Knowledge Upload**: Use admin tools to safely ingest documents (DOCX, PDF, MD, TXT)
+- **Safeguards Review**: Monitor and approve flagged content through `/admin/flags`
+
+For complete documentation on safeguards architecture, content guidelines, and best practices, see:
+**📖 [`docs/SHERPA_KNOWLEDGE_SAFEGUARDS.md`](docs/SHERPA_KNOWLEDGE_SAFEGUARDS.md)**
+
 ## Supporting Materials (handoff)
 
 Drop assets here for incorporation:
@@ -342,3 +360,4 @@ This content previously lived in `docs/README.md` and is consolidated here.
 - `docs/ENVIRONMENT_SWITCHING_SUMMARY.md` – smart build + sharing quick reference
 - `docs/SIMULTANEOUS_ACCESS_GUIDE.md` – using localhost and `/mxtk` simultaneously
 - `docs/ONCHAIN_SETUP.md` – RPC and pool discovery configuration
+- `docs/SHERPA_KNOWLEDGE_SAFEGUARDS.md` – AI knowledge management, content safeguards, and best practices

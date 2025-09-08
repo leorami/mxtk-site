@@ -3,9 +3,9 @@ import AppImage from "@/components/ui/AppImage";
 import { useExperience } from "./ClientExperience";
 
 const modes = [
-  { value: "learn",   label: "Learn",   icon: () => <AppImage src="icons/experience/icon-learn.svg" alt="" width={16} height={16} className="w-4 h-4" /> },
-  { value: "build",   label: "Build",   icon: () => <AppImage src="icons/experience/icon-build.svg" alt="" width={16} height={16} className="w-4 h-4" /> },
-  { value: "operate", label: "Operate", icon: () => <AppImage src="icons/experience/icon-operate.svg" alt="" width={16} height={16} className="w-4 h-4" /> },
+  { value: "learn", label: "Learn", src: "icons/experience/icon-learn.svg" },
+  { value: "build", label: "Build", src: "icons/experience/icon-build.svg" },
+  { value: "operate", label: "Operate", src: "icons/experience/icon-operate.svg" },
 ] as const;
 
 export default function ExperienceToggle() {
@@ -31,15 +31,25 @@ export default function ExperienceToggle() {
             onClick={() => setMode(m.value)}
             aria-pressed={selected}
             className={[
-              "px-3 py-1 rounded-full text-sm transition",
+              "px-3 py-1.5 rounded-full text-sm transition flex items-center justify-center",
               "focus:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--mxtk-orange)_60%,transparent)]",
               selected
                 ? "bg-[color-mix(in_srgb,var(--mxtk-orange)_30%,transparent)] dark:bg-[color-mix(in_srgb,var(--mxtk-orange)_34%,transparent)] shadow-sm"
                 : "opacity-85 hover:opacity-100"
             ].join(" ")}
+            title={m.label}
           >
-            <span className="inline-flex items-center justify-center w-6">
-              <m.icon />
+            <span className="inline-flex items-center justify-center w-7 h-7">
+              <AppImage
+                src={m.src}
+                alt=""
+                width={20}
+                height={20}
+                className={[
+                  "w-5 h-5",
+                  selected ? "brightness-0 invert" : "",
+                ].join(" ")}
+              />
               <span className="sr-only">{m.label}</span>
             </span>
           </button>

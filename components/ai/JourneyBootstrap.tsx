@@ -15,7 +15,7 @@ export default function JourneyBootstrap() {
   // Simple client-side effect
   useEffect(() => {
     setIsClient(true);
-    
+
     // Check for existing journey ID
     try {
       const existingId = localStorage.getItem('mxtkJourneyId');
@@ -72,14 +72,14 @@ export default function JourneyBootstrap() {
             <p className="text-gray-600 dark:text-gray-400 mb-6 max-w-lg mx-auto">
               Your AI guide is ready to help you explore MXTK. Ask your first question to start building your personalized journey.
             </p>
-            <div className="text-sm text-gray-500 dark:text-gray-500 flex items-center gap-1">
+            <div className="text-sm text-gray-500 dark:text-gray-400 flex items-center gap-1">
               <AppImage src="icons/ui/icon-lightbulb.svg" alt="" width={16} height={16} className="w-4 h-4" />
               Tip: Try asking "What is MXTK?" or "How do validator incentives work?"
             </div>
             <div className="mt-6">
               <button
                 onClick={() => {
-                  try { window.dispatchEvent(new CustomEvent('mxtk:guide:open', { detail: { prompt: 'What is MXTK?' } })) } catch {}
+                  try { window.dispatchEvent(new CustomEvent('mxtk:guide:open', { detail: { prompt: 'What is MXTK?' } })) } catch { }
                 }}
                 className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 text-sm"
                 aria-label="Open Sherpa"

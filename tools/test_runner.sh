@@ -6,8 +6,9 @@ set -euo pipefail
 
 BASE_URL="${BASE_URL:-}"
 if [ -z "${BASE_URL}" ]; then
-  echo "Usage: BASE_URL=<url> $0 [nav|crawl|all]" >&2
+  echo "Usage: BASE_URL=<url> $0 [nav|crawl|guide|mobile|all]" >&2
   echo "Example: BASE_URL=https://ramileo.ngrok.app/mxtk $0 all" >&2
+  echo "         BASE_URL=http://localhost:2000 $0 mobile" >&2
   exit 1
 fi
 
@@ -45,11 +46,23 @@ run_crawl() {
   BASE_URL="$BASE_URL" node "$(dirname "$0")/test/crawl-regression.mjs"
 }
 
+run_mobile() {
+  echo "==> Running mobile-ui-test.mjs"
+  BASE_URL="$BASE_URL" node "$(dirname "$0")/test/mobile-ui-test.mjs"
+}
+
+run_home() {
+  echo "==> Running w12-home-evolution.mjs"
+  BASE_URL="$BASE_URL" node "$(dirname "$0")/test/w12-home-evolution.mjs"
+}
+
 case "$MODE" in
   nav) wait_for_health; run_nav;;
   crawl) wait_for_health; run_crawl;;
   guide) wait_for_health; run_guide_alignment;;
-  all) wait_for_health; run_nav; run_crawl; run_guide_alignment;;
+  mobile) wait_for_health; run_mobile;;
+  home) wait_for_health; run_home;;
+  all) wait_for_health; run_nav; run_crawl; run_guide_alignment; run_mobile; run_home;;
   *) echo "Unknown mode: $MODE" >&2; exit 2;;
 esac
 

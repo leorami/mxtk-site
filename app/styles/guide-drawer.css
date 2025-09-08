@@ -4,6 +4,8 @@
   --guide-width: 420px;
   --nav-height: 76px;
   --footer-height: 64px;
+  /* Single source of truth for drawer width */
+  --drawer-w: 0px;
 }
 
 /* 0) Smooth shift for the content wrapper */
@@ -47,6 +49,8 @@ html.guide-open [data-shiftable-root] {
   height: auto;
   display: flex;
   flex-direction: column;
+  padding-inline: 10px;
+  /* add small left/right padding so bubbles don’t touch edges */
 }
 
 /* === fix-left-shift: footer pad only when drawer open + no horizontal scroll === */

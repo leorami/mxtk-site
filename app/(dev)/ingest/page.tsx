@@ -15,16 +15,16 @@ export default function DevIngestPage() {
   return (
     <main className="max-w-3xl mx-auto p-6 prose dark:prose-invert">
       <h1>AI Ingest (Dev)</h1>
-      
+
       <p>
-        This is the development ingestion panel for the MXTK AI system. 
+        This is the development ingestion panel for the MXTK AI system.
         Use the CLI or API endpoints to manage knowledge ingestion.
       </p>
 
       <h2>Available Commands</h2>
-      
+
       <pre className="bg-gray-100 dark:bg-gray-800 p-4 rounded">
-{`# Ingest from file
+        {`# Ingest from file
 npm run ai:ingest ./docs/whitepaper.md
 
 # Ingest text directly  
@@ -40,14 +40,22 @@ curl -X POST /api/ai/chat \\
       </pre>
 
       <h2>Current Status</h2>
-      
+
       <p>
         Status endpoint: <code>/api/ai/ingest/status</code>
       </p>
-      
+
       <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded border border-blue-200 dark:border-blue-800">
         <p><strong>Note:</strong> This page is only visible when <code>NEXT_PUBLIC_ENABLE_AI_DEV=1</code> is set.</p>
       </div>
+
+      <h2>Unit Tests</h2>
+      {/* @ts-expect-error RSC importing client */}
+      <UnitTestConsole />
     </main>
   );
 }
+
+// @ts-expect-error RSC importing client
+import UnitTestConsole from '@/components/dev/UnitTestConsole';
+

@@ -2,6 +2,8 @@ import { blockFromAnswer } from '@/lib/ai/journey';
 import { ChatMessageSchema, getChatModel, getEmbedder, getHeaders, type ChatResponse } from '@/lib/ai/models';
 import { getBudget, getTodayUSD } from '@/lib/ai/ops/budget';
 import { estimateUSD, logCost } from '@/lib/ai/ops/costs';
+import { routeModel } from '@/lib/ai/router';
+import { sherpaSystemPrompt } from '@/lib/ai/systemPrompt';
 import { searchSimilar } from '@/lib/ai/vector-store';
 import { NextRequest, NextResponse } from 'next/server';
 
@@ -72,14 +74,14 @@ export async function POST(request: NextRequest): Promise<NextResponse<ChatRespo
       }
       const linksList: string[] = [...internal, ...external].slice(0, 6);
       const tone = parsed.mode === 'learn'
-        ? 'Be a friendly teacher. Define terms simply, avoid jargon, give short step-by-step explanations, and build understanding layer by layer without sounding condescending.'
+        ? 'Be a patient teacher for beginners. Use simple words, define each new term the first time it appears, and prefer short step-by-step numbered lists. Keep paragraphs under 3 sentences. Offer a one-sentence "In plain words" summary when helpful. Avoid expert jargon unless the user asks for more depth.'
         : parsed.mode === 'explore'
           ? 'Be concise and helpful. Focus on concepts and comparisons with light examples.'
           : 'Be precise and structured. State assumptions, trade-offs, and references to context.';
       const domainGuide = 'Explain MXTK using: conservative geology estimates; long extraction timelines; anti-fraud validation; token leverage and stability; tech-driven efficiency; context of minerals-backed assets vs fiat. Never claim features beyond MXTK scope.';
-      const formatting = 'Return answers in clean markdown suitable for `remark-gfm`: use short paragraphs, bullet and numbered lists (with proper indentation for nested items), tables only when helpful, and code fences for snippets. Prefer internal site links when relevant.';
+      const formatting = 'Return answers in clean markdown for remark-gfm. Rules: (1) Always use proper list markers for lists ("- " for bullets, "1." for steps) with a blank line before the list; (2) Use short paragraphs; (3) Use tables only when clearly helpful; (4) Never leave a sentence unfinished; end with a complete thought.';
       const boundaries = 'Only answer using the provided Context and known MXTK site knowledge. If the answer is not in Context or known MXTK materials, say you do not know and suggest a related, on-track question.';
-      const sys = `You are MXTK Sherpa, a trustworthy, experienced guide for Mineral Token (MXTK). Use the Context faithfully and follow the tone.
+      const sys = `${sherpaSystemPrompt}\n\nUse the Context faithfully and follow the tone.
 
 Context:
 ${context}
@@ -94,24 +96,55 @@ Guidelines:
 - ${boundaries}
 - Only include a link if it directly helps the user.`;
       try {
-        const r = await fetch('https://api.openai.com/v1/chat/completions', {
-          method: 'POST',
-          headers: { 'content-type': 'application/json', ...(getHeaders() as any) },
-          body: JSON.stringify({
-            model: getChatModel().name,
-            messages: [
-              { role: 'system', content: sys },
-              { role: 'user', content: parsed.message },
-            ],
-            temperature: 0.3,
-            max_tokens: 400,
-          }),
-          signal: controller.signal,
-        } as any);
+        // Cost-aware routing
+        const route = routeModel(parsed.message, {
+          userAskedDeep: /deep\s+dive|dive\s+deep|in\s+depth/i.test(parsed.message),
+          longFormExpected: /plan|steps|procedure|outline/i.test(parsed.message),
+          toolOrCodeHeavy: /code|json|schema|sql|typescript|react|step-\s*by-\s*step/i.test(parsed.message),
+          highStakes: /compliance|legal|security|risk|financial model|sla|slo/i.test(parsed.message),
+          userTier: 'free',
+        });
+        async function tryModel(modelName: string) {
+          return fetch('https://api.openai.com/v1/chat/completions', {
+            method: 'POST',
+            headers: { 'content-type': 'application/json', ...(getHeaders() as any) },
+            body: JSON.stringify({
+              model: modelName,
+              messages: [
+                { role: 'system', content: sys },
+                { role: 'user', content: parsed.message },
+              ],
+              temperature: 0.3,
+              max_tokens: route.maxOutputTokens,
+            }),
+            signal: controller.signal,
+          } as any)
+        }
+
+        const primary = route.model;
+        const fallbacks = [
+          ...(primary.startsWith('gpt-5') ? ['gpt-4o', 'gpt-4o-mini'] : []),
+          'gpt-3.5-turbo'
+        ];
+        let j: any = null;
+        let lastErr: any = null;
+        for (const m of [primary, ...fallbacks]) {
+          try {
+            const resp = await tryModel(m);
+            if (!resp.ok) { lastErr = new Error(`chat ${resp.status} ${await resp.text().catch(() => '')}`); continue; }
+            j = await resp.json();
+            break;
+          } catch (e) { lastErr = e; }
+        }
         clearTimeout(timer);
-        if (!r.ok) throw new Error(`chat ${r.status}`);
-        const j = await r.json();
-        answer = sanitizePublicText(j.choices?.[0]?.message?.content || '');
+        if (!j) throw lastErr || new Error('chat failed');
+        let rawAnswer = sanitizePublicText(j.choices?.[0]?.message?.content || '');
+        // Learn mode: keep friendly tone but do not restate the user's message
+        if (parsed.mode === 'learn') {
+          // Guardrails to avoid jargon in learn mode
+          rawAnswer = rawAnswer.replace(/\b(orthogonal|eigen|manifold|bayesian|regression|cohort|shard|latency|throughput|capex|opex)\b/gi, (m) => `${m} (simple: define when needed)`);
+        }
+        answer = rawAnswer;
         if (!answer) answer = generateMockResponse(parsed.message, parsed.mode, similarChunks);
       } catch {
         answer = generateMockResponse(parsed.message, parsed.mode, similarChunks);
@@ -177,6 +210,18 @@ function sanitizePublicText(text: string): string {
   const noHeadings = text.replace(/^\s{0,3}#{1,6}\s+.*$/gm, '').trim();
   const cleaned = noHeadings.replace(forbidden, '').replace(/\s{2,}/g, ' ').replace(/\s+[,.;:]/g, (m) => m.trim().slice(-1));
   return cleaned.trim();
+}
+
+// Very small helper to restate the user question simply for learn mode
+function summarizeSimple(message: string): string {
+  try {
+    const m = String(message || '').trim();
+    if (!m) return '';
+    // Heuristic: strip punctuation and keep the core ask
+    const simple = m.replace(/\s+/g, ' ').replace(/[!?.,;:]+$/, '');
+    if (simple.length > 160) return simple.slice(0, 157) + '…';
+    return simple;
+  } catch { return ''; }
 }
 
 function generateMockResponse(

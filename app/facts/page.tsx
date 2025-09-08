@@ -1,7 +1,18 @@
+import CopyJsonButton from '@/components/ai/CopyFactsJsonButton';
+import { headers } from 'next/headers';
 import { getBasePathUrl } from '../../lib/basepath';
 
+async function absoluteUrlFromHeaders(path: string): Promise<string> {
+  const h = await headers();
+  const host = h.get('x-forwarded-host') || h.get('host') || 'localhost:2000';
+  const proto = h.get('x-forwarded-proto') || 'http';
+  const origin = `${proto}://${host}`;
+  return new URL(path, origin).toString();
+}
+
 async function fetchFacts() {
-  const url = getBasePathUrl('/api/ai/facts');
+  const path = getBasePathUrl('/api/ai/facts');
+  const url = await absoluteUrlFromHeaders(path);
   const res = await fetch(url, { cache: 'no-store' });
   if (!res.ok) throw new Error('Failed to load facts');
   const data = await res.json();
@@ -26,19 +37,6 @@ function List({ items }: { items?: string[] }) {
         <li key={i} className="text-sm text-neutral-900 dark:text-neutral-100">{x}</li>
       ))}
     </ul>
-  );
-}
-
-function CopyJsonButton() {
-  'use client';
-  const onClick = async () => {
-    const url = (await import('../../lib/basepath')).getBasePathUrl('/api/ai/facts');
-    const res = await fetch(url);
-    const json = await res.text();
-    await navigator.clipboard.writeText(json);
-  };
-  return (
-    <button onClick={onClick} className="px-3 py-1 rounded-md border border-neutral-300 text-sm hover:bg-neutral-50 dark:border-neutral-700 dark:hover:bg-neutral-800">Copy JSON</button>
   );
 }
 

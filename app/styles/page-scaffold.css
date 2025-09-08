@@ -1,0 +1,100 @@
+/* PageScaffold — shared content page template */
+.page-scaffold {
+    min-height: calc(100dvh - var(--nav-height) - var(--footer-height));
+    background: var(--surface-page);
+}
+
+.page-hero {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+    text-align: left;
+}
+
+.page-title {
+    font-size: clamp(1.8rem, 2.8vw, 2.6rem);
+    color: var(--h1-color);
+    font-weight: 800;
+    letter-spacing: .2px;
+}
+
+.page-subtitle {
+    color: var(--ink-strong);
+    opacity: .95;
+    margin-top: .25rem;
+}
+
+.page-desc {
+    color: var(--ink-muted);
+    margin-top: .5rem;
+}
+
+.page-main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1rem;
+    display: grid;
+    gap: 1rem;
+}
+
+.section-card {
+    background: var(--surface-card);
+    border: 1px solid var(--border-soft);
+    border-radius: var(--radius-2xl);
+    box-shadow: var(--shadow-lift-sm);
+    overflow: clip;
+}
+
+.section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: .8rem 1rem;
+    background: var(--glass-70);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border-soft);
+}
+
+.section-title h2 {
+    color: var(--h2-color);
+    font-weight: 700;
+}
+
+.section-title .section-sub {
+    font-size: .95rem;
+    color: var(--ink-muted);
+    margin-top: .25rem;
+}
+
+.section-actions {
+    display: inline-flex;
+    gap: .5rem;
+}
+
+.icon-btn {
+    inline-size: 36px;
+    block-size: 36px;
+    border-radius: 999px;
+    display: grid;
+    place-items: center;
+    background: var(--glass-70);
+    border: 1px solid var(--border-soft);
+    box-shadow: var(--shadow-inner-top);
+}
+
+.section-body {
+    padding: 1rem;
+}
+
+/* Hero CTA baseline helper (use on hero groups) */
+.hero-cta-row {
+    display: flex;
+    gap: .75rem;
+    align-items: center;
+}
+
+@media (min-width: 768px) {
+    .hero-cta-row {
+        align-items: flex-end;
+    }
+}

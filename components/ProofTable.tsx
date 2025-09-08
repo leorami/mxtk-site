@@ -40,7 +40,50 @@ export default function ProofTable({
       <div className="flex items-center justify-between mb-2">
         <div className="text-sm font-semibold">Attestations & Audits</div>
       </div>
-      <div className='overflow-x-auto'>
+
+      {/* Mobile card layout */}
+      <div className='mt-2 space-y-3 md:hidden'>
+        {proofs.map(p => (
+          <div key={p.id} className="rounded-lg border border-[var(--border-soft)] p-3 bg-[var(--surface-card-emb)]">
+            <div className="flex items-start justify-between mb-2">
+              <div className="font-medium text-[var(--ink-strong)] flex-1">{p.title}</div>
+              <span className={`rounded-xl border px-2 py-0.5 text-xs font-medium ml-2 ${getTypeColor(p.type)}`}>
+                {p.type}
+              </span>
+            </div>
+            <div className="space-y-2 text-sm">
+              <div>
+                <div className="text-xs font-medium text-[var(--ink-muted)] uppercase tracking-wide">Issuer</div>
+                <div className="text-[var(--ink-strong)]">{p.issuer}</div>
+              </div>
+              <div>
+                <div className="text-xs font-medium text-[var(--ink-muted)] uppercase tracking-wide">Effective Date</div>
+                <div className="text-[var(--ink-strong)]">{p.effectiveDate}</div>
+              </div>
+              <div className="grid grid-cols-1 gap-2 pt-2 border-t border-[var(--border-soft)]">
+                <div>
+                  <div className="text-xs font-medium text-[var(--ink-muted)] uppercase tracking-wide">IPFS CID</div>
+                  <a
+                    className='text-blue-600 dark:text-blue-400 hover:underline text-sm break-all'
+                    href={`https://ipfs.io/ipfs/${p.cid}`}
+                    target='_blank'
+                    rel="noopener noreferrer"
+                  >
+                    {p.cid}
+                  </a>
+                </div>
+                <div>
+                  <div className="text-xs font-medium text-[var(--ink-muted)] uppercase tracking-wide">SHA256</div>
+                  <div className="font-mono text-xs text-[var(--ink-strong)] break-all">{p.sha256}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Desktop table layout */}
+      <div className='overflow-x-auto hidden md:block'>
         <table className='table text-sm md:table-fixed'>
           <thead>
             <tr>
@@ -55,29 +98,18 @@ export default function ProofTable({
           <tbody>
             {proofs.map(p => (
               <tr key={p.id} className="align-top">
+                <td>{p.title}</td>
                 <td>
-                  <div className="md:hidden text-[11px] uppercase tracking-wide text-muted mb-1">Title</div>
-                  {p.title}
-                </td>
-                <td>
-                  <div className="md:hidden text-[11px] uppercase tracking-wide text-muted mb-1">Type</div>
                   <span className={`rounded-xl border px-2 py-0.5 text-xs font-medium ${getTypeColor(p.type)}`}>
                     {p.type}
                   </span>
                 </td>
+                <td>{p.issuer}</td>
+                <td>{p.effectiveDate}</td>
                 <td>
-                  <div className="md:hidden text-[11px] uppercase tracking-wide text-muted mb-1">Issuer</div>
-                  {p.issuer}
-                </td>
-                <td>
-                  <div className="md:hidden text-[11px] uppercase tracking-wide text-muted mb-1">Effective</div>
-                  {p.effectiveDate}
-                </td>
-                <td>
-                  <div className="md:hidden text-[11px] uppercase tracking-wide text-muted mb-1">IPFS CID</div>
-                  <a 
-                    className='table-link' 
-                    href={`https://ipfs.io/ipfs/${p.cid}`} 
+                  <a
+                    className='table-link'
+                    href={`https://ipfs.io/ipfs/${p.cid}`}
                     target='_blank'
                     rel="noopener noreferrer"
                   >
@@ -85,7 +117,6 @@ export default function ProofTable({
                   </a>
                 </td>
                 <td className='font-mono text-xs'>
-                  <div className="md:hidden text-[11px] uppercase tracking-wide text-muted mb-1">Hash</div>
                   {p.sha256.slice(0, 12)}…
                 </td>
               </tr>
@@ -93,6 +124,7 @@ export default function ProofTable({
           </tbody>
         </table>
       </div>
+
       <div className="mt-2 text-xs text-muted">
         <strong>Type</strong> indicates the document category: <em>audit</em> (financial/technical review), <em>attestation</em> (legal/regulatory), or <em>report</em> (operational/status).
       </div>

@@ -1,56 +1,58 @@
+import '@/app/styles/design-tokens.scss';
+import BrandThemeProvider from '@/components/BrandThemeProvider';
+import Favicons from '@/components/Favicons';
+import SiteFooter from '@/components/SiteFooter';
+import SiteHeader from '@/components/SiteHeader';
 import Script from "next/script";
-import '@/app/styles/design-tokens.scss'
-import BrandThemeProvider from '@/components/BrandThemeProvider'
-import Favicons from '@/components/Favicons'
-import SiteFooter from '@/components/SiteFooter'
-import SiteHeader from '@/components/SiteHeader'
 // FooterChatBarMountEffect removed - chat moved to drawer
-import PageChromeVars from '@/components/chrome/PageChromeVars'
-import DevThemeSwitcher from '@/components/dev/DevThemeSwitcher'
-import ExperienceProvider from '@/components/experience/ExperienceProvider'
+import PageChromeVars from '@/components/chrome/PageChromeVars';
+import DevThemeSwitcher from '@/components/dev/DevThemeSwitcher';
+import ExperienceProvider from '@/components/experience/ExperienceProvider';
 
-import GuideHost from '@/components/ai/GuideHost'
-import GuideBootStyle from '@/components/chrome/GuideBootStyle'
-import JsonLd from '@/components/seo/JsonLd'
-import type { Metadata } from 'next'
-import { Roboto, Space_Grotesk } from 'next/font/google'
-import { cookies } from 'next/headers'
-import './globals.css'
-import './styles/guide-drawer.css'
-import './styles/minerals.css'
-import './styles/motion.css'
+import GuideHost from '@/components/ai/GuideHost';
+import GuideBootStyle from '@/components/chrome/GuideBootStyle';
+import JsonLd from '@/components/seo/JsonLd';
+import type { Metadata } from 'next';
+import { Roboto, Space_Grotesk } from 'next/font/google';
+import { cookies } from 'next/headers';
+import './globals.css';
+import './styles/guide-drawer.css';
+import './styles/minerals.css';
+import './styles/motion.css';
+import './styles/page-scaffold.css';
+import './styles/home-widgets.css';
 
 const roboto = Roboto({
   subsets: ['latin'],
-  weight: ['300','400','500','700'],
+  weight: ['300', '400', '500', '700'],
   display: 'swap',
   variable: '--font-roboto',
 });
 
 const grotesk = Space_Grotesk({
   subsets: ['latin'],
-  weight: ['400','500','700'],
+  weight: ['400', '500', '700'],
   display: 'swap',
   variable: '--font-display',
 });
 
 export const metadata: Metadata = {
-    title: 'MXTK — Mineral Token',
-    description: 'Digitizing verified mineral interests with transparent, governed market plumbing.',
+  title: 'MXTK — Mineral Token',
+  description: 'Digitizing verified mineral interests with transparent, governed market plumbing.',
 }
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
-    const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
-    const cookieStore = await cookies();
-    const hasHome = Boolean(cookieStore.get('mxtk_home_id')?.value)
-    
-    return (
-        <html lang="en" className={`${roboto.variable} ${roboto.className} ${grotesk.variable}`} suppressHydrationWarning>
-            <head>
+  const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
+  const cookieStore = await cookies();
+  const hasHome = Boolean(cookieStore.get('mxtk_home_id')?.value)
+
+  return (
+    <html lang="en" className={`${roboto.variable} ${roboto.className} ${grotesk.variable}`} suppressHydrationWarning>
+      <head>
         <GuideBootStyle />
-                <Favicons />
-                {/* Ensure preloaded fonts carry crossorigin hints to satisfy Chrome */}
-                <Script id="font-preload-cors" strategy="beforeInteractive">{`
+        <Favicons />
+        {/* Ensure preloaded fonts carry crossorigin hints to satisfy Chrome */}
+        <Script id="font-preload-cors" strategy="beforeInteractive">{`
           try {
             (function ensureFontPreloadCORS(){
               var links = document.querySelectorAll('link[rel="preload"][as="font"]');
@@ -68,8 +70,8 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             });
           } catch {}
         `}</Script>
-                {/* Recover gracefully from dev-time chunk load failures (ngrok idle, HMR) */}
-                <Script id="chunk-recovery" strategy="beforeInteractive">{`
+        {/* Recover gracefully from dev-time chunk load failures (ngrok idle, HMR) */}
+        <Script id="chunk-recovery" strategy="beforeInteractive">{`
           (function(){
             try {
               var key = 'mxtk.chunk.recovered.' + Date.now();
@@ -127,7 +129,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             }
           })();
         `}</Script>
-                <Script id="theme-init" strategy="beforeInteractive">{`
+        <Script id="theme-init" strategy="beforeInteractive">{`
           try {
             var saved = localStorage.getItem('theme') || localStorage.getItem('mxtk.theme');
             var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
@@ -135,39 +137,39 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             else document.documentElement.classList.remove('dark');
           } catch {}
         `}</Script>
-                <JsonLd
-                  data={{
-                    "@context": "https://schema.org",
-                    "@type": "Organization",
-                    "name": "MXTK (Mineral Token)",
-                    "url": process.env.NEXT_PUBLIC_SITE_ORIGIN || "https://mineral-token.com",
-                    "logo": "/logo-horizontal.png",
-                    "sameAs": []
-                  }}
-                />
-            </head>
-            <body className="page min-h-dvh flex flex-col" suppressHydrationWarning>
-                <ExperienceProvider>
-                    <PageChromeVars />
-                    <SiteHeader hasHome={hasHome} />
-                    <main data-shiftable-root style={{ overflowX: "visible" }} className="relative z-10 flex-1 min-h-0">
-        <div className="site-container mx-auto w-full max-w-screen-xl px-4 sm:px-6 lg:px-8">
-<BrandThemeProvider>
-                            {children}
-                        </BrandThemeProvider>
-                    
-        </div>
-      </main>
-                    <SiteFooter />
-                    {/* FooterChatBarMountEffect removed - chat moved to drawer */}
-                    {/* Lift overlay behind content (driven by html[data-lift]) */}
-                    <div aria-hidden className="page-lift" />
-                    {/* Dev switcher (hidden in production) */}
-                    <DevThemeSwitcher />
-                    {/* Wave 4/5: Drawer host only (top-right panel disabled) */}
-                    <GuideHost />
-                </ExperienceProvider>
-            </body>
-        </html>
-    )
+        <JsonLd
+          data={{
+            "@context": "https://schema.org",
+            "@type": "Organization",
+            "name": "MXTK (Mineral Token)",
+            "url": process.env.NEXT_PUBLIC_SITE_ORIGIN || "https://mineral-token.com",
+            "logo": "/logo-horizontal.png",
+            "sameAs": []
+          }}
+        />
+      </head>
+      <body className="page min-h-dvh flex flex-col" suppressHydrationWarning>
+        <ExperienceProvider>
+          <PageChromeVars />
+          <SiteHeader hasHome={hasHome} />
+          <main data-shiftable-root style={{ overflowX: "visible" }} className="relative z-10 flex-1 min-h-0">
+            <div className="site-container mx-auto w-full max-w-screen-xl px-4 sm:px-6 lg:px-8">
+              <BrandThemeProvider>
+                {children}
+              </BrandThemeProvider>
+
+            </div>
+          </main>
+          <SiteFooter />
+          {/* FooterChatBarMountEffect removed - chat moved to drawer */}
+          {/* Lift overlay behind content (driven by html[data-lift]) */}
+          <div aria-hidden className="page-lift" />
+          {/* Dev switcher (hidden in production) */}
+          <DevThemeSwitcher />
+          {/* Wave 4/5: Drawer host only (top-right panel disabled) */}
+          <GuideHost />
+        </ExperienceProvider>
+      </body>
+    </html>
+  )
 }

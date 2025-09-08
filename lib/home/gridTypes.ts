@@ -42,3 +42,17 @@ export interface HomeDoc {
 }
 
 
+// Per-widget-type interaction metadata
+export const widgetTypeMeta: Record<WidgetType, { minSize?: Size }> = {
+  'getting-started': { minSize: { w: 3, h: 2 } },
+  'recent-answers': { minSize: { w: 4, h: 3 } },
+  'glossary-spotlight': { minSize: { w: 3, h: 2 } },
+  'custom-note': { minSize: { w: 3, h: 2 } },
+  'resource-list': { minSize: { w: 3, h: 2 } },
+};
+
+export function getMinSizeForWidget(type: WidgetType): Size | undefined {
+  return widgetTypeMeta[type]?.minSize;
+}
+
+
