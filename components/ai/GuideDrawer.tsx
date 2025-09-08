@@ -6,13 +6,25 @@ export default function GuideDrawer() {
   const [open, setOpen] = useState(false);
   const [prefill, setPrefill] = useState<string>("");
 
-  useEffect(() => { try { document.documentElement.classList.remove('guide-open'); } catch {} }, []);
+  useEffect(() => {
+    try {
+      // Initialize from persisted state
+      const saved = localStorage.getItem('mxtk_guide_open');
+      const initial = saved === '1';
+      setOpen(initial);
+      const root = document.documentElement;
+      if (initial) root.classList.add('guide-open');
+      else root.classList.remove('guide-open');
+    } catch { }
+  }, []);
 
   useEffect(() => {
     const root = document.documentElement;
     if (open) root.classList.add('guide-open');
     else root.classList.remove('guide-open');
-    return () => { try { root.classList.remove('guide-open'); } catch {} };
+    // Persist user preference
+    try { localStorage.setItem('mxtk_guide_open', open ? '1' : '0'); } catch { }
+    return () => { try { root.classList.remove('guide-open'); } catch { } };
   }, [open]);
 
   useEffect(() => {
@@ -43,7 +55,7 @@ export default function GuideDrawer() {
       role="complementary"
       aria-label="Sherpa Drawer" tabIndex={open ? 0 : -1}
       aria-hidden={!open}
-      
+
       className="guide-drawer fixed right-0 z-[120] glass glass--panel backdrop-blur-xl shadow-2xl flex flex-col"
       style={{ top: 'var(--nav-height)', bottom: 'var(--footer-height)', height: 'auto', overflow: 'hidden' }}
     >
