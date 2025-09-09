@@ -2,6 +2,7 @@
 import { useExperience } from "@/components/experience/ClientExperience";
 import { careersCopy } from "@/copy/careers";
 import { contactCopy } from "@/copy/contact";
+import { dashboardCopy } from "@/components/copy/dashboard";
 import { faqCopy } from "@/copy/faq";
 import { homeCopy } from "@/copy/home";
 import { institutionsCopy } from "@/copy/institutions";
@@ -19,6 +20,7 @@ import { whitepaperCopy } from "@/copy/whitepaper";
 
 const registry = {
   home: homeCopy,
+  dashboard: dashboardCopy,
   owners: ownersCopy,
   institutions: institutionsCopy,
   transparency: transparencyCopy,

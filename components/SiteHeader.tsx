@@ -114,12 +114,12 @@ export default function SiteHeader({ hasHome }: { hasHome?: boolean }) {
             {/* Add a Home link next to the logo (left cluster). */}
             <nav data-testid="nav-links" className="hidden nav:flex items-center justify-center gap-1 relative">
               <Link
-                href="/home"
+                href="/dashboard"
                 className="nav-link nav-pill px-3 py-2 rounded-lg transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-400/35 ml-2 mr-1 border border-[var(--border-soft)] bg-[var(--surface-card)]/55 text-[var(--ink-strong)] dark:text-[var(--ink-strong)] shadow-[0_0_8px_rgba(0,0,0,0.06)] dark:shadow-[0_0_10px_rgba(255,255,255,0.14)] hover:bg-[var(--surface-card)]/75"
                 suppressHydrationWarning
-                title="Your adaptive Home"
+                title="Your adaptive Dashboard"
               >
-                Home
+                Dashboard
               </Link>
               {Object.entries(NAVIGATION_GROUPS).map(([groupName, groupItems]) => {
                 const isActive = isGroupActive(groupItems)
@@ -205,12 +205,12 @@ export default function SiteHeader({ hasHome }: { hasHome?: boolean }) {
           <div className="mx-auto max-w-none px-3 py-2 space-y-0.5 overflow-y-auto max-h-[calc(100dvh-90px)]">
             {hasHome && (
               <Link
-                href="/home"
+                href="/dashboard"
                 className="block px-0 py-3 rounded-lg hover:bg-[var(--hover-bg)] font-medium text-base text-[var(--ink-strong)] dark:text-[var(--ink-strong)]"
                 onClick={() => setOpen(false)}
                 suppressHydrationWarning
               >
-                <span className="px-3">Home</span>
+                <span className="px-3">Dashboard</span>
               </Link>
             )}
 

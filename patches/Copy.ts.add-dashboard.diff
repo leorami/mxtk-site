@@ -1,0 +1,23 @@
+*** components/copy/Copy.ts (excerpt)
+--- a/components/copy/Copy.ts
++++ b/components/copy/Copy.ts
+@@
+-import { contactCopy } from '@/components/copy/contact'
++import { contactCopy } from '@/components/copy/contact'
++import { dashboardCopy } from '@/components/copy/dashboard'
+ // ...
+ export type PageId =
+-  | 'home'
++  | 'home'
++  | 'dashboard'
+   | 'contact'
+   | 'faq'
+   // ...
+ ;
+ const PAGES = {
+   home: homeCopy,
++  dashboard: dashboardCopy,
+   contact: contactCopy,
+   faq: faqCopy,
+   // ...
+ } as const
