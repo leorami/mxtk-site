@@ -180,7 +180,8 @@ export default function DevThemeSwitcher() {
     <>
       <button
         onClick={() => setOpen(true)}
-        className="glass p-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center w-12 h-12"
+        className="nav-link nav-pill inline-flex items-center justify-center w-12 h-12"
+        style={{ ['--hover-bg' as any]: 'var(--mxtk-hover-bg)' }}
         title="Theme switcher (Alt+T)"
       >
         <AppImage

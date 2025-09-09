@@ -238,29 +238,29 @@ html.dark .mxtk-bg-mineral {
     margin-left: .25rem
 }
 
-/* Links on glass panels: meet contrast + focus visibility */
-.glass a {
+/* Links on glass panels: meet contrast + focus visibility - exclude buttons */
+.glass a:not(.btn):not([class*="btn"]):not(button) {
     color: rgba(255, 255, 255, .96);
     text-decoration: underline;
     text-underline-offset: 2px
 }
 
-.glass a:hover {
+.glass a:not(.btn):not([class*="btn"]):not(button):hover {
     opacity: .9
 }
 
-.glass a:focus-visible {
+.glass a:not(.btn):not([class*="btn"]):not(button):focus-visible {
     outline: 2px solid rgba(255, 255, 255, .9);
     outline-offset: 2px;
     border-radius: .25rem
 }
 
-/* Dark-ink variant on light glass */
-.glass--panel a {
+/* Dark-ink variant on light glass - exclude buttons */
+.glass--panel a:not(.btn):not([class*="btn"]):not(button) {
     color: #0b63ff
 }
 
-.glass--panel a:focus-visible {
+.glass--panel a:not(.btn):not([class*="btn"]):not(button):focus-visible {
     outline: 2px solid #0b63ff
 }
 
