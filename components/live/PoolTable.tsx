@@ -77,7 +77,7 @@ export default function PoolTable() {
 
             {/* Desktop table layout */}
             <div className="overflow-x-auto hidden md:block">
-                <table className="table text-sm md:table-fixed">
+                <table className="table text-sm">
                     <thead>
                         <tr>
                             <th>Pool</th>

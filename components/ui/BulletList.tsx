@@ -1,26 +1,23 @@
 import LogoGlyph from "./LogoGlyph";
 
-// Random Lorem ipsum generators
-const loremSnippets = [
-  "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-  "Sed do eiusmod tempor incididunt ut labore.",
-  "Ut enim ad minim veniam, quis nostrud exercitation ullamco.",
-  "Duis aute irure dolor in reprehenderit in voluptate velit.",
-  "Excepteur sint occaecat cupidatat non proident.",
-  "Sunt in culpa qui officia deserunt mollit anim.",
-  "At vero eos et accusamus et iusto odio dignissimos.",
-  "Et harum quidem rerum facilis est et expedita.",
-  "Nam libero tempore, cum soluta nobis est eligendi.",
-  "Temporibus autem quibusdam et aut officiis debitis.",
-  "Neque porro quisquam est, qui dolorem ipsum.",
-  "Ut enim ad minima veniam, quis nostrum exercitationem.",
+// Professional fallback content for MXTK
+const professionalSnippets = [
+  "Transparent processes ensure accountability and trust.",
+  "Compliance-first approach to regulatory requirements.",
+  "Independent verification provides additional security.",
+  "Real-time monitoring and reporting capabilities.",
+  "Institutional-grade custody and settlement.",
+  "Comprehensive audit trails for all transactions.",
+  "Multi-signature governance with timelock controls.",
+  "Professional-grade documentation and reporting.",
+  "Secure infrastructure with redundant safeguards.",
+  "Regular third-party security assessments.",
+  "Clear communication and stakeholder updates.",
+  "Industry-standard compliance and best practices.",
 ];
 
-function getRandomLorem(index: number): string {
-  const snippet = loremSnippets[index % loremSnippets.length];
-  // Randomly truncate to make varying lengths
-  const truncateAt = Math.floor(snippet.length * (0.4 + (index * 0.1) % 0.6));
-  return snippet.substring(0, truncateAt) + (truncateAt < snippet.length ? '...' : '');
+function getProfessionalFallback(index: number): string {
+  return professionalSnippets[index % professionalSnippets.length];
 }
 
 export function BulletList({
@@ -48,7 +45,7 @@ export function BulletList({
             </div>
             {showDescription && (
               <div className="text-sm text-muted mt-1 leading-relaxed">
-                {item.body || getRandomLorem(i)}
+                {item.body || getProfessionalFallback(i)}
               </div>
             )}
           </div>
