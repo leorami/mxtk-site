@@ -5,6 +5,16 @@ import RecentAnswers from '@/components/home/widgets/RecentAnswers';
 import ResourceList from '@/components/home/widgets/ResourceList';
 import { WidgetState } from '@/lib/home/types';
 
+const SMALL_WORDS = /^(a|an|and|as|at|but|by|for|in|of|on|or|the|to|vs?)$/i;
+function toTitleCase(s?: string) {
+  if (!s) return s ?? '';
+  return s
+    .split(/\s+/)
+    .map((w, i) => i > 0 && SMALL_WORDS.test(w) ? w.toLowerCase()
+      : w.charAt(0).toUpperCase() + w.slice(1))
+    .join(' ');
+}
+
 export default function WidgetFrame({ widget, onAction }: { widget: WidgetState; onAction?: (action: string, w: WidgetState) => void }) {
   const learn = () => {
     try { window.dispatchEvent(new CustomEvent('mxtk:guide:prefill', { detail: { prompt: `Tell me more about ${widget.title || widget.type}` } })) } catch { }
@@ -40,8 +50,8 @@ export default function WidgetFrame({ widget, onAction }: { widget: WidgetState;
           </svg>
         </button>
       </div>
-      <header className="px-4 pt-4 pb-2 font-semibold text-[var(--ink-strong)] dark:text-[var(--ink-strong)]">{widget.title || widget.type}</header>
-      <div className="widget-body px-4 pb-4 text-sm text-[var(--ink)] dark:text-[var(--ink)]">
+      <header className="px-4 pt-4 pb-2 font-semibold text-[var(--ink-strong)] dark:text-[var(--ink-strong)]">{toTitleCase(widget.title || widget.type)}</header>
+      <div className="widget-body px-4 pb-4 text-sm text-[var(--ink)] dark:text-[var(--ink)]" data-widget-body>
         {widget.type === 'recent-answers' && <RecentAnswers />}
         {widget.type === 'glossary-spotlight' && <GlossarySpotlight />}
         {widget.type === 'custom-note' && <CustomNote widgetId={widget.id} />}

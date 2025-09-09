@@ -107,31 +107,93 @@
 }
 
 /* Full-bleed page scaffold */
-.page-scaffold { background: var(--surface-page); }
-.page-scaffold .container { max-width: 1100px; margin-inline: auto; padding-inline: 1rem; }
-.scaffold-hero { padding-block: 1.25rem 0.25rem; }
-.scaffold-title { font-size: clamp(1.6rem, 2.8vw, 2.25rem); font-weight: 800; letter-spacing: -0.01em; }
-.scaffold-subtitle, .scaffold-description { opacity: .85; }
-.scaffold-main { padding-block: 0.75rem 1.5rem; }
-.scaffold-section { margin-block: 1rem; }
-.section-header { display: flex; align-items: center; justify-content: space-between; gap: .75rem; padding: .6rem 1rem; border-radius: 14px; }
-.section-title h2 { font-size: clamp(1.05rem, 1.1vw, 1.25rem); font-weight: 700; }
-.section-desc { margin-top: .25rem; opacity: .85; }
-.section-actions .icon-btn { inline-size: 32px; block-size: 32px; }
-.section-body { padding: .5rem 0; }
+.page-scaffold {
+    background: var(--surface-page);
+}
+
+.page-scaffold .container {
+    max-width: 1100px;
+    margin-inline: auto;
+    padding-inline: 1rem;
+}
+
+.scaffold-hero {
+    padding-block: 1.25rem 0.25rem;
+}
+
+.scaffold-title {
+    font-size: clamp(1.6rem, 2.8vw, 2.25rem);
+    font-weight: 800;
+    letter-spacing: -0.01em;
+}
+
+.scaffold-subtitle,
+.scaffold-description {
+    opacity: .85;
+}
+
+.scaffold-main {
+    padding-block: 0.75rem 1.5rem;
+}
+
+.scaffold-section {
+    margin-block: 1rem;
+}
+
+.section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: .75rem;
+    padding: .6rem 1rem;
+    border-radius: 14px;
+}
+
+.section-title h2 {
+    font-size: clamp(1.05rem, 1.1vw, 1.25rem);
+    font-weight: 700;
+}
+
+.section-desc {
+    margin-top: .25rem;
+    opacity: .85;
+}
+
+.section-actions .icon-btn {
+    inline-size: 32px;
+    block-size: 32px;
+}
+
+.section-body {
+    padding: .5rem 0;
+}
 
 /* Mineral / Diamond backgrounds (match hero pages); keep graceful fallbacks */
-.mxtk-bg-mineral { background:
-  linear-gradient(180deg, rgba(255,206,115,.16), rgba(0,0,0,0) 22%),
-  var(--gold-grain, #faf5ea) !important; }
-html.dark .mxtk-bg-mineral { background:
-  linear-gradient(180deg, rgba(255,255,255,.04), rgba(0,0,0,0) 28%),
-  var(--diamond-sheen, #0e141a) !important; }
+.mxtk-bg-mineral {
+    background:
+        linear-gradient(180deg, rgba(255, 206, 115, .16), rgba(0, 0, 0, 0) 22%),
+        var(--gold-grain, #faf5ea) !important;
+}
+
+html.dark .mxtk-bg-mineral {
+    background:
+        linear-gradient(180deg, rgba(255, 255, 255, .04), rgba(0, 0, 0, 0) 28%),
+        var(--diamond-sheen, #0e141a) !important;
+}
 
 /* Footer brand legibility */
-.site-footer .footer-brand { color: var(--footer-ink, var(--ink-invert)); opacity: .95; }
-html.light .site-footer .footer-brand { --footer-ink: #fff; }
-html.dark .site-footer .footer-brand { --footer-ink: #fff; }
+.site-footer .footer-brand {
+    color: var(--footer-ink, var(--ink-invert));
+    opacity: .95;
+}
+
+html.light .site-footer .footer-brand {
+    --footer-ink: #fff;
+}
+
+html.dark .site-footer .footer-brand {
+    --footer-ink: #fff;
+}
 
 /* Themed page backgrounds */
 .mxtk-bg-mineral {
@@ -159,4 +221,62 @@ html.dark .mxtk-bg-mineral {
 .section-actions .icon-btn {
     inline-size: 32px;
     block-size: 32px;
+}
+
+/* Footer layout + spacing polish */
+.site-footer .footer-left {
+    display: flex;
+    gap: .5rem;
+    align-items: center
+}
+
+.site-footer .footer-left>* {
+    flex: 0 0 auto
+}
+
+.site-footer .theme-switch {
+    margin-left: .25rem
+}
+
+/* Links on glass panels: meet contrast + focus visibility */
+.glass a {
+    color: rgba(255, 255, 255, .96);
+    text-decoration: underline;
+    text-underline-offset: 2px
+}
+
+.glass a:hover {
+    opacity: .9
+}
+
+.glass a:focus-visible {
+    outline: 2px solid rgba(255, 255, 255, .9);
+    outline-offset: 2px;
+    border-radius: .25rem
+}
+
+/* Dark-ink variant on light glass */
+.glass--panel a {
+    color: #0b63ff
+}
+
+.glass--panel a:focus-visible {
+    outline: 2px solid #0b63ff
+}
+
+/* Equalize card padding + section rails */
+.card,
+.glass,
+.glass--panel {
+    padding: 1.25rem
+}
+
+/* bottom now matches */
+.section-card {
+    padding: 1rem 1rem 1rem 1rem
+}
+
+.section-rail {
+    display: grid;
+    gap: 1rem
 }

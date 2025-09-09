@@ -9,6 +9,36 @@ import {
 import type { CSSProperties } from "react";
 import * as React from "react";
 
+const ROW_H = 24;       // px per row (match your token)
+const GAP_Y = 8;        // vertical gap between grid rows
+
+// Measure each widget's content and update its 'h' (rows) automatically.
+function useAutoHeights(refs: React.MutableRefObject<Record<string, HTMLElement | null>>, setWidgets: React.Dispatch<React.SetStateAction<WidgetLike[]>>) {
+  React.useEffect(() => {
+    const ro = new ResizeObserver((entries) => {
+      setWidgets(prev => {
+        let changed = false;
+        const widgets = prev.map(w => {
+          const el = refs.current[w.id];
+          if (!el) return w;
+          const content = el.querySelector('[data-widget-body]') as HTMLElement | null;
+          if (!content) return w;
+          const px = content.offsetHeight + 32; // body + chrome padding
+          const rows = Math.max(2, Math.ceil((px + GAP_Y) / (ROW_H + GAP_Y)));
+          if (rows !== w.size.h) {
+            changed = true;
+            return { ...w, size: { ...w.size, h: rows } };
+          }
+          return w;
+        });
+        return changed ? widgets : prev;
+      });
+    });
+    Object.values(refs.current).forEach(el => el && ro.observe(el));
+    return () => ro.disconnect();
+  }, [refs, setWidgets]);
+}
+
 /**
  * Minimal types that match your Home doc widgets.
  */
@@ -52,6 +82,7 @@ export default function Grid({
   children,
 }: Props) {
   const containerRef = React.useRef<HTMLDivElement | null>(null);
+  const nodeRefs = React.useRef<Record<string, HTMLElement | null>>({});
   const [cols, setCols] = React.useState(colsDesktop);
   const [containerW, setContainerW] = React.useState(1);
   const [widgets, setWidgets] = React.useState<WidgetLike[]>(
@@ -64,6 +95,9 @@ export default function Grid({
     startRect: GridRect;
   } | null>(null);
   const liveRegionRef = React.useRef<HTMLDivElement | null>(null);
+
+  // Auto-height widgets
+  useAutoHeights(nodeRefs, setWidgets);
 
   // Responsive columns + ResizeObserver (client-only)
   React.useEffect(() => {
@@ -235,6 +269,7 @@ export default function Grid({
           return (
             <section
               key={w.id}
+              ref={el => { nodeRefs.current[w.id] = el }}
               className="wframe"
               style={style}
               role="gridcell"

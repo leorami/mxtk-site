@@ -59,7 +59,16 @@
     top: .5rem;
     right: .5rem;
     display: inline-flex;
-    gap: .4rem;
+    gap: .25rem;
+}
+
+.widget-actions .icon-btn {
+    width: 20px;
+    height: 20px
+}
+
+.widget-actions .icon-btn svg {
+    transform: scale(.85)
 }
 
 .widget-frame .widget-body {

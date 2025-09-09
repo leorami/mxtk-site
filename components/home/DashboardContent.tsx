@@ -1,5 +1,6 @@
 "use client";
 
+import { useExperience } from '@/components/experience/ClientExperience';
 import Grid from '@/components/home/Grid';
 import Section from '@/components/home/Section';
 import WidgetFrame from '@/components/home/WidgetFrame';
@@ -12,6 +13,7 @@ export default function DashboardContent({
 }: {
     initialDocId?: string
 }) {
+    const { mode } = useExperience();
     const [doc, setDoc] = useState<HomeDocV2>({
         id: initialDocId,
         layoutVersion: 2,
@@ -42,7 +44,27 @@ export default function DashboardContent({
                 }
 
                 const data = await res.json();
-                setDoc(data);
+
+                // Auto-seed on first visit if no widgets and layoutVersion < 2
+                if ((data.layoutVersion < 2 || data.widgets.length === 0) && mode) {
+                    try {
+                        const seedPath = getApiPath(`/api/ai/home/seed?id=${initialDocId}&mode=${mode}`);
+                        const seedUrl = new URL(seedPath, origin).toString();
+                        const seedRes = await fetch(seedUrl, { method: 'POST' });
+                        if (seedRes.ok) {
+                            const seededData = await seedRes.json();
+                            setDoc(seededData);
+                        } else {
+                            setDoc(data);
+                        }
+                    } catch (seedErr) {
+                        console.warn('Auto-seeding failed:', seedErr);
+                        setDoc(data);
+                    }
+                } else {
+                    setDoc(data);
+                }
+
                 setError(null);
             } catch (err) {
                 console.error('Error fetching home doc:', err);
@@ -53,7 +75,7 @@ export default function DashboardContent({
         }
 
         fetchHomeDoc();
-    }, [initialDocId]);
+    }, [initialDocId, mode]);
 
     if (loading) {
         return <div className="text-center py-10">Loading your dashboard...</div>;
@@ -114,23 +136,25 @@ export default function DashboardContent({
                                 ) : (
                                     <div className="text-center py-6 text-muted">
                                         No widgets in this section yet.
-                                        <div className="mt-2">
-                                            <button
-                                                className="px-3 py-1 text-sm bg-blue-100 dark:bg-blue-900 rounded-md"
-                                                onClick={() => {
-                                                    // Seed this section
-                                                    const origin = window.location.origin;
-                                                    const path = getApiPath(`/api/ai/home/seed?id=${doc.id}`);
-                                                    const url = new URL(path, origin).toString();
+                                        {sec.key === 'library' && (
+                                            <div className="mt-2">
+                                                <button
+                                                    className="px-3 py-1 text-sm bg-blue-100 dark:bg-blue-900 rounded-md"
+                                                    onClick={() => {
+                                                        // Seed this section with current experience mode
+                                                        const origin = window.location.origin;
+                                                        const path = getApiPath(`/api/ai/home/seed?id=${doc.id}&mode=${mode}`);
+                                                        const url = new URL(path, origin).toString();
 
-                                                    fetch(url, {
-                                                        method: 'POST',
-                                                    }).then(() => window.location.reload());
-                                                }}
-                                            >
-                                                Add starter widgets
-                                            </button>
-                                        </div>
+                                                        fetch(url, {
+                                                            method: 'POST',
+                                                        }).then(() => window.location.reload());
+                                                    }}
+                                                >
+                                                    Add starter widgets
+                                                </button>
+                                            </div>
+                                        )}
                                     </div>
                                 )}
                             </div>

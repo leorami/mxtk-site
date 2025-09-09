@@ -13,17 +13,13 @@ export default function SiteFooter() {
         {/* Footer Sherpa chat removed; header dropdown is primary */}
 
         <div className="hidden md:flex items-center justify-between gap-4 w-full ">
-          {/* Left: Copyright + Theme switcher */}
-          <div className="flex items-center gap-2">
+          {/* Left: Footer cluster with status and theme controls */}
+          <div className="footer-left">
             <div className="footer-brand text-sm">© 2025 Mineral Token (MXTK).</div>
-            <div className="hidden md:flex ml-3 items-center" id="theme-buttons-container">
-              <ThemeSwitch aria-label="Toggle theme" />
-              {process.env.NODE_ENV !== "production" && (
-                <div className="ml-1">
-                  <DevThemeSwitcher />
-                </div>
-              )}
-            </div>
+            <ThemeSwitch aria-label="Toggle theme" />
+            {process.env.NODE_ENV !== "production" && (
+              <DevThemeSwitcher />
+            )}
           </div>
 
           {/* Right: Legal links (reserve space with padding-right to avoid overlap) */}
