@@ -10,7 +10,7 @@ import { FeatureRow } from '@/components/ui/List'
 export default function PrivacyPage() {
   const { mode, pageCopy } = useCopy('privacy')
   return (
-    <PageTheme ink="light" lift="H" glass="soft">
+    <PageTheme ink="dark" lift="none" glass="standard">
       <PageHero>
         <SectionWrapper index={0} className="text-center">
           <h1 className="text-4xl md:text-6xl font-bold tracking-tight">{pageCopy.heroTitle[mode === 'ai' ? 'build' : mode]}</h1>

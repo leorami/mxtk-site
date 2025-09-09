@@ -15,7 +15,7 @@ export default function DashboardPage() {
   const pageCopy = dashboardCopy
 
   return (
-    <PageTheme ink="warm" lift="H" glass="soft">
+    <PageTheme ink="light" lift="none" glass="standard">
       {/* Use the same gold background as Landing */}
       <BackgroundPhoto variant="home" />
 

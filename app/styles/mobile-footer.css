@@ -1,6 +1,9 @@
 /* Mobile footer experience toggle styling */
 .mobile-experience-toggle {
-    /* Remove fixed positioning - let it flow within footer container */
+    position: fixed;
+    bottom: 1rem;
+    right: 1rem;
+    z-index: 50;
     padding: 0.5rem;
     background-color: rgba(30, 41, 59, 0.85);
     border-radius: 9999px;
@@ -16,7 +19,12 @@
     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
 }
 
-/* Safe area inset bottom padding for iOS devices - removed since not using fixed positioning */
+/* Safe area inset bottom padding for iOS devices */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+    .mobile-experience-toggle {
+        bottom: calc(1rem + env(safe-area-inset-bottom, 0px));
+    }
+}
 
 /* Hide the mobile toggle on larger screens */
 @media (min-width: 768px) {

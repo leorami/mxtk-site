@@ -35,7 +35,11 @@ export default function MediaPage() {
                     </BasePathLink>
                   </div>
                   <div className="text-center">
-                    <div className="text-3xl font-bold mb-2">📄</div>
+                    <div className="text-3xl font-bold mb-2">
+                      <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor" className="mx-auto">
+                        <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z" />
+                      </svg>
+                    </div>
                     <h3 className="font-semibold mb-2">Logo Package</h3>
                     <p className="text-muted text-sm mb-4">High-resolution MXTK logos in various formats</p>
                     <a className="btn-soft" href="/logo-horizontal.png" target="_blank" rel="noopener noreferrer">

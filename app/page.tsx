@@ -38,7 +38,7 @@ export default function Home() {
   )
 
   return (
-    <PageTheme ink="light" lift="H" glass="soft">
+    <PageTheme ink="light" lift="none" glass="standard">
       <PageBackground page="home" />
 
       <JsonLd data={faq} />
