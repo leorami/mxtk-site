@@ -19,8 +19,21 @@ function useAutoHeights(refs: React.MutableRefObject<Record<string, HTMLElement 
       setWidgets(prev => {
         let changed = false;
         const widgets = prev.map(w => {
-          // Temporarily disable auto-height to fix widget height issues
-          // Auto-height was making widgets too tall
+          const el = refs.current[w.id];
+          if (!el) return w;
+          const content = el.querySelector('[data-widget-body]') as HTMLElement | null;
+          if (!content) return w;
+          
+          // Calculate required height more accurately
+          const headerHeight = 60; // header + padding
+          const contentHeight = content.scrollHeight;
+          const totalHeight = headerHeight + contentHeight;
+          const rows = Math.max(3, Math.ceil(totalHeight / (ROW_H + GAP_Y)));
+          
+          if (rows !== w.size.h) {
+            changed = true;
+            return { ...w, size: { ...w.size, h: rows } };
+          }
           return w;
         });
         return changed ? widgets : prev;

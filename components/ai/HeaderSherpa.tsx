@@ -36,11 +36,6 @@ export default function HeaderSherpa() {
     } catch { }
   }
 
-  // Hide the button when not active to keep the page clean like other pages
-  if (!active && !shimmer) {
-    return null;
-  }
-
   return (
     <button
       type="button"
