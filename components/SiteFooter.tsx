@@ -1,6 +1,8 @@
 'use client'
 
 import ThemeSwitch from '@/components/ThemeSwitch'
+import DevThemeSwitcher from '@/components/dev/DevThemeSwitcher'
+import ExperienceToggle from '@/components/experience/ExperienceToggle'
 import Link from 'next/link'
 
 export default function SiteFooter() {
@@ -14,7 +16,14 @@ export default function SiteFooter() {
           {/* Left: Copyright + Theme switcher */}
           <div className="flex items-center gap-2">
             <div className="footer-brand text-sm">© 2025 Mineral Token (MXTK).</div>
-            <div className="hidden md:block ml-3"><ThemeSwitch aria-label="Toggle theme" /></div>
+            <div className="hidden md:flex ml-3 items-center" id="theme-buttons-container">
+              <ThemeSwitch aria-label="Toggle theme" />
+              {process.env.NODE_ENV !== "production" && (
+                <div className="ml-1">
+                  <DevThemeSwitcher />
+                </div>
+              )}
+            </div>
           </div>
 
           {/* Right: Legal links (reserve space with padding-right to avoid overlap) */}
@@ -29,9 +38,16 @@ export default function SiteFooter() {
           </nav>
         </div>
 
-        {/* Mobile layout: keep footer visually empty; reserve height incl. safe area */}
+        {/* Mobile layout: Light/dark mode on left, Experience toggle on right */}
         <div className="md:hidden w-full" style={{ minHeight: 'calc(56px + env(safe-area-inset-bottom, 0px))', paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}>
-          {/* Intentionally empty on mobile: links live in hamburger; no copyright */}
+          <div className="flex justify-between items-center">
+            <div className="mobile-theme-toggle">
+              <ThemeSwitch aria-label="Toggle theme" />
+            </div>
+            <div className="mobile-experience-toggle" data-testid="mobile-experience-toggle">
+              <ExperienceToggle />
+            </div>
+          </div>
         </div>
       </div>
     </footer>

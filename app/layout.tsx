@@ -6,7 +6,6 @@ import SiteHeader from '@/components/SiteHeader';
 import Script from "next/script";
 // FooterChatBarMountEffect removed - chat moved to drawer
 import PageChromeVars from '@/components/chrome/PageChromeVars';
-import DevThemeSwitcher from '@/components/dev/DevThemeSwitcher';
 import ExperienceProvider from '@/components/experience/ExperienceProvider';
 
 import GuideHost from '@/components/ai/GuideHost';
@@ -19,6 +18,8 @@ import './globals.css';
 import './styles/guide-drawer.css';
 import './styles/home-widgets.css';
 import './styles/minerals.css';
+import './styles/mobile-footer.css';
+import './styles/mobile-menu.css';
 import './styles/motion.css';
 import './styles/page-scaffold.css';
 
@@ -164,8 +165,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           {/* FooterChatBarMountEffect removed - chat moved to drawer */}
           {/* Lift overlay behind content (driven by html[data-lift]) */}
           <div aria-hidden className="page-lift" />
-          {/* Dev switcher (hidden in production) */}
-          <DevThemeSwitcher />
+          {/* Dev switcher moved to footer */}
           {/* Wave 4/5: Drawer host only (top-right panel disabled) */}
           <GuideHost />
         </ExperienceProvider>

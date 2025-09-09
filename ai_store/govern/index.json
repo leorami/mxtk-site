@@ -541,7 +541,42 @@
       "category": "other",
       "reason": "check",
       "labels": []
+    },
+    {
+      "id": "c072ee61-447d-437a-b840-beff99fe7cb1",
+      "createdAt": 1757411086720,
+      "status": "open",
+      "category": "pii",
+      "reason": "pii",
+      "labels": []
+    },
+    {
+      "id": "cecfe6be-cdbd-48ed-8c0f-812c6dbbf48a",
+      "createdAt": 1757411086771,
+      "updatedAt": 1757411086898,
+      "status": "resolved",
+      "category": "policy",
+      "severity": 1,
+      "reason": "policy hit",
+      "labels": []
+    },
+    {
+      "id": "51ac7d7d-f4fd-40b1-b433-1bfe9342b6a4",
+      "createdAt": 1757411086800,
+      "status": "open",
+      "category": "spam",
+      "severity": 3,
+      "reason": "spam content",
+      "labels": []
+    },
+    {
+      "id": "f10bea29-d7be-444e-8599-0503389eaad3",
+      "createdAt": 1757411087004,
+      "status": "open",
+      "category": "other",
+      "reason": "check",
+      "labels": []
     }
   ],
-  "builtAt": 1757292843287
+  "builtAt": 1757411087023
 }

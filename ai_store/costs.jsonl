@@ -74,3 +74,8 @@
 {"ts":"2025-09-08T14:17:05.875Z","kind":"chat","model":"gpt-5-nano","tier":"suggest","tokens":{"in":10,"out":271},"usd":0.04115,"route":"/api/ai/chat"}
 {"ts":"2025-09-08T14:17:11.747Z","kind":"chat","model":"gpt-5-nano","tier":"suggest","tokens":{"in":9,"out":67},"usd":0.0105,"route":"/api/ai/chat"}
 {"ts":"2025-09-08T14:17:36.577Z","kind":"chat","model":"gpt-5-nano","tier":"suggest","tokens":{"in":7,"out":311},"usd":0.047,"route":"/api/ai/chat"}
+{"ts":"2025-09-09T08:54:24.806Z","kind":"chat","model":"gpt-5-nano","tier":"suggest","tokens":{"in":10,"out":280},"usd":0.0425,"route":"/api/ai/chat"}
+{"ts":"2025-09-09T08:56:24.353Z","kind":"chat","model":"gpt-5-nano","tier":"suggest","tokens":{"in":9,"out":43},"usd":0.006899999999999999,"route":"/api/ai/chat"}
+{"ts":"2025-09-09T08:56:43.856Z","kind":"chat","model":"gpt-5-nano","tier":"suggest","tokens":{"in":7,"out":280},"usd":0.042350000000000006,"route":"/api/ai/chat"}
+{"ts":"2025-09-09T08:56:59.036Z","kind":"chat","model":"gpt-5-nano","tier":"suggest","tokens":{"in":7,"out":263},"usd":0.0398,"route":"/api/ai/chat"}
+{"ts":"2025-09-09T09:44:47.006Z","kind":"embed","model":"text-embedding-3-large","tokens":{"in":30629,"out":0},"usd":0.61258,"route":"vector-reembed"}

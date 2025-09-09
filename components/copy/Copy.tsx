@@ -2,7 +2,7 @@
 import { useExperience } from "@/components/experience/ClientExperience";
 import { careersCopy } from "@/copy/careers";
 import { contactCopy } from "@/copy/contact";
-import { dashboardCopy } from "@/components/copy/dashboard";
+import { dashboardCopy } from "@/copy/dashboard";
 import { faqCopy } from "@/copy/faq";
 import { homeCopy } from "@/copy/home";
 import { institutionsCopy } from "@/copy/institutions";

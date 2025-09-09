@@ -1,0 +1,161 @@
+{
+  "id": "default",
+  "layoutVersion": 2,
+  "sections": [
+    {
+      "id": "sec-3560c022-c6a5-4e60-a82c-2e45d2d63a8c",
+      "key": "overview",
+      "title": "Overview",
+      "order": 0
+    },
+    {
+      "id": "sec-3d028c76-99ac-42c8-ab90-d459aa789a9b",
+      "key": "learn",
+      "title": "Learn",
+      "order": 1
+    },
+    {
+      "id": "sec-c1b90ef2-1762-4fd6-a97d-b19bc6d1a48d",
+      "key": "build",
+      "title": "Build",
+      "order": 2
+    },
+    {
+      "id": "sec-6f05d3f5-bf48-4ab0-ac91-f1a001168a51",
+      "key": "operate",
+      "title": "Operate",
+      "order": 3
+    },
+    {
+      "id": "sec-6f4e377a-7c11-47c5-9c78-c235351962fb",
+      "key": "library",
+      "title": "Library",
+      "order": 4
+    }
+  ],
+  "widgets": [
+    {
+      "id": "w-ce7571d9-6015-4539-beb9-15a44d3b12d2",
+      "type": "recent-answers",
+      "sectionId": "sec-3560c022-c6a5-4e60-a82c-2e45d2d63a8c",
+      "pos": {
+        "x": 0,
+        "y": 0
+      },
+      "size": {
+        "w": 6,
+        "h": 4
+      },
+      "pinned": false,
+      "data": {}
+    },
+    {
+      "id": "w-7a164d57-20ff-4f86-bf3d-af8befdf2922",
+      "type": "resources",
+      "sectionId": "sec-3560c022-c6a5-4e60-a82c-2e45d2d63a8c",
+      "pos": {
+        "x": 6,
+        "y": 0
+      },
+      "size": {
+        "w": 6,
+        "h": 4
+      },
+      "pinned": false,
+      "data": {}
+    },
+    {
+      "id": "w-75959501-ec99-4ffc-8b9d-47a0df508bc8",
+      "type": "glossary-spotlight",
+      "sectionId": "sec-3560c022-c6a5-4e60-a82c-2e45d2d63a8c",
+      "pos": {
+        "x": 0,
+        "y": 4
+      },
+      "size": {
+        "w": 4,
+        "h": 3
+      },
+      "pinned": false,
+      "data": {}
+    },
+    {
+      "id": "w-08c71687-b3eb-42e5-a25c-f4de60bfb6ea",
+      "type": "custom-note",
+      "title": "Notes",
+      "sectionId": "sec-3560c022-c6a5-4e60-a82c-2e45d2d63a8c",
+      "pos": {
+        "x": 4,
+        "y": 4
+      },
+      "size": {
+        "w": 8,
+        "h": 3
+      },
+      "pinned": false,
+      "data": {}
+    },
+    {
+      "id": "w-877a35d6-c5c1-4cc0-ba06-1e12479509b3",
+      "type": "resources",
+      "sectionId": "sec-3d028c76-99ac-42c8-ab90-d459aa789a9b",
+      "pos": {
+        "x": 0,
+        "y": 0
+      },
+      "size": {
+        "w": 6,
+        "h": 4
+      },
+      "pinned": false,
+      "data": {}
+    },
+    {
+      "id": "w-57a01498-2b20-4ad9-92b3-b0213c346429",
+      "type": "what-next",
+      "sectionId": "sec-3d028c76-99ac-42c8-ab90-d459aa789a9b",
+      "pos": {
+        "x": 6,
+        "y": 0
+      },
+      "size": {
+        "w": 6,
+        "h": 2
+      },
+      "pinned": false,
+      "data": {}
+    },
+    {
+      "id": "w-758588c8-7eaa-43c7-9460-9d64c5e4bd43",
+      "type": "resources",
+      "sectionId": "sec-c1b90ef2-1762-4fd6-a97d-b19bc6d1a48d",
+      "pos": {
+        "x": 0,
+        "y": 0
+      },
+      "size": {
+        "w": 6,
+        "h": 4
+      },
+      "pinned": false,
+      "data": {}
+    },
+    {
+      "id": "w-14fb046a-cf1e-4172-b57f-3e0dbb2a2f09",
+      "type": "recent-answers",
+      "sectionId": "sec-c1b90ef2-1762-4fd6-a97d-b19bc6d1a48d",
+      "pos": {
+        "x": 6,
+        "y": 0
+      },
+      "size": {
+        "w": 6,
+        "h": 4
+      },
+      "pinned": false,
+      "data": {}
+    }
+  ],
+  "createdAt": "2025-09-09T10:03:46.424Z",
+  "updatedAt": "2025-09-09T16:30:04.967Z"
+}

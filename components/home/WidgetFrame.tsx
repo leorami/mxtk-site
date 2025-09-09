@@ -3,7 +3,7 @@ import CustomNote from '@/components/home/widgets/CustomNote';
 import GlossarySpotlight from '@/components/home/widgets/GlossarySpotlight';
 import RecentAnswers from '@/components/home/widgets/RecentAnswers';
 import ResourceList from '@/components/home/widgets/ResourceList';
-import type { WidgetState } from '@/lib/home/gridTypes';
+import { WidgetState } from '@/lib/home/types';
 
 export default function WidgetFrame({ widget, onAction }: { widget: WidgetState; onAction?: (action: string, w: WidgetState) => void }) {
   const learn = () => {
@@ -45,7 +45,11 @@ export default function WidgetFrame({ widget, onAction }: { widget: WidgetState;
         {widget.type === 'recent-answers' && <RecentAnswers />}
         {widget.type === 'glossary-spotlight' && <GlossarySpotlight />}
         {widget.type === 'custom-note' && <CustomNote widgetId={widget.id} />}
+        {widget.type === 'resources' && <ResourceList />}
         {widget.type === 'resource-list' && <ResourceList />}
+        {widget.type === 'what-next' && (
+          <div className="opacity-85">Suggested next steps for your experience level.</div>
+        )}
         {widget.type === 'getting-started' && (
           <div className="opacity-85">Use Sherpa or the site to add widgets to your Home.</div>
         )}
@@ -53,5 +57,3 @@ export default function WidgetFrame({ widget, onAction }: { widget: WidgetState;
     </section>
   );
 }
-
-

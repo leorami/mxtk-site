@@ -182,10 +182,7 @@ export default function SiteHeader({ hasHome }: { hasHome?: boolean }) {
           </div>
 
           <div className="nav:hidden flex items-center gap-2">
-            {/* Mobile order: Experience Controls → Sherpa → Hamburger (far right) */}
-            <div data-testid="experience-controls-mobile" className={`flex items-center gap-2 ${iconClass}`}>
-              <ExperienceToggle />
-            </div>
+            {/* Mobile order: Sherpa → Hamburger (far right) */}
             <HeaderSherpa />
             <button
               data-testid="nav-toggle"
@@ -201,7 +198,7 @@ export default function SiteHeader({ hasHome }: { hasHome?: boolean }) {
       <div className="brand-accent-line"></div>
 
       {open && (
-        <div className="nav:hidden border-t border-[var(--border-soft)] bg-[var(--surface-2)] relative z-40">
+        <div className="nav:hidden border-t border-[var(--border-soft)] bg-[var(--surface-2)] relative z-40 mobile-menu">
           <div className="mx-auto max-w-none px-3 py-2 space-y-0.5 overflow-y-auto max-h-[calc(100dvh-90px)]">
             {hasHome && (
               <Link
@@ -302,11 +299,7 @@ export default function SiteHeader({ hasHome }: { hasHome?: boolean }) {
               </div>
             </div>
 
-            <div className="pt-3 space-y-2">
-              <div data-testid="experience-controls-mobile" className="flex items-center gap-2">
-                <ExperienceToggle />
-              </div>
-            </div>
+            {/* Experience toggle moved to footer */}
           </div>
         </div>
       )}

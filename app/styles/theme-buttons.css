@@ -1,0 +1,90 @@
+/* Theme-aware buttons for dashboard widgets */
+
+/* Base button styling */
+.theme-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  transition: all 0.2s ease-in-out;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid transparent;
+}
+
+/* Primary button - uses the current theme's accent color */
+.theme-button-primary {
+  background-color: var(--mxtk-accent, #E0932B);
+  color: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.theme-button-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  filter: brightness(1.05);
+}
+
+/* Secondary button - more subtle */
+.theme-button-secondary {
+  background-color: rgba(var(--mxtk-accent-rgb, 224, 147, 43), 0.1);
+  color: var(--ink-strong);
+  border: 1px solid rgba(var(--mxtk-accent-rgb, 224, 147, 43), 0.2);
+}
+
+.theme-button-secondary:hover {
+  background-color: rgba(var(--mxtk-accent-rgb, 224, 147, 43), 0.15);
+  border-color: rgba(var(--mxtk-accent-rgb, 224, 147, 43), 0.3);
+  transform: translateY(-1px);
+}
+
+/* Specific styling for "Add starter widgets" button */
+.add-widgets-button {
+  font-size: 0.875rem;
+  padding: 0.5rem 1rem;
+  background-color: rgba(var(--mxtk-accent-rgb, 224, 147, 43), 0.15);
+  color: var(--ink-strong);
+  border: 1px solid rgba(var(--mxtk-accent-rgb, 224, 147, 43), 0.25);
+  border-radius: 0.5rem;
+  transition: all 0.2s ease;
+  font-weight: 500;
+}
+
+.add-widgets-button:hover {
+  background-color: rgba(var(--mxtk-accent-rgb, 224, 147, 43), 0.25);
+  border-color: rgba(var(--mxtk-accent-rgb, 224, 147, 43), 0.35);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(var(--mxtk-accent-rgb, 224, 147, 43), 0.2);
+}
+
+/* Dark mode adjustments */
+.dark .add-widgets-button {
+  background-color: rgba(var(--mxtk-accent-rgb, 224, 147, 43), 0.25);
+  border-color: rgba(var(--mxtk-accent-rgb, 224, 147, 43), 0.35);
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.dark .add-widgets-button:hover {
+  background-color: rgba(var(--mxtk-accent-rgb, 224, 147, 43), 0.35);
+  border-color: rgba(var(--mxtk-accent-rgb, 224, 147, 43), 0.45);
+  box-shadow: 0 2px 12px rgba(var(--mxtk-accent-rgb, 224, 147, 43), 0.3);
+}
+
+/* Ink-specific adjustments */
+html[data-ink="warm"] .add-widgets-button {
+  color: var(--ink-strong);
+  background-color: rgba(var(--mxtk-accent-rgb, 224, 147, 43), 0.2);
+}
+
+html[data-ink="light"] .add-widgets-button {
+  color: var(--ink-strong);
+  background-color: rgba(var(--mxtk-accent-rgb, 224, 147, 43), 0.25);
+}
+
+html[data-ink="dark"] .add-widgets-button {
+  color: rgba(255, 255, 255, 0.95);
+  background-color: rgba(var(--mxtk-accent-rgb, 224, 147, 43), 0.3);
+}

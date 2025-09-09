@@ -1,94 +1,34 @@
-import { getHome, putHome } from '@/lib/home/fileStore'
-import { moveWidget, pinWidget, removeWidget, resizeWidget, togglePinWidget, upsertWidgetData } from '@/lib/home/pureStore'
-import { safeParseHome, zHomePatch, zPos, zSize } from '@/lib/home/schema'
-import { NextRequest, NextResponse } from 'next/server'
-import crypto from 'node:crypto'
+// app/api/ai/home/[id]/route.ts
+import { toV2 } from '@/lib/home/migrate'
+import { readHome, writeHome } from '@/lib/home/store'
+import { NextResponse } from 'next/server'
 
-export const runtime = 'nodejs'
-
-export async function GET(_req: NextRequest, { params }: { params: { id: string } }) {
-  const doc = await getHome(params.id)
-  if (!doc) return NextResponse.json({ ok: false, error: 'not found' }, { status: 404, headers: { 'Cache-Control': 'no-store' } })
-  return NextResponse.json({ ok: true, doc }, { headers: { 'Cache-Control': 'no-store' } })
-}
-
-export async function PUT(req: NextRequest, { params }: { params: { id: string } }) {
-  const body = await req.json().catch(() => null)
-  const parsed = safeParseHome(body)
-  if (!parsed.success || parsed.data.id !== params.id) {
-    return NextResponse.json({ ok: false, error: 'bad payload' }, { status: 400, headers: { 'Cache-Control': 'no-store' } })
+export async function GET(_: Request, { params }: { params: { id: string } }) {
+  const id = await params.id
+  const raw = (await readHome(id)) || { id, widgets: [] }
+  const v2 = toV2(raw)
+  // Write back if we migrated
+  if ((raw as any).layoutVersion !== 2) {
+    await writeHome(v2)
   }
-  const saved = await putHome(parsed.data)
-  return NextResponse.json({ ok: true, doc: saved }, { headers: { 'Cache-Control': 'no-store' } })
+  return NextResponse.json(v2, { status: 200 })
 }
 
-// PATCH: partial updates for a single widget (position, size, pinned, data)
-export async function PATCH(req: NextRequest, { params }: { params: { id: string } }) {
-  const home = await getHome(params.id)
-  if (!home) return NextResponse.json({ ok: false, error: 'not found' }, { status: 404, headers: { 'Cache-Control': 'no-store' } })
+// PATCH payload: { id, widgets:[{ id, pos:{x,y}, size:{w,h} }] }
+export async function PATCH(req: Request, { params }: { params: { id: string } }) {
+  const id = await params.id
+  const body = await req.json().catch(() => ({}))
+  const raw = (await readHome(id)) || { id, widgets: [] }
+  const v2 = toV2(raw)
 
-  const body = await req.json().catch(() => null as any)
-
-  // New shape (Wave 12.2): { widgets: [{ id, size?, pos?, pinned?, data? }] }
-  if (body && Array.isArray(body.widgets)) {
-    const parsed = zHomePatch.safeParse(body)
-    if (!parsed.success) return NextResponse.json({ ok: false, error: parsed.error.flatten() }, { status: 400, headers: { 'Cache-Control': 'no-store' } })
-
-    let next = { ...home, widgets: [...home.widgets] }
-    for (const patch of parsed.data.widgets) {
-      const w = next.widgets.find(x => x.id === patch.id)
-      if (!w) continue
-      if (patch.pos) next = moveWidget(next, patch.id, patch.pos)
-      if (patch.size) next = resizeWidget(next, patch.id, patch.size)
-      if (typeof patch.pinned === 'boolean') {
-        const current = !!w.pinned
-        if (current !== patch.pinned) {
-          // pinWidget toggles; call only when different
-          next = pinWidget(next, patch.id)
-        }
-      }
-      if (patch.data) next = upsertWidgetData(next, patch.id, patch.data as Record<string, unknown>)
+  const map = new Map(v2.widgets.map(w => [w.id, w]))
+  for (const w of body.widgets || []) {
+    const cur = map.get(w.id)
+    if (cur) {
+      cur.pos = w.pos || cur.pos
+      cur.size = w.size || cur.size
     }
-
-    const saved = await putHome(next)
-    const payload = JSON.stringify({ ok: true, doc: saved })
-    const etag = 'W/"' + crypto.createHash('sha1').update(payload).digest('hex') + '"'
-    return new NextResponse(payload, { headers: { 'content-type': 'application/json', 'Cache-Control': 'no-store', ETag: etag } })
   }
-
-  // Back-compat shape: { widgetId, pos?, size?, pin?, remove?, data? }
-  const widgetId = typeof body?.widgetId === 'string' && body.widgetId.length > 0 ? body.widgetId : null
-  if (!widgetId) {
-    return NextResponse.json({ ok: false, error: 'bad payload' }, { status: 400, headers: { 'Cache-Control': 'no-store' } })
-  }
-
-  let next = home
-  if (body?.remove === true) {
-    next = removeWidget(next, widgetId)
-  }
-  if (body?.pin === true || body?.pin === false || typeof body?.pin === 'boolean') {
-    next = togglePinWidget(next, widgetId)
-  }
-  if (body?.pos) {
-    const parsed = zPos.safeParse(body.pos)
-    if (!parsed.success) return NextResponse.json({ ok: false, error: 'bad pos' }, { status: 400, headers: { 'Cache-Control': 'no-store' } })
-    next = moveWidget(next, widgetId, parsed.data)
-  }
-  if (body?.size) {
-    const parsed = zSize.safeParse(body.size)
-    if (!parsed.success) return NextResponse.json({ ok: false, error: 'bad size' }, { status: 400, headers: { 'Cache-Control': 'no-store' } })
-    next = resizeWidget(next, widgetId, parsed.data)
-  }
-  if (body?.data && typeof body.data === 'object') {
-    next = upsertWidgetData(next, widgetId, body.data)
-  }
-
-  const saved = await putHome(next)
-  const payload = JSON.stringify({ ok: true, doc: saved })
-  const etag = 'W/"' + crypto.createHash('sha1').update(payload).digest('hex') + '"'
-  return new NextResponse(payload, { headers: { 'content-type': 'application/json', 'Cache-Control': 'no-store', ETag: etag } })
+  await writeHome(v2)
+  return NextResponse.json({ ok: true }, { status: 200 })
 }
-
-
-
-

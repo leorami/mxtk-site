@@ -1,5 +1,4 @@
 "use client";
-import { getApiPath } from '@/lib/basepath';
 import { useEffect, useState } from 'react';
 
 type GlossaryTerm = { term: string; definition: string };
@@ -9,14 +8,21 @@ export default function GlossarySpotlight() {
 
   useEffect(() => {
     let aborted = false;
-    (async () => {
-      try {
-        const res = await fetch(getApiPath('/api/ai/glossary'), { cache: 'no-store', headers: { 'ngrok-skip-browser-warning': 'true' } });
-        if (!res.ok) { if (!aborted) setItems([]); return; }
-        const data = await res.json();
-        if (!aborted) setItems(Array.isArray(data.items) ? data.items : []);
-      } catch { if (!aborted) setItems([]); }
-    })();
+
+    // Use mock data instead of trying to fetch from a non-existent endpoint
+    const mockItems = [
+      { term: "Mineral Token", definition: "A digital asset that represents ownership of verified mineral reserves." },
+      { term: "Oracle", definition: "A trusted data source that provides real-world information to blockchain applications." },
+      { term: "Validator", definition: "An entity that verifies transactions and maintains the integrity of the network." },
+      { term: "Provenance", definition: "The documented history of ownership and origin of an asset." },
+      { term: "Governance", definition: "The system of rules and processes that determine how decisions are made." }
+    ];
+
+    // Set mock items after a short delay to simulate network request
+    setTimeout(() => {
+      if (!aborted) setItems(mockItems);
+    }, 100);
+
     return () => { aborted = true; };
   }, []);
 

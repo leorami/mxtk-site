@@ -22,12 +22,22 @@ export default function AppImage(props: Omit<ImageProps, 'src'> & { src: string 
 
   // Ensure src starts with / for public assets
   const normalizedSrc = src.startsWith('/') ? src : `/${src}`;
-  
+
   // Apply base path to public assets
   const basePathAwareSrc = `${basePath}${normalizedSrc}`;
 
   // Let Next.js Image component handle the rest
-  return <Image {...rest} src={basePathAwareSrc} unoptimized />;
+  // Add width="auto" or height="auto" to maintain aspect ratio when one dimension is modified
+  const imageProps = { ...rest };
+
+  // If only one dimension (width or height) is specified, set the other to "auto"
+  if (imageProps.width && !imageProps.height) {
+    imageProps.height = "auto" as any;
+  } else if (imageProps.height && !imageProps.width) {
+    imageProps.width = "auto" as any;
+  }
+
+  return <Image {...imageProps} src={basePathAwareSrc} unoptimized />;
 }
 
 

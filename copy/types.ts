@@ -25,6 +25,8 @@ export type FAQ = {
 export type PageCopy = {
   heroTitle: Triplet;
   heroSub: Triplet;
+  adaptTitle?: Triplet;
+  adaptSub?: Triplet;
   pillars?: Pillar[];
   learnMore?: Triplet;
   sections?: RichSection[]; // NEW

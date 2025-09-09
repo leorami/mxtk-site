@@ -1,66 +1,28 @@
-import fs from 'node:fs/promises';
-import path from 'node:path';
-import type { HomeDoc, Widget } from './types';
+// lib/home/store.ts
+import { promises as fs } from 'node:fs'
+import { join } from 'node:path'
+import { HomeDocAny, HomeDocV2 } from './types'
 
-const BASE = process.env.AI_VECTOR_DIR || './ai_store'
-const DIR = path.join(process.cwd(), BASE, 'home')
+const ROOT = process.env.AI_STORE_ROOT || 'ai_store'
+const HOMES_DIR = join(process.cwd(), ROOT, 'homes')
 
-async function ensure() {
-  await fs.mkdir(DIR, { recursive: true })
+async function ensureDir() {
+  await fs.mkdir(HOMES_DIR, { recursive: true })
 }
 
-export async function loadHome(id: string): Promise<HomeDoc> {
-  await ensure()
+export async function readHome(id: string): Promise<HomeDocAny | null> {
+  await ensureDir()
   try {
-    return JSON.parse(await fs.readFile(path.join(DIR, `${id}.json`), 'utf8'))
+    const raw = await fs.readFile(join(HOMES_DIR, `${id}.json`), 'utf8')
+    return JSON.parse(raw)
   } catch {
-    return { id, updatedAt: new Date().toISOString(), widgets: [] }
+    return null
   }
 }
 
-export async function saveHome(doc: HomeDoc) {
-  await ensure()
-  const next = { ...doc, updatedAt: new Date().toISOString() }
-  await fs.writeFile(path.join(DIR, `${doc.id}.json`), JSON.stringify(next, null, 2), 'utf8')
-  return next
+export async function writeHome(doc: HomeDocV2): Promise<void> {
+  await ensureDir()
+  const file = join(HOMES_DIR, `${doc.id}.json`)
+  const stamped = { ...doc, updatedAt: new Date().toISOString(), createdAt: doc.createdAt || new Date().toISOString() }
+  await fs.writeFile(file, JSON.stringify(stamped, null, 2), 'utf8')
 }
-
-export async function addWidget(id: string, w: Omit<Widget, 'id' | 'order'> & { id?: string }) {
-  const doc = await loadHome(id)
-  if (w.id && doc.widgets.some(x => x.id === w.id)) return doc
-  const wid = w.id || `w_${Math.random().toString(36).slice(2)}`
-  const order = (doc.widgets.at(-1)?.order ?? 0) + 1
-  doc.widgets.push({ id: wid, order, ...w })
-  return saveHome(doc)
-}
-
-export async function updateWidget(id: string, wid: string, patch: Partial<Widget>) {
-  const doc = await loadHome(id)
-  const i = doc.widgets.findIndex(x => x.id === wid)
-  if (i < 0) return doc
-  doc.widgets[i] = { ...doc.widgets[i], ...patch }
-  return saveHome(doc)
-}
-
-export async function removeWidget(id: string, wid: string) {
-  const doc = await loadHome(id)
-  doc.widgets = doc.widgets.filter(x => x.id !== wid)
-  return saveHome(doc)
-}
-
-export async function reorderWidget(id: string, wid: string, dir: 1 | -1) {
-  const doc = await loadHome(id)
-  const idx = doc.widgets.findIndex(x => x.id === wid)
-  if (idx < 0) return doc
-  const swap = idx + dir
-  if (swap < 0 || swap >= doc.widgets.length) return doc
-  const a = doc.widgets[idx]
-  const b = doc.widgets[swap]
-  const ao = a.order
-  a.order = b.order
-  b.order = ao
-  ;[doc.widgets[idx], doc.widgets[swap]] = [b, a]
-  return saveHome(doc)
-}
-
-

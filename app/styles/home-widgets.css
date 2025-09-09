@@ -1,3 +1,55 @@
+/* Grid container (inherits your tokens; no colors hardcoded) */
+.home-grid {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    grid-auto-rows: 24px;
+    /* matches rowH default */
+    gap: 12px;
+}
+
+/* Cells */
+.widget-cell {
+    outline: none;
+}
+
+.widget-cell:focus-visible .widget-chrome {
+    box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.9);
+    /* visible focus ring; tokenize later if you like */
+    border-radius: 10px;
+}
+
+/* Draggable surface */
+.widget-chrome {
+    border-radius: 12px;
+    height: 100%;
+    cursor: grab;
+}
+
+.widget-chrome:active {
+    cursor: grabbing;
+}
+
+/* Body keeps your card look (glass/lift handled by surrounding Card if you render it) */
+.widget-body {
+    height: 100%;
+}
+
+/* Resize handle in bottom-right */
+.resize-handle {
+    position: absolute;
+    right: 6px;
+    bottom: 6px;
+    width: 16px;
+    height: 16px;
+    border-radius: 4px;
+    cursor: nwse-resize;
+    background: transparent;
+}
+
+.widget-cell {
+    position: relative;
+}
+
 .widget-frame {
     padding-top: 2.25rem;
 }
@@ -72,4 +124,28 @@
     background: var(--accent-warm);
     color: var(--ink-invert);
     border-color: transparent;
+}
+
+.sc-section {
+    margin-top: 1.5rem;
+}
+
+.sc-section-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: .5rem;
+}
+
+.sc-section-title {
+    font-weight: 600;
+}
+
+.sc-section-toggle {
+    font-size: 12px;
+    opacity: .8;
+}
+
+.sc-section-body.is-collapsed {
+    display: none;
 }

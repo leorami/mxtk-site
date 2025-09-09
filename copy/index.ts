@@ -1,0 +1,1 @@
+export { dashboardCopy } from './dashboard'
