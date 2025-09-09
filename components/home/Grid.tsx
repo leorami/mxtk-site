@@ -90,6 +90,7 @@ export default function Grid({
   const nodeRefs = React.useRef<Record<string, HTMLElement | null>>({});
   const [cols, setCols] = React.useState(colsDesktop);
   const [containerW, setContainerW] = React.useState(1);
+  const [sherpaOpen, setSherpaOpen] = React.useState(false);
   const [widgets, setWidgets] = React.useState<WidgetLike[]>(
     sectionId ? doc.widgets.filter(w => w.sectionId === sectionId) : doc.widgets
   );
@@ -100,6 +101,24 @@ export default function Grid({
     startRect: GridRect;
   } | null>(null);
   const liveRegionRef = React.useRef<HTMLDivElement | null>(null);
+
+  // Track Sherpa drawer state
+  React.useEffect(() => {
+    if (typeof document === 'undefined') return;
+    
+    const updateSherpaState = () => {
+      setSherpaOpen(document.documentElement.classList.contains('guide-open'));
+    };
+    
+    updateSherpaState();
+    const observer = new MutationObserver(updateSherpaState);
+    observer.observe(document.documentElement, { 
+      attributes: true, 
+      attributeFilter: ['class'] 
+    });
+    
+    return () => observer.disconnect();
+  }, []);
 
   // Auto-height widgets
   useAutoHeights(nodeRefs, setWidgets);
@@ -256,11 +275,19 @@ export default function Grid({
     el.textContent = `Widget updated. Column ${w.pos.x + 1} of ${cols}, row ${w.pos.y + 1}, width ${w.size.w}, height ${w.size.h}.`;
   };
 
+  // Calculate minimum grid height to accommodate all widgets
+  const minGridHeight = React.useMemo(() => {
+    if (widgets.length === 0) return 200; // Default minimum height
+    const maxBottomRow = Math.max(...widgets.map(w => w.pos.y + w.size.h));
+    return maxBottomRow * (rowHeight + gap) + gap;
+  }, [widgets, rowHeight, gap]);
+
   // Render
   const styleVars: CSSProperties = {
     "--grid-cols": String(cols),
     "--grid-gap": `${gap}px`,
     "--row-h": `${rowHeight}px`,
+    minHeight: `${minGridHeight}px`,
   } as CSSProperties;
 
   return (
@@ -282,27 +309,31 @@ export default function Grid({
               aria-label={`Widget ${w.id}`}
               onKeyDown={(e) => onKeyDown(e, w.id)}
             >
-              <div
-                className="wframe__drag"
-                title="Drag to move"
-                onPointerDown={(e) => onPointerDown(e, w.id, "move")}
-                onPointerMove={onPointerMove}
-                onPointerUp={onPointerUp}
-                onPointerCancel={onPointerUp}
-              />
+              {sherpaOpen && (
+                <div
+                  className="wframe__drag"
+                  title="Drag to move"
+                  onPointerDown={(e) => onPointerDown(e, w.id, "move")}
+                  onPointerMove={onPointerMove}
+                  onPointerUp={onPointerUp}
+                  onPointerCancel={onPointerUp}
+                />
+              )}
               {/* Content placeholder – your existing widget body renders here */}
               <div className="wframe__body" style={{ pointerEvents: 'auto' }}>
                 {children ? children(w) : null}
               </div>
-              <div
-                className="wframe__resize"
-                title="Drag to resize"
-                onPointerDown={(e) => onPointerDown(e, w.id, "resize")}
-                onPointerMove={onPointerMove}
-                onPointerUp={onPointerUp}
-                onPointerCancel={onPointerUp}
-                aria-hidden="true"
-              />
+              {sherpaOpen && (
+                <div
+                  className="wframe__resize"
+                  title="Drag to resize"
+                  onPointerDown={(e) => onPointerDown(e, w.id, "resize")}
+                  onPointerMove={onPointerMove}
+                  onPointerUp={onPointerUp}
+                  onPointerCancel={onPointerUp}
+                  aria-hidden="true"
+                />
+              )}
             </section>
           );
         })}
