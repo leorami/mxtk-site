@@ -64,7 +64,10 @@
 
 .widget-actions .icon-btn {
     width: 20px;
-    height: 20px
+    height: 20px;
+    background: white;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 4px
 }
 
 .widget-actions .icon-btn svg {
