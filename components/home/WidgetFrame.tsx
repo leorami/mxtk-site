@@ -1,95 +1,17 @@
-"use client";
-import CustomNote from '@/components/home/widgets/CustomNote';
-import GlossarySpotlight from '@/components/home/widgets/GlossarySpotlight';
-import RecentAnswers from '@/components/home/widgets/RecentAnswers';
-import ResourceList from '@/components/home/widgets/ResourceList';
-import { WidgetState } from '@/lib/home/types';
-import { useEffect, useState } from 'react';
-
-const SMALL_WORDS = /^(a|an|and|as|at|but|by|for|in|of|on|or|the|to|vs?)$/i;
-function toTitleCase(s?: string) {
-  if (!s) return s ?? '';
-  return s
-    .split(/\s+/)
-    .map((w, i) => i > 0 && SMALL_WORDS.test(w) ? w.toLowerCase()
-      : w.charAt(0).toUpperCase() + w.slice(1))
-    .join(' ');
-}
-
-export default function WidgetFrame({ widget, onAction }: { widget: WidgetState; onAction?: (action: string, w: WidgetState) => void }) {
-  const [sherpaOpen, setSherpaOpen] = useState(false);
-  
-  // Track Sherpa drawer state
-  useEffect(() => {
-    if (typeof document === 'undefined') return;
-    
-    const updateSherpaState = () => {
-      setSherpaOpen(document.documentElement.classList.contains('guide-open'));
-    };
-    
-    // Initial state
-    updateSherpaState();
-    
-    // Watch for changes
-    const observer = new MutationObserver(updateSherpaState);
-    observer.observe(document.documentElement, { 
-      attributes: true, 
-      attributeFilter: ['class'] 
-    });
-    
-    return () => observer.disconnect();
-  }, []);
-
-  const learn = () => {
-    try { window.dispatchEvent(new CustomEvent('mxtk:guide:prefill', { detail: { prompt: `Tell me more about ${widget.title || widget.type}` } })) } catch { }
-  };
-  const refresh = () => onAction?.('refresh', widget);
-  const remove = () => onAction?.('remove', widget);
+import * as React from "react";
+export default function WidgetFrame({
+  title, children, onRefresh, onSettings,
+}: { title?: string; children: React.ReactNode; onRefresh?: ()=>void; onSettings?: ()=>void }) {
   return (
-    <section
-      role="region"
-      aria-label={widget.title || widget.type}
-      data-testid="widget-frame"
-      data-widget-id={widget.id}
-      className="widget-frame rounded-2xl border border-[var(--border-soft)] bg-[var(--surface-card)] shadow-sm relative"
-    >
-      {sherpaOpen && (
-        <div className="widget-actions" role="toolbar" aria-label="Widget actions">
-          {/* Pin intentionally omitted on Home */}
-          <button className="icon-btn" aria-label="Refresh" onClick={refresh} data-testid="refresh-widget">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden>
-              <path d="M21 12a9 9 0 10-3.2 6.9" stroke="currentColor" strokeWidth="1.5" />
-              <path d="M21 3v6h-6" stroke="currentColor" strokeWidth="1.5" />
-            </svg>
-          </button>
-          <button className="icon-btn" aria-label="Learn more" onClick={learn} data-testid="learn-widget">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden>
-              <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="1.5" />
-              <path d="M12 10v6" stroke="currentColor" strokeWidth="1.5" />
-              <circle cx="12" cy="7" r="1" fill="currentColor" />
-            </svg>
-          </button>
-          <button className="icon-btn" aria-label="Remove" onClick={remove} data-testid="remove-widget">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden>
-              <path d="M3 6h18M8 6l1-2h6l1 2M6 6l1 14h10l1-14" stroke="currentColor" strokeWidth="1.5" />
-            </svg>
-          </button>
-        </div>
-      )}
-      <header className="px-4 pt-4 pb-2 font-semibold text-[var(--ink-strong)] dark:text-[var(--ink-strong)]">{toTitleCase(widget.title || widget.type)}</header>
-      <div className="widget-body px-4 pb-4 text-sm text-[var(--ink)] dark:text-[var(--ink)]" data-widget-body>
-        {widget.type === 'recent-answers' && <RecentAnswers />}
-        {widget.type === 'glossary-spotlight' && <GlossarySpotlight />}
-        {widget.type === 'custom-note' && <CustomNote widgetId={widget.id} />}
-        {widget.type === 'resources' && <ResourceList />}
-        {widget.type === 'resource-list' && <ResourceList />}
-        {widget.type === 'what-next' && (
-          <div className="opacity-85">Suggested next steps for your experience level.</div>
-        )}
-        {widget.type === 'getting-started' && (
-          <div className="opacity-85">Use Sherpa or the site to add widgets to your Home.</div>
-        )}
+    <div className="wframe" data-testid="wframe">
+      <div className="wframe-controls" aria-hidden="true">
+        <button className="iconbtn" title="Refresh" onClick={onRefresh}>↻</button>
+        <button className="iconbtn" title="Settings" onClick={onSettings}>⚙︎</button>
+        <button className="iconbtn" title="Pin">📌</button>
       </div>
-    </section>
+      {title ? <div className="w-title text-sm font-semibold mb-2">{toTitleCase(title)}</div> : null}
+      <div className="wframe-body" data-widget-body>{children}</div>
+    </div>
   );
 }
+function toTitleCase(s?: string){ if(!s) return ""; return s.replace(/\w\S*/g,t=>t[0].toUpperCase()+t.slice(1).toLowerCase()); }

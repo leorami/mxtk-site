@@ -87,12 +87,6 @@ html.guide-open {
   transform: none !important;
   transition: width .28s ease;
   overflow: hidden;
-  /* Make background half as light for better visibility */
-  --glass-bg: rgba(255, 255, 255, 0.45);
-}
-
-.dark .guide-drawer {
-  --glass-bg: rgba(18, 22, 28, 0.43);
 }
 
 [data-shiftable-root] {

@@ -1,55 +1,31 @@
-// lib/home/migrate.ts
-import crypto from 'node:crypto'
-import { HomeDocAny, HomeDocV2, SectionKey, SectionState, WidgetState } from './types'
+import type { HomeDocV1, HomeDoc, SectionKey, SectionState } from "./types";
+const MIN_W = 3, MIN_H = 4;
 
-const rid = () => (crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).slice(2))
+export function isV2(doc: HomeDoc): doc is HomeDoc & { layoutVersion: 2 } {
+  return doc.layoutVersion === 2 && Array.isArray((doc as any).sections);
+}
 
-export function toV2(raw: HomeDocAny, opts?: { titleOverrides?: Partial<Record<SectionKey, string>> }): HomeDocV2 {
-    // Already v2?
-    if (raw && raw.layoutVersion === 2 && Array.isArray(raw.sections) && Array.isArray(raw.widgets)) {
-        return raw as HomeDocV2
-    }
-
-    // V1 shape (widgets only)
-    const v1Widgets: any[] = Array.isArray((raw as any)?.widgets) ? (raw as any).widgets : []
-    const id: string = (raw as any)?.id || rid()
-
-    const sectionTitle = (k: SectionKey) =>
-        (opts?.titleOverrides?.[k]) ||
-        ({
-            overview: 'Overview',
-            learn: 'Learn',
-            build: 'Build',
-            operate: 'Operate',
-            library: 'Library',
-        }[k])
-
-    const sectionOverview: SectionState = {
-        id: `sec-${rid()}`,
-        key: 'overview',
-        title: sectionTitle('overview')!,
-        order: 0,
-    }
-
-    const widgets: WidgetState[] = v1Widgets.map((w) => ({
-        id: w.id || `w-${rid()}`,
-        type: w.type || 'custom-note',
-        title: w.title,
-        sectionId: sectionOverview.id,
-        pos: w.pos || { x: 0, y: 0 },
-        size: w.size || { w: 4, h: 3 },
-        pinned: w.pinned || false,
-        data: w.data || {},
-    }))
-
-    const v2: HomeDocV2 = {
-        id,
-        layoutVersion: 2,
-        sections: [sectionOverview],
-        widgets,
-        createdAt: (raw as any)?.createdAt || new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-    }
-
-    return v2
+export function toV2(doc: HomeDocV1): HomeDoc {
+  // If already V2, return as is
+  if (isV2(doc)) return doc as any;
+  
+  const sections: SectionState[] = [
+    { id: "s-overview", key: "overview" as SectionKey, title: "Overview", order: 0 },
+    { id: "s-learn",    key: "learn" as SectionKey,    title: "Learn",    order: 1 },
+    { id: "s-build",    key: "build" as SectionKey,    title: "Build",    order: 2 },
+    { id: "s-operate",  key: "operate" as SectionKey,  title: "Operate",  order: 3 },
+    { id: "s-library",  key: "library" as SectionKey,  title: "Library",  order: 4 },
+  ];
+  
+  return {
+    id: doc.id,
+    layoutVersion: 2,
+    sections,
+    widgets: doc.widgets.map(w => ({
+      ...w,
+      sectionId: w.sectionId || "s-overview",
+      size: { w: Math.max(w.size?.w ?? MIN_W, MIN_W), h: Math.max(w.size?.h ?? MIN_H, MIN_H) },
+      pos: { x: Math.max(0, w.pos?.x ?? 0), y: Math.max(0, w.pos?.y ?? 0) },
+    })),
+  };
 }

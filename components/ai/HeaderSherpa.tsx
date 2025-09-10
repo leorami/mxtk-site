@@ -45,7 +45,7 @@ export default function HeaderSherpa() {
       className={`relative inline-flex justify-center items-center h-9 px-4 rounded-full shadow hover:shadow-md transition-all duration-200 sherpa-theme-button ${active ? 'active' : 'inactive'} ${shimmer ? 'sherpa-shimmer' : ''} text-[color:var(--header-pill-ink,inherit)]`}
       style={{ color: 'var(--header-pill-ink,inherit)', background: 'var(--sherpa-pill-bg, var(--mxtk-orange))' }}
     >
-      <span className="i-mxtk-sparkles" aria-hidden style={{ transform: 'rotate(180deg)' }}></span>
+      <span className="i-mxtk-sparkles" aria-hidden></span>
       <strong className="mx-1">Sherpa</strong>
       <style jsx global>{`
         :root { --header-pill-ink: #0B0E12 }

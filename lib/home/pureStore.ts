@@ -3,7 +3,7 @@ export type Id = string;
 
 export interface GridPos { x: number; y: number }
 export interface GridSize { w: number; h: number }
-export interface GridRect extends GridPos, GridSize { }
+export interface GridRect { x: number; y: number; w: number; h: number }
 export interface Item {
   id: Id;
   sectionId?: string;
@@ -21,12 +21,12 @@ export function rectsOverlap(a: GridRect, b: GridRect) {
 /**
  * Keep within grid bounds.
  */
-export function clampToGrid(r: GridRect, cols: number, maxRows = 10_000): GridRect {
-  const w = clamp(r.w, 1, cols);
-  const h = clamp(r.h, 1, maxRows);
-  const x = clamp(r.x, 0, cols - w);
-  const y = clamp(r.y, 0, maxRows - h);
-  return { x, y, w, h };
+export function clampToGrid(pos: GridPos, size: GridSize, cols: number, maxRows = 10_000): { pos: GridPos; size: GridSize } {
+  const w = clamp(size.w, 1, cols);
+  const h = clamp(size.h, 1, maxRows);
+  const x = clamp(pos.x, 0, cols - w);
+  const y = clamp(pos.y, 0, maxRows - h);
+  return { pos: { x, y }, size: { w, h } };
 }
 
 /**
@@ -49,12 +49,14 @@ export function resolveCollisions(items: Item[], cols: number): Item[] {
         if (rectsOverlap({ ...a.pos, ...a.size }, { ...b.pos, ...b.size })) {
           // push B down one row
           b.pos.y = a.pos.y + a.size.h;
-          b.pos = clampToGrid({ ...b.pos, ...b.size }, cols);
+          const clamped = clampToGrid(b.pos, b.size, cols);
+          b.pos = clamped.pos;
           moved = true;
         }
       }
     }
-    a.pos = clampToGrid({ ...a.pos, ...a.size }, cols);
+    const clamped = clampToGrid(a.pos, a.size, cols);
+    a.pos = clamped.pos;
   }
   // restore original order
   out.sort((a, b) => items.findIndex(x => x.id === a.id) - items.findIndex(x => x.id === b.id));
