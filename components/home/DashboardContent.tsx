@@ -1,6 +1,6 @@
 "use client";
 
-import type { HomeDocV2 } from '@/lib/home/types';
+import type { HomeDocV2, WidgetState } from '@/lib/home/types';
 import { useEffect, useMemo, useState } from 'react';
 import Grid from './Grid';
 import { useDebouncedCallback } from "use-debounce";
@@ -13,6 +13,15 @@ export default function DashboardContent({ initialDocId }: { initialDocId: strin
         () => doc ? [...doc.sections].sort((a, b) => a.order - b.order) : [],
         [doc]
     );
+    
+    // Create debounced callbacks outside the render loop
+    const handleWidgetChange = useDebouncedCallback((docId: string, widgets: WidgetState[]) => {
+        fetch(`/api/ai/home/${docId}`, {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ widgets }),
+        });
+    }, 600);
 
     useEffect(() => {
         (async () => {
@@ -42,13 +51,7 @@ export default function DashboardContent({ initialDocId }: { initialDocId: strin
                 <Grid
                   doc={doc}
                   sectionId={sec.id}
-                  onChange={useDebouncedCallback((widgets) => {
-                    fetch(`/api/ai/home/${doc.id}`, {
-                      method: "PATCH",
-                      headers: { "Content-Type": "application/json" },
-                      body: JSON.stringify({ widgets }),
-                    });
-                  }, 600)}
+                  onChange={(widgets) => handleWidgetChange(doc.id, widgets)}
                 />
               </section>
             ))}
