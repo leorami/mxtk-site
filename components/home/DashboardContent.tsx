@@ -22,6 +22,21 @@ export default function DashboardContent({ initialDocId = 'default', initialDoc 
     [doc]
   )
 
+  const toggleCollapse = React.useCallback(async (secId: string) => {
+    setDoc(d => {
+      if (!d) return d;
+      const collapsed = !d.sections.find(s => s.id === secId)?.collapsed;
+      const sections = d.sections.map(s => s.id === secId ? { ...s, collapsed } : s);
+      return { ...d, sections } as HomeDoc;
+    });
+    try {
+      await fetch(api(`/api/ai/home/${initialDocId}`), {
+        method: 'PATCH', headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ widgets: [], sections: [{ id: secId, collapsed: true }] })
+      })
+    } catch {}
+  }, [initialDocId])
+
   const loadData = React.useCallback(async (forceRetry = false) => {
     if (forceRetry) {
       setRetryCount(count => count + 1)
@@ -169,9 +184,13 @@ export default function DashboardContent({ initialDocId = 'default', initialDoc 
           <section id={sec.id} key={sec.id} className="glass glass--panel p-4 md:p-6 mb-6 rounded-xl">
             <header className="flex items-center justify-between mb-3">
               <h2 className="text-lg font-semibold">{sec.title}</h2>
-              <button className="text-sm opacity-70 hover:opacity-100">Collapse</button>
+              <button className="text-sm opacity-70 hover:opacity-100" onClick={() => toggleCollapse(sec.id)}>
+                {sec.collapsed ? 'Expand' : 'Collapse'}
+              </button>
             </header>
-            <Grid doc={{ ...doc, widgets }} />
+            <div className="section-body" hidden={!!sec.collapsed} aria-hidden={!!sec.collapsed}>
+              <Grid doc={{ ...doc, widgets }} />
+            </div>
           </section>
         )
       })}

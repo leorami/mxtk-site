@@ -22,11 +22,6 @@
 .widget-chrome {
     border-radius: 12px;
     height: 100%;
-    cursor: grab;
-}
-
-.widget-chrome:active {
-    cursor: grabbing;
 }
 
 /* Body keeps your card look (glass/lift handled by surrounding Card if you render it) */
@@ -92,6 +87,9 @@
     background: var(--surface-elev-1);
     margin-block: .5rem;
 }
+
+/* Collapsible section body */
+.section-body[hidden]{ display:none; }
 
 /* StarterPanel */
 .starter-panel {
@@ -245,6 +243,11 @@ html.dark .wframe{ background: rgba(10,12,16,0.35); outline-color: rgba(255,255,
 }
 html.guide-open .wframe-controls{ opacity:1; visibility:visible; pointer-events:auto; }
 
+/* Drag affordance gated by guide-open */
+.widget-chrome{ cursor: default; }
+html.guide-open .widget-chrome{ cursor: grab; }
+html.guide-open .widget-chrome:active{ cursor: grabbing; }
+
 .iconbtn{
   width:20px; height:20px; border-radius:999px; display:grid; place-items:center;
   border:1px solid rgba(255,255,255,0.35);
@@ -264,6 +267,20 @@ html.light .wframe-resize{ border-color: rgba(0,0,0,0.45); }
 html.light .wframe a{ color:#133c8a; border-bottom-color:rgba(19,60,138,.35); }
 html.dark  .wframe a{ color:#a7c4ff; border-bottom-color:rgba(167,196,255,.35); }
 .wframe a:hover{ border-bottom-color: currentColor; }
+
+/* Widget header row */
+.wf-head{ display:flex; align-items:center; justify-content:space-between; gap:.75rem; margin-bottom:.25rem; }
+.wf-title{ font-weight:600; opacity:.9; }
+.wf-actions{ display:inline-flex; align-items:center; gap:.25rem; pointer-events:auto; position:static; top:auto; right:auto; margin-left:auto; }
+.wf-actions.wframe-controls{ position:static; top:auto; right:auto; }
+.wf-actions button, .wf-actions [role="button"]{ cursor:pointer; }
+
+/* Ensure controls transition consistently on mobile */
+@media (max-width: 820px){
+  .wframe-controls{ display:flex; transition: opacity .15s ease; }
+  html:not(.guide-open) .wframe-controls{ opacity:0; visibility:hidden; pointer-events:none; }
+  html.guide-open .wframe-controls{ opacity:1; visibility:visible; pointer-events:auto; }
+}
 
 /* === dashboard grid hardening (append-only) ============================== */
 

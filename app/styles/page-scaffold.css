@@ -1,3 +1,13 @@
+/* Experience/guide tools pill - mobile tightening */
+[xp-toggle-group], [data-testid="xp-toggle-group"]{ display:inline-flex; align-items:center; gap:.5rem; }
+@media (max-width: 480px){
+  [data-testid="xp-toggle-group"]{ padding:4px 6px !important; gap:6px !important; }
+  [data-testid="xp-toggle-group"] > *{ padding:4px 6px; }
+}
+
+/* Guard: never underline text inside actual buttons */
+button, .btn, [role="button"]{ text-decoration:none; }
+button a, .btn a{ text-decoration:none !important; border-bottom:0 !important; }
 /* PageScaffold — shared content page template */
 .page-scaffold {
     min-height: calc(100dvh - var(--nav-height) - var(--footer-height));

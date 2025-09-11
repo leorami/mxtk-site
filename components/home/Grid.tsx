@@ -1,5 +1,9 @@
 'use client';
 
+import WidgetFrame from '@/components/home/WidgetFrame';
+import GlossarySpotlight from '@/components/home/widgets/GlossarySpotlight';
+import RecentAnswers from '@/components/home/widgets/RecentAnswers';
+import Resources from '@/components/home/widgets/Resources';
 import type { HomeDoc, WidgetState } from '@/lib/home/types';
 import * as React from 'react';
 
@@ -42,6 +46,9 @@ export default function Grid({ doc, render, onPatch }: GridProps) {
   // Local working copy so drag/resize updates re-render immediately
   const [widgets, setWidgets] = React.useState<WidgetState[]>(doc.widgets);
   React.useEffect(() => { setWidgets(doc.widgets); }, [doc.widgets]);
+
+  // Per-widget refresh ticks to trigger refetch in child components
+  const [refreshTicks, setRefreshTicks] = React.useState<Record<string, number>>({});
 
   // grid metrics
   const gridCols = React.useRef(DEFAULT_COLS);
@@ -170,17 +177,17 @@ export default function Grid({ doc, render, onPatch }: GridProps) {
   }, [widgets, queuePatch]);
 
   function startDrag(e: React.PointerEvent, w: WidgetState) {
-    if (!guideOpen) return;
-    // ignore drags from control area
+    // allow dragging regardless of guide state (cursor already signals affordance)
     const t = e.target as HTMLElement;
-    if (t.closest('.wframe-controls')) return;
+    if (t.closest('[data-nodrag]') || t.closest('.wframe-controls')) return;
     (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
     dragId.current = w.id;
     dragStart.current = { x: e.clientX, y: e.clientY, pos: { ...w.pos } };
   }
 
   function startResize(e: React.PointerEvent, w: WidgetState) {
-    if (!guideOpen) return;
+    const t = e.target as HTMLElement;
+    if (t.closest('[data-nodrag]')) return;
     (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
     resizeId.current = w.id;
     resizeStart.current = { x: e.clientX, y: e.clientY, size: { ...w.size } };
@@ -227,23 +234,34 @@ export default function Grid({ doc, render, onPatch }: GridProps) {
             tabIndex={0}
             className="widget-tile wframe widget-cell"
             style={{
-              gridColumn: `span ${spanW}`,
-              gridRow: `span ${spanH}`,
+              gridColumn: `${(w.pos?.x ?? 0) + 1} / span ${spanW}`,
+              gridRow: `${(w.pos?.y ?? 0) + 1} / span ${spanH}`,
             }}
             data-widget-id={w.id}
             onKeyDown={(e) => onKey(e, w)}
           >
-            {/* drag surface */}
-            <div
-              className="widget-chrome"
-              onPointerDown={(e) => startDrag(e, w)}
-            >
-              {/* widget header/actions are inside the child WidgetFrame (your file) */}
-              <div className="widget-body">
-                {render ? render(w) : (
-                  <div className="p-3 text-sm opacity-70">Widget <code>{w.type}</code></div>
-                )}
-              </div>
+            {/* drag surface wraps the widget frame to enable move */}
+            <div className="widget-chrome" onPointerDown={(e) => startDrag(e, w)}>
+              <WidgetFrame
+                id={w.id}
+                title={w.title}
+                data={w.data as any}
+                onRefresh={() => setRefreshTicks(prev => ({ ...prev, [w.id]: (prev[w.id] || 0) + 1 }))}
+              >
+                {render
+                  ? render(w)
+                  : (
+                    w.type === 'recent-answers' ? (
+                      <RecentAnswers key={`ra-${w.id}:${refreshTicks[w.id] || 0}`} />
+                    ) : w.type === 'resources' ? (
+                      <Resources id={w.id} data={w.data as any} />
+                    ) : w.type === 'glossary-spotlight' ? (
+                      <GlossarySpotlight id={w.id} data={w.data as any} />
+                    ) : (
+                      <div className="p-3 text-sm opacity-70">Widget <code>{w.type}</code></div>
+                    )
+                  )}
+              </WidgetFrame>
             </div>
 
             {/* resizer handle (bottom-right) - only show when Sherpa is open */}

@@ -40,7 +40,7 @@
       "title": "What's Next",
       "sectionId": "overview",
       "pos": {
-        "x": 0,
+        "x": 4,
         "y": 0
       },
       "size": {
@@ -54,7 +54,7 @@
       "title": "Recent Answers",
       "sectionId": "overview",
       "pos": {
-        "x": 4,
+        "x": 8,
         "y": 0
       },
       "size": {
@@ -68,7 +68,7 @@
       "title": "Note",
       "sectionId": "overview",
       "pos": {
-        "x": 8,
+        "x": 0,
         "y": 0
       },
       "size": {
@@ -89,8 +89,8 @@
         "y": 0
       },
       "size": {
-        "w": 12,
-        "h": 23
+        "w": 5,
+        "h": 14
       }
     }
   ]
