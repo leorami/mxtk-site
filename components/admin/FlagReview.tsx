@@ -1,4 +1,5 @@
 "use client";
+import { apiGet, apiPut } from '@/lib/api';
 import { useEffect, useState } from 'react';
 
 export default function FlagReview() {
@@ -9,10 +10,9 @@ export default function FlagReview() {
   async function load() {
     setErr('');
     try {
-      const r = await fetch('/api/ai/flags', {
+      const j = await apiGet<any>('/ai/flags', {
         headers: { authorization: 'Bearer ' + (process.env.NEXT_PUBLIC_ADMIN_TOKEN || 'dev') },
       });
-      const j = await r.json();
       if (!j.ok) throw new Error('auth');
       setData(j);
     } catch (e: any) {
@@ -25,13 +25,10 @@ export default function FlagReview() {
 
   async function act(id: string, action: 'approve' | 'reject') {
     setBusy(true);
-    await fetch('/api/ai/flags', {
-      method: 'PUT',
+    await apiPut('/ai/flags', { id, action }, {
       headers: {
-        'content-type': 'application/json',
         authorization: 'Bearer ' + (process.env.NEXT_PUBLIC_ADMIN_TOKEN || 'dev'),
       },
-      body: JSON.stringify({ id, action }),
     });
     setBusy(false);
     await load();

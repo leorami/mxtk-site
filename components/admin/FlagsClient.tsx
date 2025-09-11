@@ -1,6 +1,7 @@
 "use client";
-import { useEffect, useMemo, useState } from 'react';
 import FlagDetailPanel from '@/components/admin/FlagDetailPanel';
+import { getApiUrl } from '@/lib/api';
+import { useEffect, useState } from 'react';
 
 type IndexItem = {
   id: string;
@@ -34,7 +35,7 @@ export default function FlagsClient({ initialQuery }: Props) {
     if (category) sp.set('category', category);
     if (q) sp.set('q', q);
     if (cursor) sp.set('cursor', cursor);
-    const r = await fetch('/api/ai/flags?' + sp.toString(), { headers: { 'cache-control': 'no-store' } });
+    const r = await fetch(getApiUrl('/ai/flags') + '?' + sp.toString(), { headers: { 'cache-control': 'no-store' } });
     if (!r.ok) {
       setErr('Failed to load');
       return;
@@ -60,14 +61,14 @@ export default function FlagsClient({ initialQuery }: Props) {
         action: action === 'resolved' ? 'resolve' : action === 'dismissed' ? 'dismiss' : action === 'escalated' ? 'escalate' : action === 'reopen' ? 'reopen' : 'annotate',
         payload,
       };
-      const r = await fetch(`/api/ai/flags/${id}`, { method: 'PUT', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) });
+      const r = await fetch(getApiUrl(`/ai/flags/${id}`), { method: 'PUT', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) });
       if (!r.ok) throw new Error('Update failed');
       const updated = await r.json();
       setItems((prev) => prev.map((it) => (it.id === id ? { ...it, ...updated } : it)));
       // record signal
       const ls = payload?.labels && payload.labels.length ? payload.labels : (updated.labels || []);
       const labelSet = ls && ls.length ? ls : [body.action];
-      await fetch('/api/ai/govern/signals', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ flagId: id, at: Date.now(), labelSet, category: updated.category, severity: updated.severity, note: payload?.note, journeyId: updated.journeyId, messageId: updated.messageId }) });
+      await fetch(getApiUrl('/ai/govern/signals'), { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ flagId: id, at: Date.now(), labelSet, category: updated.category, severity: updated.severity, note: payload?.note, journeyId: updated.journeyId, messageId: updated.messageId }) });
     } catch (e: any) {
       setErr(e.message || 'Action failed');
     } finally {

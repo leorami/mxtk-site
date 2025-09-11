@@ -982,7 +982,7 @@ html body [data-mineral] h3 {
   font-weight: 600;
   transition: transform .15s, box-shadow .15s, background-color .15s, color .15s;
   background: var(--mxtk-accent);
-  color: var(--mxtk-accent-fg, var(--mxtk-orange));
+  color: #111318;
 }
 
 .btn-primary:hover {
@@ -999,7 +999,7 @@ html body [data-mineral] h3 {
   font-weight: 600;
   transition: transform .15s, box-shadow .15s, background-color .15s, color .15s;
   border: 1px solid var(--mxtk-accent);
-  color: var(--mxtk-accent);
+  color: #111318;
   background: transparent;
 }
 
@@ -1017,8 +1017,8 @@ html body [data-mineral] h3 {
   padding: .6rem 1rem;
   font-weight: 600;
   transition: transform .15s, box-shadow .15s, background-color .15s, color .15s;
-  background: var(--mxtk-hover-bg);
-  color: var(--mxtk-accent);
+  background: color-mix(in srgb, var(--mxtk-accent) 14%, transparent);
+  color: #111318;
 }
 
 .btn-soft:hover {
@@ -1034,7 +1034,7 @@ html body [data-mineral] h3 {
   padding: .3rem .6rem;
   font-weight: 600;
   transition: transform .15s, box-shadow .15s, background-color .15s, color .15s;
-  color: var(--mxtk-accent);
+  color: #111318;
   text-decoration: none;
 }
 
@@ -1042,7 +1042,7 @@ html body [data-mineral] h3 {
   transform: translateY(-0.5px);
   box-shadow: var(--shadow-lift-sm);
   background: var(--mxtk-hover-bg);
-  color: var(--mxtk-accent);
+  color: #111318;
   text-decoration: none;
 }
 
@@ -1109,7 +1109,7 @@ h3 {
 /* Enhanced dark mode primary button contrast */
 .dark .btn-primary {
   background: var(--accent, var(--mxtk-accent));
-  color: var(--mxtk-accent-fg, var(--mxtk-orange));
+  color: #0B0E12;
   border: 1px solid rgba(255, 255, 255, 0.18);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
@@ -1193,7 +1193,7 @@ h3 {
 
   .btn-primary {
     background: var(--mxtk-orange);
-    color: white;
+    color: #111318;
     box-shadow: var(--shadow-lift-sm);
   }
 
@@ -1819,6 +1819,10 @@ button[class*="btn"] {
   justify-content: center;
   align-items: center;
 }
+
+/* Ensure minimum text contrast for all buttons across themes */
+button { color: var(--ink-strong); }
+.dark button { color: #E6EAF2; }
 
 /* Ensure all buttons have centered text on mobile */
 @media (max-width: 768px) {

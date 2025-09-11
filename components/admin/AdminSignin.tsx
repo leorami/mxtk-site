@@ -1,4 +1,5 @@
 "use client";
+import { apiPost } from '@/lib/api';
 import { useState } from 'react';
 
 export default function AdminSignin() {
@@ -11,12 +12,7 @@ export default function AdminSignin() {
     setErr('');
     setBusy(true);
     try {
-      const r = await fetch('/api/admin/session', {
-        method: 'POST',
-        headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ token }),
-      });
-      if (!r.ok) throw new Error('Unauthorized');
+      await apiPost('/admin/session', { token });
       // refresh
       window.location.reload();
     } catch (e: any) {

@@ -12,9 +12,17 @@ export function detectBasePath(): string {
     return process.env.NEXT_PUBLIC_BASE_PATH || ''
   }
   
+  // Client-side: prefer the public env if provided (Next exposes NEXT_PUBLIC_* at build time)
+  const envBase = (process.env.NEXT_PUBLIC_BASE_PATH || '').trim()
+  if (envBase) {
+    return envBase
+  }
+
   const pathname = window.location.pathname
-  // If pathname starts with /mxtk, we're behind proxy
-  if (pathname.startsWith('/mxtk')) {
+  // Consider base path only when the first path segment is exactly 'mxtk'
+  // This avoids false positives for routes like '/mxtk-cares'
+  const firstSegment = pathname.split('/').filter(Boolean)[0] || ''
+  if (firstSegment === 'mxtk') {
     return '/mxtk'
   }
   return ''

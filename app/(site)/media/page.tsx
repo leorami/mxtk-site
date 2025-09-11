@@ -7,6 +7,7 @@ import ModeTextSwap from '@/components/experience/ModeTextSwap'
 import PageTheme from '@/components/theme/PageTheme'
 import Card from '@/components/ui/Card'
 import BackgroundPhoto from '@/components/visuals/BackgroundPhoto'
+import { getBasePathUrl } from '@/lib/basepath'
 
 export default function MediaPage() {
   const { mode, pageCopy } = useCopy('media')
@@ -42,7 +43,7 @@ export default function MediaPage() {
                     </div>
                     <h3 className="font-semibold mb-2">Logo Package</h3>
                     <p className="text-muted text-sm mb-4">High-resolution MXTK logos in various formats</p>
-                    <a className="btn-soft" href="/logo-horizontal.png" target="_blank" rel="noopener noreferrer">
+                    <a className="btn-soft" href={getBasePathUrl('/logo-horizontal.png')} target="_blank" rel="noopener noreferrer">
                       Download Logo
                     </a>
                   </div>

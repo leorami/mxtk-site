@@ -17,6 +17,8 @@ if (!BASE_URL) {
 
 const MAX_PAGES = parseInt(process.env.CRAWL_MAX_PAGES || '200', 10);
 const NAV_TIMEOUT = parseInt(process.env.CRAWL_NAV_TIMEOUT || '45000', 10);
+const IGNORE_CONTRAST = /^1|true$/i.test(process.env.CRAWL_IGNORE_CONTRAST || '');
+const DISABLE_DOCKER_LOGS = /^1|true$/i.test(process.env.DOCKER_LOGS_DISABLED || '');
 const SINCE_LOGS = process.env.DOCKER_LOGS_SINCE || '10m';
 const CONTAINERS = (process.env.DOCKER_CONTAINERS || 'mxtk-site-dev,mxtk-site-dev-mxtk').split(',');
 
@@ -167,11 +169,15 @@ async function crawl(browser) {
     report.networkTotals.errors += store.networkErrors.length;
     report.pages.push(store);
     report.contrastTotals.violations += store.contrast.length;
+    try {
+      console.log(`[crawl] ${url} console=${store.consoleErrors.length}/${store.consoleWarnings.length} network=${store.networkErrors.length} contrast=${store.contrast.length}`);
+    } catch {}
   }
   return report;
 }
 
 function dockerLogs() {
+  if (DISABLE_DOCKER_LOGS) return {};
   const logs = {};
   for (const name of CONTAINERS) {
     try {
@@ -202,15 +208,15 @@ function dockerLogs() {
     console.log(`Wrote report: ${outFile}`);
 
     // Decide pass/fail
-    const dockerHasErrors = Object.values(report.docker).some(d => d && (d.errors?.length || 0) > 0);
+    const dockerHasErrors = DISABLE_DOCKER_LOGS ? false : Object.values(report.docker).some(d => d && (d.errors?.length || 0) > 0);
     const hasConsole = report.consoleTotals.errors > 0 || report.consoleTotals.warnings > 0;
     const hasNetwork = report.networkTotals.errors > 0;
-    const hasContrast = report.contrastTotals.violations > 0;
+    const hasContrast = IGNORE_CONTRAST ? false : report.contrastTotals.violations > 0;
     if (dockerHasErrors || hasConsole || hasNetwork || hasContrast) {
-      console.error(`FAIL: dockerErrors=${dockerHasErrors} console=${report.consoleTotals.errors}/${report.consoleTotals.warnings} network=${report.networkTotals.errors} contrast=${report.contrastTotals.violations}`);
+      console.error(`FAIL: dockerErrors=${dockerHasErrors} console=${report.consoleTotals.errors}/${report.consoleTotals.warnings} network=${report.networkTotals.errors} contrast=${report.contrastTotals.violations}${IGNORE_CONTRAST ? ' (contrast ignored)' : ''}${DISABLE_DOCKER_LOGS ? ' (docker logs disabled)' : ''}`);
       process.exit(1);
     }
-    console.log('✅ crawl-regression: all checks passed');
+    console.log(`✅ crawl-regression: all checks passed${IGNORE_CONTRAST ? ' (contrast ignored)' : ''}${DISABLE_DOCKER_LOGS ? ' (docker logs disabled)' : ''}`);
     process.exit(0);
   } catch (err) {
     console.error(String(err && err.stack || err));

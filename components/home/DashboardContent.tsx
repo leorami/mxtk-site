@@ -1,12 +1,9 @@
 'use client'
 import { useCopy } from '@/components/copy/Copy'
+import { getApiUrl } from '@/lib/api'
 import type { HomeDoc, SectionState } from '@/lib/home/types'
 import * as React from 'react'
 import Grid from './Grid'
-
-function api(path: string) {
-  return (globalThis as any).__mx_basePath ? `${(globalThis as any).__mx_basePath}${path}` : path
-}
 
 type Props = { initialDocId?: string; initialDoc?: HomeDoc | null }
 
@@ -30,7 +27,7 @@ export default function DashboardContent({ initialDocId = 'default', initialDoc 
       return { ...d, sections } as HomeDoc;
     });
     try {
-      await fetch(api(`/api/ai/home/${initialDocId}`), {
+      await fetch(getApiUrl(`/ai/home/${initialDocId}`), {
         method: 'PATCH', headers: { 'content-type': 'application/json' },
         body: JSON.stringify({ widgets: [], sections: [{ id: secId, collapsed: true }] })
       })
@@ -47,7 +44,7 @@ export default function DashboardContent({ initialDocId = 'default', initialDoc 
     
     try {
       // 1) Try GET
-      let res = await fetch(api(`/api/ai/home/${initialDocId}`), { 
+      let res = await fetch(getApiUrl(`/ai/home/${initialDocId}`), { 
         cache: 'no-store',
         headers: { 'x-retry-count': retryCount.toString() }
       })
@@ -55,7 +52,7 @@ export default function DashboardContent({ initialDocId = 'default', initialDoc 
       if (res.status === 404) {
         // 2) Seed, then GET
         console.log('Dashboard: Home not found, seeding...')
-        const seeded = await fetch(api(`/api/ai/home/seed`), {
+        const seeded = await fetch(getApiUrl(`/ai/home/seed`), {
           method: 'POST',
           headers: { 
             'content-type': 'application/json',
@@ -83,7 +80,7 @@ export default function DashboardContent({ initialDocId = 'default', initialDoc 
         
         // If we couldn't get data from seed response, try GET again
         console.log('Dashboard: Trying GET after seed')
-        res = await fetch(api(`/api/ai/home/${initialDocId}`), { 
+        res = await fetch(getApiUrl(`/ai/home/${initialDocId}`), { 
           cache: 'no-store',
           headers: { 'x-retry-count': retryCount.toString() }
         })

@@ -1,6 +1,7 @@
 import PageHero from "@/components/PageHero";
 import SectionWrapper from "@/components/SectionWrapper";
 import JsonLd from "@/components/seo/JsonLd";
+import Link from 'next/link';
 
 const facts = {
   "@context": "https://schema.org",
@@ -35,7 +36,7 @@ export default function AIFactsPage() {
             <li>Validator assurance (clawback, correlated slashing, insurance)</li>
             <li>MPC custody + oracle safeguards</li>
           </ul>
-          <p>See: <a href="/resources">Resources</a>, <a href="/transparency">Transparency</a>, <a href="/whitepaper">Whitepaper</a>.</p>
+          <p>See: <Link href="/resources">Resources</Link>, <Link href="/transparency">Transparency</Link>, <Link href="/whitepaper">Whitepaper</Link>.</p>
         </div>
       </SectionWrapper>
     </>

@@ -1,4 +1,5 @@
 "use client";
+import { apiGet, apiPost, getApiUrl } from '@/lib/api';
 import { useEffect, useState } from 'react';
 
 type VectorStatus = { ok: boolean; chunks: number; embeddings: number };
@@ -14,8 +15,7 @@ export default function ToolsPanel() {
 
     async function refreshStatus() {
         try {
-            const r = await fetch('/api/ai/vector/status', { cache: 'no-store' });
-            const j = await r.json();
+            const j = await apiGet<VectorStatus>('/ai/vector/status', { cache: 'no-store' });
             setStatus(j);
         } catch {
             setStatus({ ok: false, chunks: 0, embeddings: 0 });
@@ -27,8 +27,7 @@ export default function ToolsPanel() {
     async function doReset() {
         setBusy(true); setErr(null); setNote(null);
         try {
-            const r = await fetch('/api/ai/vector/reset', { method: 'POST' });
-            if (!r.ok) throw new Error('Reset failed');
+            await apiPost('/ai/vector/reset');
             setNote('Vector store reset.');
             await refreshStatus();
         } catch (e: any) {
@@ -40,13 +39,8 @@ export default function ToolsPanel() {
         if (!content.trim() || !source.trim()) { setErr('Provide source and content'); return; }
         setBusy(true); setErr(null); setNote(null);
         try {
-            const r = await fetch('/api/ai/ingest', {
-                method: 'POST',
-                headers: { 'content-type': 'application/json' },
-                body: JSON.stringify({ source: source.trim(), content }),
-            });
-            const j = await r.json();
-            if (!r.ok || j?.ok === false) throw new Error(j?.error || 'Ingest failed');
+            const j: any = await apiPost('/ai/ingest', { source: source.trim(), content });
+            if (j?.ok === false) throw new Error(j?.error || 'Ingest failed');
             setNote(`Ingested ${j?.chunksAdded ?? '?'} chunks from ${source.trim()}`);
             await refreshStatus();
         } catch (e: any) { setErr(e?.message || 'Ingest failed'); } finally { setBusy(false); }
@@ -59,7 +53,7 @@ export default function ToolsPanel() {
             const fd = new FormData();
             fd.set('source', source.trim());
             for (const f of files) fd.append('file', f);
-            const r = await fetch('/api/ai/ingest/upload', { method: 'POST', body: fd });
+            const r = await fetch(getApiUrl('/ai/ingest/upload'), { method: 'POST', body: fd });
             const j = await r.json().catch(() => ({}));
             if (!r.ok || j?.ok === false) throw new Error(j?.error || 'Upload failed');
             setNote(`Uploaded ${files.length} file(s); ingested ${j?.added ?? '?'} chunks from ${source.trim()}`);
