@@ -1,6 +1,5 @@
 'use client'
 
-import PageHero from '@/components/PageHero'
 import SectionWrapper from '@/components/SectionWrapper'
 import { useCopy } from '@/components/copy/Copy'
 import ModeTextSwap from '@/components/experience/ModeTextSwap'
@@ -49,45 +48,46 @@ export default function PageScaffold({
     <div className={['page-scaffold', className].filter(Boolean).join(' ')} data-testid="page-scaffold">
       <PageTheme ink={ink} lift={lift} glass={glass}>
         <BackgroundPhoto variant={backgroundVariant ?? copyKey} />
-        <PageHero>
+        
+        {/* Standard page structure matching the home page */}
+        <div className="glass glass--panel p-6 md:p-8">
           <div className="relative">
-            <SectionWrapper
-              index={0}
-              className={[
-                heroAlign === 'center' ? 'text-center' : '',
-                // 👇 force the hero to be a glass panel like the rest of the site
-                'glass glass--panel rounded-2xl p-5 md:p-8 shadow-[0_12px_30px_rgba(0,0,0,0.22)]'
-              ].join(' ').trim()}
-            >
-              <ModeTextSwap
-                as={TitleTag as any}
-                depKey={`${copyKey}-hero-title-${mode}`}
-                className={
-                  heroTitleClassName ??
-                  'text-4xl md:text-6xl font-bold tracking-tight text-slate-900 dark:text-slate-50 drop-shadow-[0_1px_1px_rgba(0,0,0,0.25)]'
-                }
-                content={pageCopy.heroTitle[contentMode]}
-              />
-              <ModeTextSwap
-                as="p"
-                depKey={`${copyKey}-hero-sub-${mode}`}
-                className={[
-                  (heroSubClassName ?? 'text-xl text-muted max-w-3xl'),
-                  heroAlign === 'center' ? 'mx-auto' : ''
-                ].join(' ')}
-                content={pageCopy.heroSub[contentMode]}
-              />
-              {heroActions ? <div className="mt-6">{heroActions}</div> : null}
-            </SectionWrapper>
-          </div>
-        </PageHero>
+            <div className="space-y-0">
+              {/* Hero Section */}
+              <SectionWrapper
+                index={0}
+                className={heroAlign === 'center' ? 'text-center' : ''}
+              >
+                <ModeTextSwap
+                  as={TitleTag as any}
+                  depKey={`${copyKey}-hero-title-${mode}`}
+                  className={
+                    heroTitleClassName ??
+                    'text-4xl md:text-6xl font-bold tracking-tight copy-fade-in'
+                  }
+                  content={pageCopy.heroTitle[contentMode]}
+                />
+                <ModeTextSwap
+                  as="p"
+                  depKey={`${copyKey}-hero-sub-${mode}`}
+                  className={[
+                    (heroSubClassName ?? 'text-xl max-w-3xl copy-fade-in'),
+                    heroAlign === 'center' ? 'mx-auto' : ''
+                  ].join(' ')}
+                  content={pageCopy.heroSub[contentMode]}
+                />
+                {heroActions ? (
+                  <div className={`flex flex-col sm:flex-row gap-4 ${heroAlign === 'center' ? 'justify-center' : ''}`}>
+                    {heroActions}
+                  </div>
+                ) : null}
+              </SectionWrapper>
 
-        {/* Sections container matches all other pages */}
-        {children ? (
-          <div className="container mx-auto px-4 md:px-6">
-            {children}
+              {/* Content Sections */}
+              {children}
+            </div>
           </div>
-        ) : null}
+        </div>
       </PageTheme>
     </div>
   )
