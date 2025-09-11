@@ -246,13 +246,15 @@ export default function Grid({ doc, render, onPatch }: GridProps) {
               </div>
             </div>
 
-            {/* resizer handle (bottom-right) */}
-            <button
-              type="button"
-              className="wframe-resize"
-              aria-label="Resize widget"
-              onPointerDown={(e) => startResize(e, w)}
-            />
+            {/* resizer handle (bottom-right) - only show when Sherpa is open */}
+            {guideOpen && (
+              <button
+                type="button"
+                className="wframe-resize"
+                aria-label="Resize widget"
+                onPointerDown={(e) => startResize(e, w)}
+              />
+            )}
           </div>
         );
       })}
