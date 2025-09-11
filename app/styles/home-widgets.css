@@ -264,3 +264,89 @@ html.light .wframe-resize{ border-color: rgba(0,0,0,0.45); }
 html.light .wframe a{ color:#133c8a; border-bottom-color:rgba(19,60,138,.35); }
 html.dark  .wframe a{ color:#a7c4ff; border-bottom-color:rgba(167,196,255,.35); }
 .wframe a:hover{ border-bottom-color: currentColor; }
+
+/* === dashboard grid hardening (append-only) ============================== */
+
+.section-rail .mxtk-grid {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    grid-auto-rows: var(--row-h, 8px);
+    gap: 12px;
+  }
+  
+  /* prevent ultra-narrow “pill” collapse */
+  .wframe {
+    min-width: 14rem;
+  }
+  
+  /* Grid.tsx should render each tile with inline grid span styles:
+     style="grid-column: span <w>; grid-row: span <h>;" */
+  :root { --row-h: 8px; }
+
+  /* --- Responsive grid & tile clamps ------------------------------------- */
+:root {
+    --grid-cols-desktop: 12;
+    --grid-cols-tablet: 6;
+    --grid-cols-mobile: 1;
+    --grid-row-h: 8px;
+    --grid-gap: 12px;
+  }
+  
+  .section-rail .section-grid {
+    display: grid;
+    grid-template-columns: repeat(var(--grid-cols-desktop), minmax(0, 1fr));
+    grid-auto-rows: var(--grid-row-h);
+    gap: var(--grid-gap);
+  }
+  
+  @media (max-width: 1024px) {
+    .section-rail .section-grid {
+      grid-template-columns: repeat(var(--grid-cols-tablet), minmax(0, 1fr));
+    }
+  }
+  
+  @media (max-width: 640px) {
+    .section-rail .section-grid {
+      grid-template-columns: repeat(var(--grid-cols-mobile), minmax(0, 1fr));
+    }
+  }
+  
+  /* Each tile uses inline CSS vars from Grid.tsx; clamp for narrow screens */
+  .widget-tile {
+    position: relative;
+    grid-column: span var(--w, 3);
+    grid-row: span var(--h, 24);
+    min-width: 0;
+  }
+  
+  /* Prevent ultra-narrow “pill” look; keep readability on tablet/phone */
+  @media (max-width: 1024px) {
+    .widget-tile { --w: max(var(--w, 3), 2); }
+  }
+  @media (max-width: 640px) {
+    .widget-tile { --w: 1; grid-column: 1 / -1; }  /* full width on phone */
+  }
+  
+  /* Resize handle stays usable but unobtrusive */
+  .widget-tile .resizer {
+    position: absolute;
+    right: 6px;
+    bottom: 6px;
+    width: 14px;
+    height: 14px;
+    border-radius: 4px;
+    cursor: nwse-resize;
+    background: transparent;
+    border-right: 2px solid rgba(255,255,255,.6);
+    border-bottom: 2px solid rgba(255,255,255,.6);
+  }
+  html.light .widget-tile .resizer {
+    border-color: rgba(0,0,0,.35);
+  }
+  
+/* Hide widget controls unless the guide is open */
+.widget-controls { transition: opacity .15s ease; }
+html:not(.guide-open) .widget-controls { opacity: 0; pointer-events: none; }
+
+/* Anchor targets land below sticky header */
+.scroll-mt-24 { scroll-margin-top: 6rem; }

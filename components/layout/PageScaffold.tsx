@@ -90,11 +90,16 @@ export default function PageScaffold({
                 {heroActions ? <div className="mt-6">{heroActions}</div> : null}
               </SectionWrapper>
 
-              {/* Children render INSIDE PageHero (same as Contact/FAQ) */}
-              {children}
+              {/* Children render AFTER PageHero (hero above, sections below) */}
             </div>
           </div>
         </PageHero>
+        {/* Children render AFTER PageHero (hero above, sections below) */}
+        {children ? (
+          <div className="container mx-auto px-4 md:px-6">
+            {children}
+          </div>
+        ) : null}
       </PageTheme>
     </div>
   )

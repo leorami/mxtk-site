@@ -1,0 +1,39 @@
+{
+  "id": "default",
+  "layoutVersion": 2,
+  "sections": [
+    {
+      "id": "s-overview",
+      "key": "overview",
+      "title": "Overview",
+      "order": 0
+    },
+    {
+      "id": "s-learn",
+      "key": "learn",
+      "title": "Learn",
+      "order": 1
+    },
+    {
+      "id": "s-build",
+      "key": "build",
+      "title": "Build",
+      "order": 2
+    },
+    {
+      "id": "s-operate",
+      "key": "operate",
+      "title": "Operate",
+      "order": 3
+    },
+    {
+      "id": "s-library",
+      "key": "library",
+      "title": "Library",
+      "order": 4
+    }
+  ],
+  "widgets": [],
+  "updatedAt": "2025-09-10T14:32:30.340Z",
+  "createdAt": "2025-09-10T12:11:01.946Z"
+}

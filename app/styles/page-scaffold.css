@@ -262,7 +262,7 @@ html.dark .mxtk-bg-mineral {
 
 .glass--panel a:not(.btn):not([class*="btn"]):not(button):focus-visible {
     outline: 2px solid var(--mxtk-accent, var(--mxtk-orange))
-}
+}a
 
 /* Equalize card padding + section rails */
 .card,
@@ -280,3 +280,45 @@ padding: 1.25rem
     display: grid;
     gap: 1rem
 }
+
+/* --- Guide Drawer: right on desktop, bottom sheet on small screens --- */
+:root {
+    --guide-w: 420px;         /* desktop width */
+    --guide-h: 44vh;          /* mobile/tablet height */
+  }
+  
+  html.guide-open [data-shiftable-root] {
+    /* desktop: shift content to make room on the right */
+    padding-right: calc(var(--guide-w) + 16px);
+  }
+  
+  /* The drawer panel element must have [data-guide-panel] */
+  [data-guide-panel] {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: var(--guide-w);
+    height: 100dvh;
+    max-height: 100dvh;
+    z-index: 50;
+  }
+  
+  /* Tablet & below: dock to bottom, give content its width back */
+  @media (max-width: 1024px) {
+    html.guide-open [data-shiftable-root] {
+      padding-right: 0;
+      padding-bottom: calc(var(--guide-h) + 16px); /* push page up above the sheet */
+    }
+  
+    [data-guide-panel] {
+      left: 0;
+      right: 0;
+      bottom: 0;
+      top: auto;
+      width: 100%;
+      height: var(--guide-h);
+      max-height: calc(100dvh - 56px); /* avoid covering header on very short viewports */
+      border-top-left-radius: 16px;
+      border-top-right-radius: 16px;
+    }
+  }

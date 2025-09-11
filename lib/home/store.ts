@@ -1,28 +1,43 @@
-// lib/home/store.ts
-import { promises as fs } from 'node:fs'
-import { join } from 'node:path'
-import { HomeDocAny, HomeDocV2 } from './types'
+// lib/home/store/fileStore.ts
+import { promises as fs } from 'fs';
+import path from 'path';
+import type { HomeDoc } from '../types';
 
-const ROOT = process.env.AI_STORE_ROOT || 'ai_store'
-const HOMES_DIR = join(process.cwd(), ROOT, 'homes')
+const ROOT = process.cwd();
+const HOMES_DIR = path.join(ROOT, 'ai_store', 'homes');
 
 async function ensureDir() {
-  await fs.mkdir(HOMES_DIR, { recursive: true })
+  await fs.mkdir(HOMES_DIR, { recursive: true });
 }
 
-export async function readHome(id: string): Promise<HomeDocAny | null> {
-  await ensureDir()
+function homePath(id: string) {
+  return path.join(HOMES_DIR, `${id}.json`);
+}
+
+export async function getHome(id: string): Promise<HomeDoc | null> {
+  await ensureDir();
+  const p = homePath(id);
   try {
-    const raw = await fs.readFile(join(HOMES_DIR, `${id}.json`), 'utf8')
-    return JSON.parse(raw)
-  } catch {
-    return null
+    const buf = await fs.readFile(p);
+    const txt = buf.toString('utf8').trim();
+    if (!txt) {
+      // empty file—quarantine and treat as missing
+      await fs.rename(p, p.replace(/\.json$/, `.bad.json`)).catch(() => {});
+      return null;
+    }
+    const doc = JSON.parse(txt);
+    return doc as HomeDoc;
+  } catch (err: any) {
+    if (err && (err.code === 'ENOENT')) return null; // not found → let caller 404
+    // Corrupt JSON, quarantine it and surface as "missing"
+    try { await fs.rename(p, p.replace(/\.json$/, `.bad.json`)); } catch {}
+    return null;
   }
 }
 
-export async function writeHome(doc: HomeDocV2): Promise<void> {
-  await ensureDir()
-  const file = join(HOMES_DIR, `${doc.id}.json`)
-  const stamped = { ...doc, updatedAt: new Date().toISOString(), createdAt: doc.createdAt || new Date().toISOString() }
-  await fs.writeFile(file, JSON.stringify(stamped, null, 2), 'utf8')
+export async function putHome(doc: HomeDoc): Promise<void> {
+  await ensureDir();
+  const p = homePath(doc.id);
+  const txt = JSON.stringify(doc, null, 2);
+  await fs.writeFile(p, txt);
 }

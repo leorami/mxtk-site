@@ -1,0 +1,87 @@
+{
+  "id": "default",
+  "version": 2,
+  "sections": [
+    {
+      "id": "overview",
+      "title": "Overview"
+    },
+    {
+      "id": "learn",
+      "title": "Learn"
+    },
+    {
+      "id": "build",
+      "title": "Build"
+    },
+    {
+      "id": "operate",
+      "title": "Operate"
+    },
+    {
+      "id": "library",
+      "title": "Library"
+    }
+  ],
+  "widgets": [
+    {
+      "id": "wmfeojy340",
+      "type": "what-next",
+      "title": "What’s Next",
+      "sectionId": "overview",
+      "pos": {
+        "x": 0,
+        "y": 0
+      },
+      "size": {
+        "w": 4,
+        "h": 24
+      }
+    },
+    {
+      "id": "wmfeojy341",
+      "type": "recent-answers",
+      "title": "Recent Answers",
+      "sectionId": "overview",
+      "pos": {
+        "x": 8,
+        "y": 8
+      },
+      "size": {
+        "w": 4,
+        "h": 24
+      }
+    },
+    {
+      "id": "wmfeojy342",
+      "type": "custom-note",
+      "title": "Note",
+      "sectionId": "overview",
+      "pos": {
+        "x": 8,
+        "y": 0
+      },
+      "size": {
+        "w": 4,
+        "h": 24
+      },
+      "data": {
+        "note": ""
+      }
+    },
+    {
+      "id": "wmfeojy343",
+      "type": "mode-highlight",
+      "title": "Getting Started",
+      "sectionId": "learn",
+      "pos": {
+        "x": 0,
+        "y": 0
+      },
+      "size": {
+        "w": 8,
+        "h": 16
+      }
+    }
+  ]
+}

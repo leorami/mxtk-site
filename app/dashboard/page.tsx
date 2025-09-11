@@ -1,54 +1,46 @@
-import PageHero from '@/components/PageHero'
+import { cookies } from 'next/headers'
+import PageScaffold from '@/components/layout/PageScaffold'
 import SectionWrapper from '@/components/SectionWrapper'
-import DashboardContent from '@/components/home/DashboardContent'
-import PageTheme from '@/components/theme/PageTheme'
 import Card from '@/components/ui/Card'
-import BackgroundPhoto from '@/components/visuals/BackgroundPhoto'
-import { dashboardCopy } from '@/copy/dashboard'
+import DashboardContent from '@/components/home/DashboardContent'
 
-export default function DashboardPage() {
-  // Get copy data from client component instead of server component
-  const mode = 'learn' // Default mode, will be overridden by client component
-  const contentMode = (mode === 'ai') ? 'build' : mode
+export const dynamic = 'force-dynamic'
 
-  // Use imported copy directly
-  const pageCopy = dashboardCopy
+export default async function DashboardPage() {
+  const cookieStore = cookies()
+  const initialDocId = cookieStore.get('mxtk_home_id')?.value ?? 'default'
 
   return (
-    <PageTheme ink="light" lift="none" glass="standard">
-      {/* Use the same gold background as Landing */}
-      <BackgroundPhoto variant="home" />
-
-      <PageHero>
-        <div className="relative">
-          <div className="space-y-0">
-            {/* HERO — exact same structure as other pages */}
-            <SectionWrapper index={0} className="text-center">
-              <h1 className="text-4xl md:text-6xl font-bold tracking-tight text-slate-900 dark:text-slate-50 drop-shadow-[0_1px_1px_rgba(0,0,0,0.25)]">
-                {pageCopy.heroTitle[contentMode]}
-              </h1>
-              <p className="text-xl text-muted max-w-3xl mx-auto">
-                {pageCopy.heroSub[contentMode]}
-              </p>
-            </SectionWrapper>
-
-            {/* "How this dashboard adapts" — same Card pattern */}
-            <SectionWrapper index={1}>
-              <Card tint="amber">
-                <h2 className="text-xl md:text-2xl font-semibold mb-2">
-                  {pageCopy.adaptTitle[contentMode]}
-                </h2>
-                <p className="text-muted">
-                  {pageCopy.adaptSub[contentMode]}
-                </p>
-              </Card>
-            </SectionWrapper>
-
-            {/* Client-side rendered dashboard content */}
-            <DashboardContent initialDocId="default" />
-          </div>
+    <PageScaffold
+      copyKey="dashboard"
+      backgroundVariant="home"
+      ink="warm"
+      lift="H"
+      glass="soft"
+      heroAlign="left"
+      heroActions={(
+        <div className="flex flex-wrap gap-2 justify-start">
+          <a href="#overview" className="btn-soft">Overview</a>
+          <a href="#learn" className="btn-soft">Learn</a>
+          <a href="#build" className="btn-soft">Build</a>
+          <a href="#operate" className="btn-soft">Operate</a>
+          <a href="#library" className="btn-soft">Library</a>
         </div>
-      </PageHero>
-    </PageTheme>
+      )}
+    >
+      {/* Small explainer panel directly under hero */}
+      <SectionWrapper index={0}>
+        <Card tint="amber">
+          <div className="text-sm opacity-90">
+            Your Dashboard adapts as you interact. Switch experience in the header (Learn/Build/Operate), then drag, resize, or remove widgets. Ask the Sherpa for new widgets anytime.
+          </div>
+        </Card>
+      </SectionWrapper>
+
+      {/* Section rails + widgets */}
+      <div className="mt-6">
+        <DashboardContent initialDocId={initialDocId} />
+      </div>
+    </PageScaffold>
   )
 }

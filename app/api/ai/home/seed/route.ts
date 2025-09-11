@@ -1,67 +1,63 @@
-import { toV2 } from '@/lib/home/migrate';
-import { getHomeDoc, saveHomeDoc } from '@/lib/home/store/fileStore';
-import type { HomeDocV2, SectionKey, WidgetType } from '@/lib/home/types';
-import { randomUUID } from 'crypto';
+// app/api/ai/home/seed/route.ts
+export const runtime = 'nodejs';
+export const dynamic = 'force-dynamic';
+
+import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
-import { NextRequest, NextResponse } from 'next/server';
+import { getHome, putHome } from '@/lib/home/store/fileStore';
+import { migrateToV2 } from '@/lib/home/migrate';
+import type { HomeDoc, SectionState, WidgetState } from '@/lib/home/types';
 
-type Mode = 'learn' | 'build' | 'operate';
+const NO_STORE = { 'Cache-Control': 'no-store' };
 
-// Updated presets with better sizes and section distribution
-const PRESETS_V2 = {
-  learn: [
-    { key: "overview", type: "resources",  title: "Resources",           size:{w:4,h:10}, pos:{x:0,y:0} },
-    { key: "overview", type: "glossary-spotlight",   title: "Glossary Spotlight",  size:{w:3,h:12}, pos:{x:4,y:0} },
-    { key: "overview", type: "note",       title: "Notes",               size:{w:5,h:8},  pos:{x:7,y:0} },
-    { key: "learn",    type: "whats-next", title: "What's Next",         size:{w:3,h:10}, pos:{x:0,y:0} },
-    { key: "learn",    type: "recent-answers",     title: "Recent Answers",      size:{w:4,h:8},  pos:{x:3,y:0} },
-  ],
-  build: [
-    { key: "overview", type: "recent-answers",     title: "Recent Answers",      size:{w:4,h:8},  pos:{x:0,y:0} },
-    { key: "overview", type: "resources",  title: "API & SDK",           size:{w:4,h:10}, pos:{x:4,y:0} },
-    { key: "build",    type: "whats-next", title: "What's Next",         size:{w:4,h:8},  pos:{x:8,y:0} },
-  ],
-  operate: [
-    { key: "overview", type: "resources",  title: "Controls & Policy",   size:{w:5,h:10}, pos:{x:0,y:0} },
-    { key: "overview", type: "recent-answers",     title: "Recent Answers",      size:{w:4,h:8},  pos:{x:5,y:0} },
-    { key: "operate",  type: "whats-next", title: "What's Next",         size:{w:3,h:8},  pos:{x:9,y:0} },
-  ],
-} as const;
+const SECTIONS: SectionState[] = [
+  { id: 'overview', title: 'Overview' },
+  { id: 'learn',    title: 'Learn' },
+  { id: 'build',    title: 'Build' },
+  { id: 'operate',  title: 'Operate' },
+  { id: 'library',  title: 'Library' },
+];
 
-export async function POST(req: NextRequest) {
-    const url = new URL(req.url);
-    const id = url.searchParams.get('id');
-    if (!id) return NextResponse.json({ error: 'missing id' }, { status: 400 });
+function wid(i: number) { return `w${Date.now().toString(36)}${i}`; }
 
-    const cookieMode = (await cookies()).get('experience')?.value as Mode | undefined;
-    const mode = (url.searchParams.get('mode') as Mode) || cookieMode || 'learn';
-    const adapt = url.searchParams.get('adapt') === 'true';
+export async function POST(req: Request) {
+  try {
+    const body = await req.json().catch(() => ({} as any));
+    const id = String(body?.id || 'default');
+    const mode: 'learn' | 'build' | 'operate' =
+      body?.mode === 'build' || body?.mode === 'operate' ? body.mode : 'learn';
 
-    let doc = toV2(await getHomeDoc(id));
-
-    // idempotent seed: if no widgets OR adapt=true, add missing preset widgets
-    const secId = (key: SectionKey) =>
-        doc.sections.find(s => s.key === key)!.id;
-
-    const existingSig = new Set(doc.widgets.map(w => `${w.sectionId}:${w.type}`));
-
-    const adds = PRESETS_V2[mode]
-        .filter(p => adapt ? true : !existingSig.has(`${secId(p.key)}:${p.type}`))
-        .map(p => ({
-            id: randomUUID(),
-            type: p.type as WidgetType,
-            title: p.title,
-            sectionId: secId(p.key),
-            pos: { ...p.pos },
-            size: { ...p.size },
-            pinned: false,
-            data: {},
-        }));
-
-    if (adds.length) {
-        doc = { ...doc, widgets: [...doc.widgets, ...adds] };
-        await saveHomeDoc(doc);
+    const existing = await getHome(id);
+    if (existing && Array.isArray(existing.widgets) && existing.widgets.length > 0) {
+      const { doc } = migrateToV2(existing);
+      cookies().set('mxtk_home_id', id, { path: '/', httpOnly: false, sameSite: 'lax' });
+      return NextResponse.json(doc, { headers: NO_STORE });
     }
 
-    return NextResponse.json({ ok: true, added: adds.length, mode });
+    const base: HomeDoc = { id, version: 2, sections: SECTIONS, widgets: [] };
+
+    const widgets: WidgetState[] = [
+      { id: wid(0), type: 'what-next',       title: "What’s Next",     sectionId: 'overview', pos: { x: 0, y: 0 }, size: { w: 4, h: 24 } },
+      { id: wid(1), type: 'recent-answers',  title: 'Recent Answers',  sectionId: 'overview', pos: { x: 4, y: 0 }, size: { w: 4, h: 24 } },
+      { id: wid(2), type: 'custom-note',     title: 'Note',            sectionId: 'overview', pos: { x: 8, y: 0 }, size: { w: 4, h: 24 }, data: { note: '' } },
+      {
+        id: wid(3),
+        type: 'mode-highlight',
+        title: mode === 'build' ? 'Developer Docs' : mode === 'operate' ? 'Institutional Flows' : 'Getting Started',
+        sectionId: mode,
+        pos: { x: 0, y: 0 },
+        size: { w: 6, h: 24 },
+      },
+    ];
+
+    const doc: HomeDoc = { ...base, widgets };
+    await putHome(doc);
+
+    cookies().set('mxtk_home_id', id, { path: '/', httpOnly: false, sameSite: 'lax' });
+    return NextResponse.json(doc, { headers: NO_STORE });
+  } catch (e: any) {
+    const detail = e?.stack || e?.message || String(e);
+    console.error('POST /api/ai/home/seed failed:', detail);
+    return NextResponse.json({ error: 'home-seed-failed', detail }, { status: 500, headers: NO_STORE });
+  }
 }

@@ -1,14 +1,8 @@
 // lib/home/types.ts
 export type HomeId = string;
-export type SectionKey = 'overview' | 'learn' | 'build' | 'operate' | 'library';
-export type Experience = 'learn' | 'build' | 'operate';
+export type Mode = 'learn' | 'build' | 'operate';
 
-export type WidgetType =
-  | 'recent-answers'
-  | 'resources'
-  | 'glossary-spotlight'
-  | 'note'
-  | 'whats-next';
+export type SectionKey = 'overview' | 'learn' | 'build' | 'operate' | 'library';
 
 export interface SectionState {
   id: string;
@@ -18,31 +12,35 @@ export interface SectionState {
   collapsed?: boolean;
 }
 
+export type WidgetType =
+  | 'recent-answers'
+  | 'resources'
+  | 'glossary-spotlight'
+  | 'whats-next'
+  | 'note';
+
 export interface WidgetState {
   id: string;
-  type: string;                // e.g., 'recent-answers' | 'glossary-spotlight' | 'resources' | 'custom-note'
+  type: WidgetType;
   title?: string;
   sectionId: string;
-  pos: { x: number; y: number };
-  size: { w: number; h: number };
+  size: { w: number; h: number }; // grid spans (cols, rows)
+  pos: { x: number; y: number };  // zero-based col/row
   pinned?: boolean;
   data?: Record<string, unknown>;
 }
 
+/** Legacy V1 (no sections) */
 export interface HomeDocV1 {
   id: HomeId;
   layoutVersion?: 1;
-  widgets: (Omit<WidgetState,'sectionId'> & { sectionId?: string })[];
+  widgets?: any[];
 }
 
-export interface HomeDocV2 {
+/** V2 (sections) */
+export interface HomeDoc {
   id: HomeId;
   layoutVersion: 2;
   sections: SectionState[];
   widgets: WidgetState[];
-  createdAt?: string;
-  updatedAt?: string;
 }
-
-export type HomeDoc = HomeDocV1 | HomeDocV2;
-export type HomeDocAny = HomeDoc; // for migration gate

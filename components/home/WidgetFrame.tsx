@@ -1,17 +1,44 @@
-import * as React from "react";
-export default function WidgetFrame({
-  title, children, onRefresh, onSettings,
-}: { title?: string; children: React.ReactNode; onRefresh?: ()=>void; onSettings?: ()=>void }) {
+'use client';
+
+import * as React from 'react';
+
+type Props = {
+  title?: string;
+  children?: React.ReactNode;
+  onRefresh?: () => void;
+  onInfo?: () => void;
+  onRemove?: () => void;
+};
+
+export default function WidgetFrame({ title, children, onRefresh, onInfo, onRemove }: Props) {
   return (
-    <div className="wframe" data-testid="wframe">
-      <div className="wframe-controls" aria-hidden="true">
-        <button className="iconbtn" title="Refresh" onClick={onRefresh}>↻</button>
-        <button className="iconbtn" title="Settings" onClick={onSettings}>⚙︎</button>
-        <button className="iconbtn" title="Pin">📌</button>
+    <div className="relative h-full">
+      {/** Controls: only visible when html.guide-open (CSS handles this) */}
+      <div className="wframe-controls widget-controls" aria-hidden="true">
+        {onRefresh && (
+          <button type="button" className="iconbtn" title="Refresh" onClick={onRefresh}>
+            ↻
+          </button>
+        )}
+        {onInfo && (
+          <button type="button" className="iconbtn" title="Info" onClick={onInfo}>
+            i
+          </button>
+        )}
+        {onRemove && (
+          <button type="button" className="iconbtn" title="Remove" onClick={onRemove}>
+            ✕
+          </button>
+        )}
       </div>
-      {title ? <div className="w-title text-sm font-semibold mb-2">{toTitleCase(title)}</div> : null}
-      <div className="wframe-body" data-widget-body>{children}</div>
+
+      {title ? (
+        <div className="text-sm font-semibold mb-2 opacity-80">{title}</div>
+      ) : null}
+
+      <div className="widget-body" data-widget-body>
+        {children}
+      </div>
     </div>
   );
 }
-function toTitleCase(s?: string){ if(!s) return ""; return s.replace(/\w\S*/g,t=>t[0].toUpperCase()+t.slice(1).toLowerCase()); }

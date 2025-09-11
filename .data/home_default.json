@@ -1,0 +1,113 @@
+{
+  "id": "home_default",
+  "layoutVersion": 2,
+  "sections": [
+    {
+      "id": "sec_overview",
+      "key": "overview",
+      "title": "Overview",
+      "order": 0,
+      "collapsed": false
+    },
+    {
+      "id": "sec_learn",
+      "key": "learn",
+      "title": "Learn",
+      "order": 1,
+      "collapsed": false
+    },
+    {
+      "id": "sec_build",
+      "key": "build",
+      "title": "Build",
+      "order": 2,
+      "collapsed": false
+    },
+    {
+      "id": "sec_operate",
+      "key": "operate",
+      "title": "Operate",
+      "order": 3,
+      "collapsed": false
+    },
+    {
+      "id": "sec_library",
+      "key": "library",
+      "title": "Library",
+      "order": 4,
+      "collapsed": false
+    }
+  ],
+  "widgets": [
+    {
+      "id": "w_recent",
+      "type": "recent-answers",
+      "title": "Recent Answers",
+      "sectionId": "sec_overview",
+      "size": {
+        "w": 4,
+        "h": 6
+      },
+      "pos": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    {
+      "id": "w_res",
+      "type": "resources",
+      "title": "Resources",
+      "sectionId": "sec_overview",
+      "size": {
+        "w": 4,
+        "h": 6
+      },
+      "pos": {
+        "x": 4,
+        "y": 0
+      }
+    },
+    {
+      "id": "w_gloss",
+      "type": "glossary-spotlight",
+      "title": "Glossary Spotlight",
+      "sectionId": "sec_overview",
+      "size": {
+        "w": 4,
+        "h": 6
+      },
+      "pos": {
+        "x": 8,
+        "y": 0
+      }
+    },
+    {
+      "id": "w_note",
+      "type": "note",
+      "title": "Notes",
+      "sectionId": "sec_learn",
+      "size": {
+        "w": 4,
+        "h": 6
+      },
+      "pos": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    {
+      "id": "w_next",
+      "type": "whats-next",
+      "title": "What's Next",
+      "sectionId": "sec_learn",
+      "size": {
+        "w": 4,
+        "h": 6
+      },
+      "pos": {
+        "x": 4,
+        "y": 0
+      }
+    }
+  ]
+}

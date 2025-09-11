@@ -64,6 +64,7 @@ export default function GuideDrawer() {
 
   return (
     <aside
+      data-guide-panel className="guide-panel glass"
       data-open={open ? 'true' : 'false'}
       role="complementary"
       aria-label="Sherpa Drawer" tabIndex={open ? 0 : -1}
