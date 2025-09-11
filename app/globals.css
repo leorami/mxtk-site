@@ -1983,8 +1983,8 @@ button[class*="btn"] {
 
 /* === GLASS TOKENS ======================================================== */
 :root {
-  --glass-bg-color: #0a0f1b;
-  --glass-bg-alpha: 0.08;
+  --glass-bg-color: 255, 255, 255;
+  --glass-bg-alpha: 0.62;
   /* raise for darker glass */
   --glass-blur: 18px;
   --glass-saturate: 1.05;
@@ -1996,13 +1996,23 @@ button[class*="btn"] {
   --glass-radius: 16px;
 
   /* strong variant defaults */
-  --glass-strong-bg-alpha: 0.14;
+  --glass-strong-bg-alpha: 0.90;
   --glass-strong-blur: 22px;
   --glass-strong-shadow: 0 12px 28px rgba(0, 0, 0, .22);
 }
 
+/* Dark mode glass tokens */
+.dark {
+  --glass-bg-color: 18, 22, 28;
+  --glass-bg-alpha: 0.58;
+  --glass-border-color: 255, 255, 255;
+  --glass-border-alpha: 0.06;
+  --glass-shadow-main: 0 8px 24px rgba(0, 0, 0, .45);
+  --glass-strong-bg-alpha: 0.86;
+}
+
 .glass {
-  background: color-mix(in srgb, var(--glass-bg-color) calc(var(--glass-bg-alpha)*100%), transparent);
+  background: color-mix(in srgb, rgb(var(--glass-bg-color)) calc(var(--glass-bg-alpha)*100%), transparent);
   backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
   -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
   border: 1px solid rgba(var(--glass-border-color), var(--glass-border-alpha));
@@ -2011,7 +2021,7 @@ button[class*="btn"] {
 }
 
 .glass--strong {
-  background: color-mix(in srgb, var(--glass-bg-color) calc(var(--glass-strong-bg-alpha)*100%), transparent);
+  background: color-mix(in srgb, rgb(var(--glass-bg-color)) calc(var(--glass-strong-bg-alpha)*100%), transparent);
   backdrop-filter: blur(var(--glass-strong-blur)) saturate(var(--glass-saturate));
   -webkit-backdrop-filter: blur(var(--glass-strong-blur)) saturate(var(--glass-saturate));
   box-shadow: var(--glass-strong-shadow);
