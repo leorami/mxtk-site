@@ -1,10 +1,20 @@
 // app/api/ai/home/seed/route.ts
+import { promises as fs } from 'fs';
+import path from 'path';
 import { getHome, putHome } from '@/lib/home/store/fileStore'
-import type { HomeDoc, SectionKey, SectionState, WidgetState } from '@/lib/home/types'
+import type { HomeDoc, SectionState, WidgetState } from '@/lib/home/types'
 import { cookies } from 'next/headers'
 import { NextRequest, NextResponse } from 'next/server'
 
 type Mode = 'learn' | 'build' | 'operate'
+
+// Ensure the directory exists
+async function ensureStoreDir() {
+  const ROOT = process.cwd();
+  const HOMES_DIR = path.join(ROOT, 'ai_store', 'homes');
+  await fs.mkdir(HOMES_DIR, { recursive: true });
+  return HOMES_DIR;
+}
 
 const SECTIONS: SectionState[] = [
   { id: 'overview', key: 'overview', title: 'Overview', order: 0 },
@@ -35,7 +45,10 @@ function seedFor(mode: Mode, id: string): HomeDoc {
 
 export async function POST(req: NextRequest) {
   try {
-    // Using getHome/putHome functions which already call ensureDir internally
+    // Explicitly ensure the store directory exists first
+    await ensureStoreDir();
+    
+    // Parse the request body
     const body = await req.json().catch(() => ({} as any))
     const id = (body.id as string) || 'default'
     const mode = ((body.mode as Mode) || 'learn')
@@ -47,12 +60,16 @@ export async function POST(req: NextRequest) {
       return NextResponse.json(existing, { headers: { 'cache-control': 'no-store' } })
     }
 
+    // Create and save a new home document
     const doc = seedFor(mode, id)
     await putHome(doc)
     cookies().set('mxtk_home_id', id, { path: '/', sameSite: 'lax' })
     return NextResponse.json(doc, { headers: { 'cache-control': 'no-store' } })
   } catch (err) {
     console.error('home-seed-failed', err)
-    return NextResponse.json({ error: 'home-seed-failed' }, { status: 500, headers: { 'cache-control': 'no-store' } })
+    return NextResponse.json({ 
+      error: 'home-seed-failed', 
+      message: err instanceof Error ? err.message : String(err) 
+    }, { status: 500, headers: { 'cache-control': 'no-store' } })
   }
 }

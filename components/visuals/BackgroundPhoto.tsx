@@ -1,9 +1,9 @@
 'use client';
 
+import { useBasePath } from '@/lib/basepath';
 import cn from "classnames";
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
-import { useBasePath } from '@/lib/basepath';
 
 type Variant =
   | "home"

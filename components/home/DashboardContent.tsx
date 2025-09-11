@@ -15,78 +15,98 @@ export default function DashboardContent({ initialDocId = 'default', initialDoc 
   const [doc, setDoc] = React.useState<HomeDoc | null>(initialDoc)
   const [error, setError] = React.useState<string | null>(null)
   const [loading, setLoading] = React.useState(true)
+  const [retryCount, setRetryCount] = React.useState(0)
 
   const sections: SectionState[] = React.useMemo(
     () => (Array.isArray(doc?.sections) ? (doc!.sections as SectionState[]) : []),
     [doc]
   )
 
-  React.useEffect(() => {
-    let alive = true
+  const loadData = React.useCallback(async (forceRetry = false) => {
+    if (forceRetry) {
+      setRetryCount(count => count + 1)
+    }
+    
     setLoading(true)
     setError(null)
     
-    ;(async () => {
-      try {
-        // 1) Try GET
-        let res = await fetch(api(`/api/ai/home/${initialDocId}`), { cache: 'no-store' })
+    try {
+      // 1) Try GET
+      let res = await fetch(api(`/api/ai/home/${initialDocId}`), { 
+        cache: 'no-store',
+        headers: { 'x-retry-count': retryCount.toString() }
+      })
+      
+      if (res.status === 404) {
+        // 2) Seed, then GET
+        console.log('Dashboard: Home not found, seeding...')
+        const seeded = await fetch(api(`/api/ai/home/seed`), {
+          method: 'POST',
+          headers: { 
+            'content-type': 'application/json',
+            'x-retry-count': retryCount.toString()
+          },
+          body: JSON.stringify({ id: initialDocId, mode })
+        })
         
-        if (res.status === 404) {
-          // 2) Seed, then GET
-          const seeded = await fetch(api(`/api/ai/home/seed`), {
-            method: 'POST',
-            headers: { 'content-type': 'application/json' },
-            body: JSON.stringify({ id: initialDocId, mode })
-          })
-          
-          if (!seeded.ok) {
-            const errorData = await seeded.json().catch(() => ({ error: 'Unknown error' }))
-            if (alive) {
-              setError(`Failed to seed dashboard: ${errorData.error || 'Unknown error'}`)
-              setLoading(false)
-            }
-            return
-          }
-          
-          // Get the seeded data directly from the seed response
-          const seedData = await seeded.json().catch(() => null)
-          if (alive && seedData && !seedData.error) {
-            setDoc(seedData)
-            setLoading(false)
-            return
-          }
-          
-          // If we couldn't get data from seed response, try GET again
-          res = await fetch(api(`/api/ai/home/${initialDocId}`), { cache: 'no-store' })
-        }
-        
-        if (!res.ok) {
-          if (alive) {
-            setError(`Failed to load dashboard: ${res.status} ${res.statusText}`)
-            setLoading(false)
-          }
+        if (!seeded.ok) {
+          const errorData = await seeded.json().catch(() => ({ error: 'Unknown error' }))
+          console.error('Dashboard: Seed failed', errorData)
+          setError(`Failed to seed dashboard: ${errorData.error || 'Unknown error'}`)
+          setLoading(false)
           return
         }
         
-        const j = await res.json().catch(() => null)
-        if (alive) {
-          if (j && !j.error) {
-            setDoc(j)
-          } else {
-            setError(`Invalid dashboard data: ${j?.error || 'Unknown format'}`)
-          }
+        // Get the seeded data directly from the seed response
+        const seedData = await seeded.json().catch(() => null)
+        if (seedData && !seedData.error) {
+          console.log('Dashboard: Seed successful')
+          setDoc(seedData)
           setLoading(false)
+          return
         }
-      } catch (err) {
-        if (alive) {
-          setError(`Dashboard error: ${err instanceof Error ? err.message : String(err)}`)
-          setLoading(false)
-        }
+        
+        // If we couldn't get data from seed response, try GET again
+        console.log('Dashboard: Trying GET after seed')
+        res = await fetch(api(`/api/ai/home/${initialDocId}`), { 
+          cache: 'no-store',
+          headers: { 'x-retry-count': retryCount.toString() }
+        })
       }
-    })()
+      
+      if (!res.ok) {
+        console.error(`Dashboard: GET failed ${res.status}`)
+        setError(`Failed to load dashboard: ${res.status} ${res.statusText}`)
+        setLoading(false)
+        return
+      }
+      
+      const j = await res.json().catch(() => null)
+      if (j && !j.error) {
+        console.log('Dashboard: GET successful')
+        setDoc(j)
+      } else {
+        console.error('Dashboard: Invalid data', j)
+        setError(`Invalid dashboard data: ${j?.error || 'Unknown format'}`)
+      }
+    } catch (err) {
+      console.error('Dashboard: Error', err)
+      setError(`Dashboard error: ${err instanceof Error ? err.message : String(err)}`)
+    } finally {
+      setLoading(false)
+    }
+  }, [initialDocId, mode, retryCount])
+
+  React.useEffect(() => {
+    let alive = true
+    
+    // Load data and set state only if component is still mounted
+    loadData().then(() => {
+      if (!alive) return
+    })
     
     return () => { alive = false }
-  }, [initialDocId, mode])
+  }, [loadData])
 
   // Loading state
   if (loading) {
@@ -114,7 +134,7 @@ export default function DashboardContent({ initialDocId = 'default', initialDoc 
           </header>
           <p className="text-red-600 dark:text-red-400 mb-2">{error}</p>
           <button 
-            onClick={() => window.location.reload()}
+            onClick={() => loadData(true)}
             className="btn btn--pill px-4 py-2 rounded-xl shadow-sm bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300"
           >
             Reload Dashboard
