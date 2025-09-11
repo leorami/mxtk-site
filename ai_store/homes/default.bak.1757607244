@@ -1,42 +1,32 @@
 {
   "id": "default",
-  "layoutVersion": 2,
+  "version": 2,
   "sections": [
     {
       "id": "overview",
-      "key": "overview",
-      "title": "Overview",
-      "order": 0
+      "title": "Overview"
     },
     {
       "id": "learn",
-      "key": "learn",
-      "title": "Learn",
-      "order": 1
+      "title": "Learn"
     },
     {
       "id": "build",
-      "key": "build",
-      "title": "Build",
-      "order": 2
+      "title": "Build"
     },
     {
       "id": "operate",
-      "key": "operate",
-      "title": "Operate",
-      "order": 3
+      "title": "Operate"
     },
     {
       "id": "library",
-      "key": "library",
-      "title": "Library",
-      "order": 4
+      "title": "Library"
     }
   ],
   "widgets": [
     {
       "id": "w-whatnext",
-      "type": "whats-next",
+      "type": "what-next",
       "title": "What's Next",
       "sectionId": "overview",
       "pos": {
@@ -64,7 +54,7 @@
     },
     {
       "id": "w-note",
-      "type": "note",
+      "type": "custom-note",
       "title": "Note",
       "sectionId": "overview",
       "pos": {

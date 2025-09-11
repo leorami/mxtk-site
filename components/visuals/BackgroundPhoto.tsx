@@ -7,6 +7,7 @@ import { useBasePath } from '@/lib/basepath';
 
 type Variant =
   | "home"
+  | "dashboard"
   | "owners"
   | "institutions"
   | "transparency"
@@ -23,6 +24,7 @@ type Variant =
 
 const MAP: Record<Variant, string> = {
   home: "home_gold.jpg",
+  dashboard: "home_gold.jpg", // Using home background for dashboard
   owners: "owners_citrine.jpg",
   institutions: "institutions_lapis.jpg",
   transparency: "transparency_tigereye.jpg",
@@ -82,5 +84,3 @@ export default function BackgroundPhoto({
     document.body
   );
 }
-
-

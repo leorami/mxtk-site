@@ -1,8 +1,8 @@
 // app/dashboard/page.tsx
-import PageScaffold from '@/components/layout/PageScaffold'
-import SectionWrapper from '@/components/SectionWrapper'
 import ModeTextSwap from '@/components/experience/ModeTextSwap'
 import DashboardContent from '@/components/home/DashboardContent'
+import PageScaffold from '@/components/layout/PageScaffold'
+import SectionWrapper from '@/components/SectionWrapper'
 
 export const dynamic = 'force-dynamic'
 

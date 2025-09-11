@@ -1,36 +1,26 @@
 {
   "id": "default",
-  "layoutVersion": 2,
+  "version": 2,
   "sections": [
     {
       "id": "overview",
-      "key": "overview",
-      "title": "Overview",
-      "order": 0
+      "title": "Overview"
     },
     {
       "id": "learn",
-      "key": "learn",
-      "title": "Learn",
-      "order": 1
+      "title": "Learn"
     },
     {
       "id": "build",
-      "key": "build",
-      "title": "Build",
-      "order": 2
+      "title": "Build"
     },
     {
       "id": "operate",
-      "key": "operate",
-      "title": "Operate",
-      "order": 3
+      "title": "Operate"
     },
     {
       "id": "library",
-      "key": "library",
-      "title": "Library",
-      "order": 4
+      "title": "Library"
     }
   ],
   "widgets": [
@@ -38,43 +28,46 @@
       "id": "w-whatnext",
       "type": "whats-next",
       "title": "What's Next",
-      "sectionId": "overview",
+      "size": {
+        "w": 4,
+        "h": 24
+      },
       "pos": {
         "x": 0,
         "y": 0
       },
-      "size": {
-        "w": 4,
-        "h": 24
-      }
+      "sectionId": "overview",
+      "pinned": false
     },
     {
       "id": "w-recent",
       "type": "recent-answers",
       "title": "Recent Answers",
-      "sectionId": "overview",
+      "size": {
+        "w": 4,
+        "h": 24
+      },
       "pos": {
         "x": 4,
         "y": 0
       },
-      "size": {
-        "w": 4,
-        "h": 24
-      }
+      "sectionId": "overview",
+      "pinned": false
     },
     {
       "id": "w-note",
       "type": "note",
       "title": "Note",
-      "sectionId": "overview",
-      "pos": {
-        "x": 8,
-        "y": 0
-      },
       "size": {
         "w": 4,
         "h": 24
       },
+      "pos": {
+        "x": 8,
+        "y": 0
+      },
+      "sectionId": "overview",
+      "pinned": false,
       "data": {
         "note": ""
       }
@@ -83,15 +76,16 @@
       "id": "w-learn1",
       "type": "mode-highlight",
       "title": "Getting Started",
-      "sectionId": "learn",
-      "pos": {
-        "x": 0,
-        "y": 0
-      },
       "size": {
         "w": 6,
         "h": 24
-      }
+      },
+      "pos": {
+        "x": 9,
+        "y": 0
+      },
+      "sectionId": "learn",
+      "pinned": false
     }
   ]
 }

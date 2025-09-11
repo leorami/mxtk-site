@@ -2,11 +2,11 @@
 import type { HomeDoc, SectionState, WidgetState } from './types';
 
 const DEFAULT_SECTIONS: SectionState[] = [
-  { id: 'overview', title: 'Overview' },
-  { id: 'learn',    title: 'Learn' },
-  { id: 'build',    title: 'Build' },
-  { id: 'operate',  title: 'Operate' },
-  { id: 'library',  title: 'Library' },
+  { id: 'overview', key: 'overview', title: 'Overview', order: 0 },
+  { id: 'learn',    key: 'learn',    title: 'Learn',    order: 1 },
+  { id: 'build',    key: 'build',    title: 'Build',    order: 2 },
+  { id: 'operate',  key: 'operate',  title: 'Operate',  order: 3 },
+  { id: 'library',  key: 'library',  title: 'Library',  order: 4 },
 ];
 
 function coerceInt(n: any, fallback: number) {
@@ -17,13 +17,19 @@ function coerceInt(n: any, fallback: number) {
 export function migrateToV2(input: any): { doc: HomeDoc; migrated: boolean } {
   if (!input || typeof input !== 'object') {
     // brand new
-    const fresh: HomeDoc = { id: 'default', version: 2, sections: DEFAULT_SECTIONS, widgets: [] };
+    const fresh: HomeDoc = { id: 'default', layoutVersion: 2, sections: DEFAULT_SECTIONS, widgets: [] };
     return { doc: fresh, migrated: true };
   }
 
   // Already V2 with sections?
-  if (Number(input.version) === 2 && Array.isArray(input.sections)) {
-    return { doc: input as HomeDoc, migrated: false };
+  if ((Number(input.layoutVersion) === 2 || Number(input.version) === 2) && Array.isArray(input.sections)) {
+    // Ensure we're using layoutVersion
+    const fixedInput = { ...input };
+    if (fixedInput.version && !fixedInput.layoutVersion) {
+      fixedInput.layoutVersion = fixedInput.version;
+      delete fixedInput.version;
+    }
+    return { doc: fixedInput as HomeDoc, migrated: false };
   }
 
   const id: string = input.id || 'default';
@@ -50,7 +56,7 @@ export function migrateToV2(input: any): { doc: HomeDoc; migrated: boolean } {
 
   const doc: HomeDoc = {
     id,
-    version: 2,
+    layoutVersion: 2,
     sections: DEFAULT_SECTIONS,
     widgets,
   };

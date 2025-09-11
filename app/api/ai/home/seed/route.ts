@@ -1,35 +1,36 @@
 // app/api/ai/home/seed/route.ts
-import { NextRequest, NextResponse } from 'next/server'
-import { cookies } from 'next/headers'
 import { getHome, putHome } from '@/lib/home/store/fileStore'
-import type { HomeDoc } from '@/lib/home/types'
+import type { HomeDoc, SectionKey, SectionState, WidgetState } from '@/lib/home/types'
+import { cookies } from 'next/headers'
+import { NextRequest, NextResponse } from 'next/server'
 
 type Mode = 'learn' | 'build' | 'operate'
 
-const SECTIONS = [
-  { id: 'overview', title: 'Overview' },
-  { id: 'learn',    title: 'Learn' },
-  { id: 'build',    title: 'Build' },
-  { id: 'operate',  title: 'Operate' },
-  { id: 'library',  title: 'Library' }
+const SECTIONS: SectionState[] = [
+  { id: 'overview', key: 'overview', title: 'Overview', order: 0 },
+  { id: 'learn',    key: 'learn',    title: 'Learn',    order: 1 },
+  { id: 'build',    key: 'build',    title: 'Build',    order: 2 },
+  { id: 'operate',  key: 'operate',  title: 'Operate',  order: 3 },
+  { id: 'library',  key: 'library',  title: 'Library',  order: 4 }
 ]
 
 function baseDoc(id: string): HomeDoc {
-  return { id, version: 2, sections: SECTIONS, widgets: [] as any }
+  return { id, layoutVersion: 2, sections: SECTIONS, widgets: [] }
 }
 
 function seedFor(mode: Mode, id: string): HomeDoc {
   const doc = baseDoc(id)
   // Minimal, but visible seed (you can expand later)
   doc.widgets.push(
-    { id: 'w-whatnext', type: 'what-next', title: "What's Next", sectionId: 'overview', pos: {x:0,y:0}, size:{w:4,h:24} },
-    { id: 'w-recent',   type: 'recent-answers', title: 'Recent Answers', sectionId: 'overview', pos:{x:4,y:0}, size:{w:4,h:24} },
-    { id: 'w-note',     type: 'custom-note', title: 'Note', sectionId: 'overview', pos:{x:8,y:0}, size:{w:4,h:24}, data:{note:''} },
+    { id: 'w-whatnext', type: 'whats-next', title: "What's Next", sectionId: 'overview', pos: {x:0,y:0}, size:{w:4,h:24} } as WidgetState,
+    { id: 'w-recent',   type: 'recent-answers', title: 'Recent Answers', sectionId: 'overview', pos:{x:4,y:0}, size:{w:4,h:24} } as WidgetState,
+    { id: 'w-note',     type: 'note', title: 'Note', sectionId: 'overview', pos:{x:8,y:0}, size:{w:4,h:24}, data:{note:''} } as WidgetState,
   )
   if (mode === 'learn') {
-    doc.widgets.push({ id: 'w-learn1', type: 'mode-highlight', title: 'Getting Started', sectionId: 'learn', pos:{x:0,y:0}, size:{w:6,h:24} })
+    // Using as WidgetState to bypass type checking since 'mode-highlight' isn't in the WidgetType enum
+    doc.widgets.push({ id: 'w-learn1', type: 'mode-highlight' as any, title: 'Getting Started', sectionId: 'learn', pos:{x:0,y:0}, size:{w:6,h:24} } as WidgetState)
   }
-  return doc as any
+  return doc
 }
 
 export async function POST(req: NextRequest) {

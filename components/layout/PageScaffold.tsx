@@ -1,12 +1,12 @@
 'use client'
 
-import React from 'react'
 import PageHero from '@/components/PageHero'
 import SectionWrapper from '@/components/SectionWrapper'
 import { useCopy } from '@/components/copy/Copy'
 import ModeTextSwap from '@/components/experience/ModeTextSwap'
 import PageTheme from '@/components/theme/PageTheme'
 import BackgroundPhoto from '@/components/visuals/BackgroundPhoto'
+import React from 'react'
 
 type Ink = string
 type Lift = string
