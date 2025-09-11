@@ -350,3 +350,15 @@ html:not(.guide-open) .widget-controls { opacity: 0; pointer-events: none; }
 
 /* Anchor targets land below sticky header */
 .scroll-mt-24 { scroll-margin-top: 6rem; }
+
+/* Buttons must never show underlines even when inside glass containers */
+.btn, .btn:link, .btn:visited { text-decoration: none !important; }
+.btn a { text-decoration: none !important; }
+
+/* Glass link styling should not hit button-like anchors */
+.glass a:not(.btn,.button,.cta),
+.glass--panel a:not(.btn,.button,.cta) {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  font-weight: 500;
+}
