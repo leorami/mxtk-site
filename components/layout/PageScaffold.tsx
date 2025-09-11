@@ -46,10 +46,7 @@ export default function PageScaffold({
 
   return (
     <PageTheme ink={ink} lift={lift} glass={glass}>
-      <PageBackground page={backgroundVariant ?? copyKey} />
-      
-      <div className={['page-scaffold', className].filter(Boolean).join(' ')} data-testid="page-scaffold">
-        {/* Match the exact structure of the home page */}
+      <PageBackground page={backgroundVariant ?? copyKey} />      
         <div className="relative container mx-auto px-4 pt-8 pb-8">
           <div className="glass glass--panel p-6 md:p-8">
             <div className="relative">
@@ -90,7 +87,6 @@ export default function PageScaffold({
             </div>
           </div>
         </div>
-      </div>
     </PageTheme>
   )
 }

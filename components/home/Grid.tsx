@@ -1,7 +1,7 @@
 'use client';
 
-import * as React from 'react';
 import type { HomeDoc, WidgetState } from '@/lib/home/types';
+import * as React from 'react';
 
 type GridProps = {
   doc: HomeDoc;                              // expects V2 with sections + widgets
