@@ -3,13 +3,14 @@
 import AppImage from '@/components/ui/AppImage';
 
 type PageKey =
-  | "home" | "owners" | "institutions" | "transparency"
+  | "home" | "dashboard" | "owners" | "institutions" | "transparency"
   | "whitepaper" | "elitedrop" | "careers" | "roadmap"
   | "media" | "ecosystem" | "faq" | "resources"
   | "contact" | "team";
 
 const MAP: Record<PageKey, string> = {
   home:         "art/photos/home_gold.jpg",
+  dashboard:    "art/photos/home_gold.jpg", // Using home background for dashboard
   owners:       "art/photos/owners_citrine.jpg",
   institutions: "art/photos/institutions_lapis.jpg",
   transparency: "art/photos/transparency_tigereye.jpg",
@@ -26,12 +27,10 @@ const MAP: Record<PageKey, string> = {
 };
 
 export default function PageBackground({ page }: { page: PageKey }) {
-  const src = `/${MAP[page]}`;
+  const src = `/${MAP[page] || MAP.home}`; // Fallback to home background if page not found
   return (
     <div aria-hidden className="fixed inset-0 -z-10">
       <AppImage src={src} alt="" fill className="object-cover" priority />
     </div>
   );
 }
-
-

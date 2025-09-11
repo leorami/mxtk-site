@@ -4,7 +4,7 @@ import SectionWrapper from '@/components/SectionWrapper'
 import { useCopy } from '@/components/copy/Copy'
 import ModeTextSwap from '@/components/experience/ModeTextSwap'
 import PageTheme from '@/components/theme/PageTheme'
-import BackgroundPhoto from '@/components/visuals/BackgroundPhoto'
+import PageBackground from '@/components/visuals/PageBackground'
 import React from 'react'
 
 type Ink = string
@@ -47,7 +47,7 @@ export default function PageScaffold({
   return (
     <div className={['page-scaffold', className].filter(Boolean).join(' ')} data-testid="page-scaffold">
       <PageTheme ink={ink} lift={lift} glass={glass}>
-        <BackgroundPhoto variant={backgroundVariant ?? copyKey} />
+        <PageBackground page={backgroundVariant ?? copyKey} />
         
         {/* Match the exact structure of the home page */}
         <div className="relative container mx-auto px-4 pt-8 pb-8">
