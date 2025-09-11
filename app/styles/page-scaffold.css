@@ -262,7 +262,7 @@ html.dark .mxtk-bg-mineral {
 
 .glass--panel a:not(.btn):not([class*="btn"]):not(button):focus-visible {
     outline: 2px solid var(--mxtk-accent, var(--mxtk-orange))
-}a
+}
 
 /* Equalize card padding + section rails */
 .card,
@@ -322,3 +322,17 @@ padding: 1.25rem
       border-top-right-radius: 16px;
     }
   }
+
+/* === Button-like anchors must never look like links === */
+a.btn, a[role="button"], .btn, .chip {
+  text-decoration: none !important;
+  border-bottom: 0 !important;
+}
+
+/* Keep WCAG underlines on links inside glass panels — but not on buttons */
+.glass a:not(.btn):not([role="button"]),
+.glass--panel a:not(.btn):not([role="button"]) {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  font-weight: 500;
+}

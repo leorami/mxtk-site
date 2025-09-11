@@ -1,63 +1,57 @@
 // app/api/ai/home/seed/route.ts
-export const runtime = 'nodejs';
-export const dynamic = 'force-dynamic';
+import { NextRequest, NextResponse } from 'next/server'
+import { cookies } from 'next/headers'
+import { getHome, putHome } from '@/lib/home/store/fileStore'
+import type { HomeDoc } from '@/lib/home/types'
 
-import { NextResponse } from 'next/server';
-import { cookies } from 'next/headers';
-import { getHome, putHome } from '@/lib/home/store/fileStore';
-import { migrateToV2 } from '@/lib/home/migrate';
-import type { HomeDoc, SectionState, WidgetState } from '@/lib/home/types';
+type Mode = 'learn' | 'build' | 'operate'
 
-const NO_STORE = { 'Cache-Control': 'no-store' };
-
-const SECTIONS: SectionState[] = [
+const SECTIONS = [
   { id: 'overview', title: 'Overview' },
   { id: 'learn',    title: 'Learn' },
   { id: 'build',    title: 'Build' },
   { id: 'operate',  title: 'Operate' },
-  { id: 'library',  title: 'Library' },
-];
+  { id: 'library',  title: 'Library' }
+]
 
-function wid(i: number) { return `w${Date.now().toString(36)}${i}`; }
+function baseDoc(id: string): HomeDoc {
+  return { id, version: 2, sections: SECTIONS, widgets: [] as any }
+}
 
-export async function POST(req: Request) {
+function seedFor(mode: Mode, id: string): HomeDoc {
+  const doc = baseDoc(id)
+  // Minimal, but visible seed (you can expand later)
+  doc.widgets.push(
+    { id: 'w-whatnext', type: 'what-next', title: "What's Next", sectionId: 'overview', pos: {x:0,y:0}, size:{w:4,h:24} },
+    { id: 'w-recent',   type: 'recent-answers', title: 'Recent Answers', sectionId: 'overview', pos:{x:4,y:0}, size:{w:4,h:24} },
+    { id: 'w-note',     type: 'custom-note', title: 'Note', sectionId: 'overview', pos:{x:8,y:0}, size:{w:4,h:24}, data:{note:''} },
+  )
+  if (mode === 'learn') {
+    doc.widgets.push({ id: 'w-learn1', type: 'mode-highlight', title: 'Getting Started', sectionId: 'learn', pos:{x:0,y:0}, size:{w:6,h:24} })
+  }
+  return doc as any
+}
+
+export async function POST(req: NextRequest) {
   try {
-    const body = await req.json().catch(() => ({} as any));
-    const id = String(body?.id || 'default');
-    const mode: 'learn' | 'build' | 'operate' =
-      body?.mode === 'build' || body?.mode === 'operate' ? body.mode : 'learn';
+    // Using getHome/putHome functions which already call ensureDir internally
+    const body = await req.json().catch(() => ({} as any))
+    const id = (body.id as string) || 'default'
+    const mode = ((body.mode as Mode) || 'learn')
 
-    const existing = await getHome(id);
-    if (existing && Array.isArray(existing.widgets) && existing.widgets.length > 0) {
-      const { doc } = migrateToV2(existing);
-      cookies().set('mxtk_home_id', id, { path: '/', httpOnly: false, sameSite: 'lax' });
-      return NextResponse.json(doc, { headers: NO_STORE });
+    // If a home already exists, just return it; seed is idempotent.
+    const existing = await getHome(id)
+    if (existing?.sections?.length) {
+      cookies().set('mxtk_home_id', id, { path: '/', sameSite: 'lax' })
+      return NextResponse.json(existing, { headers: { 'cache-control': 'no-store' } })
     }
 
-    const base: HomeDoc = { id, version: 2, sections: SECTIONS, widgets: [] };
-
-    const widgets: WidgetState[] = [
-      { id: wid(0), type: 'what-next',       title: "What’s Next",     sectionId: 'overview', pos: { x: 0, y: 0 }, size: { w: 4, h: 24 } },
-      { id: wid(1), type: 'recent-answers',  title: 'Recent Answers',  sectionId: 'overview', pos: { x: 4, y: 0 }, size: { w: 4, h: 24 } },
-      { id: wid(2), type: 'custom-note',     title: 'Note',            sectionId: 'overview', pos: { x: 8, y: 0 }, size: { w: 4, h: 24 }, data: { note: '' } },
-      {
-        id: wid(3),
-        type: 'mode-highlight',
-        title: mode === 'build' ? 'Developer Docs' : mode === 'operate' ? 'Institutional Flows' : 'Getting Started',
-        sectionId: mode,
-        pos: { x: 0, y: 0 },
-        size: { w: 6, h: 24 },
-      },
-    ];
-
-    const doc: HomeDoc = { ...base, widgets };
-    await putHome(doc);
-
-    cookies().set('mxtk_home_id', id, { path: '/', httpOnly: false, sameSite: 'lax' });
-    return NextResponse.json(doc, { headers: NO_STORE });
-  } catch (e: any) {
-    const detail = e?.stack || e?.message || String(e);
-    console.error('POST /api/ai/home/seed failed:', detail);
-    return NextResponse.json({ error: 'home-seed-failed', detail }, { status: 500, headers: NO_STORE });
+    const doc = seedFor(mode, id)
+    await putHome(doc)
+    cookies().set('mxtk_home_id', id, { path: '/', sameSite: 'lax' })
+    return NextResponse.json(doc, { headers: { 'cache-control': 'no-store' } })
+  } catch (err) {
+    console.error('home-seed-failed', err)
+    return NextResponse.json({ error: 'home-seed-failed' }, { status: 500, headers: { 'cache-control': 'no-store' } })
   }
 }

@@ -2078,3 +2078,15 @@ html[data-lift="H"] {
   transform: translateY(-2px);
   box-shadow: 0 6px 16px rgba(0, 0, 0, .18);
 }
+
+/* Buttons should never be underlined, even inside .glass */
+.btn, .btn:link, .btn:visited { text-decoration: none !important; }
+.btn a { text-decoration: none !important; }
+
+/* If you have a rule like `.glass a { text-decoration: underline; }`, narrow it: */
+.glass a:not(.btn,.button,.cta),
+.glass--panel a:not(.btn,.button,.cta) {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  font-weight: 500;
+}

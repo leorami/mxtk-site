@@ -10,8 +10,6 @@ import DashboardContent from '@/components/home/DashboardContent';
 type Props = { initialDocId?: string };
 
 export default function DashboardPageClient({ initialDocId = 'default' }: Props) {
-  // PageScaffold drives hero via copyKey="dashboard"
-  // Hero actions: anchor chips to jump to sections (no routing/basePath changes)
   const { mode } = useCopy('dashboard');
 
   return (
@@ -25,14 +23,14 @@ export default function DashboardPageClient({ initialDocId = 'default' }: Props)
       heroActions={
         <div className="flex flex-wrap gap-3 justify-center">
           {['Overview','Learn','Build','Operate','Library'].map((t) => (
-            <a key={t} href={`#${t.toLowerCase()}`} className="btn btn--chip">
+            <a key={t} href={`#${t.toLowerCase()}`} className="btn btn--chip no-underline">
               {t}
             </a>
           ))}
         </div>
       }
     >
-      {/* Small explainer block directly under the hero */}
+      {/* Explainer block directly under hero — same width as other sections */}
       <SectionWrapper index={1}>
         <div className="glass glass--panel p-4 md:p-6 rounded-2xl">
           <ModeTextSwap
@@ -50,10 +48,10 @@ export default function DashboardPageClient({ initialDocId = 'default' }: Props)
         </div>
       </SectionWrapper>
 
-      {/* All section rails + widgets */}
-      <div className="mt-6">
+      {/* Section rails + widgets — same width wrapper */}
+      <SectionWrapper index={2}>
         <DashboardContent initialDocId={initialDocId} />
-      </div>
+      </SectionWrapper>
     </PageScaffold>
   );
 }

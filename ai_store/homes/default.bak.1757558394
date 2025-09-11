@@ -25,9 +25,9 @@
   ],
   "widgets": [
     {
-      "id": "w-whatnext",
+      "id": "wmfeojy340",
       "type": "what-next",
-      "title": "What's Next",
+      "title": "What’s Next",
       "sectionId": "overview",
       "pos": {
         "x": 0,
@@ -39,13 +39,13 @@
       }
     },
     {
-      "id": "w-recent",
+      "id": "wmfeojy341",
       "type": "recent-answers",
       "title": "Recent Answers",
       "sectionId": "overview",
       "pos": {
-        "x": 4,
-        "y": 0
+        "x": 8,
+        "y": 8
       },
       "size": {
         "w": 4,
@@ -53,7 +53,7 @@
       }
     },
     {
-      "id": "w-note",
+      "id": "wmfeojy342",
       "type": "custom-note",
       "title": "Note",
       "sectionId": "overview",
@@ -70,7 +70,7 @@
       }
     },
     {
-      "id": "w-learn1",
+      "id": "wmfeojy343",
       "type": "mode-highlight",
       "title": "Getting Started",
       "sectionId": "learn",
@@ -79,8 +79,8 @@
         "y": 0
       },
       "size": {
-        "w": 6,
-        "h": 24
+        "w": 8,
+        "h": 16
       }
     }
   ]
