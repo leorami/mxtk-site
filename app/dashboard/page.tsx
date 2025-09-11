@@ -3,6 +3,7 @@ import ModeTextSwap from '@/components/experience/ModeTextSwap'
 import DashboardContent from '@/components/home/DashboardContent'
 import PageScaffold from '@/components/layout/PageScaffold'
 import SectionWrapper from '@/components/SectionWrapper'
+import Card from '@/components/ui/Card'
 
 export const dynamic = 'force-dynamic'
 
@@ -31,7 +32,7 @@ export default async function DashboardPage() {
     >
       {/* Intro card — width matches other sections */}
       <SectionWrapper index={1} className="section-spacing">
-        <div className="glass glass--panel p-6 md:p-8 rounded-[var(--radius-lg)] shadow-[var(--shadow-2)]">
+        <Card tint="amber">
           <ModeTextSwap
             as="h2"
             depKey="dashboard-adapt-title"
@@ -44,14 +45,14 @@ export default async function DashboardPage() {
             className="leading-relaxed text-muted copy-fade-in"
             content="Choose your experience in the header—Learn, Build, or Operate—and the dashboard updates copy and suggestions. Drag, resize, or remove widgets; ask Sherpa for more."
           />
-        </div>
+        </Card>
       </SectionWrapper>
 
       {/* The actual dashboard sections/grids */}
       <SectionWrapper index={2} className="section-spacing">
-        <div className="glass glass--panel p-6 md:p-8 rounded-[var(--radius-lg)] shadow-[var(--shadow-2)]">
+        <Card tint="teal">
           <DashboardContent initialDocId="default" />
-        </div>
+        </Card>
       </SectionWrapper>
     </PageScaffold>
   )
