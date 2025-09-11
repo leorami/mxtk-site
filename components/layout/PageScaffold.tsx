@@ -45,10 +45,10 @@ export default function PageScaffold({
   const TitleTag = heroTitleAs
 
   return (
-    <div className={['page-scaffold', className].filter(Boolean).join(' ')} data-testid="page-scaffold">
-      <PageTheme ink={ink} lift={lift} glass={glass}>
-        <PageBackground page={backgroundVariant ?? copyKey} />
-        
+    <PageTheme ink={ink} lift={lift} glass={glass}>
+      <PageBackground page={backgroundVariant ?? copyKey} />
+      
+      <div className={['page-scaffold', className].filter(Boolean).join(' ')} data-testid="page-scaffold">
         {/* Match the exact structure of the home page */}
         <div className="relative container mx-auto px-4 pt-8 pb-8">
           <div className="glass glass--panel p-6 md:p-8">
@@ -90,7 +90,7 @@ export default function PageScaffold({
             </div>
           </div>
         </div>
-      </PageTheme>
-    </div>
+      </div>
+    </PageTheme>
   )
 }
