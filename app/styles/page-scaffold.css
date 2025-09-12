@@ -9,7 +9,7 @@
 @media (max-width: 640px){
   [data-testid="xp-toggle-group"]{ padding:2px 6px; gap:4px; max-width: calc(100% - 16px); }
   [data-testid="xp-toggle-group"] .sherpa-theme-button,
-  [data-testid="xp-toggle-group"] button{ padding:4px 6px; }
+  [data-testid="xp-toggle-group"] button{ padding:4px 6px; min-inline-size: 36px; min-block-size: 36px; }
   /* if nested wrapper adds extra padding, neutralize it */
   [data-testid="xp-toggle-group"] .exp-wrap{ padding:0 !important; }
 }

@@ -1,25 +1,29 @@
 // Server component: data wired from APIs
 import PageHero from "@/components/PageHero";
 import SectionWrapper from "@/components/SectionWrapper";
-import { institutionsCopy } from "@/copy/institutions";
+import TimeSeries from "@/components/charts/TimeSeries";
 import ModeTextSwap from "@/components/experience/ModeTextSwap";
-import PoolTable from "@/components/live/PoolTable";
 import JsonLd from "@/components/seo/JsonLd";
 import { faqJsonLd } from "@/components/seo/faq";
 import PageTheme from "@/components/theme/PageTheme";
 import Card from "@/components/ui/Card";
-import { FeatureRow } from "@/components/ui/List";
-import TimeSeries from "@/components/charts/TimeSeries";
 import DataTableGlass from "@/components/ui/DataTableGlass";
-import { getBasePathUrl } from '@/lib/basepath'
+import { FeatureRow } from "@/components/ui/List";
 import PhotoBackdrop from "@/components/visuals/PhotoBackdrop";
+import { institutionsCopy } from "@/copy/institutions";
+import { getBasePathUrl } from '@/lib/basepath';
+import { headers } from 'next/headers';
+import { env } from '@/lib/env';
 
 export default async function InstitutionsPage() {
   const mode = 'build'
   const pageCopy = institutionsCopy as any
-  const poolsUrl = getBasePathUrl('/api/data/pools')
-  const res = await fetch(poolsUrl, { cache: 'no-store', headers: { 'ngrok-skip-browser-warning': 'true' } })
-  const data = await res.json().catch(() => ({ pools: [] }))
+  const token = (process.env.MXTK_TOKEN || env.MXTK_TOKEN_ADDRESS)
+  const poolsPath = getBasePathUrl(`/api/data/pools?token=${encodeURIComponent(token)}`)
+  const absUrl = await absoluteUrlFromHeaders(poolsPath)
+  const res = await fetch(absUrl, { cache: 'no-store', headers: { 'ngrok-skip-browser-warning': 'true' } })
+  const data = await res.json().catch(() => ({ updatedAt: Date.now(), ttl: 0, data: [] }))
+  const staleness = badge(data.updatedAt, data.ttl)
   const faq = faqJsonLd(
     '/institutions',
     [
@@ -58,8 +62,11 @@ export default async function InstitutionsPage() {
 
         <SectionWrapper index={2}>
           <Card tint="teal">
-            <h2 className="text-2xl font-semibold mb-6">Liquidity & On-chain Addresses</h2>
-            <DataTableGlass rows={data.pools || []} />
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-2xl font-semibold">Liquidity & On-chain Addresses</h2>
+              <span className={`inline-flex items-center rounded-full px-2 py-1 text-xs ${staleness.kind==='live'?'bg-emerald-500/20 text-emerald-600 dark:text-emerald-300':'bg-amber-500/20 text-amber-600 dark:text-amber-300'}`}>{staleness.label}</span>
+            </div>
+            <DataTableGlass rows={data.data || []} />
           </Card>
         </SectionWrapper>
 
@@ -172,4 +179,21 @@ export default async function InstitutionsPage() {
       </PageHero>
     </PageTheme>
   );
+}
+
+async function absoluteUrlFromHeaders(path: string): Promise<string> {
+  const h = await headers()
+  const host = h.get('x-forwarded-host') || h.get('host') || 'localhost:2000'
+  const proto = h.get('x-forwarded-proto') || 'http'
+  const origin = `${proto}://${host}`
+  return new URL(path, origin).toString()
+}
+
+function badge(updatedAt: number, ttl: number): { kind: 'live'|'stale'; label: string } {
+  const now = Date.now()
+  const ageMs = Math.max(0, now - (updatedAt || now))
+  if (ageMs < 60_000) return { kind: 'live', label: 'live' }
+  const mm = Math.floor(ageMs / 60000)
+  const ss = Math.floor((ageMs % 60000) / 1000)
+  return { kind: 'stale', label: `stale (${String(mm).padStart(2,'0')}:${String(ss).padStart(2,'0')})` }
 }

@@ -1,3 +1,4 @@
+import { getPools as getLivePools } from '@/lib/data/pools'
 import { readFile } from 'fs/promises'
 import path from 'path'
 import { PoolRow, Series } from './types'
@@ -10,8 +11,13 @@ async function readJson<T>(fileName: string): Promise<T> {
   return JSON.parse(buf) as T
 }
 
-export async function getPools(): Promise<PoolRow[]> {
-  // Shape: { pools: PoolRow[] } | PoolRow[]; support both
+export async function getPools(token?: string): Promise<PoolRow[]> {
+  // Try live pools if token provided; fall back to fixture
+  if (token) {
+    const live = await getLivePools(token).catch(() => [])
+    if (Array.isArray(live) && live.length) return live
+  }
+  // Fixture fallback
   const data = await readJson<any>('pools.json').catch(() => ({ pools: [] }))
   if (Array.isArray(data)) return data as PoolRow[]
   return (data?.pools as PoolRow[]) || []

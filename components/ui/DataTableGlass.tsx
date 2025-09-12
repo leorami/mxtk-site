@@ -1,24 +1,39 @@
-import React from 'react'
-import cn from 'classnames'
-import { PoolRow } from '@/lib/data/types'
+"use client"
+import { PoolRow } from '@/lib/data/types';
+import cn from 'classnames';
+import { useMemo, useState } from 'react';
+
+type SortKey = 'pool' | 'price' | 'vol24' | 'tvl' | 'fees24'
 
 export default function DataTableGlass({ rows, className }: { rows: PoolRow[]; className?: string }) {
+  const [sort, setSort] = useState<{ key: SortKey; dir: 'asc' | 'desc' }>({ key: 'tvl', dir: 'desc' })
+  const sorted = useMemo(() => sortRows(rows, sort.key, sort.dir), [rows, sort])
+
+  if (!rows || rows.length === 0) {
+    return (
+      <div className={cn('glass glass--panel rounded-[var(--radius-lg)] p-6 text-center text-ink-subtle', className)}>
+        <div className="text-sm">No pools available at the moment.</div>
+        <div className="text-xs opacity-80 mt-1">Data will appear once a supported source is live.</div>
+      </div>
+    )
+  }
+
   return (
     <div className={cn('glass glass--panel rounded-[var(--radius-lg)] overflow-hidden', className)}>
       <div className="overflow-x-auto">
         <table className="min-w-full text-sm">
           <thead className="sticky top-0 bg-white/70 dark:bg-black/40 backdrop-blur supports-[backdrop-filter]:bg-white/60">
-            <tr className="text-left text-ink-subtle">
-              <th className="px-4 py-3">Pool</th>
+            <tr className="text-left text-ink-subtle select-none">
+              <SortableTh label="Pool" active={sort.key==='pool'} dir={sort.dir} onClick={() => toggle(setSort, 'pool')} />
               <th className="px-4 py-3">Fee</th>
-              <th className="px-4 py-3">Price (MXTK/USD)</th>
-              <th className="px-4 py-3">24h Volume</th>
-              <th className="px-4 py-3">24h Fees</th>
-              <th className="px-4 py-3">TVL</th>
+              <SortableTh label="Price (MXTK/USD)" active={sort.key==='price'} dir={sort.dir} onClick={() => toggle(setSort, 'price')} />
+              <SortableTh label="24h Volume" active={sort.key==='vol24'} dir={sort.dir} onClick={() => toggle(setSort, 'vol24')} />
+              <SortableTh label="24h Fees" active={sort.key==='fees24'} dir={sort.dir} onClick={() => toggle(setSort, 'fees24')} />
+              <SortableTh label="TVL" active={sort.key==='tvl'} dir={sort.dir} onClick={() => toggle(setSort, 'tvl')} />
             </tr>
           </thead>
           <tbody>
-            {rows.map((r, i) => (
+            {sorted.map((r, i) => (
               <tr key={r.address} className={cn(i % 2 === 0 ? 'bg-white/20 dark:bg-white/5' : 'bg-transparent')}>
                 <td className="px-4 py-3 whitespace-nowrap">
                   <div className="font-medium">{symbolPair(r)}</div>
@@ -37,7 +52,7 @@ export default function DataTableGlass({ rows, className }: { rows: PoolRow[]; c
 
       {/* Mobile stacked view */}
       <div className="sm:hidden divide-y divide-white/10">
-        {rows.map((r) => (
+        {sorted.map((r) => (
           <dl key={r.address} className="p-4 grid grid-cols-3 gap-2">
             <div className="col-span-3">
               <div className="font-medium">{symbolPair(r)}</div>
@@ -53,6 +68,45 @@ export default function DataTableGlass({ rows, className }: { rows: PoolRow[]; c
       </div>
     </div>
   )
+}
+
+function SortableTh({ label, active, dir, onClick }: { label: string; active: boolean; dir: 'asc'|'desc'; onClick: () => void }) {
+  return (
+    <th className={cn('px-4 py-3 cursor-pointer', active && 'text-ink font-semibold')} onClick={onClick} aria-sort={active ? (dir === 'asc' ? 'ascending' : 'descending') : 'none'}>
+      <span className="inline-flex items-center gap-1">
+        {label}
+        <span aria-hidden className="opacity-60 text-xs">{active ? (dir === 'asc' ? '▲' : '▼') : ''}</span>
+      </span>
+    </th>
+  )
+}
+
+function toggle(set: (u: any) => void, key: SortKey) {
+  set((prev: { key: SortKey; dir: 'asc'|'desc' }) => prev.key === key ? { key, dir: prev.dir === 'asc' ? 'desc' : 'asc' } : { key, dir: key === 'tvl' ? 'desc' : 'asc' })
+}
+
+function sortRows(rows: PoolRow[], key: SortKey, dir: 'asc'|'desc'): PoolRow[] {
+  const copy = [...(rows || [])]
+  const val = (r: PoolRow): number | string => {
+    switch (key) {
+      case 'pool': return `${r.token0?.symbol || ''}/${r.token1?.symbol || ''}`.toUpperCase()
+      case 'price': return n(r.approxMxtkUSD)
+      case 'vol24': return n(r.volume24hUSD)
+      case 'fees24': return n(r.fees24hUSD)
+      case 'tvl': return n(r.tvlUSD)
+    }
+  }
+  copy.sort((a, b) => {
+    const av = val(a) as any
+    const bv = val(b) as any
+    if (typeof av === 'string' || typeof bv === 'string') {
+      const cmp = String(av).localeCompare(String(bv))
+      return dir === 'asc' ? cmp : -cmp
+    }
+    const cmp = (av - bv)
+    return dir === 'asc' ? cmp : -cmp
+  })
+  return copy
 }
 
 function fmtUSD(v?: number | null): string {

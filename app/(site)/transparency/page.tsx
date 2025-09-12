@@ -3,33 +3,36 @@
 import PageHero from '@/components/PageHero'
 import ProofTable from '@/components/ProofTable'
 import SectionWrapper from '@/components/SectionWrapper'
-import { transparencyCopy } from '@/copy/transparency'
+import TimeSeries from '@/components/charts/TimeSeries'
 import ModeTextSwap from '@/components/experience/ModeTextSwap'
 import OnchainSummary from '@/components/live/OnchainSummary'
-import DataTableGlass from '@/components/ui/DataTableGlass'
-import TimeSeries from '@/components/charts/TimeSeries'
-import { getBasePathUrl } from '@/lib/basepath'
 import PageTheme from '@/components/theme/PageTheme'
 import { BulletList } from '@/components/ui/BulletList'
 import Card from '@/components/ui/Card'
+import DataTableGlass from '@/components/ui/DataTableGlass'
 import PhotoBackdrop from '@/components/visuals/PhotoBackdrop'
+import { transparencyCopy } from '@/copy/transparency'
+import { env } from '@/lib/env'
+import { getBasePathUrl } from '@/lib/basepath'
 import { PLACEHOLDER_PROOFS } from '@/lib/placeholders'
 import { getRelativePath } from '@/lib/routing/basePath'
+import { headers } from 'next/headers'
 
 import AppImage from '@/components/ui/AppImage'
-import { getPublicPath } from '@/lib/routing/basePath'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
 
 export default async function TransparencyPage() {
   const pathname = ''
   const mode = 'build'
   const pageCopy = transparencyCopy
   // Server fetch for pools
-  const apiUrl = getBasePathUrl('/api/data/pools')
-  const res = await fetch(apiUrl, { cache: 'no-store', headers: { 'ngrok-skip-browser-warning': 'true' } })
-  const json = await res.json().catch(() => ({ pools: [] }))
-  const rows = json.pools || []
+  const token = (process.env.MXTK_TOKEN || env.MXTK_TOKEN_ADDRESS)
+  const apiPath = getBasePathUrl(`/api/data/pools?token=${encodeURIComponent(token)}`)
+  const absUrl = await absoluteUrlFromHeaders(apiPath)
+  const res = await fetch(absUrl, { cache: 'no-store', headers: { 'ngrok-skip-browser-warning': 'true' } })
+  const json = await res.json().catch(() => ({ updatedAt: Date.now(), ttl: 0, data: [] }))
+  const rows = json.data || []
+  const staleness = badge(json.updatedAt, json.ttl)
   return (
     <PageTheme ink="light" lift="H" glass="soft">
       <PhotoBackdrop src="art/photos/transparency_tigereye.jpg" />
@@ -59,7 +62,10 @@ export default async function TransparencyPage() {
 
             <SectionWrapper index={2}>
               <Card tint="teal">
-                <ModeTextSwap as="h2" depKey={`tp-p1-title-${mode}`} className="text-2xl font-semibold mb-6" content={pageCopy.pillars?.[1]?.title[mode] || 'Liquidity & On-chain Addresses'} />
+                <div className="flex items-center justify-between mb-6">
+                  <ModeTextSwap as="h2" depKey={`tp-p1-title-${mode}`} className="text-2xl font-semibold" content={pageCopy.pillars?.[1]?.title[mode] || 'Liquidity & On-chain Addresses'} />
+                  <span className={`inline-flex items-center rounded-full px-2 py-1 text-xs ${staleness.kind==='live'?'bg-emerald-500/20 text-emerald-600 dark:text-emerald-300':'bg-amber-500/20 text-amber-600 dark:text-amber-300'}`}>{staleness.label}</span>
+                </div>
                 <DataTableGlass rows={rows} />
               </Card>
             </SectionWrapper>
@@ -201,4 +207,21 @@ export default async function TransparencyPage() {
       </PageHero>
     </PageTheme>
   )
+}
+
+async function absoluteUrlFromHeaders(path: string): Promise<string> {
+  const h = await headers()
+  const host = h.get('x-forwarded-host') || h.get('host') || 'localhost:2000'
+  const proto = h.get('x-forwarded-proto') || 'http'
+  const origin = `${proto}://${host}`
+  return new URL(path, origin).toString()
+}
+
+function badge(updatedAt: number, ttl: number): { kind: 'live'|'stale'; label: string } {
+  const now = Date.now()
+  const ageMs = Math.max(0, now - (updatedAt || now))
+  if (ageMs < 60_000) return { kind: 'live', label: 'live' }
+  const mm = Math.floor(ageMs / 60000)
+  const ss = Math.floor((ageMs % 60000) / 1000)
+  return { kind: 'stale', label: `stale (${String(mm).padStart(2,'0')}:${String(ss).padStart(2,'0')})` }
 }

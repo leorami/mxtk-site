@@ -13,6 +13,18 @@ export default function DashboardContent({ initialDocId = 'default', initialDoc 
   const [error, setError] = React.useState<string | null>(null)
   const [loading, setLoading] = React.useState(true)
   const [retryCount, setRetryCount] = React.useState(0)
+  // Mirror widget controls behavior: only show move controls when Guide (Sherpa) is open
+  const guideOpen = React.useSyncExternalStore(
+    (onStoreChange) => {
+      if (typeof document === 'undefined') return () => {}
+      const root = document.documentElement
+      const obs = new MutationObserver(() => onStoreChange())
+      obs.observe(root, { attributes: true, attributeFilter: ['class'] })
+      return () => obs.disconnect()
+    },
+    () => (typeof document !== 'undefined') ? document.documentElement.classList.contains('guide-open') : false,
+    () => false
+  )
 
   const sections: SectionState[] = React.useMemo(() => {
     if (!Array.isArray(doc?.sections)) return []
@@ -25,17 +37,18 @@ export default function DashboardContent({ initialDocId = 'default', initialDoc 
   const [dragSec, setDragSec] = React.useState<string | null>(null)
   const dragStartOrder = React.useRef<number | null>(null)
   const onSectionDragStart = React.useCallback((e: React.DragEvent, secId: string) => {
+    if (!guideOpen) return
     setDragSec(secId)
     const o = sections.find(s => s.id === secId)?.order ?? null
     dragStartOrder.current = o
     e.dataTransfer.effectAllowed = 'move'
     try { e.dataTransfer.setData('text/plain', secId) } catch {}
-  }, [sections])
+  }, [sections, guideOpen])
 
   const onSectionDragOver = React.useCallback((e: React.DragEvent, overId: string) => {
-    if (!dragSec || dragSec === overId) return
+    if (!guideOpen || !dragSec || dragSec === overId) return
     e.preventDefault()
-  }, [dragSec])
+  }, [dragSec, guideOpen])
 
   const persistSectionOrders = React.useCallback(async (ordered: SectionState[]) => {
     const payload = ordered.map(s => ({ id: s.id, order: s.order }))
@@ -47,6 +60,7 @@ export default function DashboardContent({ initialDocId = 'default', initialDoc 
   }, [initialDocId])
 
   const onSectionDrop = React.useCallback(async (e: React.DragEvent, targetId: string) => {
+    if (!guideOpen) return
     e.preventDefault()
     if (!dragSec || dragSec === targetId) { setDragSec(null); return }
     // compute new order indices
@@ -65,7 +79,7 @@ export default function DashboardContent({ initialDocId = 'default', initialDoc 
       return { ...d, sections: reindexed } as HomeDoc
     })
     setDragSec(null)
-  }, [dragSec, persistSectionOrders])
+  }, [dragSec, persistSectionOrders, guideOpen])
 
   const toggleCollapse = React.useCallback(async (secId: string) => {
     let nextCollapsed = false;
@@ -315,7 +329,8 @@ export default function DashboardContent({ initialDocId = 'default', initialDoc 
               onDrop={(e) => onSectionDrop(e, sec.id)}
             >
               <h2 className="wf-title text-lg font-semibold">
-                {/* drag handle */}
+                {/* drag handle: only visible when Guide (Sherpa) is open */}
+                {guideOpen && (
                 <button
                   className="iconbtn mr-2"
                   title="Reorder section"
@@ -324,6 +339,7 @@ export default function DashboardContent({ initialDocId = 'default', initialDoc 
                   onDragStart={(e) => onSectionDragStart(e, sec.id)}
                   onClick={(e) => {
                     // Click = move down; Shift+Click = move up (accessible fallback)
+                    if (!guideOpen) return
                     const dir = e.shiftKey ? -1 : 1
                     setDoc(d => {
                       if (!d) return d
@@ -342,6 +358,7 @@ export default function DashboardContent({ initialDocId = 'default', initialDoc 
                     })
                   }}
                   onKeyDown={(e) => {
+                    if (!guideOpen) return
                     if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
                       e.preventDefault()
                       setDoc(d => {
@@ -361,6 +378,7 @@ export default function DashboardContent({ initialDocId = 'default', initialDoc 
                   }}
                   data-nodrag
                 >≡</button>
+                )}
                 {sec.title}
               </h2>
               <div className="wf-actions flex items-center gap-2" data-nodrag>

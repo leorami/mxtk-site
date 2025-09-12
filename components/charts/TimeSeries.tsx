@@ -1,6 +1,8 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react'
-import { Series } from '@/lib/data/types'
-import { apiGet } from '@/lib/api'
+"use client"
+
+import { apiGet } from '@/lib/api';
+import { Series } from '@/lib/data/types';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 
 type Props = { symbol: string; days?: number; className?: string }
 
@@ -14,8 +16,8 @@ export default function TimeSeries({ symbol, days = 30, className }: Props) {
 
   useEffect(() => {
     let mounted = true
-    apiGet<{ series: Series }>(`/data/prices/${encodeURIComponent(symbol)}?days=${days}`)
-      .then((res) => { if (mounted) setSeries(res.series) })
+    apiGet<{ updatedAt: number; ttl: number; data: { symbol: string; days: number; series: Series } }>(`/data/prices/${encodeURIComponent(symbol)}?days=${days}`)
+      .then((res) => { if (mounted) setSeries(res.data?.series || { points: [] }) })
       .catch(() => { if (mounted) setSeries({ points: [] }) })
     return () => { mounted = false }
   }, [symbol, days])

@@ -1,5 +1,6 @@
-import { describe, expect, it } from 'vitest'
 import { getOrSet } from '@/lib/server/cache'
+import { describe, expect, it } from 'vitest'
+import { describe, expect, it } from 'vitest'
 
 describe('getOrSet cache TTL', () => {
   it('returns same value within TTL and reloads after TTL', async () => {
@@ -18,6 +19,17 @@ describe('getOrSet cache TTL', () => {
     expect(calls).toBe(2)
     // Values likely differ but we only assert calls
     expect(c).toBeTruthy()
+  })
+})
+
+describe('graceful fallback behaviors', () => {
+  it('loader failure returns empty array for pools consumer', async () => {
+    const loader = async () => { throw new Error('network fail') }
+    const data = await getOrSet('fail', 10, async () => {
+      try { return await loader() } catch { return [] as any[] }
+    })
+    expect(Array.isArray(data)).toBe(true)
+    expect(data.length).toBe(0)
   })
 })
 

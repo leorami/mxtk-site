@@ -1,9 +1,8 @@
 'use client'
 
-import React from 'react'
-import { useApi } from './useApi'
 import DataTableGlass from '@/components/ui/DataTableGlass'
 import { PoolRow } from '@/lib/data/types'
+import { useApi } from './useApi'
 
 type PoolsResp = { pools: PoolRow[] }
 

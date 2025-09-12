@@ -1,5 +1,4 @@
-import React from 'react'
-import { Series } from '@/lib/data/types'
+import { Series } from '@/lib/data/types';
 
 export default function Sparkline({ series, className }: { series: Series; className?: string }) {
   const points = series.points || []
