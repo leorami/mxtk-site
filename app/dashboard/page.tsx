@@ -4,6 +4,7 @@ import DashboardContent from '@/components/home/DashboardContent'
 import PageScaffold from '@/components/layout/PageScaffold'
 import SectionWrapper from '@/components/SectionWrapper'
 import Card from '@/components/ui/Card'
+import AdaptButton from '@/components/dashboard/AdaptButton'
 
 export const dynamic = 'force-dynamic'
 
@@ -18,6 +19,7 @@ export default async function DashboardPage() {
       glass="soft"
       heroActions={
         <>
+          <AdaptButton docId="default" />
           {['Overview','Learn','Build','Operate','Library'].map(k => (
             <a key={k} href={`#${k.toLowerCase()}`}
               className="btn-primary" 

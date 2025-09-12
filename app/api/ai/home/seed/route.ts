@@ -3,6 +3,8 @@ import { promises as fs } from 'fs';
 import path from 'path';
 import { getHome, putHome } from '@/lib/home/store/fileStore'
 import type { HomeDoc, SectionState, WidgetState } from '@/lib/home/types'
+import { migrateToV2 } from '@/lib/home/migrate'
+import { PRESETS_V2 } from '@/lib/home/seedPresetsV2'
 import { cookies } from 'next/headers'
 import { NextRequest, NextResponse } from 'next/server'
 
@@ -52,16 +54,72 @@ export async function POST(req: NextRequest) {
     const body = await req.json().catch(() => ({} as any))
     const id = (body.id as string) || 'default'
     const mode = ((body.mode as Mode) || 'learn')
+    const adapt = Boolean(body?.adapt)
 
-    // If a home already exists, just return it; seed is idempotent.
+    // If a home already exists
     const existing = await getHome(id)
-    if (existing?.sections?.length) {
+    if (existing) {
+      // Always migrate to V2 shape
+      const { doc: v2Doc, migrated } = migrateToV2(existing)
+
+      if (!adapt) {
+        if (migrated) await putHome(v2Doc)
+        cookies().set('mxtk_home_id', id, { path: '/', sameSite: 'lax' })
+        return NextResponse.json(v2Doc, { headers: { 'cache-control': 'no-store' } })
+      }
+
+      // Adapt merge: append missing widgets from presets for the mode
+      const presets = PRESETS_V2[mode] || []
+      const existingPairs = new Set(
+        (v2Doc.widgets || []).map(w => `${w.sectionId}::${w.type}`)
+      )
+      const existingIds = new Set((v2Doc.widgets || []).map(w => w.id))
+
+      function makeId(base: string): string {
+        let n = 1
+        let next = base
+        while (existingIds.has(next)) { n += 1; next = `${base}-${n}` }
+        existingIds.add(next)
+        return next
+      }
+
+      const adds: WidgetState[] = []
+      for (const p of presets) {
+        const key = `${p.section}::${p.type}`
+        if (existingPairs.has(key)) continue
+        // create widget from preset
+        const wid = makeId(`w-${p.type}-${p.section}`)
+        adds.push({
+          id: wid,
+          type: p.type as any,
+          title: p.title,
+          sectionId: p.section,
+          pos: { ...p.pos },
+          size: { ...p.size },
+          data: p.data ? { ...p.data } : undefined,
+        } as WidgetState)
+        existingPairs.add(key)
+      }
+
+      let out: HomeDoc = v2Doc
+      if (adds.length || migrated) {
+        out = { ...v2Doc, widgets: [...(v2Doc.widgets || []), ...adds] } as HomeDoc
+        ;(out as any).meta = { ...(v2Doc as any).meta, lastAdaptMode: mode }
+        await putHome(out)
+      } else {
+        // still update lastAdaptMode to reflect action
+        const metaUpdated = { ...(v2Doc as any), meta: { ...(v2Doc as any).meta, lastAdaptMode: mode } }
+        out = metaUpdated as HomeDoc
+        await putHome(out)
+      }
+
       cookies().set('mxtk_home_id', id, { path: '/', sameSite: 'lax' })
-      return NextResponse.json(existing, { headers: { 'cache-control': 'no-store' } })
+      return NextResponse.json(out, { headers: { 'cache-control': 'no-store' } })
     }
 
     // Create and save a new home document
     const doc = seedFor(mode, id)
+    ;(doc as any).meta = { lastAdaptMode: mode }
     await putHome(doc)
     cookies().set('mxtk_home_id', id, { path: '/', sameSite: 'lax' })
     return NextResponse.json(doc, { headers: { 'cache-control': 'no-store' } })

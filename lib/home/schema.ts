@@ -55,7 +55,9 @@ export const zWidgetPatch = z.object({
   pos: z.object({ x: z.number().int().min(0).max(11), y: z.number().int().min(0).max(2000) }).optional(),
   pinned: z.boolean().optional(),
   data: z.record(z.unknown()).optional(),
-}).refine(v => v.size || v.pos || typeof v.pinned === 'boolean' || v.data, { message: 'No changes provided' });
+  // allow removal for undo of adapt-added widgets
+  remove: z.boolean().optional(),
+}).refine(v => v.size || v.pos || typeof v.pinned === 'boolean' || v.data || v.remove === true, { message: 'No changes provided' });
 
 // W12.5b: section patch (collapsed/order)
 export const zSectionPatch = z.object({

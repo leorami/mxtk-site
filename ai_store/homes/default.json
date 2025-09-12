@@ -6,13 +6,14 @@
       "id": "overview",
       "key": "overview",
       "title": "Overview",
-      "order": 0
+      "order": 1,
+      "collapsed": false
     },
     {
       "id": "learn",
       "key": "learn",
       "title": "Learn",
-      "order": 1
+      "order": 0
     },
     {
       "id": "build",
@@ -92,6 +93,41 @@
         "w": 5,
         "h": 14
       }
+    },
+    {
+      "id": "w-resources-build",
+      "type": "resources",
+      "title": "Build Tasks",
+      "sectionId": "build",
+      "pos": {
+        "x": 0,
+        "y": 0
+      },
+      "size": {
+        "w": 6,
+        "h": 24
+      }
+    },
+    {
+      "id": "w-glossary-spotlight-build",
+      "type": "glossary-spotlight",
+      "title": "Key Concepts",
+      "sectionId": "build",
+      "pos": {
+        "x": 6,
+        "y": 0
+      },
+      "size": {
+        "w": 6,
+        "h": 24
+      },
+      "data": {
+        "day": "20250912",
+        "index": 1
+      }
     }
-  ]
+  ],
+  "meta": {
+    "lastAdaptMode": "build"
+  }
 }

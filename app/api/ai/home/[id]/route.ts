@@ -2,12 +2,12 @@
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
-import { NextResponse } from 'next/server';
-import { cookies } from 'next/headers';
-import { getHome, putHome } from '@/lib/home/store/fileStore';
 import { migrateToV2 } from '@/lib/home/migrate';
-import type { HomeDoc, WidgetState } from '@/lib/home/types';
 import { zHomePatch } from '@/lib/home/schema';
+import { getHome, putHome } from '@/lib/home/store/fileStore';
+import type { HomeDoc, WidgetState } from '@/lib/home/types';
+import { cookies } from 'next/headers';
+import { NextResponse } from 'next/server';
 
 const NO_STORE = { 'Cache-Control': 'no-store' };
 

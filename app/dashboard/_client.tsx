@@ -6,12 +6,14 @@ import ModeTextSwap from '@/components/experience/ModeTextSwap';
 import DashboardContent from '@/components/home/DashboardContent';
 import PageScaffold from '@/components/layout/PageScaffold';
 import Card from '@/components/ui/Card';
+import AdaptButton from '@/components/dashboard/AdaptButton';
 import * as React from 'react';
 
 type Props = { initialDocId?: string };
 
 export default function DashboardPageClient({ initialDocId = 'default' }: Props) {
   const { mode } = useCopy('dashboard');
+  const modeLabel = mode === 'learn' ? 'Learn' : mode === 'build' ? 'Build' : 'Operate';
 
   return (
     <PageScaffold
@@ -23,6 +25,7 @@ export default function DashboardPageClient({ initialDocId = 'default' }: Props)
       heroAlign="center"
       heroActions={
         <>
+          <AdaptButton docId={initialDocId} />
           {['Overview','Learn','Build','Operate','Library'].map((t) => (
             <a key={t} href={`#${t.toLowerCase()}`}
               className="btn-primary" 
