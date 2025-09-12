@@ -1,6 +1,5 @@
 import { getOrSet } from '@/lib/server/cache'
 import { describe, expect, it } from 'vitest'
-import { describe, expect, it } from 'vitest'
 
 describe('getOrSet cache TTL', () => {
   it('returns same value within TTL and reloads after TTL', async () => {

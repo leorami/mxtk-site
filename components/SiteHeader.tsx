@@ -181,7 +181,7 @@ export default function SiteHeader({ hasHome }: { hasHome?: boolean }) {
             {/* ThemeSwitch moved to footer */}
           </div>
 
-          <div className="nav:hidden flex items-center gap-2">
+          <div data-testid="experience-controls-mobile" className="nav:hidden flex items-center gap-2">
             {/* Mobile order: Sherpa → Hamburger (far right) */}
             <HeaderSherpa />
             <button

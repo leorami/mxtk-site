@@ -2,6 +2,8 @@
 
 import WidgetFrame from '@/components/home/WidgetFrame';
 import GlossarySpotlight from '@/components/home/widgets/GlossarySpotlight';
+import PoolsMini from '@/components/home/widgets/PoolsMini';
+import PriceMini from '@/components/home/widgets/PriceMini';
 import RecentAnswers from '@/components/home/widgets/RecentAnswers';
 import Resources from '@/components/home/widgets/Resources';
 import type { HomeDoc, WidgetState } from '@/lib/home/types';
@@ -259,6 +261,10 @@ export default function Grid({ doc, render, onPatch }: GridProps) {
                       <Resources id={w.id} data={w.data as any} />
                     ) : w.type === 'glossary-spotlight' ? (
                       <GlossarySpotlight id={w.id} data={w.data as any} />
+                    ) : w.type === 'pools-mini' ? (
+                      <PoolsMini id={w.id} />
+                    ) : w.type === 'price-mini' ? (
+                      <PriceMini />
                     ) : (
                       <div className="p-3 text-sm opacity-70">Widget <code>{w.type}</code></div>
                     )

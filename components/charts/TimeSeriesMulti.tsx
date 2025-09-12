@@ -1,5 +1,5 @@
 "use client"
-import React, { useMemo, useRef } from 'react'
+import { useMemo, useRef } from 'react';
 
 export type MultiPoint = { t: number; v: number }
 

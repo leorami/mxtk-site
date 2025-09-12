@@ -1,4 +1,5 @@
 // lib/home/pureStore.ts
+import { GRID_COLS, type HomeDoc, type Pos as WidgetPos, type Size as WidgetSize, type WidgetState } from '@/lib/home/gridTypes';
 export type Id = string;
 
 export interface GridPos { x: number; y: number }
@@ -21,12 +22,18 @@ export function rectsOverlap(a: GridRect, b: GridRect) {
 /**
  * Keep within grid bounds.
  */
-export function clampToGrid(pos: GridPos, size: GridSize, cols: number, maxRows = 10_000): { pos: GridPos; size: GridSize } {
+function clampToGridParts(pos: GridPos, size: GridSize, cols: number, maxRows = 10_000): { pos: GridPos; size: GridSize } {
   const w = clamp(size.w, 1, cols);
   const h = clamp(size.h, 1, maxRows);
   const x = clamp(pos.x, 0, cols - w);
   const y = clamp(pos.y, 0, maxRows - h);
   return { pos: { x, y }, size: { w, h } };
+}
+
+// Test-facing helper: clamps rect and returns flattened object
+export function clampToGrid(rect: { x: number; y: number; w: number; h: number }, cols: number, maxRows = 10_000): { x: number; y: number; w: number; h: number } {
+  const clamped = clampToGridParts({ x: rect.x, y: rect.y }, { w: rect.w, h: rect.h }, cols, maxRows)
+  return { x: clamped.pos.x, y: clamped.pos.y, w: clamped.size.w, h: clamped.size.h }
 }
 
 /**
@@ -49,13 +56,13 @@ export function resolveCollisions(items: Item[], cols: number): Item[] {
         if (rectsOverlap({ ...a.pos, ...a.size }, { ...b.pos, ...b.size })) {
           // push B down one row
           b.pos.y = a.pos.y + a.size.h;
-          const clamped = clampToGrid(b.pos, b.size, cols);
+          const clamped = clampToGridParts(b.pos, b.size, cols);
           b.pos = clamped.pos;
           moved = true;
         }
       }
     }
-    const clamped = clampToGrid(a.pos, a.size, cols);
+    const clamped = clampToGridParts(a.pos, a.size, cols);
     a.pos = clamped.pos;
   }
   // restore original order
@@ -78,3 +85,109 @@ export function nextNonOverlappingPos(target: GridRect, items: Item[]): GridPos 
   }
   return { x: target.x, y }; // fallback
 }
+
+// -------- High-level HomeDoc reducers expected by tests --------
+
+let __idCounter = 0
+function genId(): string { __idCounter = (__idCounter + 1) % 1_000_000; return `${Date.now().toString(36)}_${__idCounter.toString(36)}` }
+
+function placeNewWidget(existing: WidgetState[], desired: { w: number; h: number }): WidgetPos {
+  // Try positions scanning rows left-to-right, top-to-bottom
+  for (let y = 0; y < 10_000; y++) {
+    for (let x = 0; x < GRID_COLS; x++) {
+      const pos: WidgetPos = { x, y }
+      const overlap = existing.some(w => rectsOverlap({ ...w.pos, ...w.size }, { ...pos, ...desired }))
+      if (!overlap) {
+        const clamped = clampToGridParts(pos, desired, GRID_COLS)
+        return clamped.pos
+      }
+    }
+  }
+  return { x: 0, y: 0 }
+}
+
+export function addWidget(doc: HomeDoc, payload: { type: WidgetState['type']; title?: string; size: WidgetSize }): HomeDoc {
+  const base = { ...doc, widgets: [...doc.widgets] }
+  const size: WidgetSize = { w: Math.max(1, payload.size.w), h: Math.max(1, payload.size.h) }
+  const pos = placeNewWidget(base.widgets as any, size)
+  const w: WidgetState = { id: genId(), type: payload.type as any, title: payload.title, size, pos }
+  base.widgets.push(w)
+  return base
+}
+
+export function moveWidget(doc: HomeDoc, id: string, to: WidgetPos): HomeDoc {
+  const widgets = doc.widgets.map(w => ({ ...w }))
+  const idx = widgets.findIndex(w => w.id === id)
+  if (idx === -1) return doc
+  const cur = widgets[idx]
+  // clamp position against current size, do not change size
+  const clamped = clampToGridParts(to as any, cur.size as any, GRID_COLS)
+  widgets[idx] = { ...cur, pos: clamped.pos }
+  // push others down to avoid overlap
+  const items: Item[] = widgets.map(w => ({ id: w.id, pos: w.pos as any, size: w.size as any }))
+  const resolved = resolveCollisions(items, GRID_COLS)
+  for (const r of resolved) {
+    const j = widgets.findIndex(w => w.id === r.id)
+    if (j >= 0) widgets[j] = { ...widgets[j], pos: r.pos as any, size: r.size as any }
+  }
+  return { ...doc, widgets }
+}
+
+export function resizeWidget(doc: HomeDoc, id: string, next: WidgetSize): HomeDoc {
+  const widgets = doc.widgets.map(w => ({ ...w }))
+  const idx = widgets.findIndex(w => w.id === id)
+  if (idx === -1) return doc
+  const cur = widgets[idx]
+  // Allow width beyond GRID_COLS; only clamp position
+  const size: WidgetSize = { w: Math.max(1, next.w), h: Math.max(1, next.h) }
+  const pos = clampToGridParts(cur.pos as any, size as any, GRID_COLS).pos
+  widgets[idx] = { ...cur, size, pos }
+  // Resolve overlaps
+  const items: Item[] = widgets.map(w => ({ id: w.id, pos: w.pos as any, size: w.size as any }))
+  const resolved = resolveCollisions(items, GRID_COLS)
+  for (const r of resolved) {
+    const j = widgets.findIndex(w => w.id === r.id)
+    if (j >= 0) widgets[j] = { ...widgets[j], pos: r.pos as any, size: r.size as any }
+  }
+  return { ...doc, widgets }
+}
+
+export function removeWidget(doc: HomeDoc, id: string): HomeDoc {
+  return { ...doc, widgets: doc.widgets.filter(w => w.id !== id) }
+}
+
+export function pinWidget(doc: HomeDoc, id: string): HomeDoc {
+  const widgets = doc.widgets.map(w => w.id === id ? { ...w, pinned: !w.pinned } : w)
+  return { ...doc, widgets }
+}
+
+export function togglePinWidget(doc: HomeDoc, id: string): HomeDoc {
+  const widgets = doc.widgets.map(w => w.id === id ? { ...w, pinned: !w.pinned } : w)
+  return { ...doc, widgets }
+}
+
+export function ensureWidget(doc: HomeDoc, type: WidgetState['type'], defaults?: Partial<WidgetState>): HomeDoc {
+  const exists = (doc.widgets || []).some(w => w.type === type)
+  if (exists) return doc
+  const size = (defaults?.size as any) || { w: 4, h: 12 }
+  const pos = placeNewWidget(doc.widgets as any, size)
+  const next: WidgetState = {
+    id: genId(),
+    type,
+    title: defaults?.title,
+    sectionId: (defaults?.sectionId as any) || (doc.sections?.[0]?.id || 'overview'),
+    size,
+    pos,
+    data: defaults?.data as any,
+  }
+  return { ...doc, widgets: [...doc.widgets, next] }
+}
+
+export function upsertWidgetData(doc: HomeDoc, id: string, data: Record<string, unknown>): HomeDoc {
+  const widgets = doc.widgets.map(w => w.id === id ? { ...w, data: { ...(w.data || {}), ...data } } : w)
+  return { ...doc, widgets }
+}
+
+// Simple JSON serialize/deserialize for fileStore tests
+export function serialize(doc: HomeDoc): string { return JSON.stringify(doc, null, 2) }
+export function deserialize(txt: string): HomeDoc { return JSON.parse(txt) as HomeDoc }

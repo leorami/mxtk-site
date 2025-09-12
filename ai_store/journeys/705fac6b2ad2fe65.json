@@ -1,7 +1,7 @@
 {
   "id": "705fac6b2ad2fe65",
   "createdAt": "2025-09-08T06:54:43.337Z",
-  "updatedAt": "2025-09-08T06:54:43.337Z",
+  "updatedAt": "2025-09-12T05:41:03.667Z",
   "blocks": [
     {
       "id": "cedaf597-10f9-4066-8faa-69166526fc92",
@@ -9,6 +9,17 @@
       "section": "tokenomics",
       "title": "In plain words: Explain MXTK tokenomics simply",
       "body": "In plain words: Explain MXTK tokenomics simply\n\nSure! Let's break down MXTK tokenomics in simple terms: - **Tokenization**: MXTK is a token that represents real-world assets (RWAs), like minerals. This means each token is backed by a tangible asset, providing stability and value. - **Smart Contracts**: These are self-executing contracts with the terms directly written into code. They help automate processes like transactions and agreements, reducing the need for intermediaries. - **Security**: MXTK uses cryptographic security, which means it employs advanced encryption techniques to protect transactions and data. - **Efficiency**: The technology behind MXTK makes financial processes faster and more efficient by eliminating unnecessary steps and reducing fraud. - **Market Reach**: MXTK allows for global participation, meaning people from all over the world can invest and trade using this token. In plain words, MXTK is a digital token that represents real assets, uses smart technology to make finance more efficient and secure, and is accessible to a global audience.",
+      "citations": [
+        "admin"
+      ],
+      "confidence": 0.8
+    },
+    {
+      "id": "130c074e-f420-4f5f-a612-e9497f7435b9",
+      "topicKey": "certainly-here-s-a-simple-overview-of-mxtk-tokenomics-tokenization-mxtk",
+      "section": "tokenomics",
+      "title": "Certainly! Here's a simple overview of MXTK tokenomics: - **Tokenization**: MXTK",
+      "body": "Certainly! Here's a simple overview of MXTK tokenomics: - **Tokenization**: MXTK is a token that represents real-world assets (RWAs), like minerals or commodities. This means each token is backed by tangible assets. - **Value Stability**: The value of MXTK is supported by the underlying assets, making it more stable compared to traditional cryptocurrencies that aren't asset-backed. - **Efficiency**: MXTK uses technology like distributed ledgers and smart contracts to make transactions faster and more secure. - **Fraud Prevention**: Anti-fraud measures are built into the system to ensure the authenticity of transactions and asset backing. - **Market Reach**: MXTK allows for global trading and access to markets that might otherwise be difficult to enter. In plain words, MXTK is a digital token that represents real assets, making it stable and secure for trading and investment.",
       "citations": [
         "admin"
       ],

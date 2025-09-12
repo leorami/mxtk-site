@@ -22,9 +22,7 @@ export async function getPoolsByToken(tokenAddress: string): Promise<PoolSnapsho
   try {
     const base = env.DEXSCREENER_BASE || process.env.DEXSCREENER_BASE || 'https://api.dexscreener.com/latest/dex'
     const url = `${base}/tokens/${encodeURIComponent(tokenAddress)}`
-    const res = await fetch(url, { headers: { 'accept': 'application/json' } })
-    if (!res.ok) throw new Error(`dexscreener http ${res.status}`)
-    const json = (await res.json()) as DexRes
+    const json = await fetchJsonWithGuards<DexRes>(url, { headers: { 'accept': 'application/json' } })
     const pairs = json?.pairs || []
     const out: PoolSnapshot[] = pairs.map((p) => {
       const t0: TokenRef = {
@@ -61,6 +59,28 @@ export async function getPoolsByToken(tokenAddress: string): Promise<PoolSnapsho
 function toNumber(v: any): number | null {
   const n = typeof v === 'string' ? Number(v) : (typeof v === 'number' ? v : NaN)
   return Number.isFinite(n) ? n : null
+}
+
+async function fetchJsonWithGuards<T>(url: string, init?: RequestInit, tries = 2): Promise<T> {
+  const ctl = new AbortController()
+  const timeout = setTimeout(() => ctl.abort(), 5000)
+  try {
+    const res = await fetch(url, { ...init, signal: ctl.signal })
+    if (res.status === 429 || res.status === 503) {
+      if (tries > 0) {
+        const delay = 400 * Math.pow(2, 2 - tries)
+        await new Promise(r => setTimeout(r, delay))
+        return fetchJsonWithGuards<T>(url, init, tries - 1)
+      }
+      throw new Error(`backoff exhausted ${res.status}`)
+    }
+    if (!res.ok) throw new Error(`http ${res.status}`)
+    const json = (await res.json().catch(() => null)) as T | null
+    if (!json) throw new Error('invalid json')
+    return json
+  } finally {
+    clearTimeout(timeout)
+  }
 }
 
 

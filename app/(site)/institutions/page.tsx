@@ -12,8 +12,8 @@ import { FeatureRow } from "@/components/ui/List";
 import PhotoBackdrop from "@/components/visuals/PhotoBackdrop";
 import { institutionsCopy } from "@/copy/institutions";
 import { getBasePathUrl } from '@/lib/basepath';
-import { headers } from 'next/headers';
 import { env } from '@/lib/env';
+import { headers } from 'next/headers';
 
 export default async function InstitutionsPage() {
   const mode = 'build'
@@ -23,7 +23,8 @@ export default async function InstitutionsPage() {
   const absUrl = await absoluteUrlFromHeaders(poolsPath)
   const res = await fetch(absUrl, { cache: 'no-store', headers: { 'ngrok-skip-browser-warning': 'true' } })
   const data = await res.json().catch(() => ({ updatedAt: Date.now(), ttl: 0, data: [] }))
-  const staleness = badge(data.updatedAt, data.ttl)
+  const updatedAt = Number(data.updatedAt) || Date.now()
+  const ttl = Number(data.ttl) || 0
   const faq = faqJsonLd(
     '/institutions',
     [
@@ -64,9 +65,16 @@ export default async function InstitutionsPage() {
           <Card tint="teal">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-2xl font-semibold">Liquidity & On-chain Addresses</h2>
-              <span className={`inline-flex items-center rounded-full px-2 py-1 text-xs ${staleness.kind==='live'?'bg-emerald-500/20 text-emerald-600 dark:text-emerald-300':'bg-amber-500/20 text-amber-600 dark:text-amber-300'}`}>{staleness.label}</span>
             </div>
-            <DataTableGlass rows={data.data || []} />
+            <div className="relative">
+              <DataTableGlass rows={data.data || []} updatedAt={updatedAt} ttl={ttl} />
+              <div className="absolute right-2 top-2 opacity-0 pointer-events-none [html.guide-open_&]:opacity-100 transition-opacity">
+                <form action={getBasePathUrl('/api/ai/home/add')} method="post">
+                  <input type="hidden" name="widget[type]" value="pools-mini" />
+                  <button type="submit" className="btn-ghost text-xs">Pin to Home</button>
+                </form>
+              </div>
+            </div>
           </Card>
         </SectionWrapper>
 

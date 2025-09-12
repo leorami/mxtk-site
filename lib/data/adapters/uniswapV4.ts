@@ -6,13 +6,11 @@ type GraphQlResponse<T> = { data?: T }
 async function gql<T>(query: string, variables?: Record<string, any>): Promise<T> {
   const url = env.UNISWAP_V4_SUBGRAPH_URL_ARBITRUM || process.env.UNISWAP_V4_SUBGRAPH_URL || ''
   if (!url) throw new Error('UNISWAP_V4_SUBGRAPH_URL not configured')
-  const res = await fetch(url, {
+  const json = await fetchJsonWithGuards<GraphQlResponse<T>>(url, {
     method: 'POST',
     headers: { 'content-type': 'application/json' },
     body: JSON.stringify({ query, variables }),
   })
-  if (!res.ok) throw new Error(`subgraph http ${res.status}`)
-  const json = (await res.json()) as GraphQlResponse<T>
   if (!json || !json.data) throw new Error('subgraph empty data')
   return json.data
 }
@@ -89,6 +87,28 @@ export async function readPoolStats(poolAddress: string): Promise<PoolStats> {
 function num(v: any): number | null {
   const n = Number(v)
   return Number.isFinite(n) ? n : null
+}
+
+async function fetchJsonWithGuards<T>(url: string, init?: RequestInit, tries = 2): Promise<T> {
+  const ctl = new AbortController()
+  const timeout = setTimeout(() => ctl.abort(), 5000)
+  try {
+    const res = await fetch(url, { ...init, signal: ctl.signal })
+    if (res.status === 429 || res.status === 503) {
+      if (tries > 0) {
+        const delay = 400 * Math.pow(2, 2 - tries)
+        await new Promise(r => setTimeout(r, delay))
+        return fetchJsonWithGuards<T>(url, init, tries - 1)
+      }
+      throw new Error(`backoff exhausted ${res.status}`)
+    }
+    if (!res.ok) throw new Error(`http ${res.status}`)
+    const json = (await res.json().catch(() => null)) as T | null
+    if (!json) throw new Error('invalid json')
+    return json
+  } finally {
+    clearTimeout(timeout)
+  }
 }
 
 

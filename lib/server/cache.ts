@@ -38,3 +38,15 @@ export function getRemainingTtlMs(key: string): number {
     if (remaining <= 0) { store.delete(key); return 0 }
     return remaining
 }
+
+// Diagnostics helpers (dev-only usage recommended)
+export function listKeys(): string[] {
+    const out: string[] = []
+    for (const [k, v] of store.entries()) {
+        if (Date.now() <= v.exp) out.push(k)
+        else store.delete(k)
+    }
+    return out
+}
+
+export function getCapacity(): number { return MAX_ENTRIES }

@@ -17,7 +17,9 @@ export type WidgetType =
   | 'resources'
   | 'glossary-spotlight'
   | 'whats-next'
-  | 'note';
+  | 'note'
+  | 'pools-mini'
+  | 'price-mini';
 
 export interface WidgetState {
   id: string;

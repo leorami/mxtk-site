@@ -12,8 +12,8 @@ import Card from '@/components/ui/Card'
 import DataTableGlass from '@/components/ui/DataTableGlass'
 import PhotoBackdrop from '@/components/visuals/PhotoBackdrop'
 import { transparencyCopy } from '@/copy/transparency'
-import { env } from '@/lib/env'
 import { getBasePathUrl } from '@/lib/basepath'
+import { env } from '@/lib/env'
 import { PLACEHOLDER_PROOFS } from '@/lib/placeholders'
 import { getRelativePath } from '@/lib/routing/basePath'
 import { headers } from 'next/headers'
@@ -32,7 +32,8 @@ export default async function TransparencyPage() {
   const res = await fetch(absUrl, { cache: 'no-store', headers: { 'ngrok-skip-browser-warning': 'true' } })
   const json = await res.json().catch(() => ({ updatedAt: Date.now(), ttl: 0, data: [] }))
   const rows = json.data || []
-  const staleness = badge(json.updatedAt, json.ttl)
+  const updatedAt = Number(json.updatedAt) || Date.now()
+  const ttl = Number(json.ttl) || 0
   return (
     <PageTheme ink="light" lift="H" glass="soft">
       <PhotoBackdrop src="art/photos/transparency_tigereye.jpg" />
@@ -64,9 +65,16 @@ export default async function TransparencyPage() {
               <Card tint="teal">
                 <div className="flex items-center justify-between mb-6">
                   <ModeTextSwap as="h2" depKey={`tp-p1-title-${mode}`} className="text-2xl font-semibold" content={pageCopy.pillars?.[1]?.title[mode] || 'Liquidity & On-chain Addresses'} />
-                  <span className={`inline-flex items-center rounded-full px-2 py-1 text-xs ${staleness.kind==='live'?'bg-emerald-500/20 text-emerald-600 dark:text-emerald-300':'bg-amber-500/20 text-amber-600 dark:text-amber-300'}`}>{staleness.label}</span>
                 </div>
-                <DataTableGlass rows={rows} />
+                <div className="relative">
+                  <DataTableGlass rows={rows} updatedAt={updatedAt} ttl={ttl} />
+                  <div className="absolute right-2 top-2 opacity-0 pointer-events-none [html.guide-open_&]:opacity-100 transition-opacity">
+                    <form action={getBasePathUrl('/api/ai/home/add')} method="post">
+                      <input type="hidden" name="widget[type]" value="pools-mini" />
+                      <button type="submit" className="btn-ghost text-xs">Pin to Home</button>
+                    </form>
+                  </div>
+                </div>
               </Card>
             </SectionWrapper>
 

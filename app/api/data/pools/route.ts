@@ -12,10 +12,12 @@ export async function GET(req: NextRequest) {
     const ttlMs = 60_000
     const data = await getOrSet(key, ttlMs, () => getPools(token))
     const remaining = getRemainingTtlMs(key)
-    const envelope = { updatedAt: Date.now() - Math.max(0, ttlMs - remaining), ttl: remaining, data }
+    const updatedAt = Date.now() - Math.max(0, ttlMs - remaining)
+    const source = Array.isArray(data) && data.length ? (data[0]?.source || 'unknown') : 'fallback'
+    const envelope = { updatedAt, ttl: remaining, source, data }
     return NextResponse.json(envelope)
   } catch {
-    return NextResponse.json({ updatedAt: Date.now(), ttl: 0, data: [] })
+    return NextResponse.json({ updatedAt: Date.now(), ttl: 0, source: 'fallback', data: [] })
   }
 }
 

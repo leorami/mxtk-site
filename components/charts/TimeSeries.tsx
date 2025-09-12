@@ -8,16 +8,17 @@ type Props = { symbol: string; days?: number; className?: string }
 
 export default function TimeSeries({ symbol, days = 30, className }: Props) {
   const [series, setSeries] = useState<Series | null>(null)
+  const [meta, setMeta] = useState<{ updatedAt: number; ttl: number } | null>(null)
   const containerRef = useRef<HTMLDivElement | null>(null)
   const [size, setSize] = useState<{ w: number; h: number }>({ w: 640, h: 220 })
 
   // SSR-safe: path pre-renderable
-  const pathD = useMemo(() => buildPath(series), [series])
+  const pathD = useMemo(() => buildPath(maybeDownsample(series)), [series])
 
   useEffect(() => {
     let mounted = true
-    apiGet<{ updatedAt: number; ttl: number; data: { symbol: string; days: number; series: Series } }>(`/data/prices/${encodeURIComponent(symbol)}?days=${days}`)
-      .then((res) => { if (mounted) setSeries(res.data?.series || { points: [] }) })
+    apiGet<{ updatedAt: number; ttl: number; source?: string; data: { symbol: string; days: number; series: Series } }>(`/data/prices/${encodeURIComponent(symbol)}?days=${days}`)
+      .then((res) => { if (mounted) { setSeries(res.data?.series || { points: [] }); setMeta({ updatedAt: res.updatedAt, ttl: res.ttl }) } })
       .catch(() => { if (mounted) setSeries({ points: [] }) })
     return () => { mounted = false }
   }, [symbol, days])
@@ -37,8 +38,18 @@ export default function TimeSeries({ symbol, days = 30, className }: Props) {
 
   const { ticksX, ticksY } = useMemo(() => computeAxes(series), [series])
 
+  const badge = useMemo(() => makeBadge(meta?.updatedAt, meta?.ttl), [meta])
+
   return (
     <div ref={containerRef} className={className}>
+      <div className="flex items-center justify-between mb-2">
+        <div />
+        {badge && (
+          <span className={['inline-flex items-center rounded-full px-2 py-0.5 text-[10px] leading-tight', badge.kind==='live'? 'bg-emerald-500/20 text-emerald-700 dark:text-emerald-300':'bg-amber-500/20 text-amber-700 dark:text-amber-300'].join(' ')}>
+            {badge.label}
+          </span>
+        )}
+      </div>
       <ChartSVG width={size.w} height={size.h} pathD={pathD} series={series} ticksX={ticksX} ticksY={ticksY} />
     </div>
   )
@@ -144,6 +155,37 @@ function timeTicks(start: number, end: number, count: number): number[] {
   const span = Math.max(1, end - start)
   const step = span / count
   return [0, 1, 2, 3].slice(0, count + 1).map(i => Math.round(start + i * step))
+}
+
+function makeBadge(updatedAt?: number, ttl?: number): { kind: 'live'|'stale'; label: string } | null {
+  if (!updatedAt) return null
+  const now = Date.now()
+  const ageMs = Math.max(0, now - updatedAt)
+  if (ageMs < 60_000) return { kind: 'live', label: 'Updated just now' }
+  const minutes = Math.floor(ageMs / 60000)
+  return { kind: 'stale', label: `Updated ${minutes}m ago` }
+}
+
+// Lightweight downsampling: LTTB-ish bucket average; apply only when > 1000 points
+function maybeDownsample(series: Series | null): Series | null {
+  const s = series
+  const pts = s?.points || []
+  if (!pts.length || pts.length <= 1000) return s
+  const target = 800
+  const bucket = Math.ceil(pts.length / target)
+  const out: typeof pts = []
+  for (let i = 0; i < pts.length; i += bucket) {
+    const slice = pts.slice(i, Math.min(i + bucket, pts.length))
+    if (!slice.length) continue
+    const avgV = slice.reduce((acc, p) => acc + p.value, 0) / slice.length
+    const mid = slice[Math.floor(slice.length / 2)]
+    out.push({ time: mid.time, value: avgV })
+  }
+  // Preserve min/max/start/end
+  let min = Number.POSITIVE_INFINITY
+  let max = Number.NEGATIVE_INFINITY
+  for (const p of out) { if (p.value < min) min = p.value; if (p.value > max) max = p.value }
+  return { points: out, min, max, start: out[0].time, end: out[out.length - 1].time }
 }
 
 

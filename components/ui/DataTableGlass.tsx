@@ -5,7 +5,7 @@ import { useMemo, useState } from 'react';
 
 type SortKey = 'pool' | 'price' | 'vol24' | 'tvl' | 'fees24'
 
-export default function DataTableGlass({ rows, className }: { rows: PoolRow[]; className?: string }) {
+export default function DataTableGlass({ rows, className, updatedAt, ttl }: { rows: PoolRow[]; className?: string; updatedAt?: number; ttl?: number }) {
   const [sort, setSort] = useState<{ key: SortKey; dir: 'asc' | 'desc' }>({ key: 'tvl', dir: 'desc' })
   const sorted = useMemo(() => sortRows(rows, sort.key, sort.dir), [rows, sort])
 
@@ -18,11 +18,20 @@ export default function DataTableGlass({ rows, className }: { rows: PoolRow[]; c
     )
   }
 
+  const badge = useMemo(() => makeBadge(updatedAt, ttl), [updatedAt, ttl])
+
   return (
-    <div className={cn('glass glass--panel rounded-[var(--radius-lg)] overflow-hidden', className)}>
+    <div className={cn('glass glass--panel rounded-[var(--radius-lg)] overflow-hidden relative', className)}>
+      {badge && (
+        <div className="absolute right-3 top-3 pointer-events-none select-none">
+          <span className={cn('inline-flex items-center rounded-full px-2 py-0.5 text-[10px] leading-tight', badge.kind==='live'? 'bg-emerald-500/20 text-emerald-700 dark:text-emerald-300':'bg-amber-500/20 text-amber-700 dark:text-amber-300')}>
+            {badge.label}
+          </span>
+        </div>
+      )}
       <div className="overflow-x-auto">
-        <table className="min-w-full text-sm">
-          <thead className="sticky top-0 bg-white/70 dark:bg-black/40 backdrop-blur supports-[backdrop-filter]:bg-white/60">
+        <table data-testid="pools-table" className="min-w-full text-sm">
+          <thead className="sticky top-0 bg-white/70 dark:bg-black/40 backdrop-blur supports-[backdrop-filter]:bg-white/60" style={{ position: 'sticky', top: 0 }}>
             <tr className="text-left text-ink-subtle select-none">
               <SortableTh label="Pool" active={sort.key==='pool'} dir={sort.dir} onClick={() => toggle(setSort, 'pool')} />
               <th className="px-4 py-3">Fee</th>
@@ -72,7 +81,14 @@ export default function DataTableGlass({ rows, className }: { rows: PoolRow[]; c
 
 function SortableTh({ label, active, dir, onClick }: { label: string; active: boolean; dir: 'asc'|'desc'; onClick: () => void }) {
   return (
-    <th className={cn('px-4 py-3 cursor-pointer', active && 'text-ink font-semibold')} onClick={onClick} aria-sort={active ? (dir === 'asc' ? 'ascending' : 'descending') : 'none'}>
+    <th
+      className={cn('px-4 py-3 cursor-pointer sticky top-0 bg-white/70 dark:bg-black/40 backdrop-blur supports-[backdrop-filter]:bg-white/60', active && 'text-ink font-semibold')}
+      onClick={onClick}
+      onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onClick(); } }}
+      tabIndex={0}
+      role="columnheader"
+      aria-sort={active ? (dir === 'asc' ? 'ascending' : 'descending') : 'none'}
+    >
       <span className="inline-flex items-center gap-1">
         {label}
         <span aria-hidden className="opacity-60 text-xs">{active ? (dir === 'asc' ? '▲' : '▼') : ''}</span>
@@ -125,6 +141,21 @@ function symbolPair(r: PoolRow) {
   const s0 = r.token0?.symbol?.toUpperCase() || '—'
   const s1 = r.token1?.symbol?.toUpperCase() || '—'
   return `${s0}/${s1}`
+}
+
+function n(value: unknown): number {
+  const num = typeof value === 'number' ? value : Number(value as any)
+  return Number.isFinite(num) ? num : Number.NEGATIVE_INFINITY
+}
+
+function makeBadge(updatedAt?: number, ttl?: number): { kind: 'live'|'stale'; label: string } | null {
+  if (!updatedAt) return null
+  const now = Date.now()
+  const nextExpiry = (updatedAt || now) + (ttl || 0)
+  const ageMs = Math.max(0, now - (updatedAt || now))
+  if (ageMs < 60_000 && nextExpiry > now) return { kind: 'live', label: 'Updated just now' }
+  const minutes = Math.floor(ageMs / 60000)
+  return { kind: 'stale', label: `Updated ${minutes}m ago` }
 }
 
 

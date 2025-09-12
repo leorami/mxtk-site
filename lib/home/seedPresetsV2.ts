@@ -18,6 +18,8 @@ export const PRESETS_V2: Record<'learn' | 'build' | 'operate', PresetItem[]> = {
     { section: 'overview', type: 'whats-next',          title: "What's Next",    size: { w: 4, h: 24 }, pos: { x: 0, y: 0 } },
     { section: 'overview', type: 'recent-answers',      title: 'Recent Answers',  size: { w: 4, h: 24 }, pos: { x: 4, y: 0 } },
     { section: 'overview', type: 'note',                title: 'Note',            size: { w: 4, h: 24 }, pos: { x: 8, y: 0 }, data: { note: '' } },
+    { section: 'overview', type: 'pools-mini',          title: 'Top Pools',       size: { w: 4, h: 12 }, pos: { x: 0, y: 24 } },
+    { section: 'overview', type: 'price-mini',          title: 'MXTK Price',      size: { w: 8, h: 12 }, pos: { x: 4, y: 24 } },
 
     // Learn-focused
     { section: 'learn',    type: 'glossary-spotlight',  title: 'Glossary',        size: { w: 6, h: 24 }, pos: { x: 0, y: 0 } },
@@ -29,6 +31,8 @@ export const PRESETS_V2: Record<'learn' | 'build' | 'operate', PresetItem[]> = {
     { section: 'overview', type: 'whats-next',          title: "What's Next",    size: { w: 4, h: 24 }, pos: { x: 0, y: 0 } },
     { section: 'overview', type: 'recent-answers',      title: 'Recent Answers',  size: { w: 4, h: 24 }, pos: { x: 4, y: 0 } },
     { section: 'overview', type: 'note',                title: 'Note',            size: { w: 4, h: 24 }, pos: { x: 8, y: 0 }, data: { note: '' } },
+    { section: 'overview', type: 'pools-mini',          title: 'Top Pools',       size: { w: 4, h: 12 }, pos: { x: 0, y: 24 } },
+    { section: 'overview', type: 'price-mini',          title: 'MXTK Price',      size: { w: 8, h: 12 }, pos: { x: 4, y: 24 } },
 
     // Build-focused
     { section: 'build',    type: 'resources',           title: 'Build Tasks',     size: { w: 6, h: 24 }, pos: { x: 0, y: 0 } },
@@ -40,6 +44,8 @@ export const PRESETS_V2: Record<'learn' | 'build' | 'operate', PresetItem[]> = {
     { section: 'overview', type: 'whats-next',          title: "What's Next",    size: { w: 4, h: 24 }, pos: { x: 0, y: 0 } },
     { section: 'overview', type: 'recent-answers',      title: 'Recent Answers',  size: { w: 4, h: 24 }, pos: { x: 4, y: 0 } },
     { section: 'overview', type: 'note',                title: 'Note',            size: { w: 4, h: 24 }, pos: { x: 8, y: 0 }, data: { note: '' } },
+    { section: 'overview', type: 'pools-mini',          title: 'Top Pools',       size: { w: 4, h: 12 }, pos: { x: 0, y: 24 } },
+    { section: 'overview', type: 'price-mini',          title: 'MXTK Price',      size: { w: 8, h: 12 }, pos: { x: 4, y: 24 } },
 
     // Operate-focused
     { section: 'operate',  type: 'resources',           title: 'Runbook',         size: { w: 6, h: 24 }, pos: { x: 0, y: 0 } },

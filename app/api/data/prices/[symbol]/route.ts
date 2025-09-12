@@ -14,9 +14,11 @@ export async function GET(req: NextRequest, { params }: { params: { symbol: stri
     const ttlMs = 300_000
     const series = await getOrSet(key, ttlMs, () => getPriceSeries(symbol, days))
     const remaining = getRemainingTtlMs(key)
-    return NextResponse.json({ updatedAt: Date.now() - Math.max(0, ttlMs - remaining), ttl: remaining, data: { symbol, days, series } })
+    const updatedAt = Date.now() - Math.max(0, ttlMs - remaining)
+    const source = (series as any)?.source || 'fixture'
+    return NextResponse.json({ updatedAt, ttl: remaining, source, data: { symbol, days, series } })
   } catch {
-    return NextResponse.json({ updatedAt: Date.now(), ttl: 0, data: { symbol, days, series: { points: [] } } })
+    return NextResponse.json({ updatedAt: Date.now(), ttl: 0, source: 'fallback', data: { symbol, days, series: { points: [] } } })
   }
 }
 
