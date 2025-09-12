@@ -87,8 +87,8 @@ body {
   --radius-xl: 1.25rem;
   --radius-2xl: 1.5rem;
   --shadow-inner-top: 0 1px 0 rgba(255, 255, 255, .35);
-  --shadow-lift: 0 16px 42px -20px rgba(0, 0, 0, .22), 0 8px 18px -10px rgba(0, 0, 0, .14);
-  --shadow-lift-sm: 0 8px 20px -12px rgba(0, 0, 0, .18), 0 4px 10px -6px rgba(0, 0, 0, .12);
+  --shadow-lift: 0 8px 24px -16px rgba(0, 0, 0, .18), 0 4px 12px -8px rgba(0, 0, 0, .12);
+  --shadow-lift-sm: 0 4px 12px -10px rgba(0, 0, 0, .14), 0 2px 6px -5px rgba(0, 0, 0, .10);
 
   /* Typography */
   --h-color: var(--mxtk-navy);
@@ -987,7 +987,7 @@ html body [data-mineral] h3 {
 
 .btn-primary:hover {
   transform: translateY(-0.5px);
-  box-shadow: var(--shadow-lift-sm);
+  box-shadow: 0 4px 10px -6px rgba(0,0,0,.12), 0 2px 6px -4px rgba(0,0,0,.10);
 }
 
 .btn-outline {
@@ -1005,7 +1005,7 @@ html body [data-mineral] h3 {
 
 .btn-outline:hover {
   transform: translateY(-0.5px);
-  box-shadow: var(--shadow-lift-sm);
+  box-shadow: 0 4px 10px -6px rgba(0,0,0,.12), 0 2px 6px -4px rgba(0,0,0,.10);
   background: var(--mxtk-hover-bg);
 }
 
@@ -1023,7 +1023,7 @@ html body [data-mineral] h3 {
 
 .btn-soft:hover {
   transform: translateY(-0.5px);
-  box-shadow: var(--shadow-lift-sm);
+  box-shadow: 0 4px 10px -6px rgba(0,0,0,.12), 0 2px 6px -4px rgba(0,0,0,.10);
 }
 
 .btn-link {
@@ -1040,7 +1040,7 @@ html body [data-mineral] h3 {
 
 .btn-link:hover {
   transform: translateY(-0.5px);
-  box-shadow: var(--shadow-lift-sm);
+  box-shadow: 0 4px 10px -6px rgba(0,0,0,.12), 0 2px 6px -4px rgba(0,0,0,.10);
   background: var(--mxtk-hover-bg);
   color: #111318;
   text-decoration: none;
@@ -1111,7 +1111,7 @@ h3 {
   background: var(--accent, var(--mxtk-accent));
   color: #0B0E12;
   border: 1px solid rgba(255, 255, 255, 0.18);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.18);
 }
 
 /* Enhanced "Read More" button visibility */
@@ -1131,7 +1131,7 @@ h3 {
   border-color: rgba(224, 147, 43, 0.3);
   color: var(--mxtk-accent);
   transform: translateY(-0.5px);
-  box-shadow: 0 2px 8px rgba(224, 147, 43, 0.2);
+  box-shadow: 0 1px 4px rgba(224, 147, 43, 0.18);
 }
 
 .dark .btn-link.text-sm {
@@ -1294,9 +1294,9 @@ h3 {
   border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 16px;
   box-shadow:
-    0 8px 32px rgba(0, 0, 0, 0.12),
-    0 4px 16px rgba(0, 0, 0, 0.08),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    0 4px 16px rgba(0, 0, 0, 0.10),
+    0 2px 8px rgba(0, 0, 0, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18);
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   overflow: hidden;
@@ -1329,9 +1329,9 @@ h3 {
 .card-outline:hover {
   transform: translateY(-1px) scale(1.005);
   box-shadow:
-    0 8px 24px rgba(0, 0, 0, 0.12),
-    0 4px 12px rgba(0, 0, 0, 0.08),
-    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    0 4px 12px rgba(0, 0, 0, 0.10),
+    0 2px 8px rgba(0, 0, 0, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.24);
   border-color: rgba(255, 255, 255, 0.25);
   background: rgba(255, 255, 255, 0.12);
 }
@@ -1372,9 +1372,9 @@ h3 {
   background: rgba(255, 255, 255, 0.15);
   border: 1px solid rgba(255, 255, 255, 0.25);
   box-shadow:
-    0 8px 32px rgba(0, 0, 0, 0.4),
-    0 4px 16px rgba(0, 0, 0, 0.3),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    0 4px 16px rgba(0, 0, 0, 0.32),
+    0 2px 8px rgba(0, 0, 0, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
 }
@@ -1413,9 +1413,9 @@ h3 {
 .dark .card-outline:hover {
   transform: translateY(-1px) scale(1.005);
   box-shadow:
-    0 8px 24px rgba(0, 0, 0, 0.4),
-    0 4px 12px rgba(0, 0, 0, 0.3),
-    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    0 4px 12px rgba(0, 0, 0, 0.34),
+    0 2px 8px rgba(0, 0, 0, 0.24),
+    inset 0 1px 0 rgba(255, 255, 255, 0.24);
   border-color: rgba(255, 255, 255, 0.4);
   background: rgba(255, 255, 255, 0.2);
 }
@@ -1565,8 +1565,8 @@ h3 {
   -webkit-backdrop-filter: blur(15px);
   border: 1px solid rgba(255, 255, 255, 0.2);
   box-shadow:
-    0 4px 16px rgba(0, 0, 0, 0.1),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    0 2px 8px rgba(0, 0, 0, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.16);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   font-weight: 600;
   padding: 0.75rem 1.5rem;
@@ -1601,8 +1601,8 @@ h3+.btn-link {
 .btn-link:hover {
   transform: translateY(-0.5px) scale(1.01);
   box-shadow:
-    0 4px 16px rgba(0, 0, 0, 0.12),
-    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    0 3px 8px rgba(0, 0, 0, 0.10),
+    inset 0 1px 0 rgba(255, 255, 255, 0.24);
   border-color: rgba(255, 255, 255, 0.3);
   background: rgba(255, 255, 255, 0.15);
 }
@@ -1863,6 +1863,7 @@ button { color: var(--ink-strong); }
 .text-sm {
   font-size: 0.875rem;
   line-height: 1.25rem;
+  padding: 0 20px;
 }
 
 .text-base {
@@ -1995,14 +1996,14 @@ button { color: var(--ink-strong); }
   --glass-border-color: 0, 0, 0;
   /* rgb() triplet */
   --glass-border-alpha: 0.10;
-  --glass-shadow-main: 0 8px 24px rgba(0, 0, 0, .18);
+  --glass-shadow-main: 0 4px 12px rgba(0, 0, 0, .14);
   --glass-shadow-inset: 0 1px 0 rgba(255, 255, 255, .06) inset;
   --glass-radius: 16px;
 
   /* strong variant defaults */
   --glass-strong-bg-alpha: 0.90;
   --glass-strong-blur: 22px;
-  --glass-strong-shadow: 0 12px 28px rgba(0, 0, 0, .22);
+  --glass-strong-shadow: 0 8px 20px rgba(0, 0, 0, .18);
 }
 
 /* Dark mode glass tokens */

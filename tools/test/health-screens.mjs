@@ -1,13 +1,16 @@
-import puppeteer from 'puppeteer'
 import fs from 'fs/promises'
 import path from 'path'
+import puppeteer from 'puppeteer'
 
 const base = process.env.BASE_URL || 'http://localhost:2000'
 
 const outDir = path.resolve(process.cwd(), 'artifacts', String(Date.now()))
 await fs.mkdir(outDir, { recursive: true })
 
-const browser = await puppeteer.launch({ headless: 'new' })
+const browser = await puppeteer.launch({
+  headless: 'new',
+  args: ['--no-sandbox', '--disable-setuid-sandbox']
+})
 const page = await browser.newPage()
 
 for (const route of ['/transparency']) {

@@ -4,13 +4,13 @@ import HeaderSherpa from '@/components/ai/HeaderSherpa'
 // import GuideHeaderButton from '@/components/ai/GuideHeaderButton'
 import ExperienceToggle from '@/components/experience/ExperienceToggle'
 
+import DataHealthChip from '@/components/health/DataHealthChip'
 import AppImage from '@/components/ui/AppImage'
 import { useBasePath } from '@/lib/basepath'
 import { themeForRoute } from '@/lib/brand/theme'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { CSSProperties, useEffect, useState } from 'react'
-import DataHealthChip from '@/components/health/DataHealthChip'
 
 type Item = { href: string; label: string }
 

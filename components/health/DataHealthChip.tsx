@@ -1,6 +1,7 @@
 'use client';
+import { getApiPath } from '@/lib/basepath';
+import { FRESHNESS, freshness, minutesAgo } from '@/lib/data/policy';
 import * as React from 'react';
-import { minutesAgo, FRESHNESS, freshness } from '@/lib/data/policy';
 
 export default function DataHealthChip() {
   const [state, setState] = React.useState<'fresh' | 'stale' | 'degraded'>('fresh');
@@ -10,8 +11,7 @@ export default function DataHealthChip() {
     let alive = true;
     (async () => {
       try {
-        const base = (globalThis as any).__mx_basePath || '';
-        const res = await fetch(`${base}/api/data/prices/MXTK?days=30`, { cache: 'no-store' });
+        const res = await fetch(getApiPath('/api/data/prices/MXTK?days=30'), { cache: 'no-store' });
         if (!res.ok) return;
         const j = await res.json();
         const updatedAt = j?.data?.series?.end || j?.updatedAt || Date.now();

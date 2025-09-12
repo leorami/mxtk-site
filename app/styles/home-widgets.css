@@ -68,11 +68,11 @@
 
 .widget-frame .widget-body {
     max-block-size: 18rem;
-    overflow: hidden;
+    overflow: visible; /* avoid clipping shadows */
 }
 
 .widget-frame:hover .widget-body {
-    overflow: auto;
+    overflow: visible;
 }
 
 .widget-frame .widget-body {
@@ -187,7 +187,7 @@
   grid-row: span calc(var(--h, 24));
   min-width: 0; /* prevent overflow in narrow breakpoints */
   min-height: 0; /* allow children to scroll within grid tracks */
-  overflow: hidden; /* clip any child overflow outside tile */
+  overflow: visible; /* allow content glows and shadows */
 }
 
 /* Resizer: bottom-right handle */
@@ -232,15 +232,26 @@ html.guide-open .widget-controls { opacity: 1 !important; pointer-events: auto !
   position:relative;
   border-radius:18px;
   padding:12px;
-  background: rgba(255,255,255,0.08);
-  backdrop-filter: blur(10px);
-  box-shadow: 0 6px 20px rgba(0,0,0,0.25);
-  outline: 1px solid rgba(255,255,255,0.12);
+  /* Revert to transparent so surrounding glass panels provide the effect */
+  background: transparent;
+  outline: none;
+  /* Slightly lighter again for a modern, airy frame */
+  border: 1px solid color-mix(in srgb, var(--border-soft), transparent 85%) !important;
+  width: 100%;
+  z-index: 3;
+  /* subtle lift to match site cards, with a touch more body */
+  box-shadow: var(--shadow-lift-sm), 0 2px 8px rgba(0,0,0,.06);
   display:flex;           /* enable header+body column layout */
   flex-direction:column;
   height:100%;            /* fill assigned grid track height */
 }
-html.dark .wframe{ background: rgba(10,12,16,0.35); outline-color: rgba(255,255,255,0.08); }
+html.dark .wframe{ background: transparent; }
+
+/* tiny hover lift, consistent with glass cards */
+.wframe:hover{
+  transform: translateY(-1px) scale(1.005);
+  box-shadow: var(--shadow-lift), 0 4px 12px rgba(0,0,0,.08);
+}
 
 /* Controls hidden unless Guide is open */
 .wframe-controls{
@@ -258,9 +269,9 @@ html.guide-open .widget-chrome:active{ cursor: grabbing; }
 .iconbtn{
   width:20px; height:20px; border-radius:999px; display:grid; place-items:center;
   border:1px solid rgba(255,255,255,0.35);
-  background: rgba(0,0,0,0.35); color:#fff; font-size:12px; line-height:1;
+  background: rgba(0,0,0,0.25); color:#fff; font-size:12px; line-height:1;
 }
-html.light .iconbtn{ border-color: rgba(0,0,0,0.25); background: rgba(255,255,255,0.55); color:#222; }
+html.light .iconbtn{ border-color: rgba(0,0,0,0.18); background: rgba(255,255,255,0.45); color:#222; }
 
 .wframe-resize{
   position:absolute; right:6px; bottom:6px; width:14px; height:14px; cursor:nwse-resize;
@@ -269,26 +280,30 @@ html.light .iconbtn{ border-color: rgba(0,0,0,0.25); background: rgba(255,255,25
 html.light .wframe-resize{ border-color: rgba(0,0,0,0.45); }
 
 /* Links on glass: WCAG-safe */
-.wframe a{ text-decoration:underline; text-underline-offset:2px; border-bottom:1px solid transparent; font-weight:600; }
+.wframe a{ text-decoration:none; border-bottom:none; font-weight:600; color: color-mix(in srgb, var(--ink-strong) 78%, var(--ink-weak) 22%); }
 .wframe a:focus-visible{ outline:2px solid currentColor; outline-offset:2px; }
-html.light .wframe a{ color:#0c2563; border-bottom-color:rgba(12,37,99,.55); }
-html.dark  .wframe a{ color:#e6eeff; border-bottom-color:rgba(230,238,255,.55); }
-.wframe .btn-link{ font-weight:600; }
+html.light .wframe a{ color: color-mix(in srgb, #0c2563 80%, #5b6b9a 20%); border-bottom-color:rgba(12,37,99,.45); }
+html.dark  .wframe a{ color: color-mix(in srgb, #e6eeff 88%, #aab7ff 12%); border-bottom-color:rgba(230,238,255,.45); }
+.wframe .btn-link{ font-weight:600; color: color-mix(in srgb, var(--ink-strong) 78%, var(--ink-weak) 22%); }
 .wframe .btn-link:focus-visible{ outline:2px solid currentColor; outline-offset:2px; }
 .wframe .btn-link:hover{ text-decoration:underline; text-underline-offset:2px; }
 
 /* Warm ink palette: darker link/button color for readability on warm glass */
 /* Warm ink: enforce darker text for links and button-links inside widgets */
-html[data-ink="warm"] .wframe a{ color:#3a1200 !important; border-bottom-color: rgba(58,18,0,.65) !important; }
+html[data-ink="warm"] .wframe a{ color:#3a1200cc !important; border-bottom-color: rgba(58,18,0,.5) !important; }
 html[data-ink="warm"] .wframe a.btn-link,
 html[data-ink="warm"] .wframe .btn-link,
-html[data-ink="warm"] .wframe .btn-link.text-sm{ color:#3a1200 !important; }
+html[data-ink="warm"] .wframe .btn-link.text-sm{ color:#3a1200cc !important; }
 html[data-ink="warm"] .wframe a:hover,
-html[data-ink="warm"] .wframe .btn-link:hover{ color:#2c0e00 !important; border-bottom-color: rgba(44,14,0,.75) !important; }
+html[data-ink="warm"] .wframe .btn-link:hover{ color:#2c0e00 !important; border-bottom-color: rgba(44,14,0,.65) !important; }
 
 /* Warm ink: section headers and toggles */
 html[data-ink="warm"] .sc-section-title{ color:#3a1200 !important; }
-html[data-ink="warm"] .sc-section-toggle{ color:#6a3a0f !important; }
+/* Darken section titles more for readability */
+.sc-section-title{ color: color-mix(in srgb, var(--ink-strong) 65%, black 35%); }
+html.dark .sc-section-title{ color: color-mix(in srgb, var(--ink-strong) 60%, black 40%); }
+html[data-ink="warm"] .sc-section-title{ color: #180700 !important; }
+html[data-ink="warm"] .sc-section-toggle{ color:#5a2f0b !important; }
 html[data-ink="warm"] .wframe .wf-title{ color:#3a1200 !important; }
 
 /* Warm ink: non-button links inside section rails should also be dark */
@@ -302,7 +317,7 @@ html[data-ink="warm"] .section-rail .glass a:not(.btn):not(.btn-primary):not(.bt
 
 /* Widget header row */
 .wf-head{ display:flex; align-items:center; justify-content:space-between; gap:.75rem; margin-bottom:.25rem; }
-.wf-title{ font-weight:600; opacity:.9; }
+.wf-title{ font-weight:600; opacity:.9; color: color-mix(in srgb, var(--ink-strong) 75%, var(--ink-weak) 25%); }
 .wf-actions{ display:inline-flex; align-items:center; gap:.25rem; pointer-events:auto; position:static; top:auto; right:auto; margin-left:auto; }
 .wf-actions.wframe-controls{ position:static; top:auto; right:auto; }
 .wf-actions button, .wf-actions [role="button"]{ cursor:pointer; }
@@ -313,16 +328,38 @@ html[data-ink="warm"] .section-rail .glass a:not(.btn):not(.btn-primary):not(.bt
   min-height:0;
   overflow:auto;
   position: relative;
+  z-index: 1; /* keep content above indicators */
+  background: transparent; /* solid; no gradients per spec */
+  color: color-mix(in srgb, var(--ink-strong) 78%, var(--ink-weak) 22%);
 }
+html.dark .wframe-body{ background: transparent; }
+html[data-ink="warm"] .wframe-body{ background: transparent; }
 
 /* System-default scrollbars (no forced visibility or styling) */
 
-/* Scroll hint fades (top/bottom) rendered as overlays on the frame, not inside content */
-.wframe .scroll-fade{ position:absolute; left:0; right:0; height:18px; pointer-events:none; opacity:0; transition:opacity .15s ease; }
-.wframe .scroll-fade.top{ top:0; backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(3px); background: linear-gradient(to bottom, rgba(0,0,0,.10), rgba(0,0,0,0)); }
-.wframe .scroll-fade.bottom{ bottom:0; backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(3px); background: linear-gradient(to top, rgba(0,0,0,.10), rgba(0,0,0,0)); }
-html.dark .wframe .scroll-fade.top{ background: linear-gradient(to bottom, rgba(255,255,255,.12), rgba(255,255,255,0)); }
-html.dark .wframe .scroll-fade.bottom{ background: linear-gradient(to top, rgba(255,255,255,.12), rgba(255,255,255,0)); }
+/* Outer shell: owns border and indicators so inner can be clean */
+.wframe-shell{ position:relative; border-radius:18px; height:100%; z-index:1; }
+/* Additional content scroll indicators (top/bottom) */
+/* Indicators now attach to the outermost widget container */
+.widget-tile > .scroll-indicator{ position:absolute; left:0; right:0; height:18px; pointer-events:none; z-index:4; opacity:0; transition:opacity .18s ease; }
+.widget-tile > .scroll-indicator.top{ top:0; border-top-left-radius:18px; border-top-right-radius:18px; }
+.widget-tile > .scroll-indicator.bottom{ bottom:0; border-bottom-left-radius:18px; border-bottom-right-radius:18px; }
+
+/* Base (light ink) gradients */
+.widget-tile > .scroll-indicator.top{ background: linear-gradient(to bottom, rgba(255,255,255,.9), rgba(255,255,255,0)); }
+.widget-tile > .scroll-indicator.bottom{ background: linear-gradient(to top, rgba(255,255,255,.9), rgba(255,255,255,0)); }
+
+/* Dark ink gradients */
+html.dark .widget-tile > .scroll-indicator.top{ background: linear-gradient(to bottom, rgba(0,0,0,.42), rgba(0,0,0,0)); }
+html.dark .widget-tile > .scroll-indicator.bottom{ background: linear-gradient(to top, rgba(0,0,0,.42), rgba(0,0,0,0)); }
+
+/* Warm ink gradients (subtle amber tint) */
+html[data-ink="warm"] .widget-tile > .scroll-indicator.top{ background: linear-gradient(to bottom, rgba(255,234,210,.85), rgba(255,234,210,0)); }
+html[data-ink="warm"] .widget-tile > .scroll-indicator.bottom{ background: linear-gradient(to top, rgba(255,234,210,.85), rgba(255,234,210,0)); }
+
+/* Visibility rules based on scroll state toggled via data-* attributes */
+.widget-tile[data-scrollable="true"][data-at-top="false"] > .scroll-indicator.top{ opacity:1; }
+.widget-tile[data-scrollable="true"][data-at-bottom="false"] > .scroll-indicator.bottom{ opacity:1; }
 
 /* Ensure controls transition consistently on mobile */
 @media (max-width: 820px){

@@ -6,6 +6,7 @@ import PoolsMini from '@/components/home/widgets/PoolsMini';
 import PriceMini from '@/components/home/widgets/PriceMini';
 import RecentAnswers from '@/components/home/widgets/RecentAnswers';
 import Resources from '@/components/home/widgets/Resources';
+import { getApiPath } from '@/lib/basepath';
 import type { HomeDoc, WidgetState } from '@/lib/home/types';
 import * as React from 'react';
 
@@ -17,9 +18,7 @@ type GridProps = {
 };
 
 function api(path: string) {
-  // BasePath-safe for root and /mxtk
-  // If you already set __mx_basePath elsewhere, this respects it.
-  return (globalThis as any).__mx_basePath ? `${(globalThis as any).__mx_basePath}${path}` : path;
+  return getApiPath(path);
 }
 
 const DEFAULT_COLS = 12;
@@ -257,7 +256,7 @@ export default function Grid({ doc, render, onPatch }: GridProps) {
             key={w.id}
             role="listitem"
             tabIndex={0}
-            className="widget-tile wframe widget-cell"
+            className="widget-tile widget-cell"
             style={{
               // Ensure explicit inline spans for tests (accepts grid-area: span h / span w)
               gridArea: `span ${spanH} / span ${spanW}`,
@@ -265,14 +264,18 @@ export default function Grid({ doc, render, onPatch }: GridProps) {
             data-widget-id={w.id}
             onKeyDown={(e) => onKey(e, w)}
           >
-            {/* drag surface wraps the widget frame to enable move */}
-            <div className="widget-chrome" onPointerDown={(e) => startDrag(e, w)}>
-              <WidgetFrame
-                id={w.id}
-                title={w.title}
-                data={w.data as any}
-                onRefresh={() => setRefreshTicks(prev => ({ ...prev, [w.id]: (prev[w.id] || 0) + 1 }))}
-              >
+            {/* Indicators at outermost container */}
+            <div className="scroll-indicator top" aria-hidden="true" />
+            {/* Outer shell only owns border */}
+            <div className="wframe-shell" style={{ border: 'none' }}>
+              {/* drag surface wraps the widget frame to enable move */}
+              <div className="widget-chrome" onPointerDown={(e) => startDrag(e, w)}>
+                <WidgetFrame
+                  id={w.id}
+                  title={w.title}
+                  data={w.data as any}
+                  onRefresh={() => setRefreshTicks(prev => ({ ...prev, [w.id]: (prev[w.id] || 0) + 1 }))}
+                >
                 {render
                   ? render(w)
                   : (
@@ -290,8 +293,10 @@ export default function Grid({ doc, render, onPatch }: GridProps) {
                       <div className="p-3 text-sm opacity-70">Widget <code>{w.type}</code></div>
                     )
                   )}
-              </WidgetFrame>
+                </WidgetFrame>
+              </div>
             </div>
+            <div className="scroll-indicator bottom" aria-hidden="true" />
 
             {/* resizer handle (bottom-right) - only show when Sherpa is open */}
             {guideOpen && (

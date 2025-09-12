@@ -1,7 +1,7 @@
 // vitest + testing-library
-import { describe, it, expect } from 'vitest'
-import { render, screen } from '@testing-library/react'
 import DataHealthChip from '@/components/health/DataHealthChip'
+import { render, screen } from '@testing-library/react'
+import { describe, expect, it } from 'vitest'
 
 describe('DataHealthChip', () => {
   it('renders with aria label and test id', async () => {

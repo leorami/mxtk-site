@@ -45,14 +45,7 @@ export default function WidgetFrame({ id, docId, data, title, children, onRefres
 
   const bodyDensityClass = density === 'compact' ? 'space-y-2 text-sm' : 'space-y-3';
 
-  const [fade, setFade] = React.useState({ top: false, bottom: false, scrollable: false });
-  const handleScrollState = React.useCallback((s: { scrollable: boolean; atTop: boolean; atBottom: boolean }) => {
-    setFade({
-      scrollable: s.scrollable,
-      top: s.scrollable && !s.atTop,
-      bottom: s.scrollable && !s.atBottom,
-    });
-  }, []);
+  // Removed decorative scroll fades to prevent visual clipping of shadows
 
   return (
     <div className="relative h-full wframe">
@@ -69,13 +62,11 @@ export default function WidgetFrame({ id, docId, data, title, children, onRefres
         </div>
       </header>
 
-      <ScrollBody densityClass={bodyDensityClass} onState={handleScrollState}>
+      <ScrollBody densityClass={bodyDensityClass}>
         {children}
       </ScrollBody>
 
-      {/* Non-scrolling fades pinned to the frame */}
-      <div aria-hidden className="scroll-fade top" style={{ opacity: fade.top ? 1 : 0 }} />
-      <div aria-hidden className="scroll-fade bottom" style={{ opacity: fade.bottom ? 1 : 0 }} />
+      {/* No extra overlays */}
 
       {open && (
         <div className="absolute top-8 right-2 z-10 rounded-xl border border-[color:var(--border-soft)] bg-[color:var(--surface-card-emb)] shadow p-3 min-w-[220px]">
@@ -106,26 +97,28 @@ export default function WidgetFrame({ id, docId, data, title, children, onRefres
   );
 }
 
-function ScrollBody({ densityClass, children, onState }: { densityClass: string; children: React.ReactNode; onState?: (s: { scrollable: boolean; atTop: boolean; atBottom: boolean }) => void }) {
+function ScrollBody({ densityClass, children }: { densityClass: string; children: React.ReactNode }) {
   const ref = React.useRef<HTMLDivElement | null>(null);
-  const [state, setState] = React.useState({ scrollable: false, atTop: true, atBottom: false });
   React.useEffect(() => {
     const el = ref.current; if (!el) return;
-    function update() {
-      const scrollable = el.scrollHeight > el.clientHeight + 1;
+    const frame = el.closest('.widget-tile') as HTMLElement | null;
+    const update = () => {
+      if (!frame) return;
+      const isScrollable = el.scrollHeight > el.clientHeight + 1;
       const atTop = el.scrollTop <= 0;
-      const atBottom = el.scrollTop + el.clientHeight >= el.scrollHeight - 1;
-      setState({ scrollable, atTop, atBottom });
-      el.dataset.scrollable = scrollable ? 'true' : 'false';
-      el.dataset.atTop = atTop ? 'true' : 'false';
-      el.dataset.atBottom = atBottom ? 'true' : 'false';
-      try { onState?.({ scrollable, atTop, atBottom }); } catch {}
-    }
+      const atBottom = Math.ceil(el.scrollTop + el.clientHeight) >= el.scrollHeight;
+      frame.dataset.scrollable = String(isScrollable);
+      frame.dataset.atTop = String(atTop);
+      frame.dataset.atBottom = String(atBottom);
+    };
     update();
-    el.addEventListener('scroll', update, { passive: true });
-    const ro = new ResizeObserver(update); ro.observe(el);
-    return () => { el.removeEventListener('scroll', update); ro.disconnect(); };
-  }, [children, onState]);
+    const onScroll = () => update();
+    const ro = new ResizeObserver(update);
+    ro.observe(el);
+    el.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', update, { passive: true });
+    return () => { ro.disconnect(); el.removeEventListener('scroll', onScroll); window.removeEventListener('resize', update); };
+  }, [children]);
   return (
     <div ref={ref} className={`widget-body wframe-body ${densityClass}`} data-widget-body>
       {children}

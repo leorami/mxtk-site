@@ -1,5 +1,5 @@
-import { NextResponse } from 'next/server'
 import { getPools as getPoolsFromSources, getPriceSeries } from '@/lib/data/sources'
+import { NextResponse } from 'next/server'
 
 export const revalidate = 0
 

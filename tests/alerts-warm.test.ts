@@ -1,6 +1,6 @@
 // vitest integration-lite
-import { describe, it, expect } from 'vitest'
 import { FRESHNESS, freshness } from '@/lib/data/policy'
+import { describe, expect, it } from 'vitest'
 
 describe('alerts and warm helpers (smoke)', () => {
   it('freshness tuple exists', () => {

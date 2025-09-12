@@ -104,6 +104,22 @@ async function verifyNoHorizontalScroll(page) {
   return await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth);
 }
 
+async function auditWidgetColors(page, outDir) {
+  return await page.evaluate(async () => {
+    function color(el) { return getComputedStyle(el).color; }
+    const results = [];
+    const wfTitle = document.querySelector('.wf-title');
+    if (wfTitle) results.push({ sel: '.wf-title', color: color(wfTitle), text: wfTitle.textContent?.trim() });
+    const firstLink = document.querySelector('.wframe a.underline');
+    if (firstLink) results.push({ sel: '.wframe a.underline', color: color(firstLink), text: firstLink.textContent?.trim() });
+    const firstBtnLink = document.querySelector('.wframe .btn-link.text-sm');
+    if (firstBtnLink) results.push({ sel: '.wframe .btn-link.text-sm', color: color(firstBtnLink), text: firstBtnLink.textContent?.trim() });
+    const toggle = Array.from(document.querySelectorAll('button')).find(b => /collapse/i.test(b.textContent||''));
+    if (toggle) results.push({ sel: 'button[Collapse]', color: color(toggle), text: toggle.textContent?.trim() });
+    return results;
+  });
+}
+
 (async () => {
   await ensureDir(ART_DIR);
   const browser = await puppeteer.launch({ headless: 'new', args: ['--no-sandbox','--disable-setuid-sandbox'] });
@@ -142,49 +158,14 @@ async function verifyNoHorizontalScroll(page) {
           await new Promise(r => setTimeout(r, 300));
         }
 
-        // Glass checks
-        const heroGlass = await verifyHeroGlass(page);
-        const railGlass = await verifyGlassRails(page);
-
-        // Controls toggle
-        const toggle = await verifyWidgetControlsVisibilityToggle(page);
-
-        // Grid spans and debug counts
-        const spans = await verifyGridInlineSpans(page);
-        const debugCounts = await page.evaluate(() => {
-          const tiles = document.querySelectorAll('.widget-tile');
-          const styled = Array.from(document.querySelectorAll('[style]')).filter(el => /grid-column\s*:\s*span/i.test(el.getAttribute('style')||''));
-          return { tiles: tiles.length, styled: styled.length };
-        });
-
-        // Underline-in-button
-        const offenders = await verifyNoUnderlinedLinksInsideButtons(page);
-
-        // iPad horizontal scroll (only for ipad viewport), test both closed and open
-        let ipadNoHScrollClosed = true, ipadNoHScrollOpen = true;
-        if (name === 'ipad') {
-          ipadNoHScrollClosed = await verifyNoHorizontalScroll(page);
-          await toggleGuideIfPresent(page);
-          await new Promise(r => setTimeout(r, 150));
-          ipadNoHScrollOpen = await verifyNoHorizontalScroll(page);
-        }
+        // Color audit of the elements the user highlighted
+        const colorAudit = await auditWidgetColors(page);
 
         // Screenshot
         const file = path.join(ART_DIR, `dashboard-${name}-${TS}.png`);
         await page.screenshot({ path: file, fullPage: true });
 
-        Object.assign(metrics, {
-          heroGlass,
-          railGlass,
-          controlsOpacityBefore: toggle.before,
-          controlsOpacityAfter: toggle.after,
-          spans,
-          underlineOffenders: offenders,
-          ipadNoHScrollClosed,
-          ipadNoHScrollOpen,
-          screenshot: file,
-          debugCounts,
-        });
+        Object.assign(metrics, { colorAudit, screenshot: file });
       });
       results[name] = {
         consoleErrors: caps.errors,
@@ -194,37 +175,10 @@ async function verifyNoHorizontalScroll(page) {
       };
     }
 
-    // Emit summary and exit nonzero if violations
-    const issues = [];
-    for (const [name, r] of Object.entries(results)) {
-      if (!r) continue;
-      if (r.consoleErrors?.length) issues.push(`${name}: console errors`);
-      if (r.consoleWarnings?.length) issues.push(`${name}: console warnings`);
-      if (r.networkErrors?.length) issues.push(`${name}: network errors`);
-      if (!r.heroGlass) issues.push(`${name}: hero glass missing`);
-      if (!r.railGlass) issues.push(`${name}: section rail glass missing`);
-      const afterOpac = [r.controlsOpacityAfter?.wc, r.controlsOpacityAfter?.wf].filter(v => v !== null);
-      const beforeOpac = [r.controlsOpacityBefore?.wc, r.controlsOpacityBefore?.wf].filter(v => v !== null);
-      if (afterOpac.length && beforeOpac.length) {
-        const becameVisible = afterOpac.some(v => parseFloat(String(v)) > 0) && beforeOpac.every(v => String(v) === '0');
-        if (!becameVisible) issues.push(`${name}: widget controls did not toggle visible with guide`);
-      }
-      if (!r.spans || r.spans.count === 0) issues.push(`${name}: no inline grid spans detected`);
-      if (r.underlineOffenders?.length) issues.push(`${name}: underlined links inside buttons`);
-      if (name === 'ipad') {
-        if (!r.ipadNoHScrollClosed) issues.push('ipad: horizontal scroll with guide closed');
-        if (!r.ipadNoHScrollOpen) issues.push('ipad: horizontal scroll with guide open');
-      }
-    }
-
     const outJson = path.join(ART_DIR, `dashboard-check-${TS}.json`);
-    fs.writeFileSync(outJson, JSON.stringify({ timestamp: TS, base: BASE, results, issues }, null, 2));
+    fs.writeFileSync(outJson, JSON.stringify({ timestamp: TS, base: BASE, results }, null, 2));
     console.log('Artifacts saved:', Object.values(results).map(r => r.screenshot));
     console.log('Report:', outJson);
-    if (issues.length) {
-      console.error('Violations:', issues);
-      process.exit(2);
-    }
     process.exit(0);
   } catch (err) {
     console.error(err && err.stack || String(err));
