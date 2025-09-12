@@ -1,5 +1,5 @@
+import { getCapacity, getRemainingTtlMs, listKeys } from '@/lib/server/cache'
 import { NextResponse } from 'next/server'
-import { getRemainingTtlMs, listKeys, getCapacity } from '@/lib/server/cache'
 
 export const revalidate = 0
 

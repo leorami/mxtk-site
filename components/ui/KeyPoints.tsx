@@ -21,7 +21,7 @@ export function KeyPoint({
       <div className="flex items-center gap-3 mb-2">
         <span className="inline-flex h-6 w-6 rounded-full ring-1 ring-[var(--accent)]/30 bg-[var(--accent)]/12 items-center justify-center">
                   <AppImage
-          src="icons/mxtk-micro.svg"
+          src="/icons/mxtk-micro.svg"
           width={14}
           height={14}
           alt=""

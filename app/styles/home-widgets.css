@@ -186,6 +186,8 @@
   grid-column: span var(--w, 3);
   grid-row: span calc(var(--h, 24));
   min-width: 0; /* prevent overflow in narrow breakpoints */
+  min-height: 0; /* allow children to scroll within grid tracks */
+  overflow: hidden; /* clip any child overflow outside tile */
 }
 
 /* Resizer: bottom-right handle */
@@ -234,6 +236,9 @@ html.guide-open .widget-controls { opacity: 1 !important; pointer-events: auto !
   backdrop-filter: blur(10px);
   box-shadow: 0 6px 20px rgba(0,0,0,0.25);
   outline: 1px solid rgba(255,255,255,0.12);
+  display:flex;           /* enable header+body column layout */
+  flex-direction:column;
+  height:100%;            /* fill assigned grid track height */
 }
 html.dark .wframe{ background: rgba(10,12,16,0.35); outline-color: rgba(255,255,255,0.08); }
 
@@ -264,11 +269,36 @@ html.light .iconbtn{ border-color: rgba(0,0,0,0.25); background: rgba(255,255,25
 html.light .wframe-resize{ border-color: rgba(0,0,0,0.45); }
 
 /* Links on glass: WCAG-safe */
-.wframe a{ text-decoration:none; border-bottom:1px solid transparent; }
+.wframe a{ text-decoration:underline; text-underline-offset:2px; border-bottom:1px solid transparent; font-weight:600; }
 .wframe a:focus-visible{ outline:2px solid currentColor; outline-offset:2px; }
-html.light .wframe a{ color:#133c8a; border-bottom-color:rgba(19,60,138,.35); }
-html.dark  .wframe a{ color:#a7c4ff; border-bottom-color:rgba(167,196,255,.35); }
+html.light .wframe a{ color:#0c2563; border-bottom-color:rgba(12,37,99,.55); }
+html.dark  .wframe a{ color:#e6eeff; border-bottom-color:rgba(230,238,255,.55); }
+.wframe .btn-link{ font-weight:600; }
+.wframe .btn-link:focus-visible{ outline:2px solid currentColor; outline-offset:2px; }
+.wframe .btn-link:hover{ text-decoration:underline; text-underline-offset:2px; }
+
+/* Warm ink palette: darker link/button color for readability on warm glass */
+/* Warm ink: enforce darker text for links and button-links inside widgets */
+html[data-ink="warm"] .wframe a{ color:#3a1200 !important; border-bottom-color: rgba(58,18,0,.65) !important; }
+html[data-ink="warm"] .wframe a.btn-link,
+html[data-ink="warm"] .wframe .btn-link,
+html[data-ink="warm"] .wframe .btn-link.text-sm{ color:#3a1200 !important; }
+html[data-ink="warm"] .wframe a:hover,
+html[data-ink="warm"] .wframe .btn-link:hover{ color:#2c0e00 !important; border-bottom-color: rgba(44,14,0,.75) !important; }
+
+/* Warm ink: section headers and toggles */
+html[data-ink="warm"] .sc-section-title{ color:#3a1200 !important; }
+html[data-ink="warm"] .sc-section-toggle{ color:#6a3a0f !important; }
+html[data-ink="warm"] .wframe .wf-title{ color:#3a1200 !important; }
+
+/* Warm ink: non-button links inside section rails should also be dark */
+html[data-ink="warm"] .section-rail .glass a:not(.btn):not(.btn-primary):not(.btn-secondary):not(.btn-link):not(.button):not(.cta):not([role="button"]){
+  color:#3a1200 !important;
+}
 .wframe a:hover{ border-bottom-color: currentColor; }
+
+/* Extra contrast for links inside widget bodies (lists) — do not override color */
+.wframe .widget-body a{ filter: contrast(1.1); }
 
 /* Widget header row */
 .wf-head{ display:flex; align-items:center; justify-content:space-between; gap:.75rem; margin-bottom:.25rem; }
@@ -276,6 +306,23 @@ html.dark  .wframe a{ color:#a7c4ff; border-bottom-color:rgba(167,196,255,.35); 
 .wf-actions{ display:inline-flex; align-items:center; gap:.25rem; pointer-events:auto; position:static; top:auto; right:auto; margin-left:auto; }
 .wf-actions.wframe-controls{ position:static; top:auto; right:auto; }
 .wf-actions button, .wf-actions [role="button"]{ cursor:pointer; }
+
+/* Scrollable widget body constrained within tile height */
+.wframe-body{
+  flex:1 1 auto;
+  min-height:0;
+  overflow:auto;
+  position: relative;
+}
+
+/* System-default scrollbars (no forced visibility or styling) */
+
+/* Scroll hint fades (top/bottom) rendered as overlays on the frame, not inside content */
+.wframe .scroll-fade{ position:absolute; left:0; right:0; height:18px; pointer-events:none; opacity:0; transition:opacity .15s ease; }
+.wframe .scroll-fade.top{ top:0; backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(3px); background: linear-gradient(to bottom, rgba(0,0,0,.10), rgba(0,0,0,0)); }
+.wframe .scroll-fade.bottom{ bottom:0; backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(3px); background: linear-gradient(to top, rgba(0,0,0,.10), rgba(0,0,0,0)); }
+html.dark .wframe .scroll-fade.top{ background: linear-gradient(to bottom, rgba(255,255,255,.12), rgba(255,255,255,0)); }
+html.dark .wframe .scroll-fade.bottom{ background: linear-gradient(to top, rgba(255,255,255,.12), rgba(255,255,255,0)); }
 
 /* Ensure controls transition consistently on mobile */
 @media (max-width: 820px){

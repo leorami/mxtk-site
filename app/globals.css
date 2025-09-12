@@ -172,8 +172,8 @@ html[data-ink="warm"] {
   /* MXTK orange for h2 */
   --h3-color: rgb(229, 194, 160);
   /* MXTK orange for h3 */
-  --link: rgb(74, 47, 18);
-  --link-hover: rgb(47, 30, 11);
+  --link: rgb(58, 18, 0);
+  --link-hover: rgb(44, 14, 0);
 }
 
 /* Mineral "texture" gradient (no heavy images needed) */

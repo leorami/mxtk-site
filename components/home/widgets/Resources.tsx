@@ -7,7 +7,7 @@ type Resource = { label: string; href: string; prompt?: string };
 function buildResourceList(): Resource[] {
   // Curate from copy; keep it static/deterministic
   const core: Resource[] = [
-    { label: 'Resources', href: '/resources', prompt: 'Open Resources overview' },
+    { label: 'Resources', href: '/resources', prompt: 'Open the MXTK Resources overview, list its sections, give 3 key takeaways, and suggest the next best link for a builder.' },
     { label: 'Whitepaper', href: '/whitepaper', prompt: 'Summarize the MXTK whitepaper' },
     { label: 'Transparency', href: '/transparency', prompt: 'Explain MXTK transparency proofs' },
     { label: 'FAQ', href: '/faq', prompt: 'Answer common MXTK questions' },
@@ -43,8 +43,13 @@ export default function Resources({ id, data }: { id?: string; data?: { maxItems
 
   const onLearnMore = useCallback((r: Resource) => {
     try {
-      window.dispatchEvent(new CustomEvent('mxtk:guide:prefill', {
-        detail: { prompt: r.prompt || `Teach me about ${r.label} in MXTK` }
+      const prompt = r.prompt || [
+        'Open the MXTK Resources overview and briefly describe its sections.',
+        'Then give: 3 key takeaways, and the next best link a builder should click.',
+        'Respond in ~6 bullets, no fluff.'
+      ].join(' ');
+      window.dispatchEvent(new CustomEvent('mxtk:guide:open', {
+        detail: { prompt, send: true }
       }));
     } catch { }
   }, []);
@@ -63,7 +68,7 @@ export default function Resources({ id, data }: { id?: string; data?: { maxItems
           <button className="iconbtn" aria-label="Increase items" onClick={() => { const n = Math.min(7, currentMax + 1); setCurrentMax(n); persist(n); }}>+</button>
         </div>
       </div>
-      <ul className="space-y-2">
+      <ul className="space-y-1">
         {links.slice(0, currentMax).map((r) => (
           <li key={r.href} className="flex items-center justify-between gap-2">
             <a className="underline" href={r.href}>{r.label}</a>
@@ -71,6 +76,7 @@ export default function Resources({ id, data }: { id?: string; data?: { maxItems
               className="btn-link text-sm"
               onClick={() => onLearnMore(r)}
               aria-label={`Learn more about ${r.label}`}
+              data-nodrag
             >Learn more</button>
           </li>
         ))}

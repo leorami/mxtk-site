@@ -1,7 +1,7 @@
 {
   "id": "705fac6b2ad2fe65",
   "createdAt": "2025-09-08T06:54:43.337Z",
-  "updatedAt": "2025-09-12T05:41:03.667Z",
+  "updatedAt": "2025-09-12T07:06:57.727Z",
   "blocks": [
     {
       "id": "cedaf597-10f9-4066-8faa-69166526fc92",
@@ -20,6 +20,17 @@
       "section": "tokenomics",
       "title": "Certainly! Here's a simple overview of MXTK tokenomics: - **Tokenization**: MXTK",
       "body": "Certainly! Here's a simple overview of MXTK tokenomics: - **Tokenization**: MXTK is a token that represents real-world assets (RWAs), like minerals or commodities. This means each token is backed by tangible assets. - **Value Stability**: The value of MXTK is supported by the underlying assets, making it more stable compared to traditional cryptocurrencies that aren't asset-backed. - **Efficiency**: MXTK uses technology like distributed ledgers and smart contracts to make transactions faster and more secure. - **Fraud Prevention**: Anti-fraud measures are built into the system to ensure the authenticity of transactions and asset backing. - **Market Reach**: MXTK allows for global trading and access to markets that might otherwise be difficult to enter. In plain words, MXTK is a digital token that represents real assets, making it stable and secure for trading and investment.",
+      "citations": [
+        "admin"
+      ],
+      "confidence": 0.8
+    },
+    {
+      "id": "68e9afdb-9a7e-4593-853d-4a3d3f7fdbd2",
+      "topicKey": "mxtk-transparency-proofs-are-designed-to-build-trust-and-ensure-accountability",
+      "section": "overview",
+      "title": "MXTK transparency proofs are designed to build trust and ensure accountability. ",
+      "body": "MXTK transparency proofs are designed to build trust and ensure accountability. Here's how they work: - **Transparency Page**: This page will be posted to provide clear and accessible information about MXTK's operations and financials.\n- **Verified Contract**: The MXTK contract will be verified to ensure it operates as intended and is secure.\n- **Multisig with Timelock**: Admin control will be moved to a multisig (multiple signature) wallet with a timelock. This means decisions require multiple approvals and can't be executed immediately, adding security.\n- **Oracle Methodology**: The methodology for how price data is gathered and used will be published. This ensures that the data driving MXTK's value is reliable and transparent.\n- **Liquidity Pool (LP) Depth**: Initial liquidity of $5–10M will be locked on Uniswap v3 to provide stability and trust in the market. In plain words: MXTK uses clear rules and checks to show it's trustworthy and safe.",
       "citations": [
         "admin"
       ],

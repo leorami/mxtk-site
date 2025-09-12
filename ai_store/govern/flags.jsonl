@@ -91,3 +91,48 @@
 {"source":"chat","reason":"spam content","category":"spam","severity":3,"id":"d3cd52e2-185d-4d1f-b9c6-82e6ab821c60","createdAt":1757657466873,"status":"open","notes":[],"labels":[]}
 {"source":"ingest","reason":"policy hit","category":"policy","severity":1,"id":"6c97b883-d568-45f6-9f44-e58593aeccd8","createdAt":1757657466864,"status":"resolved","notes":[],"labels":[],"updatedAt":1757657466905}
 {"source":"system","reason":"check","category":"other","id":"b4a57aeb-4548-4dc3-abdb-504c42170362","createdAt":1757657466943,"status":"open","notes":[],"labels":[]}
+{"source":"system","reason":"pii","category":"pii","id":"40dae5d2-9412-4930-860c-59488e8c8f32","createdAt":1757657688625,"status":"open","notes":[],"labels":[]}
+{"source":"ingest","reason":"policy hit","category":"policy","severity":1,"id":"13577043-8aea-499b-b439-7b38624e8daf","createdAt":1757657688652,"status":"open","notes":[],"labels":[]}
+{"source":"chat","reason":"spam content","category":"spam","severity":3,"id":"72081d87-96ba-419a-bfa0-3c27416c9667","createdAt":1757657688668,"status":"open","notes":[],"labels":[]}
+{"source":"ingest","reason":"policy hit","category":"policy","severity":1,"id":"13577043-8aea-499b-b439-7b38624e8daf","createdAt":1757657688652,"status":"resolved","notes":[],"labels":[],"updatedAt":1757657688692}
+{"source":"system","reason":"check","category":"other","id":"6eb1733e-e070-4653-bc83-f964030376c4","createdAt":1757657688728,"status":"open","notes":[],"labels":[]}
+{"source":"system","reason":"pii","category":"pii","id":"d136c375-5f46-49c5-8429-e7eaa39d0547","createdAt":1757658080745,"status":"open","notes":[],"labels":[]}
+{"source":"ingest","reason":"policy hit","category":"policy","severity":1,"id":"37ae9647-b70d-413e-8883-e99ac9e6f9dd","createdAt":1757658080804,"status":"open","notes":[],"labels":[]}
+{"source":"chat","reason":"spam content","category":"spam","severity":3,"id":"52763e61-1b45-44a9-afbb-1b2cdcb0ad22","createdAt":1757658080890,"status":"open","notes":[],"labels":[]}
+{"source":"ingest","reason":"policy hit","category":"policy","severity":1,"id":"37ae9647-b70d-413e-8883-e99ac9e6f9dd","createdAt":1757658080804,"status":"resolved","notes":[],"labels":[],"updatedAt":1757658080943}
+{"source":"system","reason":"check","category":"other","id":"1a037d49-dbd5-4a85-84fc-46cc43f2e98c","createdAt":1757658080991,"status":"open","notes":[],"labels":[]}
+{"source":"system","reason":"pii","category":"pii","id":"8e78872b-0a99-453c-a197-59c5c3e77555","createdAt":1757658390065,"status":"open","notes":[],"labels":[]}
+{"source":"ingest","reason":"policy hit","category":"policy","severity":1,"id":"fe32ec0a-9c52-4f37-af82-23a38842c4b1","createdAt":1757658390078,"status":"open","notes":[],"labels":[]}
+{"source":"chat","reason":"spam content","category":"spam","severity":3,"id":"3b9e3638-5c25-4853-8190-799cb62d9881","createdAt":1757658390100,"status":"open","notes":[],"labels":[]}
+{"source":"ingest","reason":"policy hit","category":"policy","severity":1,"id":"fe32ec0a-9c52-4f37-af82-23a38842c4b1","createdAt":1757658390078,"status":"resolved","notes":[],"labels":[],"updatedAt":1757658390149}
+{"source":"system","reason":"check","category":"other","id":"b9be56df-7d22-4865-8de8-3adc8d344a3d","createdAt":1757658390181,"status":"open","notes":[],"labels":[]}
+{"source":"system","reason":"pii","category":"pii","id":"ed3ef497-34b2-4dcb-be1c-b3938ff457d6","createdAt":1757659069506,"status":"open","notes":[],"labels":[]}
+{"source":"ingest","reason":"policy hit","category":"policy","severity":1,"id":"a9d91dc5-c15e-41b5-a7e7-0a6a773e7b46","createdAt":1757659069545,"status":"open","notes":[],"labels":[]}
+{"source":"chat","reason":"spam content","category":"spam","severity":3,"id":"fe300410-c24a-4bfc-8ac4-b996514c291c","createdAt":1757659069563,"status":"open","notes":[],"labels":[]}
+{"source":"ingest","reason":"policy hit","category":"policy","severity":1,"id":"a9d91dc5-c15e-41b5-a7e7-0a6a773e7b46","createdAt":1757659069545,"status":"resolved","notes":[],"labels":[],"updatedAt":1757659069644}
+{"source":"system","reason":"check","category":"other","id":"fb132df7-b791-42df-9cc1-2f44c1911b35","createdAt":1757659069721,"status":"open","notes":[],"labels":[]}
+{"source":"system","reason":"pii","category":"pii","id":"05319581-aa0a-4352-bf09-0ad9ae6011e2","createdAt":1757659438284,"status":"open","notes":[],"labels":[]}
+{"source":"ingest","reason":"policy hit","category":"policy","severity":1,"id":"3597fa2f-f297-4593-96a8-35f089055d5d","createdAt":1757659438301,"status":"open","notes":[],"labels":[]}
+{"source":"chat","reason":"spam content","category":"spam","severity":3,"id":"94e9263e-0158-4ceb-ac02-48ee1dda0543","createdAt":1757659438323,"status":"open","notes":[],"labels":[]}
+{"source":"ingest","reason":"policy hit","category":"policy","severity":1,"id":"3597fa2f-f297-4593-96a8-35f089055d5d","createdAt":1757659438301,"status":"resolved","notes":[],"labels":[],"updatedAt":1757659438405}
+{"source":"system","reason":"check","category":"other","id":"3fd18e31-8fd8-48b4-ac44-4482be0f9e9e","createdAt":1757659438433,"status":"open","notes":[],"labels":[]}
+{"source":"system","reason":"pii","category":"pii","id":"58952262-4e01-440f-8369-6053aa9ef01f","createdAt":1757660041302,"status":"open","notes":[],"labels":[]}
+{"source":"ingest","reason":"policy hit","category":"policy","severity":1,"id":"bcc2ec04-d623-44bd-9926-205cd6443dd7","createdAt":1757660041323,"status":"open","notes":[],"labels":[]}
+{"source":"chat","reason":"spam content","category":"spam","severity":3,"id":"f569c1d8-b2ed-43ef-8455-b6f5215a6042","createdAt":1757660041349,"status":"open","notes":[],"labels":[]}
+{"source":"ingest","reason":"policy hit","category":"policy","severity":1,"id":"bcc2ec04-d623-44bd-9926-205cd6443dd7","createdAt":1757660041323,"status":"resolved","notes":[],"labels":[],"updatedAt":1757660041419}
+{"source":"system","reason":"check","category":"other","id":"771afc63-a24c-4ed9-8b10-c957c7470af7","createdAt":1757660041471,"status":"open","notes":[],"labels":[]}
+{"source":"system","reason":"pii","category":"pii","id":"0daff923-b80a-4a49-9e14-3e9510183c0a","createdAt":1757660349562,"status":"open","notes":[],"labels":[]}
+{"source":"ingest","reason":"policy hit","category":"policy","severity":1,"id":"f02e00a5-3619-47d6-a58a-2afb7e8c2f16","createdAt":1757660349591,"status":"open","notes":[],"labels":[]}
+{"source":"chat","reason":"spam content","category":"spam","severity":3,"id":"45d9f8f5-baf6-4010-b4eb-76ab6d1e8ef9","createdAt":1757660349614,"status":"open","notes":[],"labels":[]}
+{"source":"ingest","reason":"policy hit","category":"policy","severity":1,"id":"f02e00a5-3619-47d6-a58a-2afb7e8c2f16","createdAt":1757660349591,"status":"resolved","notes":[],"labels":[],"updatedAt":1757660349664}
+{"source":"system","reason":"check","category":"other","id":"67083e6f-0034-4f24-bccf-bc5a457b929a","createdAt":1757660349695,"status":"open","notes":[],"labels":[]}
+{"source":"system","reason":"pii","category":"pii","id":"5ee7a65b-5d3a-45ba-b462-181f990106df","createdAt":1757685123468,"status":"open","notes":[],"labels":[]}
+{"source":"ingest","reason":"policy hit","category":"policy","severity":1,"id":"8f1c009e-83b3-497b-b09d-4bb7228568b0","createdAt":1757685123505,"status":"open","notes":[],"labels":[]}
+{"source":"chat","reason":"spam content","category":"spam","severity":3,"id":"47d54c7a-16a9-4dd3-8497-96dc3369e893","createdAt":1757685123559,"status":"open","notes":[],"labels":[]}
+{"source":"ingest","reason":"policy hit","category":"policy","severity":1,"id":"8f1c009e-83b3-497b-b09d-4bb7228568b0","createdAt":1757685123505,"status":"resolved","notes":[],"labels":[],"updatedAt":1757685123689}
+{"source":"system","reason":"check","category":"other","id":"19fe88b7-2870-4bb8-91ae-d642c7f9efab","createdAt":1757685123778,"status":"open","notes":[],"labels":[]}
+{"source":"system","reason":"pii","category":"pii","id":"19b0cc8d-f5ab-4af6-b716-1de7d73a2501","createdAt":1757685164672,"status":"open","notes":[],"labels":[]}
+{"source":"ingest","reason":"policy hit","category":"policy","severity":1,"id":"a2c1eef8-155f-454b-9cf3-ac7cce31fa4a","createdAt":1757685164707,"status":"open","notes":[],"labels":[]}
+{"source":"chat","reason":"spam content","category":"spam","severity":3,"id":"4206e97d-490a-4231-8fd7-ccdb9026e1bc","createdAt":1757685164771,"status":"open","notes":[],"labels":[]}
+{"source":"ingest","reason":"policy hit","category":"policy","severity":1,"id":"a2c1eef8-155f-454b-9cf3-ac7cce31fa4a","createdAt":1757685164707,"status":"resolved","notes":[],"labels":[],"updatedAt":1757685164845}
+{"source":"system","reason":"check","category":"other","id":"736b9657-e298-49ce-bd9b-f28dd8575744","createdAt":1757685164883,"status":"open","notes":[],"labels":[]}

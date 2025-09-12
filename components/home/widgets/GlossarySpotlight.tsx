@@ -64,7 +64,8 @@ export default function GlossarySpotlight({ id, data }: { id?: string; data?: { 
 
   const onLearn = useCallback(() => {
     try {
-      window.dispatchEvent(new CustomEvent('mxtk:guide:prefill', { detail: { prompt: `Define ${pick.term} and how it relates to MXTK` } }));
+      const prompt = `Explain ${pick.term} and how it relates to MXTK. Provide a brief summary and key points.`
+      window.dispatchEvent(new CustomEvent('mxtk:guide:open', { detail: { prompt, send: true } }));
     } catch { }
   }, [pick.term]);
 
@@ -72,7 +73,7 @@ export default function GlossarySpotlight({ id, data }: { id?: string; data?: { 
     <div className="text-sm leading-relaxed">
       <div className="font-semibold mb-1">{pick.term}</div>
       <p className="opacity-90">{pick.definition}</p>
-      <button className="btn-link text-sm mt-2" onClick={onLearn} aria-label="Learn more in Guide">Learn more</button>
+      <button className="btn-link text-sm mt-2" onClick={onLearn} aria-label="Learn more in Guide" data-nodrag>Learn</button>
     </div>
   );
 }

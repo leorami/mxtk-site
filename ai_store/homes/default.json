@@ -59,7 +59,7 @@
         "y": 0
       },
       "size": {
-        "w": 4,
+        "w": 8,
         "h": 24
       }
     },
@@ -69,12 +69,12 @@
       "title": "Note",
       "sectionId": "overview",
       "pos": {
-        "x": 0,
+        "x": 2,
         "y": 0
       },
       "size": {
         "w": 4,
-        "h": 24
+        "h": 9
       },
       "data": {
         "note": ""
@@ -90,8 +90,8 @@
         "y": 0
       },
       "size": {
-        "w": 5,
-        "h": 14
+        "w": 4,
+        "h": 13
       }
     },
     {
@@ -100,12 +100,12 @@
       "title": "Build Tasks",
       "sectionId": "build",
       "pos": {
-        "x": 0,
-        "y": 0
+        "x": 2,
+        "y": 1
       },
       "size": {
-        "w": 6,
-        "h": 24
+        "w": 7,
+        "h": 15
       }
     },
     {
@@ -114,12 +114,12 @@
       "title": "Key Concepts",
       "sectionId": "build",
       "pos": {
-        "x": 6,
+        "x": 7,
         "y": 0
       },
       "size": {
-        "w": 6,
-        "h": 24
+        "w": 5,
+        "h": 15
       },
       "data": {
         "day": "20250912",

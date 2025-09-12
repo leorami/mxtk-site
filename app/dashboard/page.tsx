@@ -14,7 +14,7 @@ export default async function DashboardPage() {
       copyKey="dashboard"
       backgroundVariant="dashboard"
       heroAlign="center"
-      ink="light"
+      ink="warm"
       lift="H"
       glass="soft"
       heroActions={

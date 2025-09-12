@@ -2,7 +2,20 @@
   "id": "h_patch_test",
   "widgets": [
     {
-      "id": "mfgf17ze_2",
+      "id": "mfggtuto_1",
+      "type": "custom-note",
+      "title": "Note",
+      "size": {
+        "w": 3,
+        "h": 2
+      },
+      "pos": {
+        "x": 0,
+        "y": 11
+      }
+    },
+    {
+      "id": "mfggtuto_2",
       "type": "glossary-spotlight",
       "title": "Glossary",
       "size": {
@@ -11,11 +24,115 @@
       },
       "pos": {
         "x": 3,
-        "y": 4
+        "y": 11
       }
     },
     {
-      "id": "mfgfvh8t_1",
+      "id": "mfgh1r6s_1",
+      "type": "custom-note",
+      "title": "Note",
+      "size": {
+        "w": 3,
+        "h": 2
+      },
+      "pos": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    {
+      "id": "mfgh1r6s_2",
+      "type": "glossary-spotlight",
+      "title": "Glossary",
+      "size": {
+        "w": 3,
+        "h": 2
+      },
+      "pos": {
+        "x": 3,
+        "y": 0
+      }
+    },
+    {
+      "id": "mfgheony_1",
+      "type": "custom-note",
+      "title": "Note",
+      "size": {
+        "w": 3,
+        "h": 2
+      },
+      "pos": {
+        "x": 0,
+        "y": 9
+      }
+    },
+    {
+      "id": "mfgheony_2",
+      "type": "glossary-spotlight",
+      "title": "Glossary",
+      "size": {
+        "w": 3,
+        "h": 2
+      },
+      "pos": {
+        "x": 3,
+        "y": 9
+      }
+    },
+    {
+      "id": "mfghl9l4_1",
+      "type": "custom-note",
+      "title": "Note",
+      "size": {
+        "w": 3,
+        "h": 2
+      },
+      "pos": {
+        "x": 0,
+        "y": 7
+      }
+    },
+    {
+      "id": "mfghl9l4_2",
+      "type": "glossary-spotlight",
+      "title": "Glossary",
+      "size": {
+        "w": 3,
+        "h": 2
+      },
+      "pos": {
+        "x": 3,
+        "y": 7
+      }
+    },
+    {
+      "id": "mfgwcc11_1",
+      "type": "custom-note",
+      "title": "Note",
+      "size": {
+        "w": 3,
+        "h": 2
+      },
+      "pos": {
+        "x": 0,
+        "y": 5
+      }
+    },
+    {
+      "id": "mfgwcc13_2",
+      "type": "glossary-spotlight",
+      "title": "Glossary",
+      "size": {
+        "w": 3,
+        "h": 2
+      },
+      "pos": {
+        "x": 3,
+        "y": 5
+      }
+    },
+    {
+      "id": "mfgwd50v_1",
       "type": "custom-note",
       "title": "Note",
       "size": {
@@ -28,7 +145,7 @@
       }
     },
     {
-      "id": "mfgfvh8t_2",
+      "id": "mfgwd50v_2",
       "type": "glossary-spotlight",
       "title": "Glossary",
       "size": {

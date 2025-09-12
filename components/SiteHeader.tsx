@@ -4,12 +4,13 @@ import HeaderSherpa from '@/components/ai/HeaderSherpa'
 // import GuideHeaderButton from '@/components/ai/GuideHeaderButton'
 import ExperienceToggle from '@/components/experience/ExperienceToggle'
 
+import AppImage from '@/components/ui/AppImage'
 import { useBasePath } from '@/lib/basepath'
 import { themeForRoute } from '@/lib/brand/theme'
-import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { CSSProperties, useEffect, useState } from 'react'
+import DataHealthChip from '@/components/health/DataHealthChip'
 
 type Item = { href: string; label: string }
 
@@ -101,14 +102,7 @@ export default function SiteHeader({ hasHome }: { hasHome?: boolean }) {
           <div className="flex items-center gap-3">
             <Link href="/" className="flex items-center justify-center" aria-label="MXTK Home" suppressHydrationWarning>
               <div className="flex items-center justify-center" style={{ position: 'relative', width: 120, height: 36 }}>
-                <Image
-                  src={`${basePath}/logo-horizontal.png`}
-                  alt="MXTK logo"
-                  fill
-                  sizes="120px"
-                  priority
-                  style={{ objectFit: 'contain' }}
-                />
+                <AppImage src="/logo-horizontal.png" alt="MXTK logo" fill sizes="120px" priority style={{ objectFit: 'contain' }} />
               </div>
             </Link>
             {/* Add a Home link next to the logo (left cluster). */}
@@ -174,6 +168,11 @@ export default function SiteHeader({ hasHome }: { hasHome?: boolean }) {
           </div>
 
           <div data-testid="experience-controls-desktop" className="hidden nav:flex items-center justify-center gap-2">
+            {(() => {
+              const p = (pathname || '/');
+              const show = /\/(transparency|institutions|dashboard)(\b|\/)/.test(p) || p === '/transparency' || p === '/institutions' || p === '/dashboard';
+              return show ? <div className="mr-2"><DataHealthChip /></div> : null;
+            })()}
             <div className="flex items-center gap-2" data-testid="sherpa-cluster">
               <div data-testid="experience-icons" className={`mr-1 ${iconClass}`}><ExperienceToggle /></div>
               <HeaderSherpa />

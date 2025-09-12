@@ -19,7 +19,7 @@ export default function DashboardPageClient({ initialDocId = 'default' }: Props)
     <PageScaffold
       copyKey="dashboard"
       backgroundVariant="dashboard"
-      ink="light"
+      ink="warm"
       lift="H"
       glass="soft"
       heroAlign="center"

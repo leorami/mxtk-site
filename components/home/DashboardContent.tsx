@@ -13,6 +13,7 @@ export default function DashboardContent({ initialDocId = 'default', initialDoc 
   const [error, setError] = React.useState<string | null>(null)
   const [loading, setLoading] = React.useState(true)
   const [retryCount, setRetryCount] = React.useState(0)
+  const lastMutationTs = React.useRef<number>(0)
   // Mirror widget controls behavior: only show move controls when Guide (Sherpa) is open
   const guideOpen = React.useSyncExternalStore(
     (onStoreChange) => {
@@ -99,6 +100,7 @@ export default function DashboardContent({ initialDocId = 'default', initialDoc 
   }, [initialDocId])
 
   const loadData = React.useCallback(async (forceRetry = false): Promise<HomeDoc | null> => {
+    const startedAt = Date.now()
     if (forceRetry) {
       setRetryCount(count => count + 1)
     }
@@ -160,7 +162,10 @@ export default function DashboardContent({ initialDocId = 'default', initialDoc 
       const j = await res.json().catch(() => null)
       if (j && !j.error) {
         console.log('Dashboard: GET successful')
-        setDoc(j)
+        // Ignore stale GET that started before a more recent user mutation
+        if (startedAt >= lastMutationTs.current) {
+          setDoc(j)
+        }
         return j
       } else {
         console.error('Dashboard: Invalid data', j)
@@ -402,6 +407,21 @@ export default function DashboardContent({ initialDocId = 'default', initialDoc 
                     const kind = updates.some(u => u.size) ? 'resize' : 'move' as const
                     scheduleUndo({ kind, payload: inv })
                   } catch {}
+                  // Optimistically merge into in-memory doc immediately to prevent visual revert
+                  setDoc(d => {
+                    if (!d) return d
+                    const nextWidgets = d.widgets.map(w => {
+                      const u = updates.find(x => x.id === w.id)
+                      if (!u) return w
+                      return {
+                        ...w,
+                        pos: u.pos ? { ...(w.pos as any), ...u.pos as any } : w.pos,
+                        size: u.size ? { ...(w.size as any), ...u.size as any } : w.size,
+                      } as any
+                    })
+                    return { ...d, widgets: nextWidgets }
+                  })
+                  lastMutationTs.current = Date.now()
                   await fetch(getApiUrl(`/ai/home/${initialDocId}`), {
                     method: 'PATCH', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ widgets: updates })
                   })

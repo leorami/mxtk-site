@@ -73,7 +73,7 @@ export default function Grid({ doc, render, onPatch }: GridProps) {
   });
 
   // --- debounced PATCH -------------------------------------------------------
-  const pending = React.useRef<WidgetState[] | null>(null);
+  const pending = React.useRef<Partial<WidgetState>[] | null>(null);
   const debTimer = React.useRef<number | null>(null);
   const doPatch = React.useCallback(async (batch: Partial<WidgetState>[]) => {
     try {
@@ -95,11 +95,26 @@ export default function Grid({ doc, render, onPatch }: GridProps) {
 
   function queuePatch(updates: Partial<WidgetState>[]) {
     if (debTimer.current) window.clearTimeout(debTimer.current);
+    pending.current = updates;
     debTimer.current = window.setTimeout(() => {
-      doPatch(updates);
+      const p = pending.current;
+      if (p) doPatch(p);
       debTimer.current = null;
+      pending.current = null;
     }, 600);
   }
+
+  // Flush any pending updates on unmount (navigation/refresh) to avoid lost changes
+  React.useEffect(() => {
+    return () => {
+      if (debTimer.current && pending.current) {
+        // best effort, fire-and-forget
+        void doPatch(pending.current);
+        debTimer.current = null;
+        pending.current = null;
+      }
+    };
+  }, [doPatch]);
 
   // --- helpers ---------------------------------------------------------------
   function clampPos(w: WidgetState, nextX: number, nextY: number) {
@@ -161,13 +176,19 @@ export default function Grid({ doc, render, onPatch }: GridProps) {
         const id = dragId.current;
         dragId.current = null;
         const w = widgets.find(x => x.id === id);
-        if (w) queuePatch([{ id: w.id, pos: w.pos }]);
+        if (w) {
+          // Persist immediately on drag end
+          void doPatch([{ id: w.id, pos: w.pos }]);
+        }
       }
       if (resizeId.current) {
         const id = resizeId.current;
         resizeId.current = null;
         const w = widgets.find(x => x.id === id);
-        if (w) queuePatch([{ id: w.id, size: w.size }]);
+        if (w) {
+          // Persist immediately on resize end
+          void doPatch([{ id: w.id, size: w.size }]);
+        }
       }
     }
     window.addEventListener('pointermove', onMove);
