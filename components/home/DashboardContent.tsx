@@ -20,16 +20,18 @@ export default function DashboardContent({ initialDocId = 'default', initialDoc 
   )
 
   const toggleCollapse = React.useCallback(async (secId: string) => {
+    let nextCollapsed = false;
     setDoc(d => {
       if (!d) return d;
-      const collapsed = !d.sections.find(s => s.id === secId)?.collapsed;
-      const sections = d.sections.map(s => s.id === secId ? { ...s, collapsed } : s);
+      const current = d.sections.find(s => s.id === secId)?.collapsed;
+      nextCollapsed = !current;
+      const sections = d.sections.map(s => s.id === secId ? { ...s, collapsed: nextCollapsed } : s);
       return { ...d, sections } as HomeDoc;
     });
     try {
       await fetch(getApiUrl(`/ai/home/${initialDocId}`), {
         method: 'PATCH', headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ widgets: [], sections: [{ id: secId, collapsed: true }] })
+        body: JSON.stringify({ sections: [{ id: secId, collapsed: nextCollapsed }] })
       })
     } catch {}
   }, [initialDocId])
@@ -179,15 +181,21 @@ export default function DashboardContent({ initialDocId = 'default', initialDoc 
         const widgets = doc.widgets.filter(w => w.sectionId === sec.id)
         return (
           <section id={sec.id} key={sec.id} className="glass glass--panel p-4 md:p-6 mb-6 rounded-xl">
-            <header className="flex items-center justify-between mb-3">
-              <h2 className="text-lg font-semibold">{sec.title}</h2>
-              <button className="text-sm opacity-70 hover:opacity-100" onClick={() => toggleCollapse(sec.id)}>
-                {sec.collapsed ? 'Expand' : 'Collapse'}
-              </button>
+            <header className="wf-head flex items-center justify-between mb-3">
+              <h2 className="wf-title text-lg font-semibold">{sec.title}</h2>
+              <div className="wf-actions flex items-center gap-2">
+                <button
+                  className="text-sm opacity-80 hover:opacity-100"
+                  aria-expanded={!sec.collapsed}
+                  onClick={(e) => { e.preventDefault(); toggleCollapse(sec.id); }}
+                >{sec.collapsed ? 'Expand' : 'Collapse'}</button>
+              </div>
             </header>
-            <div className="section-body" hidden={!!sec.collapsed} aria-hidden={!!sec.collapsed}>
-              <Grid doc={{ ...doc, widgets }} />
-            </div>
+            {!sec.collapsed && (
+              <div className="section-body">
+                <Grid doc={{ ...doc, widgets }} />
+              </div>
+            )}
           </section>
         )
       })}

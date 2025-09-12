@@ -29,6 +29,8 @@ export default function WidgetFrame({ id, docId, data, title, children, onRefres
   const [density, setDensity] = React.useState<Density>(() => (data as any)?.density === 'compact' ? 'compact' : 'cozy');
   React.useEffect(() => { setLocalTitle(title); }, [title]);
 
+  // Visibility is CSS-driven via html.guide-open; no inline gating to avoid SSR timing
+
   const save = React.useCallback(async () => {
     if (!id) return;
     const homeId = docId || getHomeIdFallback();
@@ -46,15 +48,15 @@ export default function WidgetFrame({ id, docId, data, title, children, onRefres
   return (
     <div className="relative h-full">
       {/* Header row: title + actions; actions marked no-drag */}
-      <header className="wf-head">
-        <div className="wf-title">{localTitle}</div>
-        <div className="wf-actions wframe-controls widget-controls" data-nodrag aria-hidden="true">
+      <header className="wf-head flex items-center justify-between">
+        <div className="wf-title truncate">{localTitle}</div>
+        <div className="wf-actions wframe-controls widget-controls inline-flex items-center gap-1" data-nodrag>
           {onRefresh && (
-            <button type="button" className="iconbtn" title="Refresh" onClick={onRefresh}>↻</button>
+            <button type="button" className="iconbtn" title="Refresh" data-nodrag onMouseDown={(e) => e.stopPropagation()} onClick={(e) => { e.stopPropagation(); onRefresh?.(); }}>↻</button>
           )}
-          <button type="button" className="iconbtn" title="Settings" onClick={() => setOpen(o => !o)} aria-haspopup="dialog" aria-expanded={open ? 'true' : 'false'}>⚙︎</button>
-          {onInfo && (<button type="button" className="iconbtn" title="Info" onClick={onInfo}>i</button>)}
-          {onRemove && (<button type="button" className="iconbtn" title="Remove" onClick={onRemove}>✕</button>)}
+          <button type="button" className="iconbtn" title="Settings" data-nodrag onMouseDown={(e) => e.stopPropagation()} onClick={(e) => { e.stopPropagation(); setOpen(o => !o); }} aria-haspopup="dialog" aria-expanded={open ? 'true' : 'false'}>⚙︎</button>
+          {onInfo && (<button type="button" className="iconbtn" title="Info" data-nodrag onMouseDown={(e) => e.stopPropagation()} onClick={(e) => { e.stopPropagation(); onInfo?.(); }}>i</button>)}
+          {onRemove && (<button type="button" className="iconbtn" title="Remove" data-nodrag onMouseDown={(e) => e.stopPropagation()} onClick={(e) => { e.stopPropagation(); onRemove?.(); }}>✕</button>)}
         </div>
       </header>
 

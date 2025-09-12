@@ -57,6 +57,16 @@ export const zWidgetPatch = z.object({
   data: z.record(z.unknown()).optional(),
 }).refine(v => v.size || v.pos || typeof v.pinned === 'boolean' || v.data, { message: 'No changes provided' });
 
-export const zHomePatch = z.object({ widgets: z.array(zWidgetPatch).min(1) });
+// W12.5b: section patch (collapsed/order)
+export const zSectionPatch = z.object({
+  id: z.string(),
+  collapsed: z.boolean().optional(),
+  order: z.number().int().optional(),
+});
+
+export const zHomePatch = z.object({
+  widgets: z.array(zWidgetPatch).optional(),
+  sections: z.array(zSectionPatch).optional(),
+}).refine(v => (v.widgets && v.widgets.length) || (v.sections && v.sections.length), { message: 'No changes provided' });
 export type HomePatch = z.infer<typeof zHomePatch>;
 

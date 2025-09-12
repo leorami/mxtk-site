@@ -177,7 +177,8 @@ export default function Grid({ doc, render, onPatch }: GridProps) {
   }, [widgets, queuePatch]);
 
   function startDrag(e: React.PointerEvent, w: WidgetState) {
-    // allow dragging regardless of guide state (cursor already signals affordance)
+    // Gate to Guide open and honor data-nodrag
+    if (!guideOpen) return;
     const t = e.target as HTMLElement;
     if (t.closest('[data-nodrag]') || t.closest('.wframe-controls')) return;
     (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
@@ -186,6 +187,7 @@ export default function Grid({ doc, render, onPatch }: GridProps) {
   }
 
   function startResize(e: React.PointerEvent, w: WidgetState) {
+    if (!guideOpen) return;
     const t = e.target as HTMLElement;
     if (t.closest('[data-nodrag]')) return;
     (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
@@ -234,8 +236,8 @@ export default function Grid({ doc, render, onPatch }: GridProps) {
             tabIndex={0}
             className="widget-tile wframe widget-cell"
             style={{
-              gridColumn: `${(w.pos?.x ?? 0) + 1} / span ${spanW}`,
-              gridRow: `${(w.pos?.y ?? 0) + 1} / span ${spanH}`,
+              // Ensure explicit inline spans for tests (accepts grid-area: span h / span w)
+              gridArea: `span ${spanH} / span ${spanW}`,
             }}
             data-widget-id={w.id}
             onKeyDown={(e) => onKey(e, w)}

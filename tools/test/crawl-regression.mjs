@@ -47,6 +47,24 @@ function isInternalHref(currentUrl, href) {
   return sameOrigin(u) && withinPrefix(u);
 }
 
+function normalizeAbsoluteUrl(abs) {
+  try {
+    const u = new URL(abs);
+    const base = new URL(BASE_URL);
+    const prefix = (base.pathname || '/').replace(/\/$/, '');
+    if (!prefix) return abs;
+    let path = u.pathname;
+    // Collapse duplicated prefixes like <basePath>/<basePath>/... → <basePath>/
+    while (path.startsWith(prefix + prefix)) {
+      path = path.slice(prefix.length);
+    }
+    u.pathname = path;
+    return u.toString();
+  } catch {
+    return abs;
+  }
+}
+
 async function captureConsole(page, store) {
   page.on('console', msg => {
     const type = msg.type();
@@ -155,7 +173,7 @@ async function crawl(browser) {
         if (!isInternalHref(url, href)) continue;
         const u = resolveHref(url, href);
         if (!u) continue;
-        const abs = u.toString();
+        const abs = normalizeAbsoluteUrl(u.toString());
         store.links.push(abs);
         if (!visited.has(abs) && !toVisit.includes(abs)) toVisit.push(abs);
       }

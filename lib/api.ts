@@ -15,13 +15,27 @@ export function getApiUrl(path: string): string {
   if (normalizedPath.startsWith('api/')) {
     normalizedPath = normalizedPath.slice(4);
   }
-  
+
   // Ensure we have a leading slash on the path part
   if (normalizedPath && !normalizedPath.startsWith('/')) {
     normalizedPath = `/${normalizedPath}`;
   }
-  
-  const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
+
+  // Prefer runtime detection on the client; fall back to env on server
+  let basePath = '';
+  try {
+    if (typeof window !== 'undefined') {
+      // Lazy import to avoid cyclic deps during build
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      const { detectBasePath } = require('./basepath');
+      basePath = detectBasePath() || '';
+    } else {
+      basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
+    }
+  } catch {
+    basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
+  }
+
   return `${basePath}/api${normalizedPath}`;
 }
 

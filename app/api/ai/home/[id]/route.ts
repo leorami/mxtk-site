@@ -7,6 +7,7 @@ import { cookies } from 'next/headers';
 import { getHome, putHome } from '@/lib/home/store/fileStore';
 import { migrateToV2 } from '@/lib/home/migrate';
 import type { HomeDoc, WidgetState } from '@/lib/home/types';
+import { zHomePatch } from '@/lib/home/schema';
 
 const NO_STORE = { 'Cache-Control': 'no-store' };
 
@@ -61,6 +62,11 @@ export async function PATCH(req: Request, { params }: { params: { id: string } }
     if (!body || typeof body !== 'object') {
       return NextResponse.json({ error: 'bad-body' }, { status: 400, headers: NO_STORE });
     }
+    const parsed = zHomePatch.safeParse(body);
+    if (!parsed.success) {
+      return NextResponse.json({ error: 'bad-body', detail: parsed.error.flatten() }, { status: 400, headers: NO_STORE });
+    }
+    const valid = parsed.data as any;
 
     const base = await getHome(id);
     let doc: HomeDoc;
@@ -72,11 +78,11 @@ export async function PATCH(req: Request, { params }: { params: { id: string } }
       if (mig.migrated) await putHome(doc);
     }
 
-    const updates: Partial<WidgetState>[] = Array.isArray((body as any).widgets)
-      ? (body as any).widgets
+    const updates: Partial<WidgetState>[] = Array.isArray(valid.widgets)
+      ? valid.widgets
       : (body?.id ? [body as Partial<WidgetState>] : []);
 
-    if (!updates.length) {
+    if (!updates.length && !Array.isArray(valid.sections)) {
       return NextResponse.json({ error: 'no-updates' }, { status: 400, headers: NO_STORE });
     }
 
@@ -100,6 +106,22 @@ export async function PATCH(req: Request, { params }: { params: { id: string } }
         title: u.title ?? cur.title,
       });
       widgets[idx] = next;
+    }
+
+    // apply section patches if provided
+    if (Array.isArray(valid.sections) && valid.sections.length) {
+      const nextSections = [...(doc.sections || [])];
+      for (const s of valid.sections) {
+        const idx = nextSections.findIndex(x => x.id === s.id);
+        if (idx >= 0) {
+          nextSections[idx] = {
+            ...nextSections[idx],
+            ...(Object.prototype.hasOwnProperty.call(s, 'collapsed') ? { collapsed: !!(s as any).collapsed } : {}),
+            ...(Object.prototype.hasOwnProperty.call(s, 'order') ? { order: (s as any).order } : {}),
+          } as typeof nextSections[number];
+        }
+      }
+      (doc as any).sections = nextSections;
     }
 
     const out: HomeDoc = { ...doc, widgets };
