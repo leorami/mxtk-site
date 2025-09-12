@@ -232,20 +232,20 @@ html.guide-open .widget-controls { opacity: 1 !important; pointer-events: auto !
   position:relative;
   border-radius:18px;
   padding:12px;
-  /* Revert to transparent so surrounding glass panels provide the effect */
-  background: transparent;
+  /* Modern default: translucent white card surface */
+  background: var(--widget-bg);
   outline: none;
-  /* Slightly lighter again for a modern, airy frame */
-  border: 1px solid color-mix(in srgb, var(--border-soft), transparent 85%) !important;
+  border: 1px solid var(--widget-border) !important;
   width: 100%;
   z-index: 3;
-  /* subtle lift to match site cards, with a touch more body */
-  box-shadow: var(--shadow-lift-sm), 0 2px 8px rgba(0,0,0,.06);
+  box-shadow: var(--widget-shadow);
+  backdrop-filter: blur(22px);
+  -webkit-backdrop-filter: blur(22px);
   display:flex;           /* enable header+body column layout */
   flex-direction:column;
   height:100%;            /* fill assigned grid track height */
 }
-html.dark .wframe{ background: transparent; }
+html.dark .wframe{ background: var(--widget-bg); }
 
 /* tiny hover lift, consistent with glass cards */
 .wframe:hover{
@@ -253,17 +253,17 @@ html.dark .wframe{ background: transparent; }
   box-shadow: var(--shadow-lift), 0 4px 12px rgba(0,0,0,.08);
 }
 
-/* Modern style (opt-in): translucent white cards */
-html[data-style="modern"] .wframe{
-  background: var(--widget-bg);
-  border: 1px solid var(--widget-border) !important;
-  box-shadow: var(--widget-shadow);
-  backdrop-filter: blur(22px);
-  -webkit-backdrop-filter: blur(22px);
+/* Classic opt-out: revert to transparent card when requested */
+html[data-style="classic"] .wframe{
+  background: transparent;
+  border: 1px solid color-mix(in srgb, var(--border-soft), transparent 85%) !important;
+  box-shadow: var(--shadow-lift-sm), 0 2px 8px rgba(0,0,0,.06);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
 }
-html[data-style="modern"] .wframe:hover{
-  transform: translateY(-1.5px) scale(1.006);
-  box-shadow: 0 10px 24px rgba(0,0,0,.12), 0 3px 12px rgba(0,0,0,.08);
+html[data-style="classic"] .wframe:hover{
+  transform: translateY(-1px) scale(1.005);
+  box-shadow: var(--shadow-lift), 0 4px 12px rgba(0,0,0,.08);
 }
 
 /* Controls hidden unless Guide is open */
@@ -361,13 +361,13 @@ html[data-ink="warm"] .wframe-body{ background: transparent; }
 /* Base (light ink) gradients */
 .widget-tile > .scroll-indicator.top{ background: linear-gradient(to bottom, rgba(255,255,255,.9), rgba(255,255,255,0)); }
 .widget-tile > .scroll-indicator.bottom{ background: linear-gradient(to top, rgba(255,255,255,.9), rgba(255,255,255,0)); }
-/* Modern style indicators fade from the card surface */
-html[data-style="modern"] .widget-tile > .scroll-indicator.top{ background: linear-gradient(to bottom, color-mix(in srgb, #fff 92%, transparent), transparent); }
-html[data-style="modern"] .widget-tile > .scroll-indicator.bottom{ background: linear-gradient(to top, color-mix(in srgb, #fff 92%, transparent), transparent); }
-html.dark[data-style="modern"] .widget-tile > .scroll-indicator.top{ background: linear-gradient(to bottom, rgba(255,255,255,.12), rgba(255,255,255,0)); }
-html.dark[data-style="modern"] .widget-tile > .scroll-indicator.bottom{ background: linear-gradient(to top, rgba(255,255,255,.12), rgba(255,255,255,0)); }
-html[data-style="modern"][data-ink="warm"] .widget-tile > .scroll-indicator.top{ background: linear-gradient(to bottom, color-mix(in srgb, #fff 88%, #F7E6D5 12%), transparent); }
-html[data-style="modern"][data-ink="warm"] .widget-tile > .scroll-indicator.bottom{ background: linear-gradient(to top, color-mix(in srgb, #fff 88%, #F7E6D5 12%), transparent); }
+/* Indicators fade from the card surface by default */
+.widget-tile > .scroll-indicator.top{ background: linear-gradient(to bottom, color-mix(in srgb, #fff 92%, transparent), transparent); }
+.widget-tile > .scroll-indicator.bottom{ background: linear-gradient(to top, color-mix(in srgb, #fff 92%, transparent), transparent); }
+html.dark .widget-tile > .scroll-indicator.top{ background: linear-gradient(to bottom, rgba(255,255,255,.12), rgba(255,255,255,0)); }
+html.dark .widget-tile > .scroll-indicator.bottom{ background: linear-gradient(to top, rgba(255,255,255,.12), rgba(255,255,255,0)); }
+html[data-ink="warm"] .widget-tile > .scroll-indicator.top{ background: linear-gradient(to bottom, color-mix(in srgb, #fff 88%, #F7E6D5 12%), transparent); }
+html[data-ink="warm"] .widget-tile > .scroll-indicator.bottom{ background: linear-gradient(to top, color-mix(in srgb, #fff 88%, #F7E6D5 12%), transparent); }
 
 /* Dark ink gradients */
 html.dark .widget-tile > .scroll-indicator.top{ background: linear-gradient(to bottom, rgba(0,0,0,.42), rgba(0,0,0,0)); }
