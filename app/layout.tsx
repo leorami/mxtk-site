@@ -11,6 +11,7 @@ import ExperienceProvider from '@/components/experience/ExperienceProvider';
 import GuideHost from '@/components/ai/GuideHost';
 import GuideBootStyle from '@/components/chrome/GuideBootStyle';
 import JsonLd from '@/components/seo/JsonLd';
+import { getBasePathUrl } from '@/lib/basepath';
 import type { Metadata } from 'next';
 import { Roboto, Space_Grotesk } from 'next/font/google';
 import { cookies } from 'next/headers';
@@ -144,7 +145,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             "@type": "Organization",
             "name": "MXTK (Mineral Token)",
             "url": process.env.NEXT_PUBLIC_SITE_ORIGIN || "https://mineral-token.com",
-            "logo": "/logo-horizontal.png",
+            "logo": getBasePathUrl('/logo-horizontal.png'),
             "sameAs": []
           }}
         />
