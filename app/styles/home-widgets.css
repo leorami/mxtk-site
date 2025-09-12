@@ -253,6 +253,19 @@ html.dark .wframe{ background: transparent; }
   box-shadow: var(--shadow-lift), 0 4px 12px rgba(0,0,0,.08);
 }
 
+/* Modern style (opt-in): translucent white cards */
+html[data-style="modern"] .wframe{
+  background: var(--widget-bg);
+  border: 1px solid var(--widget-border) !important;
+  box-shadow: var(--widget-shadow);
+  backdrop-filter: blur(22px);
+  -webkit-backdrop-filter: blur(22px);
+}
+html[data-style="modern"] .wframe:hover{
+  transform: translateY(-1.5px) scale(1.006);
+  box-shadow: 0 10px 24px rgba(0,0,0,.12), 0 3px 12px rgba(0,0,0,.08);
+}
+
 /* Controls hidden unless Guide is open */
 .wframe-controls{
   position:absolute; top:8px; right:8px; display:flex; gap:8px;
@@ -348,6 +361,13 @@ html[data-ink="warm"] .wframe-body{ background: transparent; }
 /* Base (light ink) gradients */
 .widget-tile > .scroll-indicator.top{ background: linear-gradient(to bottom, rgba(255,255,255,.9), rgba(255,255,255,0)); }
 .widget-tile > .scroll-indicator.bottom{ background: linear-gradient(to top, rgba(255,255,255,.9), rgba(255,255,255,0)); }
+/* Modern style indicators fade from the card surface */
+html[data-style="modern"] .widget-tile > .scroll-indicator.top{ background: linear-gradient(to bottom, color-mix(in srgb, #fff 92%, transparent), transparent); }
+html[data-style="modern"] .widget-tile > .scroll-indicator.bottom{ background: linear-gradient(to top, color-mix(in srgb, #fff 92%, transparent), transparent); }
+html.dark[data-style="modern"] .widget-tile > .scroll-indicator.top{ background: linear-gradient(to bottom, rgba(255,255,255,.12), rgba(255,255,255,0)); }
+html.dark[data-style="modern"] .widget-tile > .scroll-indicator.bottom{ background: linear-gradient(to top, rgba(255,255,255,.12), rgba(255,255,255,0)); }
+html[data-style="modern"][data-ink="warm"] .widget-tile > .scroll-indicator.top{ background: linear-gradient(to bottom, color-mix(in srgb, #fff 88%, #F7E6D5 12%), transparent); }
+html[data-style="modern"][data-ink="warm"] .widget-tile > .scroll-indicator.bottom{ background: linear-gradient(to top, color-mix(in srgb, #fff 88%, #F7E6D5 12%), transparent); }
 
 /* Dark ink gradients */
 html.dark .widget-tile > .scroll-indicator.top{ background: linear-gradient(to bottom, rgba(0,0,0,.42), rgba(0,0,0,0)); }

@@ -100,6 +100,10 @@ body {
   --link: rgb(36, 72, 179);
   --link-hover: rgb(26, 53, 160);
   --mxtk-accent: var(--mxtk-orange);
+  /* Modern style tokens (opt-in via html[data-style="modern"]) */
+  --widget-bg: color-mix(in srgb, #ffffff 85%, transparent);
+  --widget-border: rgba(0,0,0,.06);
+  --widget-shadow: 0 6px 18px rgba(0,0,0,.10), 0 2px 8px rgba(0,0,0,.06);
 }
 
 html.dark {
@@ -119,6 +123,10 @@ html.dark {
   /* matches ink-strong for contrast */
   --link-hover: rgb(244, 247, 253);
   --mxtk-accent-text: color-mix(in srgb, var(--mxtk-accent) 58%, #ffffff);
+  /* Dark mode defaults for modern style */
+  --widget-bg: color-mix(in srgb, #ffffff 18%, transparent);
+  --widget-border: rgba(255,255,255,.12);
+  --widget-shadow: 0 8px 20px rgba(0,0,0,.28), 0 3px 10px rgba(0,0,0,.18);
 }
 
 /* Dev Theme Switcher ink mapping -> adjust core color tokens on the fly */
