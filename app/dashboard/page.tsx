@@ -1,10 +1,10 @@
 // app/dashboard/page.tsx
+import SectionWrapper from '@/components/SectionWrapper'
+import AdaptButton from '@/components/dashboard/AdaptButton'
 import ModeTextSwap from '@/components/experience/ModeTextSwap'
 import DashboardContent from '@/components/home/DashboardContent'
 import PageScaffold from '@/components/layout/PageScaffold'
-import SectionWrapper from '@/components/SectionWrapper'
 import Card from '@/components/ui/Card'
-import AdaptButton from '@/components/dashboard/AdaptButton'
 
 export const dynamic = 'force-dynamic'
 

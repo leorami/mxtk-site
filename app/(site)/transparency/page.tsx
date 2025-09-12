@@ -1,12 +1,14 @@
-'use client'
+// Server component: fetch data server-side to avoid drift
 
 import PageHero from '@/components/PageHero'
 import ProofTable from '@/components/ProofTable'
 import SectionWrapper from '@/components/SectionWrapper'
-import { useCopy } from '@/components/copy/Copy'
+import { transparencyCopy } from '@/copy/transparency'
 import ModeTextSwap from '@/components/experience/ModeTextSwap'
 import OnchainSummary from '@/components/live/OnchainSummary'
-import PoolTable from '@/components/live/PoolTable'
+import DataTableGlass from '@/components/ui/DataTableGlass'
+import TimeSeries from '@/components/charts/TimeSeries'
+import { getBasePathUrl } from '@/lib/basepath'
 import PageTheme from '@/components/theme/PageTheme'
 import { BulletList } from '@/components/ui/BulletList'
 import Card from '@/components/ui/Card'
@@ -19,9 +21,15 @@ import { getPublicPath } from '@/lib/routing/basePath'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
-export default function TransparencyPage() {
-  const pathname = usePathname() || '/'
-  const { mode, pageCopy } = useCopy('transparency')
+export default async function TransparencyPage() {
+  const pathname = ''
+  const mode = 'build'
+  const pageCopy = transparencyCopy
+  // Server fetch for pools
+  const apiUrl = getBasePathUrl('/api/data/pools')
+  const res = await fetch(apiUrl, { cache: 'no-store', headers: { 'ngrok-skip-browser-warning': 'true' } })
+  const json = await res.json().catch(() => ({ pools: [] }))
+  const rows = json.pools || []
   return (
     <PageTheme ink="light" lift="H" glass="soft">
       <PhotoBackdrop src="art/photos/transparency_tigereye.jpg" />
@@ -52,7 +60,7 @@ export default function TransparencyPage() {
             <SectionWrapper index={2}>
               <Card tint="teal">
                 <ModeTextSwap as="h2" depKey={`tp-p1-title-${mode}`} className="text-2xl font-semibold mb-6" content={pageCopy.pillars?.[1]?.title[mode] || 'Liquidity & On-chain Addresses'} />
-                <PoolTable />
+                <DataTableGlass rows={rows} />
               </Card>
             </SectionWrapper>
 
@@ -108,6 +116,14 @@ export default function TransparencyPage() {
             </SectionWrapper>
 
             <SectionWrapper index={5}>
+              <Card tint="amber">
+                <h2 className="text-2xl font-semibold mb-6">Price (MXTK)</h2>
+                {/* SSR-safe chart */}
+                <TimeSeries symbol="MXTK" />
+              </Card>
+            </SectionWrapper>
+
+            <SectionWrapper index={6}>
               <Card tint="amber">
                 <h2 className="text-2xl font-semibold mb-6">Additional Resources</h2>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">

@@ -293,6 +293,12 @@ BASE_URL=https://<your-ngrok-domain>/mxtk node tools/test/nav-regression.mjs
 # Crawl + Contrast Audit
 BASE_URL=http://localhost:2000 node tools/test/crawl-regression.mjs
 BASE_URL=https://<your-ngrok-domain>/mxtk node tools/test/crawl-regression.mjs
+
+# Transparency screenshots and assertions (Wave 12.7)
+BASE_URL=http://localhost:2000 node tools/test/transparency-screens.mjs
+
+# Unit tests (includes cache TTL test)
+npm run test:unit
 ```
 
 The navigation tests verify:

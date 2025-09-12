@@ -1,7 +1,7 @@
-"use client";
+// Server component: data wired from APIs
 import PageHero from "@/components/PageHero";
 import SectionWrapper from "@/components/SectionWrapper";
-import { useCopy } from "@/components/copy/Copy";
+import { institutionsCopy } from "@/copy/institutions";
 import ModeTextSwap from "@/components/experience/ModeTextSwap";
 import PoolTable from "@/components/live/PoolTable";
 import JsonLd from "@/components/seo/JsonLd";
@@ -9,11 +9,17 @@ import { faqJsonLd } from "@/components/seo/faq";
 import PageTheme from "@/components/theme/PageTheme";
 import Card from "@/components/ui/Card";
 import { FeatureRow } from "@/components/ui/List";
-import MarketChart from "@/components/ui/MarketChart";
+import TimeSeries from "@/components/charts/TimeSeries";
+import DataTableGlass from "@/components/ui/DataTableGlass";
+import { getBasePathUrl } from '@/lib/basepath'
 import PhotoBackdrop from "@/components/visuals/PhotoBackdrop";
 
-export default function InstitutionsPage() {
-  const { mode, pageCopy } = useCopy('institutions');
+export default async function InstitutionsPage() {
+  const mode = 'build'
+  const pageCopy = institutionsCopy as any
+  const poolsUrl = getBasePathUrl('/api/data/pools')
+  const res = await fetch(poolsUrl, { cache: 'no-store', headers: { 'ngrok-skip-browser-warning': 'true' } })
+  const data = await res.json().catch(() => ({ pools: [] }))
   const faq = faqJsonLd(
     '/institutions',
     [
@@ -46,14 +52,14 @@ export default function InstitutionsPage() {
         <SectionWrapper index={1}>
           <Card tint="amber">
             <h2 className="text-2xl font-semibold mb-6">Token Information</h2>
-            <MarketChart />
+            <TimeSeries symbol="MXTK" />
           </Card>
         </SectionWrapper>
 
         <SectionWrapper index={2}>
           <Card tint="teal">
             <h2 className="text-2xl font-semibold mb-6">Liquidity & On-chain Addresses</h2>
-            <PoolTable />
+            <DataTableGlass rows={data.pools || []} />
           </Card>
         </SectionWrapper>
 

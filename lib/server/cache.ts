@@ -11,3 +11,12 @@ export function getCached<T>(key: string): T | null {
 export function setCached<T>(key: string, value: T, ttlSeconds: number) {
     store.set(key, { value, exp: Date.now() + ttlSeconds * 1000 })
 }
+
+// Tiny helper to fetch-and-cache with TTL in milliseconds
+export async function getOrSet<T>(key: string, ttlMs: number, loader: () => Promise<T> | T): Promise<T> {
+    const existing = getCached<T>(key)
+    if (existing !== null) return existing
+    const value = await loader()
+    setCached<T>(key, value, Math.max(0, Math.floor(ttlMs / 1000)))
+    return value
+}

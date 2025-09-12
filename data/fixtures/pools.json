@@ -1,0 +1,28 @@
+{
+  "pools": [
+    {
+      "address": "0x1234567890123456789012345678901234567890",
+      "source": "mock",
+      "fee": 3000,
+      "token0": { "address": "0x3e4Ffeb394B371AAaa0998488046Ca19d870d9Ba", "symbol": "MXTK", "decimals": 18 },
+      "token1": { "address": "0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8", "symbol": "USDC", "decimals": 6 },
+      "approxMxtkUSD": 0.85,
+      "volume24hUSD": 125000,
+      "fees24hUSD": 375,
+      "tvlUSD": 2500000
+    },
+    {
+      "address": "0xabcdefabcdefabcdefabcdefabcdefabcdefabcd",
+      "source": "mock",
+      "fee": 500,
+      "token0": { "address": "0x3e4Ffeb394B371AAaa0998488046Ca19d870d9Ba", "symbol": "MXTK", "decimals": 18 },
+      "token1": { "address": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE", "symbol": "ETH", "decimals": 18 },
+      "approxMxtkUSD": 0.86,
+      "volume24hUSD": 54000,
+      "fees24hUSD": 120,
+      "tvlUSD": 740000
+    }
+  ]
+}
+
+

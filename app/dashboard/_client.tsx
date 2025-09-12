@@ -2,11 +2,11 @@
 
 import SectionWrapper from '@/components/SectionWrapper';
 import { useCopy } from '@/components/copy/Copy';
+import AdaptButton from '@/components/dashboard/AdaptButton';
 import ModeTextSwap from '@/components/experience/ModeTextSwap';
 import DashboardContent from '@/components/home/DashboardContent';
 import PageScaffold from '@/components/layout/PageScaffold';
 import Card from '@/components/ui/Card';
-import AdaptButton from '@/components/dashboard/AdaptButton';
 import * as React from 'react';
 
 type Props = { initialDocId?: string };
