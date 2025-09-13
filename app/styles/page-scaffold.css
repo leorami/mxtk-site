@@ -363,10 +363,19 @@ a.btn, a[role="button"], .btn, .chip {
     overflow: hidden;
   }
   .experience-toggle [role="group"]{ width: 100%; }
-  .experience-toggle button{ min-width: 40px; min-height: 40px; }
+  .experience-toggle button{ min-width: 36px; min-height: 36px; padding: 4px 8px; }
 }
 
 /* Align wf-title and wf-actions in one row */
 .wf-head{ display:flex; align-items:center; justify-content:space-between; }
 .wf-title{ flex: 1 1 auto; min-width: 0; }
 .wf-actions{ flex: 0 0 auto; }
+
+/* Guard: ensure inner links in buttons are never underlined */
+button a,
+.btn-soft a,
+.btn-outline a,
+.btn-link a {
+  text-decoration: none !important;
+  border-bottom: 0 !important;
+}

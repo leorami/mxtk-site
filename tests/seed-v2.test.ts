@@ -1,8 +1,7 @@
-import { describe, it, expect } from 'vitest'
-import { PRESETS_V2 } from '@/lib/home/seedPresetsV2'
 import { migrateToV2 } from '@/lib/home/migrate'
-import { getHome, putHome } from '@/lib/home/store/fileStore'
 import { adaptDocWithPresets, buildSeedDocFromPresets } from '@/lib/home/seedUtil'
+import { getHome, putHome } from '@/lib/home/store/fileStore'
+import { describe, expect, it } from 'vitest'
 
 async function seed(id: string, mode: 'learn'|'build'|'operate', adapt = false) {
   const existing = await getHome(id)

@@ -67,7 +67,7 @@ export default function Team() {
     }, [])
 
     return (
-        <PageTheme ink="light" lift="M" glass="soft">
+        <PageTheme ink="dark" lift="none" glass="standard">
             <BackgroundPhoto variant="team" />
             <PageHero>
                 <div className="relative">

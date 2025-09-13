@@ -1,6 +1,6 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest'
 import * as fs from 'fs/promises'
 import path from 'path'
+import { beforeEach, describe, expect, it } from 'vitest'
 
 describe('signals store append', () => {
   const signalsDir = path.join(process.cwd(), 'ai_store', 'signals')

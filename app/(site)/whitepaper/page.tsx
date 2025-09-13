@@ -11,7 +11,7 @@ import BackgroundPhoto from '@/components/visuals/BackgroundPhoto'
 export default function WhitepaperPage() {
   const { mode, pageCopy } = useCopy('whitepaper')
   return (
-    <PageTheme ink="light" lift="H" glass="soft">
+    <PageTheme ink="dark" lift="none" glass="standard">
       <BackgroundPhoto variant="whitepaper" />
       <PageHero>
         <div className="relative">

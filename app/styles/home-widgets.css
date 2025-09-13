@@ -177,7 +177,7 @@
   .section-rail .section-grid { grid-template-columns: repeat(var(--grid-cols-tablet), minmax(0, 1fr)); }
 }
 @media (max-width: 640px) {
-  .section-rail .section-grid { grid-template-columns: repeat(var(--grid-cols-mobile), minmax(0, 1fr)); }
+  .section-rail .section-grid { grid-template-columns: 1fr; }
 }
 
 /* Each widget declares spans via CSS vars injected by Grid.tsx */
@@ -281,12 +281,9 @@ html.guide-open .wframe-controls{ opacity:1 !important; visibility:visible !impo
 html.guide-open .wf-head{ cursor: grab; }
 html.guide-open .wf-head:active{ cursor: grabbing; }
 
-.iconbtn{
-  width:20px; height:20px; border-radius:999px; display:grid; place-items:center;
-  border:1px solid rgba(255,255,255,0.35);
-  background: rgba(0,0,0,0.25); color:#fff; font-size:12px; line-height:1;
-}
+.iconbtn{ width:18px; height:18px; border-radius:999px; display:grid; place-items:center; border:1px solid rgba(255,255,255,0.35); background: rgba(0,0,0,0.25); color:#fff; font-size:12px; line-height:1; }
 html.light .iconbtn{ border-color: rgba(0,0,0,0.18); background: rgba(255,255,255,0.45); color:#222; }
+@media (max-width: 640px){ .iconbtn{ width:16px; height:16px; } }
 
 .wframe-resize{ position:absolute; width:14px; height:14px; border-radius:2px; opacity:.75; z-index:5; transition:opacity .12s ease, background-color .12s ease, border-color .12s ease; }
 .wframe-resize.br{ right:6px; bottom:6px; cursor:nwse-resize; border-right:2px solid rgba(255,255,255,0.7); border-bottom:2px solid rgba(255,255,255,0.7); }

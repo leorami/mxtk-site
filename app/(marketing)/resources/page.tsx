@@ -13,7 +13,7 @@ export default function Resources() {
   const { mode, pageCopy } = useCopy('resources')
   const contentMode = (mode === 'ai') ? 'build' : mode;
   return (
-    <PageTheme ink="light" lift="H" glass="soft">
+    <PageTheme ink="dark" lift="none" glass="standard">
       <BackgroundPhoto variant="resources" />
       <PageHero>
         <div className="relative">

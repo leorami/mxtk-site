@@ -11,7 +11,7 @@ import { PLACEHOLDER_PARTNERS_ECOSYSTEM } from '@/lib/placeholders'
 
 export default function Ecosystem() {
   return (
-    <PageTheme ink="light" lift="H" glass="soft">
+    <PageTheme ink="dark" lift="none" glass="standard">
       <PhotoBackdrop src="art/photos/ecosystem_jade.jpg" />
       <PageHero>
         <div className="relative">

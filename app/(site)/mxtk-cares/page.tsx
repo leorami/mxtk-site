@@ -21,7 +21,7 @@ export default function MXTKCaresPage() {
   )
 
   return (
-    <PageTheme ink="light" lift="H" glass="soft">
+    <PageTheme ink="dark" lift="none" glass="standard">
       <PhotoBackdrop src="art/photos/mxtk_cares_amethyst.jpg" />
       <PageHero>
         <SectionWrapper index={0} className="text-center">

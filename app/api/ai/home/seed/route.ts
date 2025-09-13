@@ -1,9 +1,8 @@
 // app/api/ai/home/seed/route.ts
 import { migrateToV2 } from '@/lib/home/migrate';
-import { PRESETS_V2 } from '@/lib/home/seedPresetsV2';
+import { adaptDocWithPresets, buildSeedDocFromPresets } from '@/lib/home/seedUtil';
 import { getHome, putHome } from '@/lib/home/store/fileStore';
-import type { HomeDoc, SectionState, WidgetState } from '@/lib/home/types';
-import { adaptDocWithPresets, buildSeedDocFromPresets } from '@/lib/home/seedUtil'
+import type { HomeDoc, SectionState } from '@/lib/home/types';
 import { promises as fs } from 'fs';
 import { cookies } from 'next/headers';
 import { NextRequest, NextResponse } from 'next/server';

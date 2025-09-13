@@ -3,9 +3,9 @@ import AppImage from "@/components/ui/AppImage";
 import { useExperience } from "./ClientExperience";
 
 const modes = [
-  { value: "learn", label: "Learn", src: "/icons/experience/icon-learn.svg" },
-  { value: "build", label: "Build", src: "/icons/experience/icon-build.svg" },
-  { value: "operate", label: "Operate", src: "/icons/experience/icon-operate.svg" },
+  { value: "learn", label: "Train", src: "/icons/experience/icon-learn.svg" },
+  { value: "build", label: "Prepare", src: "/icons/experience/icon-build.svg" },
+  { value: "operate", label: "Conquer", src: "/icons/experience/icon-operate.svg" },
 ] as const;
 
 export default function ExperienceToggle() {

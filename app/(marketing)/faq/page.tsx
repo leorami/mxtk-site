@@ -12,7 +12,7 @@ export default function FAQ() {
   const { mode, pageCopy } = useCopy('faq')
   const contentMode = (mode === 'ai') ? 'build' : mode;
   return (
-    <PageTheme ink="warm" lift="H" glass="soft">
+    <PageTheme ink="warm" lift="none" glass="standard">
       <BackgroundPhoto variant="faq" />
       <PageHero>
         <div className="relative">

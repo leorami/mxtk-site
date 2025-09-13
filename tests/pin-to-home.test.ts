@@ -1,5 +1,5 @@
-import { describe, it, expect } from 'vitest'
-import { getHome } from '@/lib/home/store/fileStore'
+import { getHome } from '@/lib/home/store/fileStore';
+import { describe, expect, it } from 'vitest';
 
 async function pin(widget: { type: string; sectionId?: string; data?: Record<string, unknown> }, id = 'pin_test') {
   const { POST } = await import('@/app/api/ai/home/pin/route')

@@ -35,7 +35,7 @@ export default async function InstitutionsPage() {
   );
 
   return (
-    <PageTheme ink="light" lift="none" glass="standard">
+    <PageTheme ink="warm" lift="none" glass="standard">
       <JsonLd data={faq} />
       <PhotoBackdrop src="art/photos/institutions_lapis.jpg" />
       <PageHero>

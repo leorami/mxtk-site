@@ -13,7 +13,7 @@ export default function MediaPage() {
   const { mode, pageCopy } = useCopy('media')
   const mode3 = (mode === 'ai' ? 'learn' : mode) as 'learn' | 'build' | 'operate'
   return (
-    <PageTheme ink="light" lift="H" glass="soft">
+    <PageTheme ink="dark" lift="none" glass="standard">
       <BackgroundPhoto variant="media" />
       <PageHero>
         <div className="relative">

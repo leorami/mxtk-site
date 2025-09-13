@@ -2002,7 +2002,7 @@ button { color: var(--ink-strong); }
   --glass-bg-alpha: 0.62;
   /* raise for darker glass */
   --glass-blur: 18px;
-  --glass-saturate: 2.05;
+  --glass-saturate: 1.05;
   --glass-border-color: 0, 0, 0;
   /* rgb() triplet */
   --glass-border-alpha: 0.10;

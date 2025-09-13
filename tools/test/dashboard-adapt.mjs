@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import puppeteer from 'puppeteer'
+import puppeteer from 'puppeteer';
 
 const BASE_URL = process.env.BASE_URL || 'http://localhost:2000'
 

@@ -9,7 +9,6 @@ import Resources from '@/components/home/widgets/Resources';
 import { getApiPath } from '@/lib/basepath';
 import type { HomeDoc, WidgetState } from '@/lib/home/types';
 import * as React from 'react';
-import { getApiPath } from '@/lib/basepath'
 
 type GridProps = {
   doc: HomeDoc;                              // expects V2 with sections + widgets
@@ -56,6 +55,7 @@ export default function Grid({ doc, render, onPatch }: GridProps) {
   const gridCols = React.useRef(DEFAULT_COLS);
   const colW = React.useRef(0);
   const rowH = React.useRef(8); // px, matches --row-h default
+  const [cols, setCols] = React.useState<number>(DEFAULT_COLS)
 
   React.useLayoutEffect(() => {
     const el = containerRef.current;
@@ -65,6 +65,7 @@ export default function Grid({ doc, render, onPatch }: GridProps) {
     const tmpl = cs.getPropertyValue('grid-template-columns');
     const count = tmpl ? tmpl.split(' ').filter(Boolean).length : DEFAULT_COLS;
     gridCols.current = count || DEFAULT_COLS;
+    setCols(gridCols.current)
 
     colW.current = el.clientWidth / gridCols.current;
 
@@ -295,9 +296,94 @@ export default function Grid({ doc, render, onPatch }: GridProps) {
     }
   }
 
+  const isSingleCol = cols <= 1
+
   return (
     <div ref={containerRef} className="section-grid mxtk-grid" data-grid role="list">
-      {widgets.map((w) => {
+      {isSingleCol ? (() => { let rowCursor = 1; return widgets.map((w) => {
+        const spanH = Math.max(1, w.size?.h ?? 12);
+        const startRow = rowCursor;
+        rowCursor += spanH;
+        return (
+          <div
+            key={w.id}
+            role="listitem"
+            tabIndex={0}
+            className="widget-tile widget-cell"
+            style={{
+              gridColumn: `1 / -1`,
+              gridRow: `${startRow} / span ${spanH}`,
+            }}
+            data-widget-id={w.id}
+            onKeyDown={(e) => onKey(e, w)}
+          >
+            {/* Indicators at outermost container */}
+            <div className="scroll-indicator top" aria-hidden="true" />
+            {/* Outer shell only owns border */}
+            <div className="wframe-shell" style={{ border: 'none' }}>
+              {/* drag surface wraps the widget frame to enable move; only head is handle */}
+              <div className="widget-chrome" onPointerDown={(e) => startDrag(e, w)}>
+                <WidgetFrame
+                  id={w.id}
+                  docId={doc.id}
+                  title={w.title}
+                  data={w.data as any}
+                  onRefresh={() => setRefreshTicks(prev => ({ ...prev, [w.id]: (prev[w.id] || 0) + 1 }))}
+                >
+                {render
+                  ? render(w)
+                  : (
+                    w.type === 'recent-answers' ? (
+                      <RecentAnswers key={`ra-${w.id}:${refreshTicks[w.id] || 0}`} />
+                    ) : w.type === 'resources' ? (
+                      <Resources id={w.id} data={w.data as any} />
+                    ) : w.type === 'glossary-spotlight' ? (
+                      <GlossarySpotlight id={w.id} data={w.data as any} />
+                    ) : w.type === 'pools-mini' ? (
+                      <PoolsMini id={w.id} docId={doc.id} data={w.data as any} refreshKey={refreshTicks[w.id] || 0} />
+                    ) : w.type === 'price-mini' ? (
+                      <PriceMini id={w.id} docId={doc.id} data={w.data as any} refreshKey={refreshTicks[w.id] || 0} />
+                    ) : (
+                      <div className="p-3 text-sm opacity-70">Widget <code>{w.type}</code></div>
+                    )
+                  )}
+                </WidgetFrame>
+              </div>
+            </div>
+            <div className="scroll-indicator bottom" aria-hidden="true" />
+
+            {/* resizer handle (bottom-right) - only show when Sherpa is open */}
+            {guideOpen && (
+              <>
+                <button
+                  type="button"
+                  className="wframe-resize br"
+                  aria-label="Resize widget"
+                  onPointerDown={(e) => startResize(e, w, 'br')}
+                />
+                <button
+                  type="button"
+                  className="wframe-resize tr"
+                  aria-label="Resize widget from top-right"
+                  onPointerDown={(e) => startResize(e, w, 'tr')}
+                />
+                <button
+                  type="button"
+                  className="wframe-resize bl"
+                  aria-label="Resize widget from bottom-left"
+                  onPointerDown={(e) => startResize(e, w, 'bl')}
+                />
+                <button
+                  type="button"
+                  className="wframe-resize tl"
+                  aria-label="Resize widget from top-left"
+                  onPointerDown={(e) => startResize(e, w, 'tl')}
+                />
+              </>
+            )}
+          </div>
+        );
+      }); })() : widgets.map((w) => {
         // Force spans: match your CSS (grid uses var(--row-h))
         const spanW = Math.max(1, w.size?.w ?? 3);
         const spanH = Math.max(1, w.size?.h ?? 12);

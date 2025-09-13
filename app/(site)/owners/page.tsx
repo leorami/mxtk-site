@@ -27,7 +27,7 @@ export default function OwnersPage() {
     ]
   )
   return (
-    <PageTheme ink="light" lift="none" glass="standard">
+    <PageTheme ink="warm" lift="none" glass="standard">
       <JsonLd data={faq} />
       <PageBackground page="owners" />
       <PageHero>

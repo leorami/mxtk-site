@@ -35,7 +35,7 @@ export default async function TransparencyPage() {
   const updatedAt = Number(json.updatedAt) || Date.now()
   const ttl = Number(json.ttl) || 0
   return (
-    <PageTheme ink="light" lift="H" glass="soft">
+    <PageTheme ink="warm" lift="none" glass="standard">
       <PhotoBackdrop src="art/photos/transparency_tigereye.jpg" />
       <PageHero>
         <div className="relative">
