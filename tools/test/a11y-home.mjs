@@ -3,7 +3,7 @@ import puppeteer from 'puppeteer';
 const base = process.env.BASE_URL || 'http://localhost:2000';
 
 async function run(){
-  const browser = await puppeteer.launch({ headless: 'new' });
+  const browser = await puppeteer.launch({ headless: 'new', args: ['--no-sandbox', '--disable-setuid-sandbox'] });
   const page = await browser.newPage();
   await page.goto(base + '/home', { waitUntil: 'networkidle0' });
   await page.waitForSelector('[data-testid="home-grid"]');

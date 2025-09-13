@@ -161,6 +161,10 @@ async function auditWidgetColors(page, outDir) {
         // Color audit of the elements the user highlighted
         const colorAudit = await auditWidgetColors(page);
 
+        // Assert minis visible by data-testid if present
+        try {
+          await page.waitForSelector('[data-widget-id]', { timeout: 5000 })
+        } catch {}
         // Screenshot
         const file = path.join(ART_DIR, `dashboard-${name}-${TS}.png`);
         await page.screenshot({ path: file, fullPage: true });

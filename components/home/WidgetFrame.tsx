@@ -50,15 +50,21 @@ export default function WidgetFrame({ id, docId, data, title, children, onRefres
   return (
     <div className="relative h-full wframe">
       {/* Header row: title + actions; actions marked no-drag */}
-      <header className="wf-head flex items-center justify-between">
+      <header className="wf-head flex items-center justify-between" onMouseDown={(e)=> e.stopPropagation()} onClick={(e)=> e.stopPropagation()} data-nodrag>
         <div className="wf-title truncate">{localTitle}</div>
         <div className="wf-actions wframe-controls widget-controls inline-flex items-center gap-1" data-nodrag>
           {onRefresh && (
-            <button type="button" className="iconbtn" title="Refresh" data-nodrag onMouseDown={(e) => e.stopPropagation()} onClick={(e) => { e.stopPropagation(); onRefresh?.(); }}>↻</button>
+            <button type="button" className="iconbtn" title="Refresh" data-nodrag onMouseDown={(e) => e.stopPropagation()} onClick={(e) => { e.stopPropagation(); onRefresh?.(); }}>
+              ↻
+            </button>
           )}
           <button type="button" className="iconbtn" title="Settings" data-nodrag onMouseDown={(e) => e.stopPropagation()} onClick={(e) => { e.stopPropagation(); setOpen(o => !o); }} aria-haspopup="dialog" aria-expanded={open ? 'true' : 'false'}>⚙︎</button>
-          {onInfo && (<button type="button" className="iconbtn" title="Info" data-nodrag onMouseDown={(e) => e.stopPropagation()} onClick={(e) => { e.stopPropagation(); onInfo?.(); }}>i</button>)}
-          {onRemove && (<button type="button" className="iconbtn" title="Remove" data-nodrag onMouseDown={(e) => e.stopPropagation()} onClick={(e) => { e.stopPropagation(); onRemove?.(); }}>✕</button>)}
+          {onInfo && (
+            <button type="button" className="iconbtn" title="Info" data-nodrag onMouseDown={(e) => e.stopPropagation()} onClick={(e) => { e.stopPropagation(); onInfo?.(); }}>i</button>
+          )}
+          {onRemove && (
+            <button type="button" className="iconbtn" title="Remove" data-nodrag onMouseDown={(e) => e.stopPropagation()} onClick={(e) => { e.stopPropagation(); onRemove?.(); }}>✕</button>
+          )}
         </div>
       </header>
 

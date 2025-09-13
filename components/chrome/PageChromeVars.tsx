@@ -12,6 +12,14 @@ export default function PageChromeVars(){
     const root = document.documentElement
     const measure = () => {
       try {
+        // Keep an asset base CSS var so CSS url() can be basePath-aware
+        const basePath = (process.env.NEXT_PUBLIC_BASE_PATH || '') || ''
+        root.style.setProperty('--asset-base', basePath)
+        // Back-compat: alias used in minerals.css
+        root.style.setProperty('--base-path', basePath)
+        // Provide a full url() wrapper for convenience in CSS fallbacks
+        const basePathUrl = basePath ? `url("${basePath}")` : ''
+        root.style.setProperty('--base-path-url', basePathUrl)
         const header = document.querySelector('.brand-header') as HTMLElement | null
         const accent = document.querySelector('.brand-accent-line') as HTMLElement | null
         const footer = document.querySelector('.brand-footer') as HTMLElement | null

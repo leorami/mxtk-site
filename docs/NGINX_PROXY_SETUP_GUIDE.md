@@ -10,54 +10,6 @@ Internet → Nginx Proxy → Next.js App (at root)
            /*          → 404 (blocked)
 ```
 
-## Minimal config (drop-in)
-
-```nginx
-# Upstream Next dev server
-upstream mxtk_upstream { server mxtk-site-web-1:2000; }
-
-server {
-  listen 80;
-  server_name _;
-
-  # 1) Force trailing slash for the mount point so relative links resolve under /mxtk/
-  location = /mxtk {
-    return 308 /mxtk/;
-  }
-
-  # 2) Proxy page requests at /mxtk/* to app root
-  location ^~ /mxtk/ {
-    proxy_http_version 1.1;
-    proxy_set_header Host $host;
-    proxy_set_header X-Forwarded-Proto $scheme;
-    proxy_set_header X-Forwarded-Prefix /mxtk;
-    proxy_set_header Upgrade $http_upgrade;
-    proxy_set_header Connection "upgrade";
-    proxy_read_timeout 300;
-    proxy_send_timeout 300;
-    proxy_pass http://mxtk_upstream;
-  }
-
-  # 3) Allow Next internals at domain root (dev overlay, HMR, static)
-  location ^~ /_next/ {
-    proxy_http_version 1.1;
-    proxy_set_header Host $host;
-    proxy_set_header Upgrade $http_upgrade;
-    proxy_set_header Connection "upgrade";
-    proxy_pass http://mxtk_upstream;
-  }
-  # Dev overlay posts stack frames here during errors in dev
-  location ^~ /__nextjs_ {
-    proxy_http_version 1.1;
-    proxy_set_header Host $host;
-    proxy_pass http://mxtk_upstream;
-  }
-
-  # 4) Block everything else at root
-  location / { return 404; }
-}
-```
-
 ### Why the trailing-slash rule matters
 If the browser is at /mxtk (no slash), the URL base is treated as a file, so relative paths like logo-horizontal.svg resolve to /logo-horizontal.svg (root) and 404. Redirecting /mxtk → /mxtk/ fixes that permanently.
 

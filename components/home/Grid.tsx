@@ -268,10 +268,11 @@ export default function Grid({ doc, render, onPatch }: GridProps) {
             <div className="scroll-indicator top" aria-hidden="true" />
             {/* Outer shell only owns border */}
             <div className="wframe-shell" style={{ border: 'none' }}>
-              {/* drag surface wraps the widget frame to enable move */}
+              {/* drag surface wraps the widget frame to enable move; only head is handle */}
               <div className="widget-chrome" onPointerDown={(e) => startDrag(e, w)}>
                 <WidgetFrame
                   id={w.id}
+                  docId={doc.id}
                   title={w.title}
                   data={w.data as any}
                   onRefresh={() => setRefreshTicks(prev => ({ ...prev, [w.id]: (prev[w.id] || 0) + 1 }))}
@@ -286,9 +287,9 @@ export default function Grid({ doc, render, onPatch }: GridProps) {
                     ) : w.type === 'glossary-spotlight' ? (
                       <GlossarySpotlight id={w.id} data={w.data as any} />
                     ) : w.type === 'pools-mini' ? (
-                      <PoolsMini id={w.id} />
+                      <PoolsMini id={w.id} docId={doc.id} data={w.data as any} refreshKey={refreshTicks[w.id] || 0} />
                     ) : w.type === 'price-mini' ? (
-                      <PriceMini />
+                      <PriceMini id={w.id} docId={doc.id} data={w.data as any} refreshKey={refreshTicks[w.id] || 0} />
                     ) : (
                       <div className="p-3 text-sm opacity-70">Widget <code>{w.type}</code></div>
                     )

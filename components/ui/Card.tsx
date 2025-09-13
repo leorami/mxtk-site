@@ -1,5 +1,5 @@
+import cn from 'classnames';
 import React from 'react';
-import cn from 'classnames'
 
 export default function Card({
   children,
@@ -17,7 +17,7 @@ export default function Card({
   return (
     <div
       className={cn(
-        'glass glass--panel p-6 md:p-8 rounded-[var(--radius-lg)] shadow-[var(--shadow-2)]',
+        'glass glass--panel px-4 py-3 md:px-5 md:py-4 rounded-[var(--radius-lg)] shadow-[var(--shadow-2)]',
         embedded && 'glass-embedded',
         interactive && 'hover-lift',
         tint === 'teal' && 'section section-teal',

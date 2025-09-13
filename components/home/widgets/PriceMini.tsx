@@ -1,38 +1,104 @@
 "use client"
+import { getApiPath } from '@/lib/basepath'
 import { apiGet } from '@/lib/api'
 import type { Series } from '@/lib/data/types'
 import { useEffect, useMemo, useState } from 'react'
+import Sparkline from '@/components/charts/Sparkline'
 
-export default function PriceMini({ symbol = 'MXTK' }: { symbol?: string }) {
-  const [series, setSeries] = useState<Series>({ points: [] })
-  useEffect(() => {
-    apiGet<{ updatedAt: number; ttl: number; data: { symbol: string; days: number; series: Series } }>(`/data/prices/${encodeURIComponent(symbol)}?days=7`)
-      .then((res) => setSeries(res.data?.series || { points: [] }))
-      .catch(() => setSeries({ points: [] }))
-  }, [symbol])
-  const pathD = useMemo(() => buildSpark(series), [series])
-  return (
-    <div className="h-full">
-      <svg viewBox="0 0 200 48" width="100%" height="48" aria-label="price sparkline">
-        <path d={pathD} fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" />
-      </svg>
-    </div>
-  )
+type PriceMiniProps = {
+  id: string
+  docId: string
+  data?: { symbol?: string }
+  refreshKey?: number
 }
 
-function buildSpark(series: Series): string {
-  const pts = series.points || []
-  if (!pts.length) return ''
-  const min = series.min ?? Math.min(...pts.map(p => p.value))
-  const max = series.max ?? Math.max(...pts.map(p => p.value))
-  const start = series.start ?? pts[0].time
-  const end = series.end ?? pts[pts.length - 1].time
-  const span = Math.max(1e-9, max - min)
-  const timeSpan = Math.max(1, end - start)
-  const w = 200, h = 48, pad = { l: 0, r: 0, t: 2, b: 6 }
-  const x = (t: number) => pad.l + ((t - start) / timeSpan) * (w - pad.l - pad.r)
-  const y = (v: number) => h - pad.b - ((v - min) / span) * (h - pad.t - pad.b)
-  return pts.map((p, i) => `${i === 0 ? 'M' : 'L'}${x(p.time).toFixed(2)},${y(p.value).toFixed(2)}`).join(' ')
+export default function PriceMini({ id, docId, data, refreshKey = 0 }: PriceMiniProps) {
+  const symbol = (data?.symbol || 'MXTK').toString().trim()
+  const [series, setSeries] = useState<Series>({ points: [] })
+  const [updatedAt, setUpdatedAt] = useState<number | null>(null)
+  const [deltaPct, setDeltaPct] = useState<number | null>(null)
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+
+  const url = useMemo(() => getApiPath(`/api/data/prices/${encodeURIComponent(symbol)}?days=7`), [symbol])
+
+  async function load() {
+    setLoading(true)
+    setError(null)
+    try {
+      const res = await apiGet<{ updatedAt: number; ttl: number; data: { symbol: string; days: number; series: Series; delta24hPct?: number } }>(url)
+      setSeries(res.data?.series || { points: [] })
+      setUpdatedAt(Number(res.updatedAt) || Date.now())
+      setDeltaPct(typeof (res as any).data?.delta24hPct === 'number' ? (res as any).data.delta24hPct : null)
+    } catch (e: any) {
+      setError('Failed to load')
+      setSeries({ points: [] })
+      setUpdatedAt(Date.now())
+      setDeltaPct(null)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  useEffect(() => { void load() }, [url, refreshKey])
+
+  function freshness(): string | null {
+    if (!updatedAt) return null
+    const ageMs = Date.now() - updatedAt
+    const mins = Math.floor(ageMs / 60000)
+    if (mins < 1) return 'Updated just now'
+    return `Updated ${mins}m ago`
+  }
+
+  async function promptEdit() {
+    const next = window.prompt('Enter symbol (e.g., MXTK)', symbol)
+    if (!next || next === symbol) return
+    try {
+      await fetch(getApiPath(`/api/ai/home/${encodeURIComponent(docId)}`), {
+        method: 'PATCH',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ widgets: [{ id, data: { symbol: next } }] }),
+      })
+      await load()
+    } catch {}
+  }
+
+  const priceNow = useMemo(() => {
+    const pts = series.points || []
+    return pts.length ? pts[pts.length - 1].value : null
+  }, [series])
+
+  return (
+    <div className="text-sm">
+      <div className="flex items-center justify-between mb-2">
+        <div className="text-xs opacity-70">{freshness()}</div>
+        <div className="inline-flex gap-2 wframe-controls" data-nodrag>
+          <button type="button" className="iconbtn" title="Refresh" onMouseDown={(e)=>e.stopPropagation()} onClick={(e)=>{ e.stopPropagation(); void load(); }}>↻</button>
+          <button type="button" className="iconbtn" title="Edit" onMouseDown={(e)=>e.stopPropagation()} onClick={(e)=>{ e.stopPropagation(); promptEdit(); }}>✎</button>
+        </div>
+      </div>
+      {symbol ? (
+        <div className="flex items-end justify-between gap-3">
+          <div className="flex flex-col">
+            <div className="text-lg font-semibold tabular-nums">
+              {priceNow == null ? '—' : `$${priceNow.toFixed(4)}`}
+            </div>
+            <div className={`text-xs ${deltaPct == null ? 'opacity-60' : (deltaPct >= 0 ? 'text-green-600' : 'text-red-600')}`}>
+              {deltaPct == null ? '—' : `${deltaPct >= 0 ? '+' : ''}${deltaPct.toFixed(2)}% 24h`}
+            </div>
+          </div>
+          <Sparkline series={series} className="w-32 h-8 opacity-90" />
+        </div>
+      ) : (
+        <div className="opacity-70 text-sm">
+          Set a symbol to view price.
+          <span className="ml-2 [html.guide-open_&]:inline hidden">
+            <button className="btn-link text-xs" onClick={promptEdit}>Edit</button>
+          </span>
+        </div>
+      )}
+    </div>
+  )
 }
 
 

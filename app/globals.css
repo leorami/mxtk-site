@@ -101,8 +101,9 @@ body {
   --link-hover: rgb(26, 53, 160);
   --mxtk-accent: var(--mxtk-orange);
   /* Modern style tokens (opt-in via html[data-style="modern"]) */
-  --widget-bg: color-mix(in srgb, #ffffff 85%, transparent);
-  --widget-border: rgba(0,0,0,.06);
+  /* Default translucency for modern cards (light) */
+  --widget-bg: color-mix(in srgb, #ffffff 40%, transparent);
+  --widget-border: rgba(0,0,0,.08);
   --widget-shadow: 0 6px 18px rgba(0,0,0,.10), 0 2px 8px rgba(0,0,0,.06);
 }
 
@@ -124,7 +125,8 @@ html.dark {
   --link-hover: rgb(244, 247, 253);
   --mxtk-accent-text: color-mix(in srgb, var(--mxtk-accent) 58%, #ffffff);
   /* Dark mode defaults for modern style */
-  --widget-bg: color-mix(in srgb, #ffffff 18%, transparent);
+  /* Dark mode translucency for modern cards (closer to your 20%) */
+  --widget-bg: color-mix(in srgb, #ffffff 20%, transparent);
   --widget-border: rgba(255,255,255,.12);
   --widget-shadow: 0 8px 20px rgba(0,0,0,.28), 0 3px 10px rgba(0,0,0,.18);
 }
@@ -473,7 +475,7 @@ table a:hover {
 
 /* Stronger glass that still breathes over detailed photos */
 .glass {
-  --glass-bg: rgba(255, 255, 255, 0.62);
+  --glass-bg: rgba(255, 255, 255, 0.72);
   --glass-border: rgba(0, 0, 0, 0.08);
   --glass-shadow: rgba(0, 0, 0, 0.28);
   backdrop-filter: blur(14px) saturate(1.08);
@@ -489,7 +491,7 @@ table a:hover {
 /* High-contrast panel variant for dense backgrounds */
 .glass--panel {
   /* Raise opacity to ensure WCAG AA against busy photos */
-  --glass-bg: rgba(255, 255, 255, 0.90);
+  --glass-bg: rgba(255, 255, 255, 0.94);
 }
 
 .dark .glass--panel {
@@ -499,7 +501,7 @@ table a:hover {
 /* Dark mode tune */
 @media (prefers-color-scheme: dark) {
   .glass {
-    --glass-bg: rgba(24, 26, 33, 0.58);
+    --glass-bg: rgba(24, 26, 33, 0.64);
     --glass-border: rgba(255, 255, 255, 0.06);
     --glass-shadow: rgba(0, 0, 0, 0.45);
   }
@@ -2000,7 +2002,7 @@ button { color: var(--ink-strong); }
   --glass-bg-alpha: 0.62;
   /* raise for darker glass */
   --glass-blur: 18px;
-  --glass-saturate: 1.05;
+  --glass-saturate: 2.05;
   --glass-border-color: 0, 0, 0;
   /* rgb() triplet */
   --glass-border-alpha: 0.10;
@@ -2042,14 +2044,14 @@ button { color: var(--ink-strong); }
 
 /* Allow the Dev Theme Switcher to control glass intensity via html[data-glass] */
 html[data-glass="soft"] {
-  --glass-bg-alpha: 0.06;
+  --glass-bg-alpha: 0.4;
   --glass-blur: 12px;
   --glass-border-alpha: 0.08;
 }
 
 html[data-glass="standard"] {
-  --glass-bg-alpha: 0.08;
-  --glass-blur: 18px;
+  --glass-bg-alpha: 0.7;
+  --glass-blur: 2px;
   --glass-border-alpha: 0.10;
   --glass-shadow-main: 0 8px 24px rgba(0, 0, 0, .18);
 }

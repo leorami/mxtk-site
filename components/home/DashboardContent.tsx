@@ -327,7 +327,7 @@ export default function DashboardContent({ initialDocId = 'default', initialDoc 
       {sections.map((sec) => {
         const widgets = doc.widgets.filter(w => w.sectionId === sec.id)
         return (
-          <section id={sec.id} key={sec.id} className="glass glass--panel p-4 md:p-6 mb-6 rounded-xl">
+          <section id={sec.id} key={sec.id} className="glass glass--panel px-4 py-3 md:px-5 md:py-4 mb-5 rounded-xl">
             <header
               className="wf-head flex items-center justify-between mb-3"
               onDragOver={(e) => onSectionDragOver(e, sec.id)}

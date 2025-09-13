@@ -1,0 +1,90 @@
+{
+  "timestamp": "2025-09-13T01-32-00-380Z",
+  "base": "http://localhost:2000",
+  "results": {
+    "desktop": {
+      "consoleErrors": [],
+      "consoleWarnings": [],
+      "networkErrors": [],
+      "colorAudit": [
+        {
+          "sel": ".wf-title",
+          "color": "rgb(14, 17, 22)",
+          "text": "Learn"
+        },
+        {
+          "sel": ".wframe a.underline",
+          "color": "rgb(224, 147, 43)",
+          "text": "Resources"
+        },
+        {
+          "sel": ".wframe .btn-link.text-sm",
+          "color": "rgb(14, 17, 22)",
+          "text": "Learn more"
+        },
+        {
+          "sel": "button[Collapse]",
+          "color": "rgb(14, 17, 22)",
+          "text": "Collapse"
+        }
+      ],
+      "screenshot": "/app/artifacts/dashboard-desktop-2025-09-13T01-32-00-380Z.png"
+    },
+    "ipad": {
+      "consoleErrors": [],
+      "consoleWarnings": [],
+      "networkErrors": [],
+      "colorAudit": [
+        {
+          "sel": ".wf-title",
+          "color": "rgb(14, 17, 22)",
+          "text": "Learn"
+        },
+        {
+          "sel": ".wframe a.underline",
+          "color": "rgb(224, 147, 43)",
+          "text": "Resources"
+        },
+        {
+          "sel": ".wframe .btn-link.text-sm",
+          "color": "rgb(14, 17, 22)",
+          "text": "Learn more"
+        },
+        {
+          "sel": "button[Collapse]",
+          "color": "rgb(14, 17, 22)",
+          "text": "Collapse"
+        }
+      ],
+      "screenshot": "/app/artifacts/dashboard-ipad-2025-09-13T01-32-00-380Z.png"
+    },
+    "mobile": {
+      "consoleErrors": [],
+      "consoleWarnings": [],
+      "networkErrors": [],
+      "colorAudit": [
+        {
+          "sel": ".wf-title",
+          "color": "rgb(14, 17, 22)",
+          "text": "Learn"
+        },
+        {
+          "sel": ".wframe a.underline",
+          "color": "rgb(224, 147, 43)",
+          "text": "Resources"
+        },
+        {
+          "sel": ".wframe .btn-link.text-sm",
+          "color": "rgb(14, 17, 22)",
+          "text": "Learn more"
+        },
+        {
+          "sel": "button[Collapse]",
+          "color": "rgb(14, 17, 22)",
+          "text": "Collapse"
+        }
+      ],
+      "screenshot": "/app/artifacts/dashboard-mobile-2025-09-13T01-32-00-380Z.png"
+    }
+  }
+}

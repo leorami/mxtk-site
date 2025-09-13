@@ -1,0 +1,73 @@
+{
+  "timestamp": "2025-09-13T01-02-51-290Z",
+  "base": "http://localhost:2000",
+  "results": {
+    "desktop": {
+      "consoleErrors": [],
+      "consoleWarnings": [],
+      "networkErrors": [],
+      "colorAudit": [
+        {
+          "sel": ".wf-title",
+          "color": "rgb(14, 17, 22)",
+          "text": "Learn"
+        },
+        {
+          "sel": ".wframe a.underline",
+          "color": "rgb(224, 147, 43)",
+          "text": "Resources"
+        },
+        {
+          "sel": ".wframe .btn-link.text-sm",
+          "color": "rgb(14, 17, 22)",
+          "text": "Learn more"
+        },
+        {
+          "sel": "button[Collapse]",
+          "color": "rgb(14, 17, 22)",
+          "text": "Collapse"
+        }
+      ],
+      "screenshot": "/app/artifacts/dashboard-desktop-2025-09-13T01-02-51-290Z.png"
+    },
+    "ipad": {
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 404 (Not Found)"
+      ],
+      "consoleWarnings": [],
+      "networkErrors": [
+        "404 Not Found: http://localhost:2000/dashboard"
+      ],
+      "colorAudit": [],
+      "screenshot": "/app/artifacts/dashboard-ipad-2025-09-13T01-02-51-290Z.png"
+    },
+    "mobile": {
+      "consoleErrors": [],
+      "consoleWarnings": [],
+      "networkErrors": [],
+      "colorAudit": [
+        {
+          "sel": ".wf-title",
+          "color": "rgb(14, 17, 22)",
+          "text": "Learn"
+        },
+        {
+          "sel": ".wframe a.underline",
+          "color": "rgb(224, 147, 43)",
+          "text": "Resources"
+        },
+        {
+          "sel": ".wframe .btn-link.text-sm",
+          "color": "rgb(14, 17, 22)",
+          "text": "Learn more"
+        },
+        {
+          "sel": "button[Collapse]",
+          "color": "rgb(14, 17, 22)",
+          "text": "Collapse"
+        }
+      ],
+      "screenshot": "/app/artifacts/dashboard-mobile-2025-09-13T01-02-51-290Z.png"
+    }
+  }
+}

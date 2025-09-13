@@ -270,14 +270,16 @@ html[data-style="classic"] .wframe:hover{
 .wframe-controls{
   position:absolute; top:8px; right:8px; display:flex; gap:8px;
   transition:opacity .15s ease;
+  z-index: 6; /* above drag surface and scroll indicators */
 }
 html:not(.guide-open) .wframe-controls{ opacity:0 !important; visibility:hidden !important; pointer-events:none !important; }
 html.guide-open .wframe-controls{ opacity:1 !important; visibility:visible !important; pointer-events:auto !important; }
 
 /* Drag affordance gated by guide-open */
 .widget-chrome{ cursor: default; }
-html.guide-open .widget-chrome{ cursor: grab; }
-html.guide-open .widget-chrome:active{ cursor: grabbing; }
+/* Limit grab cursor to the header (drag handle) only */
+html.guide-open .wf-head{ cursor: grab; }
+html.guide-open .wf-head:active{ cursor: grabbing; }
 
 .iconbtn{
   width:20px; height:20px; border-radius:999px; display:grid; place-items:center;
@@ -295,8 +297,8 @@ html.light .wframe-resize{ border-color: rgba(0,0,0,0.45); }
 /* Links on glass: WCAG-safe */
 .wframe a{ text-decoration:none; border-bottom:none; font-weight:600; color: color-mix(in srgb, var(--ink-strong) 78%, var(--ink-weak) 22%); }
 .wframe a:focus-visible{ outline:2px solid currentColor; outline-offset:2px; }
-html.light .wframe a{ color: color-mix(in srgb, #0c2563 80%, #5b6b9a 20%); border-bottom-color:rgba(12,37,99,.45); }
-html.dark  .wframe a{ color: color-mix(in srgb, #e6eeff 88%, #aab7ff 12%); border-bottom-color:rgba(230,238,255,.45); }
+html.light .wframe a{ color: color-mix(in srgb, #0c2563 82%, #6f7faf 18%); border-bottom-color:rgba(12,37,99,.45); }
+html.dark  .wframe a{ color: color-mix(in srgb, #e6eeff 88%, #b8c3ff 12%); border-bottom-color:rgba(230,238,255,.45); }
 .wframe .btn-link{ font-weight:600; color: color-mix(in srgb, var(--ink-strong) 78%, var(--ink-weak) 22%); }
 .wframe .btn-link:focus-visible{ outline:2px solid currentColor; outline-offset:2px; }
 .wframe .btn-link:hover{ text-decoration:underline; text-underline-offset:2px; }
@@ -330,7 +332,7 @@ html[data-ink="warm"] .section-rail .glass a:not(.btn):not(.btn-primary):not(.bt
 
 /* Widget header row */
 .wf-head{ display:flex; align-items:center; justify-content:space-between; gap:.75rem; margin-bottom:.25rem; }
-.wf-title{ font-weight:600; opacity:.9; color: color-mix(in srgb, var(--ink-strong) 75%, var(--ink-weak) 25%); }
+.wf-title{ font-weight:600; opacity:.98; color: var(--h2-color); line-height:1.25; letter-spacing:-0.01em; }
 .wf-actions{ display:inline-flex; align-items:center; gap:.25rem; pointer-events:auto; position:static; top:auto; right:auto; margin-left:auto; }
 .wf-actions.wframe-controls{ position:static; top:auto; right:auto; }
 .wf-actions button, .wf-actions [role="button"]{ cursor:pointer; }

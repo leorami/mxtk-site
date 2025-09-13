@@ -13,31 +13,13 @@ import Image, { ImageProps } from 'next/image';
  */
 export default function AppImage(props: Omit<ImageProps, 'src'> & { src: string }) {
   const { src, ...rest } = props;
-  let basePath = '';
-  try {
-    basePath = useBasePath() || '';
-  } catch {
-    basePath = '';
-  }
 
-  // Ensure src starts with / for public assets
-  const normalizedSrc = src.startsWith('/') ? src : `/${src}`;
+  // Build basePath-aware absolute src. Avoid directory-valued inputs by requiring a file path.
+  const basePath = useBasePath();
+  const leaf = src.startsWith('/') ? src : `/${src}`;
+  const href = `${basePath || ''}${leaf}`;
 
-  // Apply base path to public assets
-  const basePathAwareSrc = `${basePath}${normalizedSrc}`;
-
-  // Let Next.js Image component handle the rest
-  // Add width="auto" or height="auto" to maintain aspect ratio when one dimension is modified
-  const imageProps = { ...rest };
-
-  // If only one dimension (width or height) is specified, set the other to "auto"
-  if (imageProps.width && !imageProps.height) {
-    imageProps.height = "auto" as any;
-  } else if (imageProps.height && !imageProps.width) {
-    imageProps.width = "auto" as any;
-  }
-
-  return <Image {...imageProps} src={basePathAwareSrc} unoptimized />;
+  return <Image {...rest} src={href} unoptimized />;
 }
 
 

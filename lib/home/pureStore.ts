@@ -166,19 +166,33 @@ export function togglePinWidget(doc: HomeDoc, id: string): HomeDoc {
   return { ...doc, widgets }
 }
 
-export function ensureWidget(doc: HomeDoc, type: WidgetState['type'], defaults?: Partial<WidgetState>): HomeDoc {
-  const exists = (doc.widgets || []).some(w => w.type === type)
-  if (exists) return doc
-  const size = (defaults?.size as any) || { w: 4, h: 12 }
+export function ensureWidget(doc: HomeDoc, opts: { type: WidgetState['type']; sectionId?: string; title?: string; size?: WidgetSize; data?: Record<string, unknown> }): HomeDoc {
+  const type = opts.type
+  const sectionId = (opts.sectionId as any) || (doc.sections?.[0]?.id || 'overview')
+  const idx = (doc.widgets || []).findIndex(w => w.type === type)
+  if (idx >= 0) {
+    const cur = doc.widgets[idx]
+    const merged: WidgetState = {
+      ...cur,
+      title: opts.title ?? cur.title,
+      sectionId: sectionId || cur.sectionId,
+      data: opts.data ? { ...(cur.data || {}), ...opts.data } : cur.data,
+      size: opts.size ? { ...cur.size, ...opts.size } : cur.size,
+    } as WidgetState
+    const widgets = [...doc.widgets]
+    widgets[idx] = merged
+    return { ...doc, widgets }
+  }
+  const size: WidgetSize = opts.size ? { w: Math.max(1, opts.size.w), h: Math.max(1, opts.size.h) } : { w: 4, h: 12 }
   const pos = placeNewWidget(doc.widgets as any, size)
   const next: WidgetState = {
     id: genId(),
     type,
-    title: defaults?.title,
-    sectionId: (defaults?.sectionId as any) || (doc.sections?.[0]?.id || 'overview'),
+    title: opts.title,
+    sectionId,
     size,
     pos,
-    data: defaults?.data as any,
+    data: opts.data as any,
   }
   return { ...doc, widgets: [...doc.widgets, next] }
 }

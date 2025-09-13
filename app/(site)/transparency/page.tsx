@@ -69,7 +69,8 @@ export default async function TransparencyPage() {
                 <div className="relative">
                   <DataTableGlass rows={rows} updatedAt={updatedAt} ttl={ttl} />
                   <div className="absolute right-2 top-2 opacity-0 pointer-events-none [html.guide-open_&]:opacity-100 transition-opacity">
-                    <form action={getBasePathUrl('/api/ai/home/add')} method="post">
+                    <form action={getBasePathUrl('/api/ai/home/pin')} method="post">
+                      <input type="hidden" name="id" value="default" />
                       <input type="hidden" name="widget[type]" value="pools-mini" />
                       <button type="submit" className="btn-ghost text-xs">Pin to Home</button>
                     </form>

@@ -125,31 +125,32 @@
 .band-home::before {
   content: "";
   position: absolute; inset: 0;
-  background-image: url("/art/home_band_light.png");
+  /* Avoid CSS loader url() resolution on var() fallback; compose with CSS calc-like trick */
   background-image: var(--base-path-url, url("/art/home_band_light.png"));
+  background-image: url("" var(--asset-base) "/art/home_band_light.png");
   background-size: cover; background-position: center;
   opacity: 0.9; pointer-events: none;
-  -webkit-mask: url("/art/home_light_wave_top.svg") top / cover no-repeat,
-                 url("/art/home_light_wave_bottom.svg") bottom / cover no-repeat;
-  mask: url("/art/home_light_wave_top.svg") top / cover no-repeat,
-        url("/art/home_light_wave_bottom.svg") bottom / cover no-repeat;
+  -webkit-mask: url("" var(--asset-base) "/art/home_light_wave_top.svg") top / cover no-repeat,
+                 url("" var(--asset-base) "/art/home_light_wave_bottom.svg") bottom / cover no-repeat;
+  mask: url("" var(--asset-base) "/art/home_light_wave_top.svg") top / cover no-repeat,
+        url("" var(--asset-base) "/art/home_light_wave_bottom.svg") bottom / cover no-repeat;
 }
-.dark .band-home::before { background-image: url("/art/home_band_dark.png"); }
+.dark .band-home::before { background-image: url("" var(--asset-base) "/art/home_band_dark.png"); }
 
 /* Organic bands (Owners) */
 .band-owners { position: relative; padding: clamp(24px, 6vw, 56px) 0; }
 .band-owners::before {
   content: "";
   position: absolute; inset: 0;
-  background-image: url("/art/owners_band_light.png");
+  background-image: url("" var(--asset-base) "/art/owners_band_light.png");
   background-size: cover; background-position: center;
   opacity: 0.9; pointer-events: none;
-  -webkit-mask: url("/art/owners_light_wave_top.svg") top / cover no-repeat,
-                 url("/art/owners_light_wave_bottom.svg") bottom / cover no-repeat;
-  mask: url("/art/owners_light_wave_top.svg") top / cover no-repeat,
-        url("/art/owners_light_wave_bottom.svg") bottom / cover no-repeat;
+  -webkit-mask: url("" var(--asset-base) "/art/owners_light_wave_top.svg") top / cover no-repeat,
+                 url("" var(--asset-base) "/art/owners_light_wave_bottom.svg") bottom / cover no-repeat;
+  mask: url("" var(--asset-base) "/art/owners_light_wave_top.svg") top / cover no-repeat,
+        url("" var(--asset-base) "/art/owners_light_wave_bottom.svg") bottom / cover no-repeat;
 }
-.dark .band-owners::before { background-image: url("/art/owners_band_dark.png"); }
+.dark .band-owners::before { background-image: url("" var(--asset-base) "/art/owners_band_dark.png"); }
 
 /* Wave 2: iPad hamburger enforcement */
 @media (max-width: 1024px){

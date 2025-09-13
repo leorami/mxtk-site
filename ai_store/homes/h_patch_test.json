@@ -2,19 +2,6 @@
   "id": "h_patch_test",
   "widgets": [
     {
-      "id": "mfggtuto_1",
-      "type": "custom-note",
-      "title": "Note",
-      "size": {
-        "w": 3,
-        "h": 2
-      },
-      "pos": {
-        "x": 0,
-        "y": 11
-      }
-    },
-    {
       "id": "mfggtuto_2",
       "type": "glossary-spotlight",
       "title": "Glossary",
@@ -24,7 +11,7 @@
       },
       "pos": {
         "x": 3,
-        "y": 11
+        "y": 14
       }
     },
     {
@@ -63,7 +50,7 @@
       },
       "pos": {
         "x": 0,
-        "y": 9
+        "y": 11
       }
     },
     {
@@ -76,7 +63,7 @@
       },
       "pos": {
         "x": 3,
-        "y": 9
+        "y": 11
       }
     },
     {
@@ -89,7 +76,7 @@
       },
       "pos": {
         "x": 0,
-        "y": 7
+        "y": 9
       }
     },
     {
@@ -102,7 +89,7 @@
       },
       "pos": {
         "x": 3,
-        "y": 7
+        "y": 9
       }
     },
     {
@@ -115,7 +102,7 @@
       },
       "pos": {
         "x": 0,
-        "y": 5
+        "y": 7
       }
     },
     {
@@ -128,7 +115,7 @@
       },
       "pos": {
         "x": 3,
-        "y": 5
+        "y": 7
       }
     },
     {
@@ -155,6 +142,32 @@
       "pos": {
         "x": 9,
         "y": 0
+      }
+    },
+    {
+      "id": "mfhl73fr_1",
+      "type": "custom-note",
+      "title": "Note",
+      "size": {
+        "w": 3,
+        "h": 2
+      },
+      "pos": {
+        "x": 0,
+        "y": 5
+      }
+    },
+    {
+      "id": "mfhl73fs_2",
+      "type": "glossary-spotlight",
+      "title": "Glossary",
+      "size": {
+        "w": 3,
+        "h": 2
+      },
+      "pos": {
+        "x": 3,
+        "y": 5
       }
     }
   ],
