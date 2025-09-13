@@ -1,3 +1,32 @@
+import { describe, it, expect } from 'vitest'
+import { logSignal, listSignals } from '@/lib/home/signals'
+import type { HomeSignal } from '@/lib/home/types'
+import { promises as fs } from 'node:fs'
+import path from 'node:path'
+
+const ROOT = process.cwd()
+const SIGNALS_FILE = path.join(ROOT, 'ai_store', 'signals.jsonl')
+
+describe('home signals store', () => {
+  it('returns empty when file missing', async () => {
+    try { await fs.rm(SIGNALS_FILE, { force: true }) } catch {}
+    const items = await listSignals()
+    expect(Array.isArray(items)).toBe(true)
+    expect(items.length).toBe(0)
+  })
+
+  it('append and list recent signals', async () => {
+    try { await fs.rm(SIGNALS_FILE, { force: true }) } catch {}
+    const s: HomeSignal = { id: 't1', ts: Date.now(), kind: 'move', docId: 'd1', widgetId: 'w1', pos: { x: 1, y: 2 }, size: { w: 3, h: 4 } }
+    await logSignal(s)
+    const out = await listSignals({ sinceMs: Date.now() - 1000 })
+    expect(out.length).toBeGreaterThan(0)
+    const last = out[out.length - 1]
+    expect(last.docId).toBe('d1')
+    expect(last.kind).toBe('move')
+  })
+})
+
 import * as fs from 'fs/promises'
 import path from 'path'
 import { beforeEach, describe, expect, it } from 'vitest'

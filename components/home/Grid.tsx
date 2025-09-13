@@ -2,6 +2,7 @@
 
 import WidgetFrame from '@/components/home/WidgetFrame';
 import GlossarySpotlight from '@/components/home/widgets/GlossarySpotlight';
+import WhatsNext from '@/components/home/widgets/WhatsNext';
 import PoolsMini from '@/components/home/widgets/PoolsMini';
 import PriceMini from '@/components/home/widgets/PriceMini';
 import RecentAnswers from '@/components/home/widgets/RecentAnswers';
@@ -142,28 +143,19 @@ export default function Grid({ doc, render, onPatch }: GridProps) {
   const resizeDir = React.useRef<'br'|'tr'|'bl'|'tl'|null>(null);
   const resizeStart = React.useRef<{ x: number; y: number; size: { w: number; h: number }; pos: { x:number; y:number } } | null>(null);
 
-  // --- signals batching ------------------------------------------------------
-  type PendingSignal = { homeId: string; widgetId?: string; type: string; payload?: Record<string, unknown> }
-  const sigQueue = React.useRef<PendingSignal[]>([])
-  const sigTimer = React.useRef<number | null>(null)
-  const flushSignals = React.useCallback(async () => {
-    const batch = sigQueue.current.splice(0, sigQueue.current.length)
-    if (!batch.length) return
-    try {
-      await fetch(getApiPath('/api/ai/signals'), { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ signals: batch.map(s => ({ ...s, ts: Date.now() })) }) })
-    } catch {}
+  // --- signals minimal debounce ---------------------------------------------
+  function genId() { return `sig_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 8)}` }
+  const postTimer = React.useRef<number | null>(null)
+  const postSignal = React.useCallback((payload: any) => {
+    if (postTimer.current) window.clearTimeout(postTimer.current)
+    postTimer.current = window.setTimeout(() => {
+      fetch(getApiPath('/api/ai/signals'), {
+        method: 'POST', headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ id: genId(), ts: Date.now(), ...payload }), cache: 'no-store'
+      }).catch(() => {})
+      postTimer.current = null
+    }, 150)
   }, [])
-  function enqueueSignal(s: PendingSignal) {
-    sigQueue.current.push(s)
-    if (sigTimer.current) window.clearTimeout(sigTimer.current)
-    sigTimer.current = window.setTimeout(() => { flushSignals(); sigTimer.current = null }, 800)
-  }
-  React.useEffect(() => {
-    const onHide = () => { void flushSignals() }
-    window.addEventListener('pagehide', onHide)
-    window.addEventListener('beforeunload', onHide)
-    return () => { window.removeEventListener('pagehide', onHide); window.removeEventListener('beforeunload', onHide) }
-  }, [flushSignals])
 
   React.useEffect(() => {
     function onMove(e: PointerEvent) {
@@ -224,7 +216,7 @@ export default function Grid({ doc, render, onPatch }: GridProps) {
         if (w) {
           // Persist immediately on drag end
           void doPatch([{ id: w.id, pos: w.pos }]);
-          enqueueSignal({ homeId: doc.id, widgetId: w.id, type: 'move', payload: { x: w.pos.x, y: w.pos.y, w: w.size.w, h: w.size.h } })
+          postSignal({ kind: 'move', docId: doc.id, widgetId: w.id, pos: { x: w.pos.x, y: w.pos.y }, size: { w: w.size.w, h: w.size.h } })
         }
       }
       if (resizeId.current) {
@@ -234,7 +226,7 @@ export default function Grid({ doc, render, onPatch }: GridProps) {
         if (w) {
           // Persist immediately on resize end
           void doPatch([{ id: w.id, size: w.size }]);
-          enqueueSignal({ homeId: doc.id, widgetId: w.id, type: 'resize', payload: { x: w.pos.x, y: w.pos.y, w: w.size.w, h: w.size.h } })
+          postSignal({ kind: 'resize', docId: doc.id, widgetId: w.id, pos: { x: w.pos.x, y: w.pos.y }, size: { w: w.size.w, h: w.size.h } })
         }
       }
     }
@@ -343,6 +335,8 @@ export default function Grid({ doc, render, onPatch }: GridProps) {
                       <PoolsMini id={w.id} docId={doc.id} data={w.data as any} refreshKey={refreshTicks[w.id] || 0} />
                     ) : w.type === 'price-mini' ? (
                       <PriceMini id={w.id} docId={doc.id} data={w.data as any} refreshKey={refreshTicks[w.id] || 0} />
+                    ) : w.type === 'whats-next' ? (
+                      <WhatsNext />
                     ) : (
                       <div className="p-3 text-sm opacity-70">Widget <code>{w.type}</code></div>
                     )

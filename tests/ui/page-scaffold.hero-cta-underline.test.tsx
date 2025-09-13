@@ -1,7 +1,6 @@
-import { render, screen } from '@testing-library/react'
-import '@testing-library/jest-dom'
-import React from 'react'
 import PageScaffold from '@/components/layout/PageScaffold'
+import '@testing-library/jest-dom'
+import { render, screen } from '@testing-library/react'
 
 describe('PageScaffold hero CTA underline guard', () => {
   it('renders hero CTA anchors without text-decoration underline', () => {

@@ -43,6 +43,10 @@ export default function Resources({ id, data }: { id?: string; data?: { maxItems
 
   const onLearnMore = useCallback((r: Resource) => {
     try {
+      fetch(getApiPath('/api/ai/signals'), {
+        method: 'POST', headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ id: `sig_${Date.now().toString(36)}_${Math.random().toString(36).slice(2,8)}`, ts: Date.now(), kind: 'open', docId: getHomeId(), meta: { target: 'guide', intent: 'prefill', source: 'resources', href: r.href } }), cache: 'no-store'
+      }).catch(() => {})
       const prompt = r.prompt || [
         'Open the MXTK Resources overview and briefly describe its sections.',
         'Then give: 3 key takeaways, and the next best link a builder should click.',

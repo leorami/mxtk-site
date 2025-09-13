@@ -1,7 +1,6 @@
-import { render } from '@testing-library/react'
-import '@testing-library/jest-dom'
-import React from 'react'
 import SiteHeader from '@/components/SiteHeader'
+import '@testing-library/jest-dom'
+import { render } from '@testing-library/react'
 
 /**
  * Ensures dropdown group pills match the Dashboard pill height

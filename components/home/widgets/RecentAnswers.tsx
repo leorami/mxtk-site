@@ -57,6 +57,11 @@ export default function RecentAnswers({ refreshToken = 0 }: { refreshToken?: num
               className="btn-link text-sm"
               onClick={() => {
                 try {
+                  // log open signal
+                  fetch(getApiPath('/api/ai/signals'), {
+                    method: 'POST', headers: { 'content-type': 'application/json' },
+                    body: JSON.stringify({ id: `sig_${Date.now().toString(36)}_${Math.random().toString(36).slice(2,8)}`, ts: Date.now(), kind: 'open', docId: 'default', meta: { target: 'guide', intent: 'prefill', source: 'recent-answers' } }), cache: 'no-store'
+                  }).catch(() => {})
                   window.dispatchEvent(new CustomEvent('mxtk:guide:prefill', { detail: { prompt: m.title || m.body?.slice(0, 120) } }));
                 } catch {}
               }}

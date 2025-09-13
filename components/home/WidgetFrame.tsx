@@ -24,6 +24,15 @@ function getHomeIdFallback(): string {
 }
 
 export default function WidgetFrame({ id, docId, data, title, children, onRefresh, onInfo, onRemove }: Props) {
+  function genId() { return `sig_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 8)}` }
+  const postSignal = React.useCallback((payload: any) => {
+    try {
+      fetch(getApiPath('/api/ai/signals'), {
+        method: 'POST', headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ id: genId(), ts: Date.now(), ...payload }), cache: 'no-store'
+      }).catch(() => {})
+    } catch {}
+  }, [])
   const [open, setOpen] = React.useState(false);
   const [localTitle, setLocalTitle] = React.useState<string | undefined>(title);
   const [density, setDensity] = React.useState<Density>(() => (data as any)?.density === 'compact' ? 'compact' : 'cozy');
@@ -54,11 +63,11 @@ export default function WidgetFrame({ id, docId, data, title, children, onRefres
         <div className="wf-title truncate">{localTitle}</div>
         <div className="wf-actions wframe-controls widget-controls inline-flex items-center gap-1" data-nodrag>
           {onRefresh && (
-            <button type="button" className="iconbtn" title="Refresh" data-nodrag onMouseDown={(e) => e.stopPropagation()} onClick={(e) => { e.stopPropagation(); onRefresh?.(); }}>
+            <button type="button" className="iconbtn" title="Refresh" data-nodrag onMouseDown={(e) => e.stopPropagation()} onClick={(e) => { e.stopPropagation(); onRefresh?.(); if (id) postSignal({ kind: 'refresh', docId: docId || getHomeIdFallback(), widgetId: id }); }}>
               ↻
             </button>
           )}
-          <button type="button" className="iconbtn" title="Settings" data-nodrag onMouseDown={(e) => e.stopPropagation()} onClick={(e) => { e.stopPropagation(); setOpen(o => !o); }} aria-haspopup="dialog" aria-expanded={open ? 'true' : 'false'}>⚙︎</button>
+          <button type="button" className="iconbtn" title="Settings" data-nodrag onMouseDown={(e) => e.stopPropagation()} onClick={(e) => { e.stopPropagation(); setOpen(o => !o); if (id) postSignal({ kind: 'settings', docId: docId || getHomeIdFallback(), widgetId: id }); }} aria-haspopup="dialog" aria-expanded={open ? 'true' : 'false'}>⚙︎</button>
           {onInfo && (
             <button type="button" className="iconbtn" title="Info" data-nodrag onMouseDown={(e) => e.stopPropagation()} onClick={(e) => { e.stopPropagation(); onInfo?.(); }}>i</button>
           )}

@@ -64,6 +64,10 @@ export default function GlossarySpotlight({ id, data }: { id?: string; data?: { 
 
   const onLearn = useCallback(() => {
     try {
+      fetch(getApiPath('/api/ai/signals'), {
+        method: 'POST', headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ id: `sig_${Date.now().toString(36)}_${Math.random().toString(36).slice(2,8)}`, ts: Date.now(), kind: 'open', docId: getHomeId(), meta: { target: 'guide', intent: 'prefill', source: 'glossary-spotlight', term: pick.term } }), cache: 'no-store'
+      }).catch(() => {})
       const prompt = `Explain ${pick.term} and how it relates to MXTK. Provide a brief summary and key points.`
       window.dispatchEvent(new CustomEvent('mxtk:guide:open', { detail: { prompt, send: true } }));
     } catch { }

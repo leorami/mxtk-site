@@ -1,29 +1,44 @@
-import { append } from '@/lib/signals/store'
-import type { Signal } from '@/lib/signals/types'
 import { NextRequest, NextResponse } from 'next/server'
+import { z } from 'zod'
+import { logSignal, listSignals } from '@/lib/home/signals'
+import type { HomeSignal } from '@/lib/home/types'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
 
+const zSignal = z.object({
+  id: z.string().min(1),
+  ts: z.number().int().positive(),
+  kind: z.enum(['pin','unpin','move','resize','refresh','settings','open','collapse','expand']),
+  docId: z.string().min(1),
+  sectionId: z.string().min(1).optional(),
+  widgetId: z.string().min(1).optional(),
+  pos: z.object({ x: z.number().int().min(0), y: z.number().int().min(0) }).optional(),
+  size: z.object({ w: z.number().int().min(1), h: z.number().int().min(1) }).optional(),
+  meta: z.record(z.unknown()).optional(),
+})
+
 export async function POST(req: NextRequest) {
+  const body = await req.json().catch(() => ({}))
+  const parsed = zSignal.safeParse(body)
+  if (!parsed.success) return NextResponse.json({ ok: false, error: 'bad-payload' }, { status: 400, headers: { 'Cache-Control': 'no-store' } })
   try {
-    const body = await req.json().catch(() => ({}))
-    const signals = Array.isArray(body?.signals) ? (body.signals as Signal[]) : []
-    // Stamp ts if missing and coerce basic shape
-    const now = Date.now()
-    const sanitized: Signal[] = signals.map(s => ({
-      ts: Number(s?.ts) || now,
-      user: typeof s?.user === 'string' ? s.user : undefined,
-      homeId: String(s?.homeId || 'default'),
-      widgetId: s?.widgetId ? String(s.widgetId) : undefined,
-      type: String(s?.type) as any,
-      payload: (s && typeof s.payload === 'object') ? s.payload as any : undefined,
-    }))
-    if (sanitized.length) await append(sanitized)
-    return NextResponse.json({ ok: true, count: sanitized.length }, { headers: { 'Cache-Control': 'no-store' } })
+    await logSignal(parsed.data as HomeSignal)
+    return NextResponse.json({ ok: true }, { headers: { 'Cache-Control': 'no-store' } })
   } catch (e: any) {
-    return NextResponse.json({ ok: false, error: 'signals-failed', detail: e?.message || String(e) }, { status: 500, headers: { 'Cache-Control': 'no-store' } })
+    return NextResponse.json({ ok: false, error: 'signals-failed' }, { status: 500, headers: { 'Cache-Control': 'no-store' } })
   }
+}
+
+export async function GET(req: NextRequest) {
+  if (process.env.NODE_ENV !== 'development') {
+    return NextResponse.json({ ok: false }, { status: 404, headers: { 'Cache-Control': 'no-store' } })
+  }
+  const { searchParams } = new URL(req.url)
+  const limit = Math.max(1, Math.min(1000, Number(searchParams.get('limit') || '100')))
+  const sinceMs = searchParams.get('sinceMs') ? Number(searchParams.get('sinceMs')) : undefined
+  const items = await listSignals({ sinceMs })
+  return NextResponse.json(items.slice(-limit), { headers: { 'Cache-Control': 'no-store' } })
 }
 
 

@@ -46,3 +46,18 @@ export interface HomeDoc {
   sections: SectionState[];
   widgets: WidgetState[];
 }
+
+// Signals V0
+export type HomeSignalKind = 'pin' | 'unpin' | 'move' | 'resize' | 'refresh' | 'settings' | 'open' | 'collapse' | 'expand';
+
+export interface HomeSignal {
+  id: string;
+  ts: number;
+  kind: HomeSignalKind;
+  docId: string;
+  sectionId?: string;
+  widgetId?: string;
+  pos?: { x: number; y: number };
+  size?: { w: number; h: number };
+  meta?: Record<string, unknown>;
+}
