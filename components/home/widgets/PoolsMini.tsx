@@ -1,6 +1,6 @@
 "use client"
-import { getApiPath } from '@/lib/basepath'
 import { apiGet } from '@/lib/api'
+import { getApiPath } from '@/lib/basepath'
 import type { PoolRow } from '@/lib/data/types'
 import { useEffect, useMemo, useState } from 'react'
 
@@ -71,12 +71,20 @@ export default function PoolsMini({ id, docId, data, refreshKey = 0 }: PoolsMini
           <button type="button" className="iconbtn" title="Edit" onMouseDown={(e)=>e.stopPropagation()} onClick={(e)=>{ e.stopPropagation(); promptEdit(); }}>✎</button>
         </div>
       </div>
+      {rows.length > 0 && (
+        <div className="grid grid-cols-3 text-[11px] uppercase tracking-wide opacity-55 mb-1 select-none">
+          <div>Pair</div>
+          <div className="text-right">TVL</div>
+          <div className="text-right">24h Vol</div>
+        </div>
+      )}
       {token ? (
         <ol className="space-y-2">
           {rows.slice(0,5).map((r) => (
-            <li key={r.address} className="flex items-center justify-between">
-              <span className="truncate mr-2">{(r.token0?.symbol || '—')}/{(r.token1?.symbol || '—')}</span>
-              <span className="tabular-nums opacity-80">{fmtUSD(r.tvlUSD)}</span>
+            <li key={r.address} className="grid grid-cols-3 gap-2 items-center">
+              <span className="truncate">{(r.token0?.symbol || '—')}/{(r.token1?.symbol || '—')}</span>
+              <span className="tabular-nums opacity-80 text-right">{fmtUSD(r.tvlUSD)}</span>
+              <span className="tabular-nums opacity-70 text-right">{fmtUSD(r.volume24hUSD)}<span className="sr-only"> 24h</span></span>
             </li>
           ))}
           {rows.length === 0 && (

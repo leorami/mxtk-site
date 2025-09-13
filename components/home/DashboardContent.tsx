@@ -10,6 +10,10 @@ type Props = { initialDocId?: string; initialDoc?: HomeDoc | null }
 export default function DashboardContent({ initialDocId = 'default', initialDoc = null }: Props) {
   const { mode } = useCopy('dashboard')
   const [doc, setDoc] = React.useState<HomeDoc | null>(initialDoc)
+  const [showAdaptCta, setShowAdaptCta] = React.useState(false)
+  const [previewDoc, setPreviewDoc] = React.useState<HomeDoc | null>(null)
+  const prevModeRef = React.useRef(mode)
+  const ctaShownOnce = React.useRef(false)
   const [error, setError] = React.useState<string | null>(null)
   const [loading, setLoading] = React.useState(true)
   const [retryCount, setRetryCount] = React.useState(0)
@@ -246,6 +250,42 @@ export default function DashboardContent({ initialDocId = 'default', initialDoc 
     return () => { alive = false }
   }, [loadData])
 
+  // Surface Adapt CTA when mode changes or when doc first loads
+  React.useEffect(() => {
+    if (!doc) return
+    const modeChanged = prevModeRef.current !== mode
+    if (modeChanged || !ctaShownOnce.current) {
+      setShowAdaptCta(true)
+      ctaShownOnce.current = true
+      prevModeRef.current = mode
+    }
+  }, [doc, mode])
+
+  const onDismissAdapt = React.useCallback(() => {
+    setShowAdaptCta(false)
+    setPreviewDoc(null)
+  }, [])
+
+  const onPreviewAdapt = React.useCallback(async () => {
+    try {
+      const { buildSeedDocFromPresets, adaptDocWithPresets } = await import('@/lib/home/seedUtil')
+      const base = doc ? { ...doc } : null
+      if (!base) return
+      // create a virtual merged document without persisting
+      const merged = adaptDocWithPresets(base, mode)
+      setPreviewDoc({ ...merged })
+    } catch {}
+  }, [doc, mode])
+
+  const onApplyAdapt = React.useCallback(async () => {
+    try {
+      await fetch(getApiUrl(`/ai/home/seed`), { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ id: initialDocId, mode, adapt: true }) })
+      window.dispatchEvent(new CustomEvent('mxtk-dashboard-refresh', { detail: { source: 'adapt-apply', mode } }))
+      setPreviewDoc(null)
+      setShowAdaptCta(false)
+    } catch {}
+  }, [initialDocId, mode])
+
   // listen for global refresh event dispatched by Adapt CTA
   React.useEffect(() => {
     async function onRefresh() {
@@ -319,13 +359,23 @@ export default function DashboardContent({ initialDocId = 'default', initialDoc 
   // Render the dashboard
   return (
     <div className="section-rail">
+      {showAdaptCta && (
+        <div className="mb-3 text-sm">
+          <div className="inline-flex items-center gap-2 px-3 py-2 rounded-full bg-[color:var(--surface-card-emb)] border border-[color:var(--border-soft)] shadow-sm">
+            <span>Adapt Dashboard to {mode === 'learn' ? 'Learn' : mode === 'build' ? 'Build' : 'Operate'}?</span>
+            <button className="btn btn-ghost px-2 py-1" onClick={onPreviewAdapt} data-nodrag>Preview</button>
+            <button className="btn-primary px-2 py-1" onClick={onApplyAdapt} data-nodrag>Apply</button>
+            <button className="btn btn-ghost px-2 py-1" onClick={onDismissAdapt} data-nodrag>Dismiss</button>
+          </div>
+        </div>
+      )}
       {undoVisible && (
         <div className="mb-3 text-sm opacity-80">
           <button className="btn btn-ghost px-2 py-1" onClick={() => { if (lastOp.current) applyInverse(lastOp.current.op) }}>Undo</button>
         </div>
       )}
-      {sections.map((sec) => {
-        const widgets = doc.widgets.filter(w => w.sectionId === sec.id)
+      {(previewDoc || doc)?.sections.map((sec) => {
+        const widgets = (previewDoc || doc)!.widgets.filter(w => w.sectionId === sec.id)
         return (
           <section id={sec.id} key={sec.id} className="glass glass--panel px-4 py-3 md:px-5 md:py-4 mb-5 rounded-xl">
             <header
@@ -397,11 +447,11 @@ export default function DashboardContent({ initialDocId = 'default', initialDoc 
             {/* drop also works on header; no extra target needed */}
             {!sec.collapsed && (
               <div className="section-body">
-                <Grid doc={{ ...doc, widgets }} onPatch={async (_id, updates) => {
+                <Grid doc={{ ...(previewDoc || doc)!, widgets }} onPatch={async (_id, updates) => {
                   try {
                     // compute inverse before send
                     const inv = updates.map(u => {
-                      const cur = doc.widgets.find(w => w.id === u.id)
+                      const cur = (previewDoc || doc)!.widgets.find(w => w.id === u.id)
                       return cur ? { id: cur.id, pos: u.pos ? { ...cur.pos } : undefined, size: u.size ? { ...cur.size } : undefined } : u
                     })
                     const kind = updates.some(u => u.size) ? 'resize' : 'move' as const

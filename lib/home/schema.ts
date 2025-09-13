@@ -1,12 +1,21 @@
 import { z } from 'zod';
 
-export const zWidgetType = z.enum([
+// Accept both legacy and current widget type identifiers
+const zKnownWidgetType = z.enum([
+  // Legacy identifiers
   'getting-started',
-  'recent-answers',
-  'glossary-spotlight',
   'custom-note',
   'resource-list',
+  // Current identifiers (match lib/home/types.ts)
+  'whats-next',
+  'recent-answers',
+  'glossary-spotlight',
+  'note',
+  'resources',
+  'pools-mini',
+  'price-mini',
 ]);
+export const zWidgetType = z.union([zKnownWidgetType, z.string()])
 
 export const zSize = z.object({ w: z.number().int().min(1), h: z.number().int().min(1) });
 export const zPos = z.object({ x: z.number().int().min(0), y: z.number().int().min(0) });
@@ -26,7 +35,7 @@ export const zWidgetState = z.object({
 export const zHomeDoc = z.object({
   id: z.string().min(1),
   widgets: z.array(zWidgetState),
-  layoutVersion: z.literal(1),
+  layoutVersion: z.literal(2),
 });
 
 export const zWidgetAddRequest = z.object({

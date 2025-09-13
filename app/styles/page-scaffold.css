@@ -355,3 +355,18 @@ a.btn, a[role="button"], .btn, .chip {
   text-underline-offset: 2px;
   font-weight: 500;
 }
+
+/* Mobile experience toggle tightening */
+@media (max-width: 390px){
+  .site-footer .experience-toggle, .experience-toggle{
+    max-width: 100%;
+    overflow: hidden;
+  }
+  .experience-toggle [role="group"]{ width: 100%; }
+  .experience-toggle button{ min-width: 40px; min-height: 40px; }
+}
+
+/* Align wf-title and wf-actions in one row */
+.wf-head{ display:flex; align-items:center; justify-content:space-between; }
+.wf-title{ flex: 1 1 auto; min-width: 0; }
+.wf-actions{ flex: 0 0 auto; }

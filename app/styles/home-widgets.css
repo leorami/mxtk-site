@@ -288,11 +288,20 @@ html.guide-open .wf-head:active{ cursor: grabbing; }
 }
 html.light .iconbtn{ border-color: rgba(0,0,0,0.18); background: rgba(255,255,255,0.45); color:#222; }
 
-.wframe-resize{
-  position:absolute; right:6px; bottom:6px; width:14px; height:14px; cursor:nwse-resize;
-  border-right:2px solid rgba(255,255,255,0.7); border-bottom:2px solid rgba(255,255,255,0.7); border-radius:2px; opacity:.7;
-}
+.wframe-resize{ position:absolute; width:14px; height:14px; border-radius:2px; opacity:.75; z-index:5; transition:opacity .12s ease, background-color .12s ease, border-color .12s ease; }
+.wframe-resize.br{ right:6px; bottom:6px; cursor:nwse-resize; border-right:2px solid rgba(255,255,255,0.7); border-bottom:2px solid rgba(255,255,255,0.7); }
+.wframe-resize.tr{ right:6px; top:6px; cursor:nesw-resize; border-right:2px solid rgba(255,255,255,0.7); border-top:2px solid rgba(255,255,255,0.7); }
+.wframe-resize.bl{ left:6px; bottom:6px; cursor:nesw-resize; border-left:2px solid rgba(255,255,255,0.7); border-bottom:2px solid rgba(255,255,255,0.7); }
+.wframe-resize.tl{ left:6px; top:6px; cursor:nwse-resize; border-left:2px solid rgba(255,255,255,0.7); border-top:2px solid rgba(255,255,255,0.7); }
 html.light .wframe-resize{ border-color: rgba(0,0,0,0.45); }
+html:not(.guide-open) .wframe-resize{ display:none; pointer-events:none; }
+/* Increase contrast on hover/focus for better affordance */
+.wframe-resize:hover, .wframe-resize:focus-visible{
+  background: color-mix(in srgb, var(--ink-strong) 8%, transparent);
+  outline: 2px solid color-mix(in srgb, var(--ink-strong) 35%, transparent);
+  outline-offset: 0;
+  opacity: .95;
+}
 
 /* Links on glass: WCAG-safe */
 .wframe a{ text-decoration:none; border-bottom:none; font-weight:600; color: color-mix(in srgb, var(--ink-strong) 78%, var(--ink-weak) 22%); }

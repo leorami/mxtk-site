@@ -1,0 +1,611 @@
+{
+  "timestamp": "2025-09-13T02:47:01.671Z",
+  "summary": {
+    "total": 120,
+    "passed": 0,
+    "failed": 0,
+    "errors": 120
+  },
+  "results": [
+    {
+      "testName": "iPhone-home-default",
+      "status": "error",
+      "error": "this.page.waitForTimeout is not a function"
+    },
+    {
+      "testName": "iPhone-home-hamburger-open",
+      "status": "error",
+      "error": "this.page.waitForTimeout is not a function"
+    },
+    {
+      "testName": "iPhone-home-sherpa-open",
+      "status": "error",
+      "error": "this.page.waitForTimeout is not a function"
+    },
+    {
+      "testName": "iPhone-home-dark-mode",
+      "status": "error",
+      "error": "this.page.waitForTimeout is not a function"
+    },
+    {
+      "testName": "iPhone-home-dark-hamburger",
+      "status": "error",
+      "error": "this.page.waitForTimeout is not a function"
+    },
+    {
+      "testName": "iPhone-user-home-default",
+      "status": "error",
+      "error": "this.page.waitForTimeout is not a function"
+    },
+    {
+      "testName": "iPhone-user-home-hamburger-open",
+      "status": "error",
+      "error": "this.page.waitForTimeout is not a function"
+    },
+    {
+      "testName": "iPhone-user-home-sherpa-open",
+      "status": "error",
+      "error": "this.page.waitForTimeout is not a function"
+    },
+    {
+      "testName": "iPhone-user-home-dark-mode",
+      "status": "error",
+      "error": "this.page.waitForTimeout is not a function"
+    },
+    {
+      "testName": "iPhone-user-home-dark-hamburger",
+      "status": "error",
+      "error": "this.page.waitForTimeout is not a function"
+    },
+    {
+      "testName": "iPhone-owners-default",
+      "status": "error",
+      "error": "this.page.waitForTimeout is not a function"
+    },
+    {
+      "testName": "iPhone-owners-hamburger-open",
+      "status": "error",
+      "error": "this.page.waitForTimeout is not a function"
+    },
+    {
+      "testName": "iPhone-owners-sherpa-open",
+      "status": "error",
+      "error": "this.page.waitForTimeout is not a function"
+    },
+    {
+      "testName": "iPhone-owners-dark-mode",
+      "status": "error",
+      "error": "this.page.waitForTimeout is not a function"
+    },
+    {
+      "testName": "iPhone-owners-dark-hamburger",
+      "status": "error",
+      "error": "this.page.waitForTimeout is not a function"
+    },
+    {
+      "testName": "iPhone-transparency-default",
+      "status": "error",
+      "error": "this.page.waitForTimeout is not a function"
+    },
+    {
+      "testName": "iPhone-transparency-hamburger-open",
+      "status": "error",
+      "error": "this.page.waitForTimeout is not a function"
+    },
+    {
+      "testName": "iPhone-transparency-sherpa-open",
+      "status": "error",
+      "error": "this.page.waitForTimeout is not a function"
+    },
+    {
+      "testName": "iPhone-transparency-dark-mode",
+      "status": "error",
+      "error": "this.page.waitForTimeout is not a function"
+    },
+    {
+      "testName": "iPhone-transparency-dark-hamburger",
+      "status": "error",
+      "error": "this.page.waitForTimeout is not a function"
+    },
+    {
+      "testName": "iPhone-ecosystem-default",
+      "status": "error",
+      "error": "this.page.waitForTimeout is not a function"
+    },
+    {
+      "testName": "iPhone-ecosystem-hamburger-open",
+      "status": "error",
+      "error": "this.page.waitForTimeout is not a function"
+    },
+    {
+      "testName": "iPhone-ecosystem-sherpa-open",
+      "status": "error",
+      "error": "this.page.waitForTimeout is not a function"
+    },
+    {
+      "testName": "iPhone-ecosystem-dark-mode",
+      "status": "error",
+      "error": "this.page.waitForTimeout is not a function"
+    },
+    {
+      "testName": "iPhone-ecosystem-dark-hamburger",
+      "status": "error",
+      "error": "this.page.waitForTimeout is not a function"
+    },
+    {
+      "testName": "iPhone-admin-default",
+      "status": "error",
+      "error": "this.page.waitForTimeout is not a function"
+    },
+    {
+      "testName": "iPhone-admin-hamburger-open",
+      "status": "error",
+      "error": "this.page.waitForTimeout is not a function"
+    },
+    {
+      "testName": "iPhone-admin-sherpa-open",
+      "status": "error",
+      "error": "this.page.waitForTimeout is not a function"
+    },
+    {
+      "testName": "iPhone-admin-dark-mode",
+      "status": "error",
+      "error": "this.page.waitForTimeout is not a function"
+    },
+    {
+      "testName": "iPhone-admin-dark-hamburger",
+      "status": "error",
+      "error": "this.page.waitForTimeout is not a function"
+    },
+    {
+      "testName": "iPhoneX-home-default",
+      "status": "error",
+      "error": "this.page.waitForTimeout is not a function"
+    },
+    {
+      "testName": "iPhoneX-home-hamburger-open",
+      "status": "error",
+      "error": "this.page.waitForTimeout is not a function"
+    },
+    {
+      "testName": "iPhoneX-home-sherpa-open",
+      "status": "error",
+      "error": "this.page.waitForTimeout is not a function"
+    },
+    {
+      "testName": "iPhoneX-home-dark-mode",
+      "status": "error",
+      "error": "this.page.waitForTimeout is not a function"
+    },
+    {
+      "testName": "iPhoneX-home-dark-hamburger",
+      "status": "error",
+      "error": "this.page.waitForTimeout is not a function"
+    },
+    {
+      "testName": "iPhoneX-user-home-default",
+      "status": "error",
+      "error": "this.page.waitForTimeout is not a function"
+    },
+    {
+      "testName": "iPhoneX-user-home-hamburger-open",
+      "status": "error",
+      "error": "this.page.waitForTimeout is not a function"
+    },
+    {
+      "testName": "iPhoneX-user-home-sherpa-open",
+      "status": "error",
+      "error": "this.page.waitForTimeout is not a function"
+    },
+    {
+      "testName": "iPhoneX-user-home-dark-mode",
+      "status": "error",
+      "error": "this.page.waitForTimeout is not a function"
+    },
+    {
+      "testName": "iPhoneX-user-home-dark-hamburger",
+      "status": "error",
+      "error": "this.page.waitForTimeout is not a function"
+    },
+    {
+      "testName": "iPhoneX-owners-default",
+      "status": "error",
+      "error": "this.page.waitForTimeout is not a function"
+    },
+    {
+      "testName": "iPhoneX-owners-hamburger-open",
+      "status": "error",
+      "error": "this.page.waitForTimeout is not a function"
+    },
+    {
+      "testName": "iPhoneX-owners-sherpa-open",
+      "status": "error",
+      "error": "this.page.waitForTimeout is not a function"
+    },
+    {
+      "testName": "iPhoneX-owners-dark-mode",
+      "status": "error",
+      "error": "this.page.waitForTimeout is not a function"
+    },
+    {
+      "testName": "iPhoneX-owners-dark-hamburger",
+      "status": "error",
+      "error": "this.page.waitForTimeout is not a function"
+    },
+    {
+      "testName": "iPhoneX-transparency-default",
+      "status": "error",
+      "error": "this.page.waitForTimeout is not a function"
+    },
+    {
+      "testName": "iPhoneX-transparency-hamburger-open",
+      "status": "error",
+      "error": "this.page.waitForTimeout is not a function"
+    },
+    {
+      "testName": "iPhoneX-transparency-sherpa-open",
+      "status": "error",
+      "error": "this.page.waitForTimeout is not a function"
+    },
+    {
+      "testName": "iPhoneX-transparency-dark-mode",
+      "status": "error",
+      "error": "this.page.waitForTimeout is not a function"
+    },
+    {
+      "testName": "iPhoneX-transparency-dark-hamburger",
+      "status": "error",
+      "error": "this.page.waitForTimeout is not a function"
+    },
+    {
+      "testName": "iPhoneX-ecosystem-default",
+      "status": "error",
+      "error": "this.page.waitForTimeout is not a function"
+    },
+    {
+      "testName": "iPhoneX-ecosystem-hamburger-open",
+      "status": "error",
+      "error": "this.page.waitForTimeout is not a function"
+    },
+    {
+      "testName": "iPhoneX-ecosystem-sherpa-open",
+      "status": "error",
+      "error": "this.page.waitForTimeout is not a function"
+    },
+    {
+      "testName": "iPhoneX-ecosystem-dark-mode",
+      "status": "error",
+      "error": "this.page.waitForTimeout is not a function"
+    },
+    {
+      "testName": "iPhoneX-ecosystem-dark-hamburger",
+      "status": "error",
+      "error": "this.page.waitForTimeout is not a function"
+    },
+    {
+      "testName": "iPhoneX-admin-default",
+      "status": "error",
+      "error": "this.page.waitForTimeout is not a function"
+    },
+    {
+      "testName": "iPhoneX-admin-hamburger-open",
+      "status": "error",
+      "error": "this.page.waitForTimeout is not a function"
+    },
+    {
+      "testName": "iPhoneX-admin-sherpa-open",
+      "status": "error",
+      "error": "this.page.waitForTimeout is not a function"
+    },
+    {
+      "testName": "iPhoneX-admin-dark-mode",
+      "status": "error",
+      "error": "this.page.waitForTimeout is not a function"
+    },
+    {
+      "testName": "iPhoneX-admin-dark-hamburger",
+      "status": "error",
+      "error": "this.page.waitForTimeout is not a function"
+    },
+    {
+      "testName": "iPad-home-default",
+      "status": "error",
+      "error": "this.page.waitForTimeout is not a function"
+    },
+    {
+      "testName": "iPad-home-hamburger-open",
+      "status": "error",
+      "error": "this.page.waitForTimeout is not a function"
+    },
+    {
+      "testName": "iPad-home-sherpa-open",
+      "status": "error",
+      "error": "this.page.waitForTimeout is not a function"
+    },
+    {
+      "testName": "iPad-home-dark-mode",
+      "status": "error",
+      "error": "this.page.waitForTimeout is not a function"
+    },
+    {
+      "testName": "iPad-home-dark-hamburger",
+      "status": "error",
+      "error": "this.page.waitForTimeout is not a function"
+    },
+    {
+      "testName": "iPad-user-home-default",
+      "status": "error",
+      "error": "this.page.waitForTimeout is not a function"
+    },
+    {
+      "testName": "iPad-user-home-hamburger-open",
+      "status": "error",
+      "error": "this.page.waitForTimeout is not a function"
+    },
+    {
+      "testName": "iPad-user-home-sherpa-open",
+      "status": "error",
+      "error": "this.page.waitForTimeout is not a function"
+    },
+    {
+      "testName": "iPad-user-home-dark-mode",
+      "status": "error",
+      "error": "this.page.waitForTimeout is not a function"
+    },
+    {
+      "testName": "iPad-user-home-dark-hamburger",
+      "status": "error",
+      "error": "this.page.waitForTimeout is not a function"
+    },
+    {
+      "testName": "iPad-owners-default",
+      "status": "error",
+      "error": "this.page.waitForTimeout is not a function"
+    },
+    {
+      "testName": "iPad-owners-hamburger-open",
+      "status": "error",
+      "error": "this.page.waitForTimeout is not a function"
+    },
+    {
+      "testName": "iPad-owners-sherpa-open",
+      "status": "error",
+      "error": "this.page.waitForTimeout is not a function"
+    },
+    {
+      "testName": "iPad-owners-dark-mode",
+      "status": "error",
+      "error": "this.page.waitForTimeout is not a function"
+    },
+    {
+      "testName": "iPad-owners-dark-hamburger",
+      "status": "error",
+      "error": "this.page.waitForTimeout is not a function"
+    },
+    {
+      "testName": "iPad-transparency-default",
+      "status": "error",
+      "error": "this.page.waitForTimeout is not a function"
+    },
+    {
+      "testName": "iPad-transparency-hamburger-open",
+      "status": "error",
+      "error": "this.page.waitForTimeout is not a function"
+    },
+    {
+      "testName": "iPad-transparency-sherpa-open",
+      "status": "error",
+      "error": "this.page.waitForTimeout is not a function"
+    },
+    {
+      "testName": "iPad-transparency-dark-mode",
+      "status": "error",
+      "error": "this.page.waitForTimeout is not a function"
+    },
+    {
+      "testName": "iPad-transparency-dark-hamburger",
+      "status": "error",
+      "error": "this.page.waitForTimeout is not a function"
+    },
+    {
+      "testName": "iPad-ecosystem-default",
+      "status": "error",
+      "error": "this.page.waitForTimeout is not a function"
+    },
+    {
+      "testName": "iPad-ecosystem-hamburger-open",
+      "status": "error",
+      "error": "this.page.waitForTimeout is not a function"
+    },
+    {
+      "testName": "iPad-ecosystem-sherpa-open",
+      "status": "error",
+      "error": "this.page.waitForTimeout is not a function"
+    },
+    {
+      "testName": "iPad-ecosystem-dark-mode",
+      "status": "error",
+      "error": "this.page.waitForTimeout is not a function"
+    },
+    {
+      "testName": "iPad-ecosystem-dark-hamburger",
+      "status": "error",
+      "error": "this.page.waitForTimeout is not a function"
+    },
+    {
+      "testName": "iPad-admin-default",
+      "status": "error",
+      "error": "this.page.waitForTimeout is not a function"
+    },
+    {
+      "testName": "iPad-admin-hamburger-open",
+      "status": "error",
+      "error": "this.page.waitForTimeout is not a function"
+    },
+    {
+      "testName": "iPad-admin-sherpa-open",
+      "status": "error",
+      "error": "this.page.waitForTimeout is not a function"
+    },
+    {
+      "testName": "iPad-admin-dark-mode",
+      "status": "error",
+      "error": "this.page.waitForTimeout is not a function"
+    },
+    {
+      "testName": "iPad-admin-dark-hamburger",
+      "status": "error",
+      "error": "this.page.waitForTimeout is not a function"
+    },
+    {
+      "testName": "iPadPro-home-default",
+      "status": "error",
+      "error": "this.page.waitForTimeout is not a function"
+    },
+    {
+      "testName": "iPadPro-home-hamburger-open",
+      "status": "error",
+      "error": "this.page.waitForTimeout is not a function"
+    },
+    {
+      "testName": "iPadPro-home-sherpa-open",
+      "status": "error",
+      "error": "this.page.waitForTimeout is not a function"
+    },
+    {
+      "testName": "iPadPro-home-dark-mode",
+      "status": "error",
+      "error": "this.page.waitForTimeout is not a function"
+    },
+    {
+      "testName": "iPadPro-home-dark-hamburger",
+      "status": "error",
+      "error": "this.page.waitForTimeout is not a function"
+    },
+    {
+      "testName": "iPadPro-user-home-default",
+      "status": "error",
+      "error": "this.page.waitForTimeout is not a function"
+    },
+    {
+      "testName": "iPadPro-user-home-hamburger-open",
+      "status": "error",
+      "error": "this.page.waitForTimeout is not a function"
+    },
+    {
+      "testName": "iPadPro-user-home-sherpa-open",
+      "status": "error",
+      "error": "this.page.waitForTimeout is not a function"
+    },
+    {
+      "testName": "iPadPro-user-home-dark-mode",
+      "status": "error",
+      "error": "this.page.waitForTimeout is not a function"
+    },
+    {
+      "testName": "iPadPro-user-home-dark-hamburger",
+      "status": "error",
+      "error": "this.page.waitForTimeout is not a function"
+    },
+    {
+      "testName": "iPadPro-owners-default",
+      "status": "error",
+      "error": "this.page.waitForTimeout is not a function"
+    },
+    {
+      "testName": "iPadPro-owners-hamburger-open",
+      "status": "error",
+      "error": "this.page.waitForTimeout is not a function"
+    },
+    {
+      "testName": "iPadPro-owners-sherpa-open",
+      "status": "error",
+      "error": "this.page.waitForTimeout is not a function"
+    },
+    {
+      "testName": "iPadPro-owners-dark-mode",
+      "status": "error",
+      "error": "this.page.waitForTimeout is not a function"
+    },
+    {
+      "testName": "iPadPro-owners-dark-hamburger",
+      "status": "error",
+      "error": "this.page.waitForTimeout is not a function"
+    },
+    {
+      "testName": "iPadPro-transparency-default",
+      "status": "error",
+      "error": "this.page.waitForTimeout is not a function"
+    },
+    {
+      "testName": "iPadPro-transparency-hamburger-open",
+      "status": "error",
+      "error": "this.page.waitForTimeout is not a function"
+    },
+    {
+      "testName": "iPadPro-transparency-sherpa-open",
+      "status": "error",
+      "error": "this.page.waitForTimeout is not a function"
+    },
+    {
+      "testName": "iPadPro-transparency-dark-mode",
+      "status": "error",
+      "error": "this.page.waitForTimeout is not a function"
+    },
+    {
+      "testName": "iPadPro-transparency-dark-hamburger",
+      "status": "error",
+      "error": "this.page.waitForTimeout is not a function"
+    },
+    {
+      "testName": "iPadPro-ecosystem-default",
+      "status": "error",
+      "error": "this.page.waitForTimeout is not a function"
+    },
+    {
+      "testName": "iPadPro-ecosystem-hamburger-open",
+      "status": "error",
+      "error": "this.page.waitForTimeout is not a function"
+    },
+    {
+      "testName": "iPadPro-ecosystem-sherpa-open",
+      "status": "error",
+      "error": "this.page.waitForTimeout is not a function"
+    },
+    {
+      "testName": "iPadPro-ecosystem-dark-mode",
+      "status": "error",
+      "error": "this.page.waitForTimeout is not a function"
+    },
+    {
+      "testName": "iPadPro-ecosystem-dark-hamburger",
+      "status": "error",
+      "error": "this.page.waitForTimeout is not a function"
+    },
+    {
+      "testName": "iPadPro-admin-default",
+      "status": "error",
+      "error": "this.page.waitForTimeout is not a function"
+    },
+    {
+      "testName": "iPadPro-admin-hamburger-open",
+      "status": "error",
+      "error": "this.page.waitForTimeout is not a function"
+    },
+    {
+      "testName": "iPadPro-admin-sherpa-open",
+      "status": "error",
+      "error": "this.page.waitForTimeout is not a function"
+    },
+    {
+      "testName": "iPadPro-admin-dark-mode",
+      "status": "error",
+      "error": "this.page.waitForTimeout is not a function"
+    },
+    {
+      "testName": "iPadPro-admin-dark-hamburger",
+      "status": "error",
+      "error": "this.page.waitForTimeout is not a function"
+    }
+  ]
+}

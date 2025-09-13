@@ -29,7 +29,8 @@ export default function TimeSeries({ symbol, days = 30, className }: Props) {
     const ro = new ResizeObserver((entries) => {
       for (const entry of entries) {
         const cr = entry.contentRect
-        setSize({ w: Math.max(200, cr.width), h: Math.max(160, cr.height) })
+        const clampedH = Math.min(320, Math.max(160, cr.height))
+        setSize({ w: Math.max(260, cr.width), h: clampedH })
       }
     })
     ro.observe(el)
@@ -41,21 +42,21 @@ export default function TimeSeries({ symbol, days = 30, className }: Props) {
   const badge = useMemo(() => makeBadge(meta?.updatedAt, meta?.ttl), [meta])
 
   return (
-    <div ref={containerRef} className={className}>
+    <div ref={containerRef} className={className} style={{ minHeight: 180 }}>
       <div className="flex items-center justify-between mb-2">
-        <div />
+        <div className="text-[11px] uppercase tracking-wide opacity-55 select-none">{symbol} price ($)</div>
         {badge && (
           <span className={['inline-flex items-center rounded-full px-2 py-0.5 text-[10px] leading-tight', badge.kind==='live'? 'bg-emerald-500/20 text-emerald-700 dark:text-emerald-300':'bg-amber-500/20 text-amber-700 dark:text-amber-300'].join(' ')}>
             {badge.label}
           </span>
         )}
       </div>
-      <ChartSVG width={size.w} height={size.h} pathD={pathD} series={series} ticksX={ticksX} ticksY={ticksY} />
+      <ChartSVG symbol={symbol} width={size.w} height={size.h} pathD={pathD} series={series} ticksX={ticksX} ticksY={ticksY} />
     </div>
   )
 }
 
-function ChartSVG({ width, height, pathD, series, ticksX, ticksY }: { width: number; height: number; pathD: string; series: Series | null; ticksX: number[]; ticksY: number[] }) {
+function ChartSVG({ symbol, width, height, pathD, series, ticksX, ticksY }: { symbol: string; width: number; height: number; pathD: string; series: Series | null; ticksX: number[]; ticksY: number[] }) {
   const pad = { l: 40, r: 12, t: 8, b: 22 }
   const w = Math.max(1, width)
   const h = Math.max(1, height)
@@ -96,6 +97,22 @@ function ChartSVG({ width, height, pathD, series, ticksX, ticksY }: { width: num
         {ticksX.map((t) => (
           <line key={`x-${t}`} x1={xScale(t)} y1={pad.t} x2={xScale(t)} y2={vbH - pad.b} />
         ))}
+      </g>
+      {/* tick labels */}
+      <g fill="currentColor" fontSize={10} opacity={0.7}>
+        {ticksY.map((t) => (
+          <text key={`yl-${t}`} x={pad.l - 6} y={yScale(t)} textAnchor="end" dominantBaseline="middle">{fmtUSDShort(t)}</text>
+        ))}
+        {ticksX.map((t) => (
+          <text key={`xl-${t}`} x={xScale(t)} y={vbH - 4} textAnchor="middle">{fmtDateShort(t)}</text>
+        ))}
+      </g>
+      {/* y-axis label */}
+      <text x={pad.l - 28} y={(vbH - pad.b + pad.t) / 2} transform={`rotate(-90 ${pad.l - 28},${(vbH - pad.b + pad.t) / 2})`} fontSize={10} fill="currentColor" opacity={0.6}>$</text>
+      {/* legend (symbol) */}
+      <g>
+        <rect x={vbW - pad.r - 64} y={pad.t + 4} width={56} height={16} rx={8} fill="currentColor" opacity={0.08} />
+        <text x={vbW - pad.r - 36} y={pad.t + 12} textAnchor="middle" fontSize={11} fill="currentColor" opacity={0.85}>{symbol}</text>
       </g>
       {/* path */}
       <path d={path} fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" />
@@ -186,6 +203,24 @@ function maybeDownsample(series: Series | null): Series | null {
   let max = Number.NEGATIVE_INFINITY
   for (const p of out) { if (p.value < min) min = p.value; if (p.value > max) max = p.value }
   return { points: out, min, max, start: out[0].time, end: out[out.length - 1].time }
+}
+
+function fmtUSDShort(v: number): string {
+  const av = Math.abs(v)
+  if (av >= 1_000_000) return `$${(v / 1_000_000).toFixed(1)}m`
+  if (av >= 1_000) return `$${(v / 1_000).toFixed(1)}k`
+  return `$${v.toFixed(2)}`
+}
+
+function fmtDateShort(t: number): string {
+  try {
+    const d = new Date(t)
+    const mm = String(d.getMonth() + 1).padStart(2, '0')
+    const dd = String(d.getDate()).padStart(2, '0')
+    return `${mm}/${dd}`
+  } catch {
+    return ''
+  }
 }
 
 

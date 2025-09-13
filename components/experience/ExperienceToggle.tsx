@@ -12,6 +12,7 @@ export default function ExperienceToggle() {
   const { mode, setMode } = useExperience();
   return (
     <div
+      className="experience-toggle"
       className={[
         "flex items-center gap-1 rounded-full",
         "px-1 py-1",

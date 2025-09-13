@@ -109,3 +109,6 @@
 {"ts":"2025-09-12T16:59:34.016Z","kind":"embed","model":"text-embedding-3-large","tokens":{"in":30629,"out":0},"usd":0.61258,"route":"vector-reembed"}
 {"ts":"2025-09-12T16:59:42.149Z","kind":"chat","model":"gpt-5-nano","tier":"suggest","tokens":{"in":30,"out":239},"usd":0.03735,"route":"/api/ai/chat"}
 {"ts":"2025-09-13T01:27:51.924Z","kind":"embed","model":"text-embedding-3-large","tokens":{"in":30629,"out":0},"usd":0.61258,"route":"vector-reembed"}
+{"ts":"2025-09-13T01:36:47.168Z","kind":"embed","model":"text-embedding-3-large","tokens":{"in":30629,"out":0},"usd":0.61258,"route":"vector-reembed"}
+{"ts":"2025-09-13T01:36:51.427Z","kind":"chat","model":"gpt-5-nano","tier":"suggest","tokens":{"in":22,"out":293},"usd":0.04504999999999999,"route":"/api/ai/chat"}
+{"ts":"2025-09-13T03:55:42.455Z","kind":"embed","model":"text-embedding-3-large","tokens":{"in":30629,"out":0},"usd":0.61258,"route":"vector-reembed"}

@@ -1,9 +1,9 @@
 "use client"
-import { getApiPath } from '@/lib/basepath'
+import Sparkline from '@/components/charts/Sparkline'
 import { apiGet } from '@/lib/api'
+import { getApiPath } from '@/lib/basepath'
 import type { Series } from '@/lib/data/types'
 import { useEffect, useMemo, useState } from 'react'
-import Sparkline from '@/components/charts/Sparkline'
 
 type PriceMiniProps = {
   id: string
@@ -86,8 +86,12 @@ export default function PriceMini({ id, docId, data, refreshKey = 0 }: PriceMini
             <div className={`text-xs ${deltaPct == null ? 'opacity-60' : (deltaPct >= 0 ? 'text-green-600' : 'text-red-600')}`}>
               {deltaPct == null ? '—' : `${deltaPct >= 0 ? '+' : ''}${deltaPct.toFixed(2)}% 24h`}
             </div>
+            <div className="text-[11px] uppercase tracking-wide opacity-55 mt-1 select-none">Price</div>
           </div>
-          <Sparkline series={series} className="w-32 h-8 opacity-90" />
+          <div className="flex-1 min-w-[8rem]">
+            <Sparkline series={series} className="w-full h-8 opacity-90" />
+            <div className="text-[11px] uppercase tracking-wide opacity-55 mt-1 text-right select-none">7d</div>
+          </div>
         </div>
       ) : (
         <div className="opacity-70 text-sm">

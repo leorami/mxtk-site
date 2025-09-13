@@ -13,7 +13,7 @@ async function run() {
     await page.goto(`${BASE}/dashboard`, { waitUntil: 'networkidle2', timeout: 45000 })
     // Open guide to reveal controls
     await page.evaluate(() => { document.documentElement.classList.add('guide-open'); localStorage.setItem('mxtk_guide_open','1') })
-    await page.waitForSelector('.widget-tile', { timeout: 15000 })
+    await page.waitForSelector('.widget-tile', { timeout: 20000 })
 
     // Find pools-mini and set token
     const pools = await page.$('.widget-tile:has-text("Top Pools")').catch(() => null)
@@ -37,6 +37,18 @@ async function run() {
       if (after <= before) throw new Error('Price refresh did not advance')
     }
 
+    // Try dragging the first tile down one row (guide open, handle only)
+    const firstTile = await page.$('.widget-tile')
+    if (firstTile) {
+      const box = await firstTile.boundingBox()
+      if (box) {
+        // drag from header area (y + 10)
+        await page.mouse.move(box.x + 10, box.y + 10)
+        await page.mouse.down()
+        await page.mouse.move(box.x + 10, box.y + 40, { steps: 5 })
+        await page.mouse.up()
+      }
+    }
     console.log('widgets-live OK', ts())
     process.exit(0)
   } catch (err) {

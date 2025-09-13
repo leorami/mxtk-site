@@ -106,7 +106,7 @@ export default function SiteHeader({ hasHome }: { hasHome?: boolean }) {
               </div>
             </Link>
             {/* Add a Home link next to the logo (left cluster). */}
-            <nav data-testid="nav-links" className="hidden nav:flex items-center justify-center gap-1 relative">
+            <nav data-testid="nav-links" className="hidden nav:flex items-center justify-center gap-2 relative">
               <Link
                 href="/dashboard"
                 className="nav-link nav-pill px-3 py-2 rounded-lg transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-400/35 ml-2 mr-1 border border-[var(--border-soft)] bg-[var(--surface-card)]/55 text-[var(--ink-strong)] dark:text-[var(--ink-strong)] shadow-[0_0_8px_rgba(0,0,0,0.06)] dark:shadow-[0_0_10px_rgba(255,255,255,0.14)] hover:bg-[var(--surface-card)]/75"
@@ -126,7 +126,7 @@ export default function SiteHeader({ hasHome }: { hasHome?: boolean }) {
                     onMouseLeave={handleDropdownMouseLeave}
                   >
                     <button
-                      className={`nav-link nav-pill px-3 py-2 rounded-lg transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-400/35 flex items-center gap-1 ${isActive ? 'font-semibold' : ''}`}
+                      className={`nav-link nav-pill px-4 py-2.5 rounded-lg transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-400/35 flex items-center gap-1 text-sm ${isActive ? 'font-semibold' : ''}`}
                       aria-expanded={isDropdownOpen}
                       aria-haspopup="true"
                     >
@@ -141,7 +141,7 @@ export default function SiteHeader({ hasHome }: { hasHome?: boolean }) {
                       </svg>
                     </button>
                     {isDropdownOpen && (
-                      <div className="absolute top-full left-0 bg-[var(--surface-card)] border border-[var(--border-soft)] rounded-lg shadow-lg py-1 min-w-[180px] z-50">
+                      <div className="absolute top-full left-0 bg-[var(--surface-card)] border border-[var(--border-soft)] rounded-lg shadow-lg py-1 min-w-[220px] z-50">
                         {groupItems.map(({ href, label }) => {
                           const t = themeForRoute(href)
                           const isItemActive = getActiveState(href)
@@ -151,7 +151,7 @@ export default function SiteHeader({ hasHome }: { hasHome?: boolean }) {
                               key={href}
                               href={navHref}
                               aria-current={isItemActive ? 'page' : undefined}
-                              className={`block px-3 py-2 text-sm hover:bg-[var(--hover-bg)] transition-colors ${isItemActive ? 'font-semibold bg-[var(--hover-bg)]' : ''}`}
+                              className={`block px-4 py-2.5 text-[15px] hover:bg-[var(--hover-bg)] transition-colors ${isItemActive ? 'font-semibold bg-[var(--hover-bg)]' : ''}`}
                               style={{ ['--hover-bg' as any]: t.hoverBg } as CSSProperties}
                               suppressHydrationWarning
                             >

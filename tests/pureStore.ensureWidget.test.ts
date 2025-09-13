@@ -1,6 +1,6 @@
-import { describe, it, expect } from 'vitest'
 import { ensureWidget } from '@/lib/home/pureStore'
 import type { HomeDoc } from '@/lib/home/types'
+import { describe, expect, it } from 'vitest'
 
 function doc(): HomeDoc {
   return { id: 't', layoutVersion: 2, sections: [{ id: 'overview', key: 'overview', title: 'Overview', order: 0 } as any], widgets: [] }

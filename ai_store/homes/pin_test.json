@@ -1,0 +1,23 @@
+{
+  "id": "pin_test",
+  "layoutVersion": 2,
+  "sections": [],
+  "widgets": [
+    {
+      "id": "mfhqh6ra_mzaj",
+      "type": "pools-mini",
+      "sectionId": "overview",
+      "size": {
+        "w": 6,
+        "h": 20
+      },
+      "pos": {
+        "x": 0,
+        "y": 0
+      },
+      "data": {
+        "token": "0xdef"
+      }
+    }
+  ]
+}

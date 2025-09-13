@@ -9,6 +9,7 @@ import Resources from '@/components/home/widgets/Resources';
 import { getApiPath } from '@/lib/basepath';
 import type { HomeDoc, WidgetState } from '@/lib/home/types';
 import * as React from 'react';
+import { getApiPath } from '@/lib/basepath'
 
 type GridProps = {
   doc: HomeDoc;                              // expects V2 with sections + widgets
@@ -137,7 +138,31 @@ export default function Grid({ doc, render, onPatch }: GridProps) {
   const dragStart = React.useRef<{ x: number; y: number; pos: { x: number; y: number } } | null>(null);
 
   const resizeId = React.useRef<string | null>(null);
-  const resizeStart = React.useRef<{ x: number; y: number; size: { w: number; h: number } } | null>(null);
+  const resizeDir = React.useRef<'br'|'tr'|'bl'|'tl'|null>(null);
+  const resizeStart = React.useRef<{ x: number; y: number; size: { w: number; h: number }; pos: { x:number; y:number } } | null>(null);
+
+  // --- signals batching ------------------------------------------------------
+  type PendingSignal = { homeId: string; widgetId?: string; type: string; payload?: Record<string, unknown> }
+  const sigQueue = React.useRef<PendingSignal[]>([])
+  const sigTimer = React.useRef<number | null>(null)
+  const flushSignals = React.useCallback(async () => {
+    const batch = sigQueue.current.splice(0, sigQueue.current.length)
+    if (!batch.length) return
+    try {
+      await fetch(getApiPath('/api/ai/signals'), { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ signals: batch.map(s => ({ ...s, ts: Date.now() })) }) })
+    } catch {}
+  }, [])
+  function enqueueSignal(s: PendingSignal) {
+    sigQueue.current.push(s)
+    if (sigTimer.current) window.clearTimeout(sigTimer.current)
+    sigTimer.current = window.setTimeout(() => { flushSignals(); sigTimer.current = null }, 800)
+  }
+  React.useEffect(() => {
+    const onHide = () => { void flushSignals() }
+    window.addEventListener('pagehide', onHide)
+    window.addEventListener('beforeunload', onHide)
+    return () => { window.removeEventListener('pagehide', onHide); window.removeEventListener('beforeunload', onHide) }
+  }, [flushSignals])
 
   React.useEffect(() => {
     function onMove(e: PointerEvent) {
@@ -165,8 +190,28 @@ export default function Grid({ doc, render, onPatch }: GridProps) {
 
         setWidgets(prev => prev.map(w => {
           if (w.id !== id) return w;
-          const ns = clampSize((rs.size?.w ?? w.size.w) + dCols, (rs.size?.h ?? w.size.h) + dRows);
-          return { ...w, size: ns };
+          const from = resizeDir.current || 'br';
+          let nextW = rs.size.w;
+          let nextH = rs.size.h;
+          let nextX = rs.pos.x;
+          let nextY = rs.pos.y;
+          // Horizontal
+          if (from === 'br' || from === 'tr') {
+            nextW = rs.size.w + dCols;
+          } else { // from left
+            nextW = rs.size.w - dCols;
+            nextX = rs.pos.x + dCols;
+          }
+          // Vertical
+          if (from === 'br' || from === 'bl') {
+            nextH = rs.size.h + dRows;
+          } else { // from top
+            nextH = rs.size.h - dRows;
+            nextY = rs.pos.y + dRows;
+          }
+          const ns = clampSize(nextW, nextH);
+          const np = clampPos(w, nextX, nextY);
+          return { ...w, size: ns, pos: np };
         }));
       }
     }
@@ -178,6 +223,7 @@ export default function Grid({ doc, render, onPatch }: GridProps) {
         if (w) {
           // Persist immediately on drag end
           void doPatch([{ id: w.id, pos: w.pos }]);
+          enqueueSignal({ homeId: doc.id, widgetId: w.id, type: 'move', payload: { x: w.pos.x, y: w.pos.y, w: w.size.w, h: w.size.h } })
         }
       }
       if (resizeId.current) {
@@ -187,6 +233,7 @@ export default function Grid({ doc, render, onPatch }: GridProps) {
         if (w) {
           // Persist immediately on resize end
           void doPatch([{ id: w.id, size: w.size }]);
+          enqueueSignal({ homeId: doc.id, widgetId: w.id, type: 'resize', payload: { x: w.pos.x, y: w.pos.y, w: w.size.w, h: w.size.h } })
         }
       }
     }
@@ -202,19 +249,23 @@ export default function Grid({ doc, render, onPatch }: GridProps) {
     // Gate to Guide open and honor data-nodrag
     if (!guideOpen) return;
     const t = e.target as HTMLElement;
+    // Only allow initiating drag from header handle area to avoid accidental drags
+    if (!t.closest('.wf-head')) return;
     if (t.closest('[data-nodrag]') || t.closest('.wframe-controls')) return;
     (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
     dragId.current = w.id;
     dragStart.current = { x: e.clientX, y: e.clientY, pos: { ...w.pos } };
   }
 
-  function startResize(e: React.PointerEvent, w: WidgetState) {
+  function startResize(e: React.PointerEvent, w: WidgetState, dir: 'br'|'tr'|'bl'|'tl' = 'br') {
     if (!guideOpen) return;
+    e.stopPropagation();
     const t = e.target as HTMLElement;
     if (t.closest('[data-nodrag]')) return;
     (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
     resizeId.current = w.id;
-    resizeStart.current = { x: e.clientX, y: e.clientY, size: { ...w.size } };
+    resizeDir.current = dir;
+    resizeStart.current = { x: e.clientX, y: e.clientY, size: { ...w.size }, pos: { ...w.pos } };
   }
 
   function onKey(e: React.KeyboardEvent, w: WidgetState) {
@@ -250,6 +301,8 @@ export default function Grid({ doc, render, onPatch }: GridProps) {
         // Force spans: match your CSS (grid uses var(--row-h))
         const spanW = Math.max(1, w.size?.w ?? 3);
         const spanH = Math.max(1, w.size?.h ?? 12);
+        const startCol = Math.max(1, (w.pos?.x ?? 0) + 1);
+        const startRow = Math.max(1, (w.pos?.y ?? 0) + 1);
 
         return (
           <div
@@ -258,8 +311,9 @@ export default function Grid({ doc, render, onPatch }: GridProps) {
             tabIndex={0}
             className="widget-tile widget-cell"
             style={{
-              // Ensure explicit inline spans for tests (accepts grid-area: span h / span w)
-              gridArea: `span ${spanH} / span ${spanW}`,
+              // Explicit placement and spans so drag/resize are reflected visually
+              gridColumn: `${startCol} / span ${spanW}`,
+              gridRow: `${startRow} / span ${spanH}`,
             }}
             data-widget-id={w.id}
             onKeyDown={(e) => onKey(e, w)}
@@ -301,12 +355,32 @@ export default function Grid({ doc, render, onPatch }: GridProps) {
 
             {/* resizer handle (bottom-right) - only show when Sherpa is open */}
             {guideOpen && (
-              <button
-                type="button"
-                className="wframe-resize"
-                aria-label="Resize widget"
-                onPointerDown={(e) => startResize(e, w)}
-              />
+              <>
+                <button
+                  type="button"
+                  className="wframe-resize br"
+                  aria-label="Resize widget"
+                  onPointerDown={(e) => startResize(e, w, 'br')}
+                />
+                <button
+                  type="button"
+                  className="wframe-resize tr"
+                  aria-label="Resize widget from top-right"
+                  onPointerDown={(e) => startResize(e, w, 'tr')}
+                />
+                <button
+                  type="button"
+                  className="wframe-resize bl"
+                  aria-label="Resize widget from bottom-left"
+                  onPointerDown={(e) => startResize(e, w, 'bl')}
+                />
+                <button
+                  type="button"
+                  className="wframe-resize tl"
+                  aria-label="Resize widget from top-left"
+                  onPointerDown={(e) => startResize(e, w, 'tl')}
+                />
+              </>
             )}
           </div>
         );

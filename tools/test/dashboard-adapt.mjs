@@ -1,6 +1,7 @@
-import puppeteer from 'puppeteer';
+#!/usr/bin/env node
+import puppeteer from 'puppeteer'
 
-const BASE_URL = process.env.BASE_URL || 'http://localhost:2000';
+const BASE_URL = process.env.BASE_URL || 'http://localhost:2000'
 
 async function run() {
   const browser = await puppeteer.launch({ headless: 'new', args: ['--no-sandbox','--disable-setuid-sandbox'] });
@@ -18,10 +19,10 @@ async function run() {
   // Count current widgets
   const beforeCount = await page.$$eval('[data-grid] [data-widget-id]', els => els.length);
 
-  // Click Adapt CTA
-  const adaptBtn = await page.waitForSelector('[data-testid="adapt-btn"]', { timeout: 8000 });
-  await adaptBtn.click();
-  await new Promise(r => setTimeout(r, 800));
+  // Ensure CTA pill visible and test Preview
+  await page.waitForSelector('text/Adapt Dashboard to', { timeout: 8000 })
+  await page.click('text/Preview')
+  await new Promise(r => setTimeout(r, 600))
 
   // Wait for grid to re-render with at least one widget
   let afterCount = 0;
@@ -34,6 +35,11 @@ async function run() {
   if (!(afterCount >= beforeCount)) {
     throw new Error(`Expected widget count to increase or stay same, before=${beforeCount} after=${afterCount}`);
   }
+
+  // Apply
+  await page.click('text/Apply')
+  // naive wait for apply+refresh
+  await new Promise(r => setTimeout(r, 1000))
 
   // Screenshots
   await page.setViewport({ width: 1366, height: 900 });

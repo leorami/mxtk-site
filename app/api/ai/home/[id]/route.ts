@@ -2,6 +2,7 @@
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
+import { env } from '@/lib/env';
 import { migrateToV2 } from '@/lib/home/migrate';
 import { zHomePatch } from '@/lib/home/schema';
 import { getHome, putHome } from '@/lib/home/store/fileStore';
@@ -27,7 +28,21 @@ export async function GET(_req: Request, { params }: { params: { id: string } })
       return NextResponse.json({ error: 'not-found' }, { status: 404, headers: NO_STORE });
     }
     const { doc, migrated } = migrateToV2(raw);
-    if (migrated) await putHome(doc);
+    // Fill defaults for minis if missing to avoid empty widgets
+    let changed = false;
+    const widgets = (doc.widgets || []).map(w => {
+      if (w.type === 'pools-mini') {
+        const token = (w.data as any)?.token
+        if (!token) { changed = true; return { ...w, data: { ...(w.data || {}), token: env.MXTK_TOKEN_ADDRESS } as any } }
+      }
+      if (w.type === 'price-mini') {
+        const symbol = (w.data as any)?.symbol
+        if (!symbol) { changed = true; return { ...w, data: { ...(w.data || {}), symbol: 'MXTK' } as any } }
+      }
+      return w
+    });
+    if (changed) (doc as any).widgets = widgets;
+    if (migrated || changed) await putHome(doc);
     cookies().set('mxtk_home_id', id, { path: '/', httpOnly: false, sameSite: 'lax' });
     return NextResponse.json(doc, { headers: NO_STORE });
   } catch (e: any) {

@@ -18,8 +18,14 @@ export async function GET(req: NextRequest, { params }: { params: { symbol: stri
     const source = (series as any)?.source || 'fixture'
     return NextResponse.json({ updatedAt, ttl: remaining, source, data: { symbol, days, series } })
   } catch {
-    return NextResponse.json({ updatedAt: Date.now(), ttl: 0, source: 'fallback', data: { symbol, days, series: { points: [] } } })
+    // Dev-friendly mock sparkline (flat-ish) to ensure UI shows content
+    const now = Date.now()
+    const points = Array.from({ length: Math.min(60, days * 8) }, (_, i) => ({ time: now - (pointsBase(days) * (pointsLen(days) - i)), value: 1 + Math.sin(i / 6) * 0.05 }))
+    return NextResponse.json({ updatedAt: Date.now(), ttl: 0, source: 'fallback', data: { symbol, days, series: { points } } })
   }
 }
+
+function pointsBase(days: number) { return Math.max(60_000, Math.floor((days * 24 * 60 * 60 * 1000) / Math.max(10, days * 8))) }
+function pointsLen(days: number) { return Math.min(60, days * 8) }
 
 

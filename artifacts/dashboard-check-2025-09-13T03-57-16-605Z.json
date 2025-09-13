@@ -1,0 +1,45 @@
+{
+  "timestamp": "2025-09-13T03-57-16-605Z",
+  "base": "http://localhost:2000",
+  "results": {
+    "desktop": {
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+        "./components/home/Grid.tsx\nModule parse failed: Identifier 'getApiPath' has already been declared (10:9)\n| import { getApiPath } from '@/lib/basepath';\n| import * as React from 'react';\n> import { getApiPath } from '@/lib/basepath';\n| function api(path) {\n|     return getApiPath(path);",
+        "./components/home/Grid.tsx\nModule parse failed: Identifier 'getApiPath' has already been declared (10:9)\n| import { getApiPath } from '@/lib/basepath';\n| import * as React from 'react';\n> import { getApiPath } from '@/lib/basepath';\n| function api(path) {\n|     return getApiPath(path);"
+      ],
+      "consoleWarnings": [],
+      "networkErrors": [
+        "500 Internal Server Error: http://localhost:2000/dashboard"
+      ],
+      "colorAudit": [],
+      "screenshot": "/app/artifacts/dashboard-desktop-2025-09-13T03-57-16-605Z.png"
+    },
+    "ipad": {
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+        "./components/home/Grid.tsx\nModule parse failed: Identifier 'getApiPath' has already been declared (10:9)\n| import { getApiPath } from '@/lib/basepath';\n| import * as React from 'react';\n> import { getApiPath } from '@/lib/basepath';\n| function api(path) {\n|     return getApiPath(path);",
+        "./components/home/Grid.tsx\nModule parse failed: Identifier 'getApiPath' has already been declared (10:9)\n| import { getApiPath } from '@/lib/basepath';\n| import * as React from 'react';\n> import { getApiPath } from '@/lib/basepath';\n| function api(path) {\n|     return getApiPath(path);"
+      ],
+      "consoleWarnings": [],
+      "networkErrors": [
+        "500 Internal Server Error: http://localhost:2000/dashboard"
+      ],
+      "colorAudit": [],
+      "screenshot": "/app/artifacts/dashboard-ipad-2025-09-13T03-57-16-605Z.png"
+    },
+    "mobile": {
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+        "./components/home/Grid.tsx\nModule parse failed: Identifier 'getApiPath' has already been declared (10:9)\n| import { getApiPath } from '@/lib/basepath';\n| import * as React from 'react';\n> import { getApiPath } from '@/lib/basepath';\n| function api(path) {\n|     return getApiPath(path);",
+        "./components/home/Grid.tsx\nModule parse failed: Identifier 'getApiPath' has already been declared (10:9)\n| import { getApiPath } from '@/lib/basepath';\n| import * as React from 'react';\n> import { getApiPath } from '@/lib/basepath';\n| function api(path) {\n|     return getApiPath(path);"
+      ],
+      "consoleWarnings": [],
+      "networkErrors": [
+        "500 Internal Server Error: http://localhost:2000/dashboard"
+      ],
+      "colorAudit": [],
+      "screenshot": "/app/artifacts/dashboard-mobile-2025-09-13T03-57-16-605Z.png"
+    }
+  }
+}

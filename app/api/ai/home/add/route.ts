@@ -1,8 +1,8 @@
+import { ensureHome, getHome, putHome } from '@/lib/home/fileStore'
+import { ensureWidget } from '@/lib/home/pureStore'
+import { safeParseWidgetAdd } from '@/lib/home/schema'
 import { cookies } from 'next/headers'
 import { NextRequest, NextResponse } from 'next/server'
-import { ensureHome, getHome, putHome } from '@/lib/home/fileStore'
-import { safeParseWidgetAdd } from '@/lib/home/schema'
-import { addWidget, serialize } from '@/lib/home/pureStore'
 
 export async function POST(req: NextRequest) {
   const body = await req.json().catch(() => ({} as any))
@@ -30,12 +30,8 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ ok: true, homeId, widget: recent }, { headers: { 'Cache-Control': 'no-store' } })
   }
 
-  const next = addWidget(base, {
-    type: incoming.type,
-    title: incoming.title,
-    size,
-    data: incoming.data,
-  })
+  // Use ensureWidget to prevent duplicates by type and merge data
+  const next = ensureWidget(base as any, { type: incoming.type as any, title: incoming.title, size: size as any, data: incoming.data as any }) as any
   await putHome(next)
   const added = next.widgets[next.widgets.length - 1]
 

@@ -50,7 +50,7 @@ export default function WidgetFrame({ id, docId, data, title, children, onRefres
   return (
     <div className="relative h-full wframe">
       {/* Header row: title + actions; actions marked no-drag */}
-      <header className="wf-head flex items-center justify-between" onMouseDown={(e)=> e.stopPropagation()} onClick={(e)=> e.stopPropagation()} data-nodrag>
+      <header className="wf-head flex items-center justify-between">
         <div className="wf-title truncate">{localTitle}</div>
         <div className="wf-actions wframe-controls widget-controls inline-flex items-center gap-1" data-nodrag>
           {onRefresh && (

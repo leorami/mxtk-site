@@ -10,15 +10,16 @@ const BASE = process.env.BASE_URL || 'http://localhost:2000';
     await page.goto(`${BASE}/dashboard`, { waitUntil: 'networkidle2', timeout: 45000 });
 
     // pick first widget tile
-    await page.waitForSelector('.widget-tile', { timeout: 12000 });
+    const sel = '[data-widget-id], .widget-tile'
+    await page.waitForSelector(sel, { timeout: 12000 });
     const before = await page.evaluate(() => {
-      const el = document.querySelector('.widget-tile');
+      const el = document.querySelector('[data-widget-id]')?.closest('.widget-tile') || document.querySelector('.widget-tile');
       const cs = el ? getComputedStyle(el) : null;
       return cs ? { gridColumn: cs.gridColumn, gridRow: cs.gridRow } : null;
     });
 
     // drag by 2 columns to the right
-    const tile = await page.$('.widget-tile .widget-chrome');
+    const tile = await page.$('[data-widget-id] .widget-chrome, .widget-tile .widget-chrome');
     const box = await tile.boundingBox();
     const startX = Math.floor(box.x + box.width / 2);
     const startY = Math.floor(box.y + 20);
@@ -31,7 +32,7 @@ const BASE = process.env.BASE_URL || 'http://localhost:2000';
     await new Promise(r => setTimeout(r, 1200));
 
     const after = await page.evaluate(() => {
-      const el = document.querySelector('.widget-tile');
+      const el = document.querySelector('[data-widget-id]')?.closest('.widget-tile') || document.querySelector('.widget-tile');
       const cs = el ? getComputedStyle(el) : null;
       return cs ? { gridColumn: cs.gridColumn, gridRow: cs.gridRow } : null;
     });
@@ -40,7 +41,7 @@ const BASE = process.env.BASE_URL || 'http://localhost:2000';
     await page.reload({ waitUntil: 'networkidle2' });
     await new Promise(r => setTimeout(r, 400));
     const persisted = await page.evaluate(() => {
-      const el = document.querySelector('.widget-tile');
+      const el = document.querySelector('[data-widget-id]')?.closest('.widget-tile') || document.querySelector('.widget-tile');
       const cs = el ? getComputedStyle(el) : null;
       return cs ? { gridColumn: cs.gridColumn, gridRow: cs.gridRow } : null;
     });

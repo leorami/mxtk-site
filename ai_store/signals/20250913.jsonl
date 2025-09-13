@@ -1,0 +1,2 @@
+{"ts":1757735750080,"homeId":"h1","widgetId":"w1","type":"move","payload":{"x":1,"y":2}}
+{"ts":1757735750080,"homeId":"h1","widgetId":"w1","type":"resize","payload":{"w":3,"h":4}}

@@ -1,0 +1,18 @@
+{
+  "id": "7be1a58446f2f3a3",
+  "createdAt": "2025-09-13T01:36:51.658Z",
+  "updatedAt": "2025-09-13T01:36:51.659Z",
+  "blocks": [
+    {
+      "id": "c8a5ae82-375e-478e-b8f6-743308689c68",
+      "topicKey": "a-validator-in-the-context-of-mxtk-is-a-crucial-participant-in-the-mxtk-asset-va",
+      "section": "validation",
+      "title": "A Validator in the context of MXTK is a crucial participant in the MXTK Asset Va",
+      "body": "A Validator in the context of MXTK is a crucial participant in the MXTK Asset Validator Program. This program ensures that real-world assets are accurately verified before being tokenized and traded on the blockchain. Validators help build trust and compliance, which are essential for institutional adoption of tokenized assets. - **Role of Validators**: Validators provide a human-powered layer of verification for assets, ensuring their existence, ownership, and value.\n- **Types of Validators**: - **Generalist Validator**: Entry-level role for users who stake the minimum MXTK tokens. They review data and vote on asset validity. - **Certified Specialist**: Validators with proven professional credentials, verified securely.\n- **Game-Theoretic Model**: The program uses a sophisticated model to ensure a permissionless yet accountable system.\n- **Trust and Compliance**: Validators help create a self-regulating, auditable, and legally defensible process for bringing real-world assets on-chain. **In plain words**: Validators check and confirm that assets are real and valuable before they are turned into digital tokens, making the system trustworthy and reliable.",
+      "citations": [
+        "admin"
+      ],
+      "confidence": 0.8
+    }
+  ]
+}
