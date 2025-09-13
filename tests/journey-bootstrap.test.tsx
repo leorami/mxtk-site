@@ -16,7 +16,9 @@ vi.mock('next/navigation', () => ({
 
 // Mock basepath helper
 vi.mock('@/lib/basepath', () => ({
-  getBasePathUrl: (path: string) => path
+  getBasePathUrl: (path: string) => path,
+  getApiPath: (path: string) => path,
+  useBasePath: () => ''
 }));
 
 // Mock experience context

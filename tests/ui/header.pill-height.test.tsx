@@ -6,7 +6,7 @@ import { render } from '@testing-library/react'
  * Ensures dropdown group pills match the Dashboard pill height
  */
 describe('SiteHeader nav pill heights', () => {
-  it('dropdown buttons have the same computed height as Dashboard pill', () => {
+  it('dropdown buttons have the same class contract for height as Dashboard pill', () => {
     // jsdom cannot compute layout heights; instead, verify class contract:
     // Dashboard pill uses "nav-link nav-pill px-3 py-2"; dropdown buttons must too.
     const { container } = render(<SiteHeader hasHome />)

@@ -2,11 +2,11 @@
 
 import WidgetFrame from '@/components/home/WidgetFrame';
 import GlossarySpotlight from '@/components/home/widgets/GlossarySpotlight';
-import WhatsNext from '@/components/home/widgets/WhatsNext';
 import PoolsMini from '@/components/home/widgets/PoolsMini';
 import PriceMini from '@/components/home/widgets/PriceMini';
 import RecentAnswers from '@/components/home/widgets/RecentAnswers';
 import Resources from '@/components/home/widgets/Resources';
+import WhatsNext from '@/components/home/widgets/WhatsNext';
 import { getApiPath } from '@/lib/basepath';
 import type { HomeDoc, WidgetState } from '@/lib/home/types';
 import * as React from 'react';
@@ -245,6 +245,7 @@ export default function Grid({ doc, render, onPatch }: GridProps) {
     // Only allow initiating drag from header handle area to avoid accidental drags
     if (!t.closest('.wf-head')) return;
     if (t.closest('[data-nodrag]') || t.closest('.wframe-controls')) return;
+    e.stopPropagation();
     (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
     dragId.current = w.id;
     dragStart.current = { x: e.clientX, y: e.clientY, pos: { ...w.pos } };
@@ -289,6 +290,29 @@ export default function Grid({ doc, render, onPatch }: GridProps) {
   }
 
   const isSingleCol = cols <= 1
+
+  // Runtime guard for mobile: ensure no overlaps by pushing down and persisting
+  React.useEffect(() => {
+    if (!containerRef.current) return
+    const el = containerRef.current
+    const cs = getComputedStyle(el)
+    const colCount = (cs.getPropertyValue('grid-template-columns') || '').trim().split(' ').filter(Boolean).length
+    if (colCount > 1) return
+    // Single-column: recompute sequential rows
+    setWidgets(prev => {
+      let y = 0
+      const next = prev.map(w => {
+        const spanH = Math.max(1, w.size?.h ?? 12)
+        const out = { ...w, pos: { x: 0, y } }
+        y += spanH
+        return out
+      })
+      // Persist positions (debounced)
+      queuePatch(next.map(w => ({ id: w.id, pos: w.pos })))
+      return next
+    })
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isSingleCol])
 
   return (
     <div ref={containerRef} className="section-grid mxtk-grid" data-grid role="list">

@@ -32,10 +32,10 @@ export default function ExperienceToggle() {
             onClick={() => setMode(m.value)}
             aria-pressed={selected}
             className={[
-              "px-3 py-1.5 rounded-full text-sm transition flex items-center justify-center",
+              "px-3 rounded-full text-sm transition flex items-center justify-center",
               "focus:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--mxtk-orange)_60%,transparent)]",
               selected
-                ? "bg-[color-mix(in_srgb,var(--mxtk-orange)_30%,transparent)] dark:bg-[color-mix(in_srgb,var(--mxtk-orange)_34%,transparent)] shadow-sm"
+                ? "bg-[color-mix(in_srgb,var(--mxtk-orange)_80%,transparent)] dark:bg-[color-mix(in_srgb,var(--mxtk-orange)_80%,transparent)] shadow-sm"
                 : "opacity-85 hover:opacity-100"
             ].join(" ")}
             title={m.label}

@@ -1,6 +1,6 @@
 "use client";
-import { useEffect, useMemo, useState } from 'react'
-import { getApiPath } from '@/lib/basepath'
+import { getApiPath } from '@/lib/basepath';
+import { useEffect, useMemo, useState } from 'react';
 
 type Item = { title: string; href: string; reason: string; score: number }
 
@@ -8,12 +8,24 @@ export default function WhatsNext() {
   const [items, setItems] = useState<Item[]>([])
   const [loading, setLoading] = useState<boolean>(true)
   const [error, setError] = useState<string | null>(null)
+  const [guideOpen, setGuideOpen] = useState<boolean>(false)
 
   const docId = useMemo(() => {
     try {
       const m = document.cookie.match(/(?:^|; )mxtk_home_id=([^;]+)/)
       return m ? decodeURIComponent(m[1]) : 'default'
     } catch { return 'default' }
+  }, [])
+
+  // Track guide-open to gate controls
+  useEffect(() => {
+    try { setGuideOpen(document.documentElement.classList.contains('guide-open')) } catch {}
+    const root = document.documentElement
+    const mo = new MutationObserver(() => {
+      try { setGuideOpen(root.classList.contains('guide-open')) } catch {}
+    })
+    mo.observe(root, { attributes: true, attributeFilter: ['class'] })
+    return () => mo.disconnect()
   }, [])
 
   useEffect(() => {
@@ -72,6 +84,28 @@ export default function WhatsNext() {
           </li>
         ))}
       </ul>
+      {guideOpen && items.length > 0 && (
+        <div className="pt-1">
+          <button
+            type="button"
+            className="btn btn-primary"
+            onClick={async () => {
+              try {
+                const r = await fetch(getApiPath('/api/ai/home/pin'), {
+                  method: 'POST', headers: { 'content-type': 'application/json' },
+                  body: JSON.stringify({ id: docId, widget: { type: 'whats-next', title: 'What\'s Next', size: { w: 4, h: 12 } } })
+                })
+                if (r.ok) {
+                  // log a pin signal
+                  await fetch(getApiPath('/api/ai/signals'), { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ id: `${Date.now().toString(36)}_${Math.random().toString(36).slice(2,6)}`, ts: Date.now(), kind: 'pin', docId }) })
+                }
+              } catch {}
+            }}
+          >
+            Pin to Home
+          </button>
+        </div>
+      )}
     </div>
   );
 }

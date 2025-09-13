@@ -126,7 +126,7 @@ export default function SiteHeader({ hasHome }: { hasHome?: boolean }) {
                     onMouseLeave={handleDropdownMouseLeave}
                   >
                     <button
-                      className={`nav-link nav-pill px-3 py-2 rounded-lg transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-400/35 flex items-center gap-1 text-sm ${isActive ? 'font-semibold' : ''}`}
+                      className={`nav-link nav-pill px-3 py-2 rounded-lg transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-400/35 flex items-center gap-1 text-sm border border-[var(--border-soft)] bg-[var(--surface-card)]/55 text-[var(--ink-strong)] dark:text-[var(--ink-strong)] shadow-[0_0_8px_rgba(0,0,0,0.06)] dark:shadow-[0_0_10px_rgba(255,255,255,0.14)] ${isActive ? 'font-semibold' : ''}`}
                       aria-expanded={isDropdownOpen}
                       aria-haspopup="true"
                     >

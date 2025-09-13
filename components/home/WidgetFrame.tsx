@@ -24,6 +24,21 @@ function getHomeIdFallback(): string {
 }
 
 export default function WidgetFrame({ id, docId, data, title, children, onRefresh, onInfo, onRemove }: Props) {
+  const guideOpen = React.useMemo(() => {
+    if (typeof document === 'undefined') return false
+    try { return document.documentElement.classList.contains('guide-open') } catch { return false }
+  }, [])
+  React.useEffect(() => {
+    if (typeof document === 'undefined') return
+    const root = document.documentElement
+    const obs = new MutationObserver(() => {
+      const open = root.classList.contains('guide-open')
+      setGuideState(open)
+    })
+    obs.observe(root, { attributes: true, attributeFilter: ['class'] })
+    return () => obs.disconnect()
+  }, [])
+  const [guideState, setGuideState] = React.useState<boolean>(guideOpen)
   function genId() { return `sig_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 8)}` }
   const postSignal = React.useCallback((payload: any) => {
     try {
@@ -61,20 +76,22 @@ export default function WidgetFrame({ id, docId, data, title, children, onRefres
       {/* Header row: title + actions; actions marked no-drag */}
       <header className="wf-head flex items-center justify-between">
         <div className="wf-title truncate">{localTitle}</div>
-        <div className="wf-actions wframe-controls widget-controls inline-flex items-center gap-1" data-nodrag>
-          {onRefresh && (
-            <button type="button" className="iconbtn" title="Refresh" data-nodrag onMouseDown={(e) => e.stopPropagation()} onClick={(e) => { e.stopPropagation(); onRefresh?.(); if (id) postSignal({ kind: 'refresh', docId: docId || getHomeIdFallback(), widgetId: id }); }}>
-              ↻
-            </button>
-          )}
-          <button type="button" className="iconbtn" title="Settings" data-nodrag onMouseDown={(e) => e.stopPropagation()} onClick={(e) => { e.stopPropagation(); setOpen(o => !o); if (id) postSignal({ kind: 'settings', docId: docId || getHomeIdFallback(), widgetId: id }); }} aria-haspopup="dialog" aria-expanded={open ? 'true' : 'false'}>⚙︎</button>
-          {onInfo && (
-            <button type="button" className="iconbtn" title="Info" data-nodrag onMouseDown={(e) => e.stopPropagation()} onClick={(e) => { e.stopPropagation(); onInfo?.(); }}>i</button>
-          )}
-          {onRemove && (
-            <button type="button" className="iconbtn" title="Remove" data-nodrag onMouseDown={(e) => e.stopPropagation()} onClick={(e) => { e.stopPropagation(); onRemove?.(); }}>✕</button>
-          )}
-        </div>
+        {guideState && (
+          <div className="wf-actions wframe-controls widget-controls inline-flex items-center gap-1" data-nodrag>
+            {onRefresh && (
+              <button type="button" className="iconbtn" title="Refresh" data-nodrag onMouseDown={(e) => e.stopPropagation()} onClick={(e) => { e.stopPropagation(); onRefresh?.(); if (id) postSignal({ kind: 'refresh', docId: docId || getHomeIdFallback(), widgetId: id }); }}>
+                ↻
+              </button>
+            )}
+            <button type="button" className="iconbtn" title="Settings" data-nodrag onMouseDown={(e) => e.stopPropagation()} onClick={(e) => { e.stopPropagation(); setOpen(o => !o); if (id) postSignal({ kind: 'settings', docId: docId || getHomeIdFallback(), widgetId: id }); }} aria-haspopup="dialog" aria-expanded={open ? 'true' : 'false'}>⚙︎</button>
+            {onInfo && (
+              <button type="button" className="iconbtn" title="Info" data-nodrag onMouseDown={(e) => e.stopPropagation()} onClick={(e) => { e.stopPropagation(); onInfo?.(); }}>i</button>
+            )}
+            {onRemove && (
+              <button type="button" className="iconbtn" title="Remove" data-nodrag onMouseDown={(e) => e.stopPropagation()} onClick={(e) => { e.stopPropagation(); onRemove?.(); }}>✕</button>
+            )}
+          </div>
+        )}
       </header>
 
       <ScrollBody densityClass={bodyDensityClass}>

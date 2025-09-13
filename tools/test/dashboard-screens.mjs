@@ -165,11 +165,17 @@ async function auditWidgetColors(page, outDir) {
         try {
           await page.waitForSelector('[data-widget-id]', { timeout: 5000 })
         } catch {}
+        // Assert glass present and no horizontal scroll
+        const glass = await verifyHeroGlass(page) || await verifyGlassRails(page);
+        const noScroll = await verifyNoHorizontalScroll(page);
+        // Assert controls gated by guide-open
+        const vis = await verifyWidgetControlsVisibilityToggle(page);
+
         // Screenshot
         const file = path.join(ART_DIR, `dashboard-${name}-${TS}.png`);
         await page.screenshot({ path: file, fullPage: true });
 
-        Object.assign(metrics, { colorAudit, screenshot: file });
+        Object.assign(metrics, { colorAudit, screenshot: file, glass, noScroll, controlsBefore: vis.before, controlsAfter: vis.after });
       });
       results[name] = {
         consoleErrors: caps.errors,

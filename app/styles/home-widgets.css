@@ -180,6 +180,11 @@
   .section-rail .section-grid { grid-template-columns: 1fr; }
 }
 
+/* Guarantee single-column stacking on mobile; tiles take full width */
+@media (max-width: 640px){
+  .widget-tile{ grid-column: 1 / -1 !important; }
+}
+
 /* Each widget declares spans via CSS vars injected by Grid.tsx */
 .widget-tile {
   position: relative;
@@ -207,6 +212,14 @@
 .widget-controls { transition: opacity .15s ease; position:relative; z-index:2; }
 html:not(.guide-open) .widget-controls { opacity: 0 !important; pointer-events: none !important; }
 html.guide-open .widget-controls { opacity: 1 !important; pointer-events: auto !important; }
+/* Ensure action buttons never initiate drag */
+.widget-controls [data-nodrag] *,
+.wframe-controls [data-nodrag] *,
+.widget-controls [data-nodrag],
+.wframe-controls [data-nodrag]{
+  -webkit-user-drag: none;
+  touch-action: manipulation;
+}
 .widget-chrome{ position:relative; z-index:1; }
 
 /* WCAG link on glass (keeps what you added earlier) */

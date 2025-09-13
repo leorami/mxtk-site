@@ -361,11 +361,13 @@ export default function DashboardContent({ initialDocId = 'default', initialDoc 
     <div className="section-rail">
       {showAdaptCta && (
         <div className="mb-3 text-sm">
-          <div className="inline-flex items-center gap-2 px-3 py-2 rounded-full bg-[color:var(--surface-card-emb)] border border-[color:var(--border-soft)] shadow-sm">
-            <span>Adapt Dashboard to {mode === 'learn' ? 'Train' : mode === 'build' ? 'Prepare' : 'Conquer'}?</span>
-            <button className="btn btn-ghost px-2 py-1" onClick={onPreviewAdapt} data-nodrag>Preview</button>
-            <button className="btn-primary px-2 py-1" onClick={onApplyAdapt} data-nodrag>Apply</button>
-            <button className="btn btn-ghost px-2 py-1" onClick={onDismissAdapt} data-nodrag>Dismiss</button>
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[color:var(--surface-card-emb)] border border-[color:var(--border-soft)] shadow-sm">
+            <span>
+              {mode === 'learn' ? 'Adapt your Dashboard for Training?' : mode === 'build' ? 'Adapt your Dashboard as you Prepare?' : 'Adapt the Dashboard to Conquer?'}
+            </span>
+            <button className="btn btn-ghost px-3 py-1" onClick={onPreviewAdapt} data-nodrag>Preview</button>
+            <button className="btn btn-ghost px-3 py-1" onClick={onDismissAdapt} data-nodrag>Dismiss</button>
+            <button className="btn btn-ghost btn-default px-3 py-1" onClick={onApplyAdapt} data-nodrag>Apply</button>
           </div>
         </div>
       )}

@@ -5,8 +5,10 @@ import SiteFooter from '@/components/SiteFooter';
 import SiteHeader from '@/components/SiteHeader';
 import Script from "next/script";
 // FooterChatBarMountEffect removed - chat moved to drawer
+import BasePathProvider from '@/components/BasePathProvider';
 import PageChromeVars from '@/components/chrome/PageChromeVars';
 import ExperienceProvider from '@/components/experience/ExperienceProvider';
+import { getServerBasePath } from '@/lib/routing/serverBasePath';
 
 import GuideHost from '@/components/ai/GuideHost';
 import GuideBootStyle from '@/components/chrome/GuideBootStyle';
@@ -44,7 +46,8 @@ export const metadata: Metadata = {
 }
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
+  const serverDetected = await getServerBasePath();
+  const basePath = process.env.NEXT_PUBLIC_BASE_PATH || serverDetected || '';
   const cookieStore = await cookies();
   const hasHome = Boolean(cookieStore.get('mxtk_home_id')?.value)
 
@@ -151,6 +154,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         />
       </head>
       <body className="page min-h-dvh flex flex-col" suppressHydrationWarning>
+        <BasePathProvider value={basePath}>
         <ExperienceProvider>
           <PageChromeVars />
           <SiteHeader hasHome={hasHome} />
@@ -170,6 +174,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           {/* Wave 4/5: Drawer host only (top-right panel disabled) */}
           <GuideHost />
         </ExperienceProvider>
+        </BasePathProvider>
       </body>
     </html>
   )

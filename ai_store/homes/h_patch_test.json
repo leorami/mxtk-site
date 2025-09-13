@@ -2,123 +2,6 @@
   "id": "h_patch_test",
   "widgets": [
     {
-      "id": "mfgh1r6s_1",
-      "type": "custom-note",
-      "title": "Note",
-      "size": {
-        "w": 3,
-        "h": 2
-      },
-      "pos": {
-        "x": 0,
-        "y": 0
-      }
-    },
-    {
-      "id": "mfgh1r6s_2",
-      "type": "glossary-spotlight",
-      "title": "Glossary",
-      "size": {
-        "w": 3,
-        "h": 2
-      },
-      "pos": {
-        "x": 3,
-        "y": 0
-      }
-    },
-    {
-      "id": "mfgheony_1",
-      "type": "custom-note",
-      "title": "Note",
-      "size": {
-        "w": 3,
-        "h": 2
-      },
-      "pos": {
-        "x": 0,
-        "y": 13
-      }
-    },
-    {
-      "id": "mfgheony_2",
-      "type": "glossary-spotlight",
-      "title": "Glossary",
-      "size": {
-        "w": 3,
-        "h": 2
-      },
-      "pos": {
-        "x": 3,
-        "y": 13
-      }
-    },
-    {
-      "id": "mfghl9l4_1",
-      "type": "custom-note",
-      "title": "Note",
-      "size": {
-        "w": 3,
-        "h": 2
-      },
-      "pos": {
-        "x": 0,
-        "y": 11
-      }
-    },
-    {
-      "id": "mfghl9l4_2",
-      "type": "glossary-spotlight",
-      "title": "Glossary",
-      "size": {
-        "w": 3,
-        "h": 2
-      },
-      "pos": {
-        "x": 3,
-        "y": 11
-      }
-    },
-    {
-      "id": "mfgwcc11_1",
-      "type": "custom-note",
-      "title": "Note",
-      "size": {
-        "w": 3,
-        "h": 2
-      },
-      "pos": {
-        "x": 0,
-        "y": 9
-      }
-    },
-    {
-      "id": "mfgwcc13_2",
-      "type": "glossary-spotlight",
-      "title": "Glossary",
-      "size": {
-        "w": 3,
-        "h": 2
-      },
-      "pos": {
-        "x": 3,
-        "y": 9
-      }
-    },
-    {
-      "id": "mfgwd50v_1",
-      "type": "custom-note",
-      "title": "Note",
-      "size": {
-        "w": 3,
-        "h": 2
-      },
-      "pos": {
-        "x": 6,
-        "y": 0
-      }
-    },
-    {
       "id": "mfgwd50v_2",
       "type": "glossary-spotlight",
       "title": "Glossary",
@@ -128,7 +11,7 @@
       },
       "pos": {
         "x": 9,
-        "y": 0
+        "y": 3
       }
     },
     {
@@ -141,7 +24,7 @@
       },
       "pos": {
         "x": 0,
-        "y": 7
+        "y": 23
       }
     },
     {
@@ -154,7 +37,7 @@
       },
       "pos": {
         "x": 3,
-        "y": 7
+        "y": 23
       }
     },
     {
@@ -167,11 +50,245 @@
       },
       "pos": {
         "x": 0,
-        "y": 5
+        "y": 21
       }
     },
     {
       "id": "mfhqhatg_2",
+      "type": "glossary-spotlight",
+      "title": "Glossary",
+      "size": {
+        "w": 3,
+        "h": 2
+      },
+      "pos": {
+        "x": 3,
+        "y": 21
+      }
+    },
+    {
+      "id": "mfii0cew_1",
+      "type": "custom-note",
+      "title": "Note",
+      "size": {
+        "w": 3,
+        "h": 2
+      },
+      "pos": {
+        "x": 0,
+        "y": 19
+      }
+    },
+    {
+      "id": "mfii0cew_2",
+      "type": "glossary-spotlight",
+      "title": "Glossary",
+      "size": {
+        "w": 3,
+        "h": 2
+      },
+      "pos": {
+        "x": 3,
+        "y": 19
+      }
+    },
+    {
+      "id": "mfiij6wl_1",
+      "type": "custom-note",
+      "title": "Note",
+      "size": {
+        "w": 3,
+        "h": 2
+      },
+      "pos": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    {
+      "id": "mfiij6wl_2",
+      "type": "glossary-spotlight",
+      "title": "Glossary",
+      "size": {
+        "w": 3,
+        "h": 2
+      },
+      "pos": {
+        "x": 3,
+        "y": 0
+      }
+    },
+    {
+      "id": "mfiijyfw_1",
+      "type": "custom-note",
+      "title": "Note",
+      "size": {
+        "w": 3,
+        "h": 2
+      },
+      "pos": {
+        "x": 0,
+        "y": 17
+      }
+    },
+    {
+      "id": "mfiijyfx_2",
+      "type": "glossary-spotlight",
+      "title": "Glossary",
+      "size": {
+        "w": 3,
+        "h": 2
+      },
+      "pos": {
+        "x": 3,
+        "y": 17
+      }
+    },
+    {
+      "id": "mfij6jvg_1",
+      "type": "custom-note",
+      "title": "Note",
+      "size": {
+        "w": 3,
+        "h": 2
+      },
+      "pos": {
+        "x": 0,
+        "y": 15
+      }
+    },
+    {
+      "id": "mfij6jvi_2",
+      "type": "glossary-spotlight",
+      "title": "Glossary",
+      "size": {
+        "w": 3,
+        "h": 2
+      },
+      "pos": {
+        "x": 3,
+        "y": 15
+      }
+    },
+    {
+      "id": "mfij8fr6_1",
+      "type": "custom-note",
+      "title": "Note",
+      "size": {
+        "w": 3,
+        "h": 2
+      },
+      "pos": {
+        "x": 0,
+        "y": 13
+      }
+    },
+    {
+      "id": "mfij8fr7_2",
+      "type": "glossary-spotlight",
+      "title": "Glossary",
+      "size": {
+        "w": 3,
+        "h": 2
+      },
+      "pos": {
+        "x": 3,
+        "y": 13
+      }
+    },
+    {
+      "id": "mfij9iuk_1",
+      "type": "custom-note",
+      "title": "Note",
+      "size": {
+        "w": 3,
+        "h": 2
+      },
+      "pos": {
+        "x": 0,
+        "y": 11
+      }
+    },
+    {
+      "id": "mfij9iuk_2",
+      "type": "glossary-spotlight",
+      "title": "Glossary",
+      "size": {
+        "w": 3,
+        "h": 2
+      },
+      "pos": {
+        "x": 3,
+        "y": 11
+      }
+    },
+    {
+      "id": "mfijgydr_1",
+      "type": "custom-note",
+      "title": "Note",
+      "size": {
+        "w": 3,
+        "h": 2
+      },
+      "pos": {
+        "x": 0,
+        "y": 9
+      }
+    },
+    {
+      "id": "mfijgyds_2",
+      "type": "glossary-spotlight",
+      "title": "Glossary",
+      "size": {
+        "w": 3,
+        "h": 2
+      },
+      "pos": {
+        "x": 3,
+        "y": 9
+      }
+    },
+    {
+      "id": "mfiktkwd_1",
+      "type": "custom-note",
+      "title": "Note",
+      "size": {
+        "w": 3,
+        "h": 2
+      },
+      "pos": {
+        "x": 0,
+        "y": 7
+      }
+    },
+    {
+      "id": "mfiktkwd_2",
+      "type": "glossary-spotlight",
+      "title": "Glossary",
+      "size": {
+        "w": 3,
+        "h": 2
+      },
+      "pos": {
+        "x": 3,
+        "y": 7
+      }
+    },
+    {
+      "id": "mfikuhp3_1",
+      "type": "custom-note",
+      "title": "Note",
+      "size": {
+        "w": 3,
+        "h": 2
+      },
+      "pos": {
+        "x": 0,
+        "y": 5
+      }
+    },
+    {
+      "id": "mfikuhp4_2",
       "type": "glossary-spotlight",
       "title": "Glossary",
       "size": {

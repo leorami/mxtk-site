@@ -1,8 +1,8 @@
-import { describe, it, expect } from 'vitest'
-import { logSignal, listSignals } from '@/lib/home/signals'
+import { listSignals, logSignal } from '@/lib/home/signals'
 import type { HomeSignal } from '@/lib/home/types'
 import { promises as fs } from 'node:fs'
 import path from 'node:path'
+import { describe, expect, it } from 'vitest'
 
 const ROOT = process.cwd()
 const SIGNALS_FILE = path.join(ROOT, 'ai_store', 'signals.jsonl')
@@ -27,9 +27,7 @@ describe('home signals store', () => {
   })
 })
 
-import * as fs from 'fs/promises'
-import path from 'path'
-import { beforeEach, describe, expect, it } from 'vitest'
+import { beforeEach } from 'vitest'
 
 describe('signals store append', () => {
   const signalsDir = path.join(process.cwd(), 'ai_store', 'signals')

@@ -10,3 +10,30 @@ if (typeof (globalThis as any).requestAnimationFrame === 'undefined') {
   // @ts-ignore
   (globalThis as any).cancelAnimationFrame = (id: number) => clearTimeout(id);
 }
+
+// Shim window.matchMedia for components that query media features in tests
+if (typeof (globalThis as any).window !== 'undefined' && typeof (globalThis as any).window.matchMedia === 'undefined') {
+  // @ts-ignore
+  (globalThis as any).window.matchMedia = (query: string) => {
+    return {
+      matches: false,
+      media: query,
+      onchange: null,
+      addListener: () => {},
+      removeListener: () => {},
+      addEventListener: () => {},
+      removeEventListener: () => {},
+      dispatchEvent: () => false,
+    } as any;
+  };
+}
+
+// Ensure basepath utilities have a stable hook export in tests
+import { vi } from 'vitest';
+vi.mock('@/lib/basepath', async (importOriginal) => {
+  const actual = await importOriginal<any>();
+  return {
+    ...actual,
+    useBasePath: () => '',
+  };
+});

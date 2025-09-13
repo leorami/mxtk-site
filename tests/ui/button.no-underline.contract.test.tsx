@@ -13,12 +13,11 @@ const ButtonShapes = () => (
 )
 
 describe('button underline regression guard', () => {
-  it('button-like anchors carry button classes, not link underlines', () => {
+  it('button-like anchors carry btn classes (CSS verified in puppeteer script)', () => {
     const { container } = render(<ButtonShapes />)
     const anchors = container.querySelectorAll('a')
     anchors.forEach(a => {
       if (a.className.includes('btn')) {
-        // Contract: presence of btn* class names signals underline suppression via CSS
         expect(a.className).toMatch(/btn|btn-primary|btn-outline|btn-soft|btn-link/)
       }
     })

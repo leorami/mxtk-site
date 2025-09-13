@@ -1,6 +1,7 @@
 "use client";
 
 import { useBasePath } from '@/lib/basepath';
+import { BasePathContext } from '@/lib/basepathContext';
 import Image, { ImageProps } from 'next/image';
 
 /**
@@ -15,7 +16,20 @@ export default function AppImage(props: Omit<ImageProps, 'src'> & { src: string 
   const { src, ...rest } = props;
 
   // Build basePath-aware absolute src. Avoid directory-valued inputs by requiring a file path.
-  const basePath = useBasePath();
+  const ctxBasePath = (() => {
+    try {
+      // Lazily access context only in client
+      // eslint-disable-next-line react-hooks/rules-of-hooks
+      const React = require('react');
+      // eslint-disable-next-line react-hooks/rules-of-hooks
+      const useContext = React.useContext;
+      return useContext ? (useContext(BasePathContext) || '') : '';
+    } catch {
+      return '';
+    }
+  })();
+  let basePath = (process.env.NEXT_PUBLIC_BASE_PATH || ctxBasePath || '').trim();
+  if (!basePath) { try { basePath = useBasePath() || '' } catch { basePath = '' } }
   const leaf = src.startsWith('/') ? src : `/${src}`;
   const href = `${basePath || ''}${leaf}`;
 

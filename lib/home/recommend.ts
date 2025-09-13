@@ -1,17 +1,19 @@
-import { listSignals } from '@/lib/home/signals'
+import { listSignals } from '@/lib/home/signals';
 
 export type Recommendation = { title: string; href: string; reason: string; score: number }
 
 const WEIGHTS: Record<string, number> = {
-  pin: 3,
-  settings: 2,
+  move: 5,
+  resize: 5,
+  open: 2,
   refresh: 1,
-  open: 1,
+  settings: 1,
+  pin: 3,
   unpin: -2,
 }
 
 function decayWeight(ts: number, now: number): number {
-  const halfLifeMs = 48 * 60 * 60 * 1000 // 48h
+  const halfLifeMs = 24 * 60 * 60 * 1000 // 24h, faster decay
   const age = Math.max(0, now - ts)
   const factor = Math.pow(0.5, age / halfLifeMs)
   return factor

@@ -1,7 +1,7 @@
+import { listSignals, logSignal } from '@/lib/home/signals'
+import type { HomeSignal } from '@/lib/home/types'
 import { NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
-import { logSignal, listSignals } from '@/lib/home/signals'
-import type { HomeSignal } from '@/lib/home/types'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0

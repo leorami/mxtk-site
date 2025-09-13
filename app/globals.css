@@ -712,6 +712,7 @@ html.dark .table thead th {
 .brand-header .nav-link,
 .brand-header a.nav-link {
   color: #0B0E12 !important;
+  padding: 8px 12px;
   /* Dark text for light mode */
 }
 
@@ -1831,6 +1832,12 @@ button[class*="btn"] {
   align-items: center;
 }
 
+.btn-default {
+  border: 1px solid color-mix(in srgb, currentColor 14%, transparent);
+  background: color-mix(in srgb, currentColor 4%, transparent);
+  line-height: 1.25rem; /* ensure consistent pill height */
+}
+
 /* Ensure minimum text contrast for all buttons across themes */
 button { color: var(--ink-strong); }
 .dark button { color: #E6EAF2; }
@@ -1874,7 +1881,6 @@ button { color: var(--ink-strong); }
 .text-sm {
   font-size: 0.875rem;
   line-height: 1.25rem;
-  padding: 0 20px;
 }
 
 .text-base {
@@ -2110,6 +2116,8 @@ html[data-lift="H"] {
 .btn, .btn:link, .btn:visited, .btn:hover, .btn:active,
 .btn-primary, .btn-primary:link, .btn-primary:visited, .btn-primary:hover, .btn-primary:active,
 .btn-secondary, .btn-secondary:link, .btn-secondary:visited, .btn-secondary:hover, .btn-secondary:active,
+.btn-outline, .btn-outline:link, .btn-outline:visited, .btn-outline:hover, .btn-outline:active,
+.btn-soft, .btn-soft:link, .btn-soft:visited, .btn-soft:hover, .btn-soft:active,
 .btn-link, .btn-link:link, .btn-link:visited, .btn-link:hover, .btn-link:active,
 .btn-pill, .btn-pill:link, .btn-pill:visited, .btn-pill:hover, .btn-pill:active,
 .button, .button:link, .button:visited, .button:hover, .button:active,
@@ -2117,6 +2125,8 @@ html[data-lift="H"] {
 a[role="button"], a[role="button"]:link, a[role="button"]:visited, a[role="button"]:hover, a[role="button"]:active,
 a.btn, a.btn:link, a.btn:visited, a.btn:hover, a.btn:active,
 a.btn-primary, a.btn-primary:link, a.btn-primary:visited, a.btn-primary:hover, a.btn-primary:active,
+a.btn-outline, a.btn-outline:link, a.btn-outline:visited, a.btn-outline:hover, a.btn-outline:active,
+a.btn-soft, a.btn-soft:link, a.btn-soft:visited, a.btn-soft:hover, a.btn-soft:active,
 a.btn-secondary, a.btn-secondary:link, a.btn-secondary:visited, a.btn-secondary:hover, a.btn-secondary:active,
 a.btn-link, a.btn-link:link, a.btn-link:visited, a.btn-link:hover, a.btn-link:active,
 a.button, a.button:link, a.button:visited, a.button:hover, a.button:active,
@@ -2132,8 +2142,8 @@ a.cta, a.cta:link, a.cta:visited, a.cta:hover, a.cta:active {
 }
 
 /* Keep WCAG underlines on regular links inside glass panels — but not on buttons */
-.glass a:not(.btn):not(.btn-primary):not(.btn-secondary):not(.btn-link):not(.button):not(.cta):not([role="button"]),
-.glass--panel a:not(.btn):not(.btn-primary):not(.btn-secondary):not(.btn-link):not(.button):not(.cta):not([role="button"]) {
+.glass a:not(.btn):not(.btn-primary):not(.btn-secondary):not(.btn-outline):not(.btn-soft):not(.btn-link):not(.button):not(.cta):not([role="button"]),
+.glass--panel a:not(.btn):not(.btn-primary):not(.btn-secondary):not(.btn-outline):not(.btn-soft):not(.btn-link):not(.button):not(.cta):not([role="button"]) {
   text-decoration: underline;
   text-underline-offset: 2px;
   font-weight: 500;

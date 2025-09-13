@@ -1,6 +1,6 @@
+import type { HomeSignal } from '@/lib/home/types'
 import { promises as fs } from 'node:fs'
 import path from 'node:path'
-import type { HomeSignal } from '@/lib/home/types'
 
 const BASE_DIR = process.env.AI_VECTOR_DIR || './ai_store'
 const ROOT = process.cwd()

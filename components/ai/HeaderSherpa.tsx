@@ -37,7 +37,7 @@ export default function HeaderSherpa() {
   }
 
   return (
-    <div data-testid="xp-toggle-group" className="xp-toggle-group">
+    <div data-testid="xp-toggle-group" className="xp-toggle-group experience-toggle">
       <button
         type="button"
         aria-label="Open Sherpa"

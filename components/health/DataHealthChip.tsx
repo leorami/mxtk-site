@@ -25,7 +25,7 @@ export default function DataHealthChip() {
     return () => { alive = false };
   }, []);
 
-  const cls = state === 'fresh' ? 'bg-green-500' : state === 'stale' ? 'bg-amber-500' : 'bg-red-500';
+  const cls = state === 'fresh' ? 'bg-green-300' : state === 'stale' ? 'bg-amber-300' : 'bg-red-300';
   return (
     <span
       data-testid="data-health"

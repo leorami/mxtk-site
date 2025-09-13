@@ -16,6 +16,7 @@ export default function PriceMini({ id, docId, data, refreshKey = 0 }: PriceMini
   const symbol = (data?.symbol || 'MXTK').toString().trim()
   const [series, setSeries] = useState<Series>({ points: [] })
   const [updatedAt, setUpdatedAt] = useState<number | null>(null)
+  const [ttl, setTtl] = useState<number>(0)
   const [deltaPct, setDeltaPct] = useState<number | null>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -26,14 +27,16 @@ export default function PriceMini({ id, docId, data, refreshKey = 0 }: PriceMini
     setLoading(true)
     setError(null)
     try {
-      const res = await apiGet<{ updatedAt: number; ttl: number; data: { symbol: string; days: number; series: Series; delta24hPct?: number } }>(url)
+      const res = await apiGet<{ updatedAt: number; ttl: number; source?: string; data: { symbol: string; days: number; series: Series; delta24hPct?: number } }>(url)
       setSeries(res.data?.series || { points: [] })
       setUpdatedAt(Number(res.updatedAt) || Date.now())
+      setTtl(Number(res.ttl) || 0)
       setDeltaPct(typeof (res as any).data?.delta24hPct === 'number' ? (res as any).data.delta24hPct : null)
     } catch (e: any) {
       setError('Failed to load')
-      setSeries({ points: [] })
-      setUpdatedAt(Date.now())
+      setSeries(prev => (prev.points && prev.points.length ? prev : fallbackSeries()))
+      setUpdatedAt(prev => prev || Date.now())
+      setTtl(0)
       setDeltaPct(null)
     } finally {
       setLoading(false)
@@ -49,6 +52,8 @@ export default function PriceMini({ id, docId, data, refreshKey = 0 }: PriceMini
     if (mins < 1) return 'Updated just now'
     return `Updated ${mins}m ago`
   }
+
+  const isStale = ttl <= 0 && !!updatedAt
 
   async function promptEdit() {
     const next = window.prompt('Enter symbol (e.g., MXTK)', symbol)
@@ -67,6 +72,12 @@ export default function PriceMini({ id, docId, data, refreshKey = 0 }: PriceMini
     const pts = series.points || []
     return pts.length ? pts[pts.length - 1].value : null
   }, [series])
+
+  function fallbackSeries(): Series {
+    const now = Date.now()
+    const points = Array.from({ length: 32 }, (_, i) => ({ time: now - (32 - i) * 60_000, value: 1 + Math.sin(i / 6) * 0.03 }))
+    return { points }
+  }
 
   return (
     <div className="text-sm">
@@ -101,6 +112,16 @@ export default function PriceMini({ id, docId, data, refreshKey = 0 }: PriceMini
           </span>
         </div>
       )}
+      {/* Freshness badge */}
+      <div className="mt-2 text-[11px] inline-flex items-center gap-1">
+        {isStale ? (
+          <span className="px-1.5 py-0.5 rounded bg-[color:var(--glass-70)] border border-[color:var(--border-soft)]">stale</span>
+        ) : loading ? (
+          <span className="px-1.5 py-0.5 rounded bg-[color:var(--glass-70)] border border-[color:var(--border-soft)]">loading</span>
+        ) : (
+          <span className="px-1.5 py-0.5 rounded bg-[color:var(--glass-70)] border border-[color:var(--border-soft)]">fresh</span>
+        )}
+      </div>
     </div>
   )
 }
