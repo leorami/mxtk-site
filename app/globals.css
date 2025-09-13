@@ -1237,9 +1237,10 @@ h3 {
   }
 
   .nav-pill {
-    @apply rounded-xl px-3 py-1.5;
+    @apply rounded-xl px-3 py-2; /* match Dashboard pill height */
     border: 1px solid color-mix(in srgb, currentColor 14%, transparent);
     background: color-mix(in srgb, currentColor 4%, transparent);
+    line-height: 1.25rem; /* ensure consistent pill height */
   }
 
   /* Nav hover using CSS var set from route theme */

@@ -126,7 +126,7 @@ export default function SiteHeader({ hasHome }: { hasHome?: boolean }) {
                     onMouseLeave={handleDropdownMouseLeave}
                   >
                     <button
-                      className={`nav-link nav-pill px-4 py-2.5 rounded-lg transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-400/35 flex items-center gap-1 text-sm ${isActive ? 'font-semibold' : ''}`}
+                      className={`nav-link nav-pill px-3 py-2 rounded-lg transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-400/35 flex items-center gap-1 text-sm ${isActive ? 'font-semibold' : ''}`}
                       aria-expanded={isDropdownOpen}
                       aria-haspopup="true"
                     >

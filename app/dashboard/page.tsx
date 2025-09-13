@@ -1,6 +1,6 @@
-import PageScaffold from '@/components/layout/PageScaffold';
 import SectionWrapper from '@/components/SectionWrapper';
 import DashboardContent from '@/components/home/DashboardContent';
+import PageScaffold from '@/components/layout/PageScaffold';
 
 export const dynamic = 'force-dynamic';
 
