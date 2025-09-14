@@ -76,8 +76,7 @@ export default function WidgetFrame({ id, docId, data, title, children, onRefres
       {/* Header row: title + actions; actions marked no-drag */}
       <header className="wf-head flex items-center justify-between">
         <div className="wf-title truncate">{localTitle}</div>
-        {guideState && (
-          <div className="wf-actions wframe-controls widget-controls inline-flex items-center gap-1" data-nodrag>
+        <div className="wf-actions wframe-controls widget-controls inline-flex items-center gap-1 opacity-0 pointer-events-none [html.guide-open_&]:opacity-100 [html.guide-open_&]:pointer-events-auto transition-opacity" data-nodrag>
             {onRefresh && (
               <button type="button" className="iconbtn" title="Refresh" data-nodrag onMouseDown={(e) => e.stopPropagation()} onClick={(e) => { e.stopPropagation(); onRefresh?.(); if (id) postSignal({ kind: 'refresh', docId: docId || getHomeIdFallback(), widgetId: id }); }}>
                 ↻
@@ -90,8 +89,7 @@ export default function WidgetFrame({ id, docId, data, title, children, onRefres
             {onRemove && (
               <button type="button" className="iconbtn" title="Remove" data-nodrag onMouseDown={(e) => e.stopPropagation()} onClick={(e) => { e.stopPropagation(); onRemove?.(); }}>✕</button>
             )}
-          </div>
-        )}
+        </div>
       </header>
 
       <ScrollBody densityClass={bodyDensityClass}>

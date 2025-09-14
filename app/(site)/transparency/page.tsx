@@ -71,7 +71,10 @@ export default async function TransparencyPage() {
                   <div className="absolute right-2 top-2 opacity-0 pointer-events-none [html.guide-open_&]:opacity-100 transition-opacity">
                     <form action={getBasePathUrl('/api/ai/home/pin')} method="post">
                       <input type="hidden" name="id" value="default" />
-                      <input type="hidden" name="widget[type]" value="pools-mini" />
+                      <input type="hidden" name="widget[type]" value="pools-table" />
+                      <input type="hidden" name="widget[data][token]" value={token} />
+                      <input type="hidden" name="widget[size][w]" value="6" />
+                      <input type="hidden" name="widget[size][h]" value="24" />
                       <button type="submit" className="btn-ghost text-xs">Pin to Home</button>
                     </form>
                   </div>
@@ -132,7 +135,18 @@ export default async function TransparencyPage() {
 
             <SectionWrapper index={5}>
               <Card tint="amber">
-                <h2 className="text-2xl font-semibold mb-6">Price (MXTK)</h2>
+                <div className="flex items-center justify-between mb-6">
+                  <h2 className="text-2xl font-semibold">Price (MXTK)</h2>
+                  <form action={getBasePathUrl('/api/ai/home/pin')} method="post" className="opacity-0 pointer-events-none [html.guide-open_&]:opacity-100 [html.guide-open_&]:pointer-events-auto transition-opacity">
+                    <input type="hidden" name="id" value="default" />
+                    <input type="hidden" name="widget[type]" value="price-large" />
+                    <input type="hidden" name="widget[data][symbol]" value="MXTK" />
+                    <input type="hidden" name="widget[data][interval]" value="7d" />
+                    <input type="hidden" name="widget[size][w]" value="6" />
+                    <input type="hidden" name="widget[size][h]" value="24" />
+                    <button type="submit" className="btn-ghost text-xs">Pin to Home</button>
+                  </form>
+                </div>
                 {/* SSR-safe chart */}
                 <TimeSeries symbol="MXTK" />
               </Card>

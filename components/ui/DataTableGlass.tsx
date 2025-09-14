@@ -8,27 +8,24 @@ type SortKey = 'pool' | 'price' | 'vol24' | 'tvl' | 'fees24'
 export default function DataTableGlass({ rows, className, updatedAt, ttl }: { rows: PoolRow[]; className?: string; updatedAt?: number; ttl?: number }) {
   const [sort, setSort] = useState<{ key: SortKey; dir: 'asc' | 'desc' }>({ key: 'tvl', dir: 'desc' })
   const sorted = useMemo(() => sortRows(rows, sort.key, sort.dir), [rows, sort])
-
-  if (!rows || rows.length === 0) {
-    return (
-      <div className={cn('glass glass--panel rounded-[var(--radius-lg)] p-6 text-center text-ink-subtle', className)}>
-        <div className="text-sm">No pools available at the moment.</div>
-        <div className="text-xs opacity-80 mt-1">Data will appear once a supported source is live.</div>
-      </div>
-    )
-  }
-
   const badge = useMemo(() => makeBadge(updatedAt, ttl), [updatedAt, ttl])
+  const isEmpty = !rows || rows.length === 0
 
   return (
     <div className={cn('glass glass--panel rounded-[var(--radius-lg)] overflow-hidden relative', className)}>
-      {badge && (
+      {badge && !isEmpty && (
         <div className="absolute right-3 top-3 pointer-events-none select-none">
           <span className={cn('inline-flex items-center rounded-full px-2 py-0.5 text-[10px] leading-tight', badge.kind==='live'? 'bg-emerald-500/20 text-emerald-700 dark:text-emerald-300':'bg-amber-500/20 text-amber-700 dark:text-amber-300')}>
             {badge.label}
           </span>
         </div>
       )}
+      {isEmpty ? (
+        <div className="p-6 text-center text-ink-subtle">
+          <div className="text-sm">No pools available at the moment.</div>
+          <div className="text-xs opacity-80 mt-1">Data will appear once a supported source is live.</div>
+        </div>
+      ) : (
       <div className="overflow-x-auto">
         <table data-testid="pools-table" className="min-w-full text-sm">
           <thead className="sticky top-0 bg-white/70 dark:bg-black/40 backdrop-blur supports-[backdrop-filter]:bg-white/60" style={{ position: 'sticky', top: 0 }}>
@@ -58,8 +55,10 @@ export default function DataTableGlass({ rows, className, updatedAt, ttl }: { ro
           </tbody>
         </table>
       </div>
+      )}
 
       {/* Mobile stacked view */}
+      {!isEmpty && (
       <div className="sm:hidden divide-y divide-white/10">
         {sorted.map((r) => (
           <dl key={r.address} className="p-4 grid grid-cols-3 gap-2">
@@ -75,6 +74,7 @@ export default function DataTableGlass({ rows, className, updatedAt, ttl }: { ro
           </dl>
         ))}
       </div>
+      )}
     </div>
   )
 }

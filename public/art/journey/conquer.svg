@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
+  <defs><style>
+  .stroke { fill: none; stroke: #111; stroke-width: 12; stroke-linecap: round; stroke-linejoin: round; }
+  .fill { fill: #111; }
+</style></defs>
+  <!-- CONQUER: climber in winter coat, backpack, hat, Everest silhouette -->
+  <!-- Mountain (Everest-like) -->
+  <path class="stroke" d="M236 212 L196 156 L156 212 Z" />
+  <path class="stroke" d="M196 156 l-14 18 l10 4 l-6 10" />
+  <!-- Trekking pole -->
+  <path class="stroke" d="M120 124 L120 220" />
+  <!-- Climber body -->
+  <circle cx="96" cy="88" r="16" class="fill" />
+  <path class="stroke" d="M80 84 h32" /> <!-- hat brim -->
+  <path class="stroke" d="M72 112 q24 -12 48 0 v60 h-48 z" /> <!-- parka torso -->
+  <path class="stroke" d="M72 172 v48" />
+  <path class="stroke" d="M120 172 v48" />
+  <!-- Arms / gloves -->
+  <path class="stroke" d="M72 132 h-28 q-8 0 -8 8 v10" />
+  <circle cx="36" cy="152" r="6" class="fill"/>
+  <path class="stroke" d="M120 132 h24" />
+  <!-- Backpack -->
+  <path class="stroke" d="M64 116 a26 26 0 0 0 -18 24 v20 a20 20 0 0 0 20 20" />
+</svg>

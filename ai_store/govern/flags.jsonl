@@ -191,3 +191,18 @@
 {"source":"chat","reason":"spam content","category":"spam","severity":3,"id":"c1f23386-443a-491c-b9dd-82930524e04c","createdAt":1757786750332,"status":"open","notes":[],"labels":[]}
 {"source":"ingest","reason":"policy hit","category":"policy","severity":1,"id":"ef8638ec-d3fe-42a4-b682-bc90f12f18a6","createdAt":1757786750317,"status":"resolved","notes":[],"labels":[],"updatedAt":1757786750384}
 {"source":"system","reason":"check","category":"other","id":"2729dd6e-c5a9-4c3c-83f6-9c54276c21fe","createdAt":1757786750409,"status":"open","notes":[],"labels":[]}
+{"source":"system","reason":"pii","category":"pii","id":"40ae8a8d-92f3-435e-b869-1592e147c352","createdAt":1757817135741,"status":"open","notes":[],"labels":[]}
+{"source":"ingest","reason":"policy hit","category":"policy","severity":1,"id":"fd821a4e-f96b-4f2a-adb8-f6012b949c32","createdAt":1757817135751,"status":"open","notes":[],"labels":[]}
+{"source":"chat","reason":"spam content","category":"spam","severity":3,"id":"d706ff85-2f13-4825-951a-54a75dfa2f91","createdAt":1757817135757,"status":"open","notes":[],"labels":[]}
+{"source":"ingest","reason":"policy hit","category":"policy","severity":1,"id":"fd821a4e-f96b-4f2a-adb8-f6012b949c32","createdAt":1757817135751,"status":"resolved","notes":[],"labels":[],"updatedAt":1757817135770}
+{"source":"system","reason":"check","category":"other","id":"01618f7f-f3b1-4894-b872-4b4fd5eef458","createdAt":1757817135790,"status":"open","notes":[],"labels":[]}
+{"source":"system","reason":"pii","category":"pii","id":"77705098-f6e7-4c16-b65f-d08f446da6cc","createdAt":1757817215902,"status":"open","notes":[],"labels":[]}
+{"source":"ingest","reason":"policy hit","category":"policy","severity":1,"id":"76e14599-a159-4957-aeb4-76ce86ed8531","createdAt":1757817215931,"status":"open","notes":[],"labels":[]}
+{"source":"chat","reason":"spam content","category":"spam","severity":3,"id":"84d66dc9-a784-4b87-8bf4-4abd3a17564c","createdAt":1757817215960,"status":"open","notes":[],"labels":[]}
+{"source":"ingest","reason":"policy hit","category":"policy","severity":1,"id":"76e14599-a159-4957-aeb4-76ce86ed8531","createdAt":1757817215931,"status":"resolved","notes":[],"labels":[],"updatedAt":1757817216017}
+{"source":"system","reason":"check","category":"other","id":"2288cc25-198c-4a97-84d6-9528d1fa2508","createdAt":1757817216051,"status":"open","notes":[],"labels":[]}
+{"source":"system","reason":"pii","category":"pii","id":"acab5b4a-c8b4-4cbd-8176-0f3b409670b2","createdAt":1757817302592,"status":"open","notes":[],"labels":[]}
+{"source":"ingest","reason":"policy hit","category":"policy","severity":1,"id":"ef5a289e-5627-499b-a9e1-8b580a510ca4","createdAt":1757817302614,"status":"open","notes":[],"labels":[]}
+{"source":"chat","reason":"spam content","category":"spam","severity":3,"id":"3c7a53ff-0f8d-4027-ac93-9a2c6329edf4","createdAt":1757817302630,"status":"open","notes":[],"labels":[]}
+{"source":"ingest","reason":"policy hit","category":"policy","severity":1,"id":"ef5a289e-5627-499b-a9e1-8b580a510ca4","createdAt":1757817302614,"status":"resolved","notes":[],"labels":[],"updatedAt":1757817302664}
+{"source":"system","reason":"check","category":"other","id":"0a44bfee-c661-4b68-9e02-94bc58a42c50","createdAt":1757817302695,"status":"open","notes":[],"labels":[]}

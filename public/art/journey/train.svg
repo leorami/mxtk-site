@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
+  <defs><style>
+  .stroke { fill: none; stroke: #111; stroke-width: 12; stroke-linecap: round; stroke-linejoin: round; }
+  .fill { fill: #111; }
+</style></defs>
+  <!-- TRAIN: lifter with barbell, bold geometric -->
+  <g transform="translate(0,0)">
+    <!-- Barbell -->
+    <path class="stroke" d="M24 90 H232" />
+    <rect x="18" y="74" width="12" height="32" class="fill" />
+    <rect x="226" y="74" width="12" height="32" class="fill" />
+    <!-- Arms to bar -->
+    <path class="stroke" d="M96 90 V64" />
+    <path class="stroke" d="M160 90 V64" />
+    <!-- Head -->
+    <circle cx="128" cy="116" r="16" class="fill" />
+    <!-- Torso -->
+    <path class="stroke" d="M88 172 V132 L128 148 L168 132 V172" />
+    <!-- Legs -->
+    <path class="stroke" d="M88 172 L72 220" />
+    <path class="stroke" d="M168 172 L184 220" />
+    <!-- Hips (thickened) -->
+    <rect x="88" y="168" width="80" height="18" class="fill" rx="8"/>
+  </g>
+</svg>

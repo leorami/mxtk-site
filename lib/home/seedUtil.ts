@@ -34,6 +34,10 @@ export function buildSeedDocFromPresets(id: string, mode: Mode): HomeDoc {
 
 export function adaptDocWithPresets(doc: HomeDoc, mode: Mode): HomeDoc {
   const presets: PresetItem[] = PRESETS_V2[mode] || []
+  // Ensure sections exist to render in Dashboard
+  const sections = Array.isArray((doc as any).sections) && (doc as any).sections.length
+    ? (doc as any).sections
+    : DEFAULT_SECTIONS
   const existingPairs = new Set((doc.widgets || []).map(w => `${w.sectionId}::${w.type}`))
   const used = new Set((doc.widgets || []).map(w => w.id))
   const mkId = (base: string) => { let n = 1; let out = base; while (used.has(out)) { n++; out = `${base}-${n}` } used.add(out); return out }
@@ -45,7 +49,7 @@ export function adaptDocWithPresets(doc: HomeDoc, mode: Mode): HomeDoc {
     adds.push({ id: wid, type: p.type as any, title: p.title, sectionId: p.section, pos: { ...p.pos }, size: { ...p.size }, data: p.data ? { ...p.data } : undefined } as any)
     existingPairs.add(key)
   }
-  const out: HomeDoc = { ...doc, widgets: [...(doc.widgets || []), ...adds] }
+  const out: HomeDoc = { ...doc, sections: sections as any, widgets: [...(doc.widgets || []), ...adds] }
   ;(out as any).meta = { ...(doc as any).meta, lastAdaptMode: mode }
   return out
 }

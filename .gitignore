@@ -26,6 +26,11 @@ coverage/
 tools/debug/output/
 tools/debug/screenshots/
 tools/debug/reports/
+artifacts/
+ai_store/signals/*.jsonl
+ai_store/signals.jsonl
+ai_store/facts.test.*.json
+ai_store/journeys/*.json
 
 # Misc
 *.zip
@@ -129,7 +134,6 @@ jspm_packages/
 
 # Gatsby files
 .cache/
-public
 
 # Storybook build outputs
 .out

@@ -3,6 +3,8 @@
 import WidgetFrame from '@/components/home/WidgetFrame';
 import GlossarySpotlight from '@/components/home/widgets/GlossarySpotlight';
 import PoolsMini from '@/components/home/widgets/PoolsMini';
+import PoolsTable from '@/components/home/widgets/PoolsTable';
+import PriceLarge from '@/components/home/widgets/PriceLarge';
 import PriceMini from '@/components/home/widgets/PriceMini';
 import RecentAnswers from '@/components/home/widgets/RecentAnswers';
 import Resources from '@/components/home/widgets/Resources';
@@ -359,6 +361,10 @@ export default function Grid({ doc, render, onPatch }: GridProps) {
                       <PoolsMini id={w.id} docId={doc.id} data={w.data as any} refreshKey={refreshTicks[w.id] || 0} />
                     ) : w.type === 'price-mini' ? (
                       <PriceMini id={w.id} docId={doc.id} data={w.data as any} refreshKey={refreshTicks[w.id] || 0} />
+                    ) : w.type === 'price-large' ? (
+                      <PriceLarge key={`pl-${w.id}:${refreshTicks[w.id] || 0}`} id={w.id} data={w.data as any} />
+                    ) : w.type === 'pools-table' ? (
+                      <PoolsTable id={w.id} data={w.data as any} />
                     ) : w.type === 'whats-next' ? (
                       <WhatsNext />
                     ) : (
@@ -448,6 +454,10 @@ export default function Grid({ doc, render, onPatch }: GridProps) {
                       <PoolsMini id={w.id} docId={doc.id} data={w.data as any} refreshKey={refreshTicks[w.id] || 0} />
                     ) : w.type === 'price-mini' ? (
                       <PriceMini id={w.id} docId={doc.id} data={w.data as any} refreshKey={refreshTicks[w.id] || 0} />
+                    ) : w.type === 'price-large' ? (
+                      <PriceLarge key={`pl-${w.id}:${refreshTicks[w.id] || 0}`} id={w.id} data={w.data as any} />
+                    ) : w.type === 'pools-table' ? (
+                      <PoolsTable id={w.id} data={w.data as any} />
                     ) : (
                       <div className="p-3 text-sm opacity-70">Widget <code>{w.type}</code></div>
                     )

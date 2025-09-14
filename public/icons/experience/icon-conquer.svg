@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+  <!-- CONQUER: mountaineer with backpack, pole, and flag -->
+  <g fill="currentColor">
+    <!-- Head -->
+    <circle cx="8.8" cy="6.2" r="1.8"/>
+    <!-- Hood -->
+    <path d="M7 8c.9-1.2 3.6-1.2 4.5 0v1.6H7V8z"/>
+    <!-- Jacket body -->
+    <rect x="5.6" y="9.6" width="7.2" height="6.8" rx="1"/>
+    <rect x="8.8" y="9.6" width="1.2" height="6.8"/>
+    <!-- Backpack -->
+    <rect x="4.6" y="9.8" width="1.2" height="5.8" rx="0.6"/>
+    <!-- Arms (one to pole) -->
+    <rect x="6.2" y="10.4" width="1.4" height="2.6" rx="0.7"/>
+    <path d="M10.8 11.2 L13.8 13.8 L12.9 14.9 L10.1 12.8Z"/>
+    <!-- Legs -->
+    <path d="M8.4 16.4 L7.2 20.8 H9.2 L10.2 16.4Z"/>
+    <path d="M11.6 16.4 L13 20.8 H15 L13.4 16.4Z"/>
+    <!-- Pole -->
+    <rect x="14.6" y="8.8" width="1.2" height="12" rx="0.6"/>
+    <!-- Flag -->
+    <path d="M15.2 9 L21 11.4 L17.6 14.4 Z"/>
+    <!-- Mountain cut in flag -->
+    <path d="M18.2 12.2 l.8-1.2 1.1 1.4Z"/>
+  </g>
+</svg>
+

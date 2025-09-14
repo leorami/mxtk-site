@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
+  <defs><style>
+  .stroke { fill: none; stroke: #111; stroke-width: 12; stroke-linecap: round; stroke-linejoin: round; }
+  .fill { fill: #111; }
+</style></defs>
+  <!-- PREPARE: open map + checklist clipboard -->
+  <!-- Open map -->
+  <path class="stroke" d="M24 176 V80 l48-16 56 20 56-20 48 16 v96 l-48-16 -56 20 -56-20 -48 16 z" />
+  <!-- Fold lines -->
+  <path class="stroke" d="M72 64 V176" />
+  <path class="stroke" d="M128 84 V196" />
+  <path class="stroke" d="M184 64 V176" />
+  <!-- Clipboard -->
+  <rect x="156" y="84" width="76" height="104" rx="8" class="stroke"/>
+  <rect x="172" y="70" width="44" height="20" rx="6" class="fill"/>
+  <!-- Checkmarks -->
+  <path class="stroke" d="M168 116 l8 8 l16 -16" />
+  <path class="stroke" d="M168 144 l8 8 l16 -16" />
+  <path class="stroke" d="M168 172 l8 8 l16 -16" />
+</svg>

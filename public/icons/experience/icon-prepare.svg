@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+  <!-- PREPARE: open book + checklist clipboard -->
+  <g fill="currentColor">
+    <!-- Open book (left/right pages) -->
+    <path d="M3 9c2-1.2 4.5-1.2 6.5 0v6c-2-1.2-4.5-1.2-6.5 0V9zm18 0c-2-1.2-4.5-1.2-6.5 0v6c2-1.2 4.5-1.2 6.5 0V9z"/>
+    <!-- Clipboard body -->
+    <rect x="12.8" y="8.5" width="7.2" height="9.5" rx="1"/>
+    <!-- Clip -->
+    <rect x="14.2" y="7.7" width="4.4" height="1.2" rx="0.6"/>
+    <!-- Checks -->
+    <path d="M14.2 11 l1 1 2-2"/>
+    <path d="M14.2 13.8 l1 1 2-2"/>
+    <path d="M14.2 16.6 l1 1 2-2"/>
+  </g>
+</svg>
+

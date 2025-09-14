@@ -19,7 +19,9 @@ export type WidgetType =
   | 'whats-next'
   | 'note'
   | 'pools-mini'
-  | 'price-mini';
+  | 'price-mini'
+  | 'price-large'
+  | 'pools-table';
 
 export interface WidgetState {
   id: string;

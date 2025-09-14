@@ -1,4 +1,3 @@
-import '@/app/styles/design-tokens.scss';
 import BrandThemeProvider from '@/components/BrandThemeProvider';
 import Favicons from '@/components/Favicons';
 import SiteFooter from '@/components/SiteFooter';
@@ -47,7 +46,7 @@ export const metadata: Metadata = {
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const serverDetected = await getServerBasePath();
-  const basePath = process.env.NEXT_PUBLIC_BASE_PATH || serverDetected || '';
+  const basePath = serverDetected || process.env.NEXT_PUBLIC_BASE_PATH || '';
   const cookieStore = await cookies();
   const hasHome = Boolean(cookieStore.get('mxtk_home_id')?.value)
 

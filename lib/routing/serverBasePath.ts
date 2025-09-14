@@ -4,7 +4,15 @@ export async function getServerBasePath(): Promise<string> {
   const forwarded = h.get('x-forwarded-prefix');
   if (forwarded === '/mxtk') return '/mxtk';
   const store = await cookies();
-  return store.get('bp')?.value || '';
+  const cookieVal = store.get('bp')?.value || '';
+  if (cookieVal === '/mxtk') return '/mxtk';
+  // Fallback: infer from current URL path to avoid SSR/CSR mismatches
+  const currentUrl = h.get('x-current-url') || '';
+  try {
+    const u = new URL(currentUrl);
+    if (u.pathname.startsWith('/mxtk')) return '/mxtk';
+  } catch {}
+  return '';
 }
 
 

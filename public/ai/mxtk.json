@@ -1,0 +1,57 @@
+{
+  "project": "MXTK — Mineral Token",
+  "description": "ERC-20 token backed by verified mineral reserves with institution-grade rails",
+  "token": {
+    "symbol": "MXTK",
+    "type": "ERC-20",
+    "backing": "Verified mineral reserves with validator program"
+  },
+  "pillars": [
+    "Attested reserves with validator program",
+    "Transparent mint/burn logs", 
+    "Institutional integrations for liquidity & reporting"
+  ],
+  "features": {
+    "settlement": "Atomic DvP finalizes in seconds",
+    "custody": "Institution-grade controls and segregation",
+    "transparency": "Independent validators with legal clawback",
+    "compliance": "KYC/AML compliance and regulatory reporting"
+  },
+  "validator_incentives": {
+    "description": "Validators are incentivized through a combination of staking rewards and penalty mechanisms",
+    "rewards": {
+      "base_reward": "Annual staking yield of 4-8% based on network performance",
+      "validation_fees": "Transaction fees from reserve attestations", 
+      "reputation_bonus": "Additional rewards for consistent accurate validations"
+    },
+    "penalties": {
+      "slashing": "Stake reduction for false attestations",
+      "timeout_penalties": "Reduced rewards for delayed validations",
+      "legal_clawback": "Legal recourse for malicious behavior"
+    }
+  },
+  "transparency_mechanisms": {
+    "oracle_logs": "All validator decisions logged on-chain with timestamps",
+    "public_audits": "Regular third-party audits of mineral reserves",
+    "real_time_reporting": "Live dashboard of reserve levels and validator activity",
+    "ipfs_storage": "Immutable storage of validation documents"
+  },
+  "institutional_features": {
+    "custody": "Segregated custody with institutional-grade security",
+    "reporting": "Automated compliance reporting for regulatory requirements", 
+    "integration": "APIs for ERP and treasury management systems",
+    "settlement": "Atomic delivery vs payment with instant finality"
+  },
+  "urls": {
+    "transparency": "/transparency",
+    "institutions": "/institutions",
+    "owners": "/owners", 
+    "whitepaper": "/whitepaper",
+    "ecosystem": "/ecosystem"
+  },
+  "contacts": {
+    "general": "/contact-us",
+    "careers": "/careers"
+  },
+  "lastUpdated": "2024-01-15T00:00:00Z"
+}

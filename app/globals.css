@@ -26,6 +26,13 @@ body {
   scrollbar-gutter: stable both-edges;
 }
 
+/* Guide-open gating: reveal widget controls only when the guide is open */
+html.guide-open .widget-controls,
+html.guide-open .wframe-controls {
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+
 /* Ensure the main shiftable root never creates horizontal overflow. */
 [data-shiftable-root] {
   max-width: 100%;
@@ -37,6 +44,12 @@ body {
 }
 
 /* Section spacing standardization */
+.root {}
+.page {}
+:root {
+  --section-gap-y: 1.25rem;
+  --section-gap-md: 1.5rem;
+}
 .section-spacing {
   padding-top: var(--section-gap-y);
   padding-bottom: var(--section-gap-y);
@@ -47,6 +60,11 @@ body {
     padding-top: var(--section-gap-md);
     padding-bottom: var(--section-gap-md);
   }
+}
+
+/* Ensure sibling sections never touch each other */
+.page main .site-container > section + section {
+  margin-top: var(--section-gap-md);
 }
 
 /* ========= MXTK Design Tokens =========

@@ -72,7 +72,7 @@ export default function PoolsMini({ id, docId, data, refreshKey = 0 }: PoolsMini
     <div className="text-sm">
       <div className="flex items-center justify-between mb-2">
         <div className="text-xs opacity-70">{freshness()}</div>
-        <div className="inline-flex gap-2 wframe-controls" data-nodrag>
+        <div className="inline-flex gap-2 wframe-controls widget-controls opacity-0 pointer-events-none [html.guide-open_&]:opacity-100 [html.guide-open_&]:pointer-events-auto transition-opacity" data-nodrag>
           <button type="button" className="iconbtn" title="Refresh" onMouseDown={(e)=>e.stopPropagation()} onClick={(e)=>{ e.stopPropagation(); void load(); }}>↻</button>
           <button type="button" className="iconbtn" title="Edit" onMouseDown={(e)=>e.stopPropagation()} onClick={(e)=>{ e.stopPropagation(); promptEdit(); }}>✎</button>
         </div>

@@ -28,7 +28,14 @@ export default function AppImage(props: Omit<ImageProps, 'src'> & { src: string 
       return '';
     }
   })();
+  // Prefer server-advertised base path (via css var) to avoid hydration mismatches
   let basePath = (process.env.NEXT_PUBLIC_BASE_PATH || ctxBasePath || '').trim();
+  try {
+    if (typeof document !== 'undefined') {
+      const cssBase = getComputedStyle(document.documentElement).getPropertyValue('--asset-base')?.trim();
+      if (cssBase) basePath = cssBase;
+    }
+  } catch {}
   if (!basePath) { try { basePath = useBasePath() || '' } catch { basePath = '' } }
   const leaf = src.startsWith('/') ? src : `/${src}`;
   const href = `${basePath || ''}${leaf}`;

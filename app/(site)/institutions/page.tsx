@@ -71,7 +71,10 @@ export default async function InstitutionsPage() {
               <div className="absolute right-2 top-2 opacity-0 pointer-events-none [html.guide-open_&]:opacity-100 transition-opacity">
                 <form action={getBasePathUrl('/api/ai/home/pin')} method="post">
                   <input type="hidden" name="id" value="default" />
-                  <input type="hidden" name="widget[type]" value="pools-mini" />
+                  <input type="hidden" name="widget[type]" value="pools-table" />
+                  <input type="hidden" name="widget[data][token]" value={token} />
+                  <input type="hidden" name="widget[size][w]" value="6" />
+                  <input type="hidden" name="widget[size][h]" value="24" />
                   <button type="submit" className="btn-ghost text-xs">Pin to Home</button>
                 </form>
               </div>

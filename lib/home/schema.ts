@@ -14,6 +14,8 @@ const zKnownWidgetType = z.enum([
   'resources',
   'pools-mini',
   'price-mini',
+  'price-large',
+  'pools-table',
 ]);
 export const zWidgetType = z.union([zKnownWidgetType, z.string()])
 

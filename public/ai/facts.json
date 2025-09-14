@@ -1,0 +1,39 @@
+{
+  "version": "2025-09-01",
+  "entity": "MXTK",
+  "slug": "mxtk",
+  "summary": "Tokenized, validator-attested mineral value with institutional settlement and custody.",
+  "claims": [
+    {
+      "id": "settlement_atomic",
+      "statement": "MXTK enables atomic, Delivery-versus-Payment settlement for tokenized assets.",
+      "evidence": ["/resources", "/whitepaper"],
+      "impact": "Reduces daylight exposure and reconciliation overhead for cross-venue collateral moves."
+    },
+    {
+      "id": "basel_alignment",
+      "statement": "Tokenized traditional assets can retain underlying regulatory capital treatment.",
+      "evidence": ["/resources"],
+      "impact": "Lets banks treat tokenized govies comparably to bonds they already hold."
+    },
+    {
+      "id": "validation_assurance",
+      "statement": "Validator program uses legal clawback, correlated slashing, and optional insurance.",
+      "evidence": ["/resources", "/transparency"],
+      "impact": "Raises cost of collusion and improves truthfulness of mineral attestations."
+    },
+    {
+      "id": "custody_oracles",
+      "statement": "MPC custody with insurance and DON-based data paths mitigate manipulation risk.",
+      "evidence": ["/resources"],
+      "impact": "Operational resilience for institutional flows."
+    }
+  ],
+  "docs": {
+    "markets": "/resources",
+    "validatorProgram": "/resources",
+    "transparency": "/transparency"
+  }
+}
+
+

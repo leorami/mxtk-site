@@ -8,7 +8,7 @@
  */
 export function detectBasePath(): string {
   if (typeof window === 'undefined') {
-    // Server-side: use environment variable
+    // Server-side: avoid dynamic APIs here; use env only.
     return process.env.NEXT_PUBLIC_BASE_PATH || ''
   }
   
