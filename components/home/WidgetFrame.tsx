@@ -72,7 +72,7 @@ export default function WidgetFrame({ id, docId, data, title, children, onRefres
   // Removed decorative scroll fades to prevent visual clipping of shadows
 
   return (
-    <div className="relative h-full wframe">
+    <div className="relative h-full wframe" data-testid="wframe">
       {/* Header row: title + actions; actions marked no-drag */}
       <header className="wf-head flex items-center justify-between">
         <div className="wf-title truncate">{localTitle}</div>

@@ -237,6 +237,7 @@ export function GuidePanel({ className, onClose, embedded, prefillPrompt }: Guid
             try {
               localStorage.setItem('mxtkJourneyId', j.id);
             } catch { }
+            try { window.dispatchEvent(new CustomEvent('mxtk:journey:updated', { detail: { id: j.id } })); } catch {}
           }
         }
       } catch { }
