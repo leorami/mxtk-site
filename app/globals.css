@@ -24,6 +24,7 @@ html,
 body {
   overflow-x: clip;
   scrollbar-gutter: stable both-edges;
+  height: 100%;
 }
 
 /* Guide-open gating: reveal widget controls only when the guide is open */

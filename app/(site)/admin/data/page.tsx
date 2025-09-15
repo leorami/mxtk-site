@@ -1,4 +1,5 @@
 'use client';
+import { withBase } from '@/lib/basepath';
 import * as React from 'react';
 
 export default function AdminData() {
@@ -8,7 +9,7 @@ export default function AdminData() {
   async function load() {
     setError(null);
     try {
-      const r = await fetch('/api/data/_diag', { cache: 'no-store' });
+      const r = await fetch(withBase('/api/data/_diag'), { cache: 'no-store' });
       if (!r.ok) throw new Error(String(r.status));
       setDiag(await r.json());
     } catch (e: any) {
@@ -19,7 +20,7 @@ export default function AdminData() {
   async function warm() {
     setError(null);
     try {
-      await fetch('/api/data/_warm', { method: 'POST' });
+      await fetch(withBase('/api/data/_warm'), { method: 'POST' });
       await load();
     } catch (e: any) {
       setError('Warm failed');

@@ -39,7 +39,7 @@ export default function AppImage(props: Omit<ImageProps, 'src'> & { src: string 
   if (!basePath) { try { basePath = useBasePath() || '' } catch { basePath = '' } }
   const leaf = src.startsWith('/') ? src : `/${src}`;
   const href = `${basePath || ''}${leaf}`;
-
+  // Keep root-absolute path to avoid hydration mismatch between SSR and CSR
   return <Image {...rest} src={href} unoptimized />;
 }
 

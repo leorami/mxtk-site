@@ -1,0 +1,9 @@
+{
+  "baseUrl": "https://mineral-token.com/",
+  "host": "mineral-token.com",
+  "timestamp": "2025-09-14T17-23-32.851Z",
+  "totalPages": 1,
+  "depthLimit": 2,
+  "maxPages": 300,
+  "userAgent": "MXTK-Crawler/1.0"
+}

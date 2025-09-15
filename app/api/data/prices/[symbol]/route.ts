@@ -4,8 +4,9 @@ import { NextRequest, NextResponse } from 'next/server'
 
 export const revalidate = 0
 
-export async function GET(req: NextRequest, { params }: { params: { symbol: string } }) {
-  const symbol = (params?.symbol || 'MXTK').toUpperCase()
+export async function GET(req: NextRequest, ctx: { params: Promise<{ symbol: string }> }) {
+  const { symbol: rawSymbol } = await ctx.params
+  const symbol = (rawSymbol || 'MXTK').toUpperCase()
   const url = new URL(req.url)
   const daysParam = url.searchParams.get('days')
   const days = Math.max(1, Math.min(365, Number(daysParam) || 30))

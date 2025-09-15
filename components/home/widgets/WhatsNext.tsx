@@ -1,4 +1,5 @@
 "use client";
+import IconCard from '@/components/ui/IconCard';
 import { getApiPath } from '@/lib/basepath';
 import { useEffect, useMemo, useState } from 'react';
 
@@ -72,40 +73,41 @@ export default function WhatsNext() {
   ];
 
   return (
-    <div className="space-y-3">
-      <p className="text-sm mb-2">Suggested next steps for your journey:</p>
-      <ul className="space-y-2">
-        {items.map((it, i) => (
-          <li key={`${it.href}:${i}`} className="border border-[var(--border-soft)] rounded-lg p-2 hover:bg-[var(--surface-elev-1)] transition-colors">
-            <a href={it.href} className="block">
-              <h4 className="font-medium">{it.title}</h4>
-              <p className="text-xs opacity-80">{it.reason}</p>
-            </a>
-          </li>
-        ))}
-      </ul>
-      {guideOpen && items.length > 0 && (
-        <div className="pt-1">
-          <button
-            type="button"
-            className="btn btn-primary"
-            onClick={async () => {
-              try {
-                const r = await fetch(getApiPath('/api/ai/home/pin'), {
-                  method: 'POST', headers: { 'content-type': 'application/json' },
-                  body: JSON.stringify({ id: docId, widget: { type: 'whats-next', title: 'What\'s Next', size: { w: 4, h: 12 } } })
-                })
-                if (r.ok) {
-                  // log a pin signal
-                  await fetch(getApiPath('/api/ai/signals'), { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ id: `${Date.now().toString(36)}_${Math.random().toString(36).slice(2,6)}`, ts: Date.now(), kind: 'pin', docId }) })
-                }
-              } catch {}
-            }}
-          >
-            Pin to Home
-          </button>
-        </div>
-      )}
+    <div className="p-2">
+      <IconCard faIcon="fa-compass" iconColorClass="text-teal-600" title="What's Next" badges={[{ label: 'All resources', href: '/resources', faIcon: 'fa-arrow-up-right-from-square' }]}> 
+        <div className="text-sm mb-2">Suggested next steps for your journey:</div>
+        <ul className="space-y-2">
+          {items.map((it, i) => (
+            <li key={`${it.href}:${i}`} className="border border-[var(--border-soft)] rounded-lg p-2 hover:bg-[var(--surface-elev-1)] transition-colors">
+              <a href={it.href} className="block">
+                <div className="font-medium">{it.title}</div>
+                <div className="text-xs opacity-80">{it.reason}</div>
+              </a>
+            </li>
+          ))}
+        </ul>
+        {guideOpen && items.length > 0 && (
+          <div className="pt-2">
+            <button
+              type="button"
+              className="btn btn-primary"
+              onClick={async () => {
+                try {
+                  const r = await fetch(getApiPath('/api/ai/home/pin'), {
+                    method: 'POST', headers: { 'content-type': 'application/json' },
+                    body: JSON.stringify({ id: docId, widget: { type: 'whats-next', title: 'What\'s Next', size: { w: 4, h: 12 } } })
+                  })
+                  if (r.ok) {
+                    await fetch(getApiPath('/api/ai/signals'), { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ id: `${Date.now().toString(36)}_${Math.random().toString(36).slice(2,6)}`, ts: Date.now(), kind: 'pin', docId }) })
+                  }
+                } catch {}
+              }}
+            >
+              Pin to Home
+            </button>
+          </div>
+        )}
+      </IconCard>
     </div>
   );
 }

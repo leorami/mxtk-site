@@ -20,8 +20,9 @@ function clampWidget(w: WidgetState): WidgetState {
   return { ...w, size: { w: wW, h: wH }, pos: { x: pX, y: pY } };
 }
 
-export async function GET(_req: Request, { params }: { params: { id: string } }) {
-  const id = params.id || 'default';
+export async function GET(_req: Request, ctx: { params: Promise<{ id: string }> }) {
+  const { id: rawId } = await ctx.params;
+  const id = rawId || 'default';
   try {
     const raw = await getHome(id);
     if (!raw) {
@@ -43,7 +44,8 @@ export async function GET(_req: Request, { params }: { params: { id: string } })
     });
     if (changed) (doc as any).widgets = widgets;
     if (migrated || changed) await putHome(doc);
-    cookies().set('mxtk_home_id', id, { path: '/', httpOnly: false, sameSite: 'lax' });
+    const cookieStore = await cookies();
+    cookieStore.set('mxtk_home_id', id, { path: '/', httpOnly: false, sameSite: 'lax' });
     return NextResponse.json(doc, { headers: NO_STORE });
   } catch (e: any) {
     const detail = e?.stack || e?.message || String(e);
@@ -52,8 +54,9 @@ export async function GET(_req: Request, { params }: { params: { id: string } })
   }
 }
 
-export async function PUT(req: Request, { params }: { params: { id: string } }) {
-  const id = params.id || 'default';
+export async function PUT(req: Request, ctx: { params: Promise<{ id: string }> }) {
+  const { id: rawId } = await ctx.params;
+  const id = rawId || 'default';
   try {
     const body = await req.json().catch(() => null);
     if (!body || typeof body !== 'object') {
@@ -70,8 +73,9 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
   }
 }
 
-export async function PATCH(req: Request, { params }: { params: { id: string } }) {
-  const id = params.id || 'default';
+export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }> }) {
+  const { id: rawId } = await ctx.params;
+  const id = rawId || 'default';
   try {
     const body = await req.json().catch(() => null);
     if (!body || typeof body !== 'object') {

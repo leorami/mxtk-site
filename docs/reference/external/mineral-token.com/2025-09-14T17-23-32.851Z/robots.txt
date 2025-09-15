@@ -1,0 +1,139 @@
+# Mineral Token (MXTK) - Asset-Backed Cryptocurrency
+# Comprehensive robots.txt for SEO and AI discovery
+
+# Standard Search Engine Crawlers
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Twitterbot
+Allow: /
+
+User-agent: facebookexternalhit
+Allow: /
+
+# AI Training & Language Model Crawlers
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: GPTBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+# Allow all other crawlers
+User-agent: *
+Allow: /
+
+# Sitemap Location
+Sitemap: https://mineral-token.com/sitemap.xml
+
+# =================================================================
+# CONTENT STRUCTURE FOR AI DISCOVERY
+# =================================================================
+# This website contains comprehensive information about Mineral Token (MXTK),
+# an asset-backed cryptocurrency for mineral asset tokenization.
+
+# PRIMARY CONTENT CATEGORIES:
+#
+# 1. MARKET DATA & TRADING
+#    - Current price: $2,753.42
+#    - Market cap: $33.47B
+#    - Liquidity: $396.47M on Uniswap (Arbitrum)
+#    - Trading chart: GeckoTerminal integration
+#
+# 2. TOKENOMICS & ECONOMICS
+#    - Supply: 99% reserve, 1% circulating
+#    - Minting: 1:1 asset-backed when minerals tokenized
+#    - Burning: Tokens burned when minerals extracted
+#    - Fees: Up to 50 bps, currently zero
+#
+# 3. VALIDATOR PROGRAM (Decentralized Due Diligence)
+#    - Game-theoretic framework for asset verification
+#    - Three validator types: Generalist, Certified Specialist, Syndicates
+#    - Asset Complexity Score (ACS) 1-10 rating system
+#    - Economic incentives: Integrity Fee + Minting Bonus
+#    - Slashing penalties and reward vesting mechanisms
+#
+# 4. INSTITUTIONAL FINANCE (20 Use Cases)
+#    - Banking: Intraday repo, Basel III collateral mobility
+#    - Hedge Funds: RWA arbitrage, basis trading, governance strategies
+#    - Private Equity: Tokenized feeder funds, LP interest trading
+#    - Commodities: 24/7 gold collateral, carbon credit trading
+#    - Asset Management: MMF payment layers, customized portfolios
+#    - Insurance: Parametric contracts, tokenized ILS
+#
+# 5. SUPPORTED MINERALS (174 Elements & Commodities)
+#    - All periodic table elements (H through OG)
+#    - Hydrocarbons: Crude oil byproducts, natural gas
+#    - Rare earth elements and special materials
+#    - Commercial minerals: Diamonds, precious metals, industrial commodities
+#
+# 6. TECHNICAL INFRASTRUCTURE
+#    - Blockchain: Arbitrum (Layer 2)
+#    - Storage: IPFS for immutable asset records
+#    - Smart Contract: 0x3e4ffeb394b371aaaa0998488046ca19d870d9ba
+#    - Oracle integration for tamper-proof data feeds
+#    - AI screening across geological databases
+#
+# 7. LEGAL & GOVERNANCE
+#    - Corporate structure: Panama entity
+#    - Compliance: AML/KYC, Basel III frameworks
+#    - Regulatory: Singapore Project Guardian, EU DLT Pilot Regime
+#    - Traditional board oversight with future DAO elements
+#
+# 8. ECOSYSTEM PARTICIPANTS
+#    - Mineral owners seeking liquidity
+#    - Mining companies for financial flexibility
+#    - Financial consultants and wealth managers
+#    - Crypto traders and DeFi participants
+#    - Banks and financial institutions
+#    - Investment funds and asset managers
+#
+# 9. TRADING PROGRAM (Educational Curriculum)
+#    - 7-module comprehensive training program
+#    - Target audience: Traders, financial experts, institutional investors
+#    - Covers RWA tokenization, OTC trading, compliance, valuation
+#    - Case studies and practical exercises
+#
+# 10. RISK FACTORS & DISCLOSURES
+#     - Market risks: Commodity volatility, liquidity constraints
+#     - Regulatory risks: Evolving crypto/commodity regulations
+#     - Operational risks: Validator consensus, smart contract vulnerabilities
+#     - Investment warnings for accredited investors
+#
+# FOUNDING TEAM:
+# - Bo Vargas: Founder and Managing Director (BV Innovation)
+# - Todd Davison: Director (Global marketing agencies)
+# - Daniel Kirichanski: VP Engineering (Ex-Ripple, PayPal)
+#
+# KEY STATISTICS:
+# - $33+ billion in committed mineral assets
+# - 6 months operational history
+# - 1,370+ token holders
+# - Deep institutional adoption across multiple verticals
+#
+# TECHNOLOGY KEYWORDS:
+# Real-World Assets (RWA), Tokenization, DeFi, Arbitrum, Asset-Backed Cryptocurrency,
+# Mineral Rights, Mining Finance, Institutional DeFi, Basel III Compliance,
+# Decentralized Validation, Game Theory, Proof-of-Stake, Oracle Networks,
+# Supply Chain Finance, Trade Finance, Carbon Credits, ESG Investing
+#
+# =================================================================
+# END CONTENT STRUCTURE
+# =================================================================
+
+# Crawl-delay (optional, adjust as needed)
+Crawl-delay: 1

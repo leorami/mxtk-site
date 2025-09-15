@@ -1,6 +1,7 @@
 import SectionWrapper from '@/components/SectionWrapper';
 import DashboardContent from '@/components/home/DashboardContent';
 import PageScaffold from '@/components/layout/PageScaffold';
+import Link from 'next/link';
 
 export const dynamic = 'force-dynamic';
 
@@ -15,8 +16,8 @@ export default function DashboardPage() {
       heroAlign="center"
       heroActions={(
         <div className="flex flex-wrap gap-3 justify-center">
-          <a href="/resources" className="btn-soft">Explore resources</a>
-          <a href="/institutions" className="btn-outline">For institutions</a>
+          <Link href="/resources" className="btn-soft">Explore resources</Link>
+          <Link href="/institutions" className="btn-outline">For institutions</Link>
         </div>
       )}
     >

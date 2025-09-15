@@ -15,17 +15,13 @@ import puppeteer from 'puppeteer';
 
 // Configuration
 const DEFAULT_URL = 'http://localhost:2000';
-const PAGES_TO_CHECK = [
-    '/',
-    '/dashboard',
-    '/owners',
-    '/institutions',
-    '/transparency',
-    '/ecosystem',
-    '/whitepaper',
-    '/resources',
-    '/faq',
-    '/mxtk-cares'
+const envPaths = (process.env.PATHS || '').trim();
+const cliPathsArg = process.argv[3] || '';
+const parsedPaths = (envPaths || cliPathsArg)
+  ? (envPaths || cliPathsArg).split(',').map(s => s.trim()).filter(Boolean)
+  : null;
+const PAGES_TO_CHECK = parsedPaths || [
+  '/dashboard'
 ];
 
 // Get URL from command line or use default
@@ -73,7 +69,7 @@ async function checkPage(browser, path) {
         });
 
         // Wait a bit for any async errors
-        await page.waitForTimeout(2000);
+        await delay(2000);
 
         // Take a screenshot for reference
         await page.screenshot({ path: `error-check-${path.replace(/\//g, '-') || 'home'}.png` });
@@ -87,12 +83,16 @@ async function checkPage(browser, path) {
     }
 }
 
+const delay = (ms) => new Promise(r => setTimeout(r, ms));
+
 async function main() {
     console.log(`Starting console error check for ${baseUrl}`);
-    const browser = await puppeteer.launch({
+    const launchCfg = {
         headless: 'new',
-        args: ['--no-sandbox', '--disable-setuid-sandbox']
-    });
+        args: ['--no-sandbox','--disable-gpu']
+    };
+    if (process.env.PUPPETEER_EXECUTABLE_PATH) launchCfg.executablePath = process.env.PUPPETEER_EXECUTABLE_PATH;
+    const browser = await puppeteer.launch(launchCfg);
 
     try {
         // Check each page

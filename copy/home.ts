@@ -8,7 +8,7 @@ export const homeCopy: PageCopy = {
   },
   heroSub: {
     learn:
-      "MXTK turns independently-verified mineral reserves into digital tokens you can hold and use. Think of it as a modern claim on real-world value that’s easy to move, verify, and understand.",
+      "MXTK turns independently-verified mineral reserves into 1:1-backed digital tokens you can hold and use—guided by clear, AI-powered explanations of how it all works.",
     build:
       "MXTK packages validator-attested reserves with audit-friendly provenance and programmable controls—so you can build custody, settlement, and risk tooling on a familiar, institutional stack.",
     operate:
@@ -23,11 +23,11 @@ export const homeCopy: PageCopy = {
       },
       body: {
         learn:
-          "Each token traces back to reports and surveys by qualified professionals. You can see what was verified, by whom, and when.",
+          "Each token traces to independent reports and surveys. You can see what was verified, by whom, and when.",
         build:
-          "Attestations are linked to on-chain identifiers with signed reports, version history, and machine-readable references for downstream systems.",
+          "Attestations link to on-chain IDs with signed reports, version history, and machine-readable references.",
         operate:
-          "DON/oracle proofs + slashing/clawback policy objects reduce information asymmetry and support operational risk controls.",
+          "Oracle proofs plus policy objects (slashing/clawback) reduce information asymmetry and support controls.",
       },
     },
     {

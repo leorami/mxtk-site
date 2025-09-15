@@ -100,7 +100,7 @@ export default function SiteHeader({ hasHome }: { hasHome?: boolean }) {
       <div className="brand-header header-container" style={{ ['--sherpa-pill-bg' as any]: theme?.accent ?? 'var(--mxtk-orange)' }}>
         <div className="mx-auto flex max-w-none items-center justify-between px-4" style={{ height: '76px' }}>
           <div className="flex items-center gap-3">
-            <Link href="/" className="flex items-center justify-center" aria-label="MXTK Home" suppressHydrationWarning>
+            <Link href="/" scroll={false} className="flex items-center justify-center" aria-label="MXTK Home" suppressHydrationWarning>
               <div className="flex items-center justify-center" style={{ position: 'relative', width: 120, height: 36 }}>
                 <AppImage src="/logo-horizontal.png" alt="MXTK logo" fill sizes="120px" priority style={{ objectFit: 'contain' }} />
               </div>
@@ -109,6 +109,7 @@ export default function SiteHeader({ hasHome }: { hasHome?: boolean }) {
             <nav data-testid="nav-links" className="hidden nav:flex items-center justify-center gap-2 relative">
               <Link
                 href="/dashboard"
+                scroll={false}
                 className="nav-link nav-pill px-3 py-2 rounded-lg transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-400/35 ml-2 mr-1 border border-[var(--border-soft)] bg-[var(--surface-card)]/55 text-[var(--ink-strong)] dark:text-[var(--ink-strong)] shadow-[0_0_8px_rgba(0,0,0,0.06)] dark:shadow-[0_0_10px_rgba(255,255,255,0.14)] hover:bg-[var(--surface-card)]/75"
                 suppressHydrationWarning
                 title="Your adaptive Dashboard"
@@ -150,6 +151,7 @@ export default function SiteHeader({ hasHome }: { hasHome?: boolean }) {
                             <Link
                               key={href}
                               href={navHref}
+                              scroll={false}
                               aria-current={isItemActive ? 'page' : undefined}
                               className={`block px-4 py-2.5 text-[15px] hover:bg-[var(--hover-bg)] transition-colors ${isItemActive ? 'font-semibold bg-[var(--hover-bg)]' : ''}`}
                               style={{ ['--hover-bg' as any]: t.hoverBg } as CSSProperties}
@@ -202,6 +204,7 @@ export default function SiteHeader({ hasHome }: { hasHome?: boolean }) {
             {hasHome && (
               <Link
                 href="/dashboard"
+                scroll={false}
                 className="block px-0 py-3 rounded-lg hover:bg-[var(--hover-bg)] font-medium text-base text-[var(--ink-strong)] dark:text-[var(--ink-strong)]"
                 onClick={() => setOpen(false)}
                 suppressHydrationWarning
@@ -221,6 +224,7 @@ export default function SiteHeader({ hasHome }: { hasHome?: boolean }) {
                       <Link
                         key={href}
                         href={navHref}
+                        scroll={false}
                         className={`block px-0 py-3 text-base rounded-lg hover:bg-[var(--hover-bg)] transition-colors text-[var(--ink-strong)] dark:text-[var(--ink-strong)] ${isActive ? 'font-semibold bg-[var(--hover-bg)]' : ''}`}
                         style={{ ['--hover-bg' as any]: themeForRoute(href).hoverBg } as CSSProperties}
                         onClick={() => setOpen(false)}
@@ -269,6 +273,7 @@ export default function SiteHeader({ hasHome }: { hasHome?: boolean }) {
               <div className="space-y-1">
                 <Link
                   href="/media"
+                  scroll={false}
                   className="block px-0 py-3 text-base rounded-lg hover:bg-[var(--hover-bg)] text-[var(--ink-strong)] dark:text-[var(--ink-strong)] opacity-90"
                   onClick={() => setOpen(false)}
                 >
@@ -276,6 +281,7 @@ export default function SiteHeader({ hasHome }: { hasHome?: boolean }) {
                 </Link>
                 <Link
                   href="/the-team"
+                  scroll={false}
                   className="block px-0 py-3 text-base rounded-lg hover:bg-[var(--hover-bg)] text-[var(--ink-strong)] dark:text-[var(--ink-strong)] opacity-90"
                   onClick={() => setOpen(false)}
                 >
@@ -283,6 +289,7 @@ export default function SiteHeader({ hasHome }: { hasHome?: boolean }) {
                 </Link>
                 <Link
                   href="/careers"
+                  scroll={false}
                   className="block px-0 py-3 text-base rounded-lg hover:bg-[var(--hover-bg)] text-[var(--ink-strong)] dark:text-[var(--ink-strong)] opacity-90"
                   onClick={() => setOpen(false)}
                 >
@@ -290,6 +297,7 @@ export default function SiteHeader({ hasHome }: { hasHome?: boolean }) {
                 </Link>
                 <Link
                   href="/contact-us"
+                  scroll={false}
                   className="block px-0 py-3 text-base rounded-lg hover:bg-[var(--hover-bg)] text-[var(--ink-strong)] dark:text-[var(--ink-strong)] opacity-90"
                   onClick={() => setOpen(false)}
                 >

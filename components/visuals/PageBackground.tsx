@@ -1,6 +1,8 @@
 "use client";
 
 import AppImage from '@/components/ui/AppImage';
+import { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 
 type PageKey =
   | "home" | "dashboard" | "owners" | "institutions" | "transparency"
@@ -28,9 +30,13 @@ const MAP: Record<PageKey, string> = {
 
 export default function PageBackground({ page }: { page: PageKey }) {
   const src = `/${MAP[page] || MAP.home}`; // Fallback to home background if page not found
-  return (
-    <div aria-hidden className="fixed inset-0 -z-10">
-      <AppImage src={src} alt="" fill className="object-cover" priority />
-    </div>
+  const [mounted, setMounted] = useState(false)
+  useEffect(() => { setMounted(true) }, [])
+  if (!mounted || typeof document === 'undefined') return null
+  return createPortal(
+    <div aria-hidden className="pointer-events-none fixed inset-0 -z-10" inert>
+      <AppImage src={src} alt="" fill className="object-cover" />
+    </div>,
+    document.body
   );
 }

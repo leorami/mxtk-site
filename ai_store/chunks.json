@@ -229,5 +229,43 @@
     "meta": {
       "source": "admin"
     }
+  },
+  {
+    "id": "mineral-token.com-rendered-index-0",
+    "text": "Mineral Token\n\nDiscover the revolutionary world of MXTK through immersive AI-guided stories. Learn how we're unlocking liquidity for global mineral assets.\n\nAsset-Backed Tokens\n\n1:1 tokenization of verified mineral assets with full transparency\n\nGlobal Liquidity\n\nTrade mineral wealth on crypto exchanges worldwide\n\nPre-Extraction Value\n\nUnlock mineral wealth before extraction - revolutionary market approach\n\nStart Your MXTK Journey\nLearn About Tokenization\n$33B+\nMineral Assets Committed\n1:1\nAsset-Backed Ratio\nGlobal\nMineral Network\n\nUnlocking liquidity for global mineral holdings through innovative 1:1 asset-backed tokenization.\n\nWhitepaper\nLearn\nHow It Works\nRequirements\nFAQ\nConnect\nContact Us\nTelegram\nCareers\n© 2024 Mineral Token. All rights reserved.\nPrivacy Policy\nTerms of Service",
+    "meta": {
+      "source": "mineral-token.com-rendered-index"
+    }
+  },
+  {
+    "id": "mineral-token.com-raw-index-0",
+    "text": "Mineral Token (MXTK) | Asset-Backed Cryptocurrency",
+    "meta": {
+      "source": "mineral-token.com-raw-index"
+    }
+  },
+  {
+    "id": "EXTERNAL_MINERAL_TOKEN_SUMMARY.md-0",
+    "text": "## Mineral Token (mineral-token.com) — Snapshot Summary (2025-09-14)\n\n- **Positioning**: Asset-backed cryptocurrency (MXTK) with AI-guided learning. Emphasis on unlocking liquidity for global mineral assets via 1:1 tokenization.\n- **Key Claims**:\n  - **$33B+ mineral assets committed**\n  - **1:1 asset-backed ratio**\n  - Global mineral network; pre-extraction value unlocked\n  - Transparency and how-it-works/requirements/FAQ resources\n- **Primary CTAs**: Whitepaper, Learn, How It Works, Requirements, FAQ, Contact/Telegram, Careers.\n  \n### Home Render (SPA)\nSource: `docs/reference/external/mineral-token.com/<timestamp>/rendered/index.rendered.txt`\n\nHighlights:\n- “Discover the revolutionary world of MXTK through immersive AI-guided stories.”\n- “1:1 tokenization of verified mineral assets with full transparency.”\n- “$33B+ Mineral Assets Committed.”\n- Links to Whitepaper, Learn, How It Works, Requirements, FAQ.\n\n### Bot Q&A (Automated Attempt)\nSource: `docs/reference/external/mineral-token.com/<timestamp>/bot/transcript.json`\n\n- Result: Chat input not automatically detected by generic auditor. Manual pass or widget-specific selectors may be required to capture answers.\n- Questions attempted include backing specifics, audits, participation, retail access, fees/liquidity/redemption, pricing/oracles, and risk/mitigations.\n\n### Gaps/Follow-ups\n- Confirm the $33B+ figure provenance, date, and supporting documentation.\n- Identify audit reports, oracle sources, and redemption mechanics documentation.\n- Determine eligibility and compliance flows (institutional vs retail), jurisdictional constraints.\n- Capture and parse whitepaper highlights to reconcile with MXTK site content.\n\n### Proposed Integration to mxtk-site\n- Add a “At-a-Glance” stats widget reflecting: $33B+ committed, 1:1 ratio, global network (with provenance links).\n- Expand “How It Works” with a 1:1 tokenization stepper and transparency references (logs, oracle data, OTC aggregates).\n- Ensure light/dark theme support and accessibility for all new widgets; test with our auditor.\n- Add AI-guided “journeys” language to hero/learn sections to align positioning.\n\n### Compliance/Transparency Alignment\n- Link to transparency features (IPFS proofs, oracle logs, OTC aggregates) and ensure data freshness.\n- Add risk disclosures aligned with financial compliance requirements.\n\n\n",
+    "meta": {
+      "source": "EXTERNAL_MINERAL_TOKEN_SUMMARY.md",
+      "section": "Mineral Token (mineral-token.com) — Snapshot Summary (2025-09-14)"
+    }
+  },
+  {
+    "id": "EXTERNAL_MINERAL_TOKEN_COPY_RECOMMENDATIONS.md-0",
+    "text": "## Copy Recommendations Based on mineral-token.com Snapshot\n\n### Beginner (Overview)\n- What is MXTK? Asset-backed cryptocurrency linked 1:1 to verified mineral assets. Designed to unlock liquidity globally — even before extraction.\n- Why it matters: Converts real-world mineral commitments into digital tokens for transparent, global access.\n- Key points to feature:\n  - $33B+ mineral assets committed\n  - 1:1 asset-backed ratio\n  - Transparency and audits (link to proofs)\n\nSuggested hero body:\n“MXTK turns verified mineral asset value into transparent, 1:1-backed digital tokens. Explore how global mineral holders unlock liquidity and how you can participate.”\n\n### Intermediate (How It Works)\n1. Asset verification and onboarding (geological reports, legal title, valuation methodology).\n2. 1:1 tokenization and custody (escrow/controls, on-chain issuance).\n3. Ongoing transparency (oracle feeds, custody attestations, OTC aggregates).\n4. Liquidity and redemption mechanics (venues, settlement, fees, KYC/AML).\n\nCTA set: Whitepaper • Requirements • FAQ • Transparency\n\n### Expert (Details & Risk)\n- Backing specifics: custody structure, rehypothecation limits, revaluation cadence, impairment treatment.\n- Pricing/oracle methodology: sources, fallback logic, update intervals, circuit breakers.\n- Redemption: eligibility, timelines, costs, partial fills.\n- Compliance: jurisdictions, accreditation, disclosures.\n- Risk & mitigations: market, legal, operational, oracle, custody.\n\n### Widgets\n- StatsBar: `$33B+ committed` • `1:1 ratio` • `Global network` (with tooltips linking to proofs).\n- How-It-Works Stepper: 4 steps with short copy and deep links to docs.\n- Transparency Panel: live oracle price, last audit timestamp, OTC aggregation summary.\n- Journey/Guide Teaser: “Learn through AI-guided stories.”\n\n### Notes\n- Replace placeholders in `lib/placeholders.ts` with updated figures once verified.\n- Ensure WCAG 2.1 AA and theme parity; integrate into `components/ui/` patterns.\n\n\n",
+    "meta": {
+      "source": "EXTERNAL_MINERAL_TOKEN_COPY_RECOMMENDATIONS.md",
+      "section": "Copy Recommendations Based on mineral-token.com Snapshot"
+    }
+  },
+  {
+    "id": "SITE_ALIGNMENT_AUDIT.md-0",
+    "text": "## Site Alignment Audit — mineral-token.com parity (2025-09-14)\n\n### Sources\n- Snapshot (rendered/html): `docs/reference/external/mineral-token.com/<ts>/`\n- Bot transcript attempt: `docs/reference/external/mineral-token.com/<ts>/bot/`\n- Summaries: `EXTERNAL_MINERAL_TOKEN_SUMMARY.md`, `EXTERNAL_MINERAL_TOKEN_COPY_RECOMMENDATIONS.md`\n\n### Implemented\n- Crawl/render/archive external homepage; add summary/copy docs.\n- Chat ingest tooling integrated into auditor stack (transcript + screenshot artifacts).\n- External rendered text ingested into embeddings; full re-embed performed.\n- Homepage alignment:\n  - Added `components/home/StatsBar.tsx` with `$33B+ / 1:1 / Global` (preview tagged, source noted).\n  - Tweaked home hero subcopy to mention 1:1-backed and AI-guided explanations.\n\n### Outstanding (follow-ups)\n- Bot capture: provider-specific selectors needed (current transcript shows no auto-detected input). Action: inspect production widget markup or share provider details to finalize selectors.\n- Provenance links: replace preview/source labels with links to proofs once available (IPFS, audits, oracle logs, OTC aggregates).\n- Owners/resources pages: include AI-guided teaser and stepper links consistent with external site messaging.\n\n### Checks\n- Build: ok (dev); navigation regression: passed.\n- Vector store: re-embedded with current embedder; total chunks updated.\n",
+    "meta": {
+      "source": "SITE_ALIGNMENT_AUDIT.md",
+      "section": "Site Alignment Audit — mineral-token.com parity (2025-09-14)"
+    }
   }
 ]

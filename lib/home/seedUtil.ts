@@ -43,7 +43,7 @@ export function adaptDocWithPresets(doc: HomeDoc, mode: Mode): HomeDoc {
   const mkId = (base: string) => { let n = 1; let out = base; while (used.has(out)) { n++; out = `${base}-${n}` } used.add(out); return out }
   const adds: WidgetState[] = []
   for (const p of presets) {
-    const key = `${p.section}::${p.type}`
+    const key = `${p.section}::${p.type}` 
     if (existingPairs.has(key)) continue
     const wid = mkId(`w-${p.type}-${p.section}`)
     adds.push({ id: wid, type: p.type as any, title: p.title, sectionId: p.section, pos: { ...p.pos }, size: { ...p.size }, data: p.data ? { ...p.data } : undefined } as any)

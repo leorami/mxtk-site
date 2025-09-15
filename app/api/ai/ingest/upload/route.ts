@@ -1,7 +1,6 @@
 import { textToChunks } from '@/lib/ai/chunk';
 import { embedAndLog } from '@/lib/ai/embed';
 import { loadVectorStore, saveVectorStore } from '@/lib/ai/vector-store';
-import mammoth from 'mammoth';
 import { NextRequest, NextResponse } from 'next/server';
 // Use pdfjs-dist at runtime to avoid test file path assumptions in pdf-parse
 
@@ -25,6 +24,8 @@ export async function POST(req: NextRequest) {
                 const buf = Buffer.from(await f.arrayBuffer());
                 let text = '';
                 if (name.endsWith('.docx')) {
+                    const mammoth = await import('mammoth').then(m => (m as any).default || m).catch(() => null as any);
+                    if (!mammoth) { details.push({ name: f.name, error: 'docx support unavailable' }); continue; }
                     const r = await mammoth.extractRawText({ buffer: buf });
                     text = r.value || '';
                 } else if (name.endsWith('.pdf')) {

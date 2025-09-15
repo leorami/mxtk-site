@@ -8,9 +8,11 @@ import PageTheme from '@/components/theme/PageTheme'
 import { useCopy } from '@/components/copy/Copy'
 import ModeChangeFX from '@/components/experience/ModeChangeFX'
 import ModeTextSwap from '@/components/experience/ModeTextSwap'
+import StatsBar from '@/components/home/StatsBar'
 import JsonLd from '@/components/seo/JsonLd'
 import { faqJsonLd } from '@/components/seo/faq'
 import Card from '@/components/ui/Card'
+import IconCard from '@/components/ui/IconCard'
 import { KeyPoint, KeyPointsGrid } from '@/components/ui/KeyPoints'
 import PageBackground from '@/components/visuals/PageBackground'
 
@@ -65,49 +67,27 @@ export default function Home() {
             <Link className="btn-primary" href={href('transparency')} suppressHydrationWarning style={{ ['--accent' as any]: 'var(--mxtk-orange)' }}>Trust & Transparency</Link>
             <Link className="btn-primary" href={href('ecosystem')} suppressHydrationWarning style={{ ['--accent' as any]: 'var(--mxtk-orange)' }}>See the Ecosystem</Link>
           </div>
+          <StatsBar />
           
         </SectionWrapper>
 
-        {/* Key Features */}
+        {/* Key Features (icon cards) */}
         <SectionWrapper index={1}>
-          <Card tint="amber">
-            <div className="grid md:grid-cols-2 gap-6 md:gap-8">
-              <div>
-                <ModeTextSwap
-                  as="h2"
-                  depKey={`p0-title-${mode}`}
-                  className="text-2xl font-semibold mb-6"
-                  content={pageCopy.pillars?.[0]?.title[contentMode]}
-                />
-                <ModeTextSwap
-                  as="p"
-                  depKey={`p0-body-${mode}`}
-                  className="text-muted mb-4"
-                  content={pageCopy.pillars?.[0]?.body[contentMode]}
-                />
-                <div className="mt-2">
-                  <Link className="btn-link" href={href('whitepaper')} suppressHydrationWarning>How MXTK works</Link>
-                </div>
-              </div>
-              <div>
-                <ModeTextSwap
-                  as="h2"
-                  depKey={`p1-title-${mode}`}
-                  className="text-2xl font-semibold mb-6"
-                  content={pageCopy.pillars?.[1]?.title[contentMode]}
-                />
-                <ModeTextSwap
-                  as="p"
-                  depKey={`p1-body-${mode}`}
-                  className="text-muted mb-4"
-                  content={pageCopy.pillars?.[1]?.body[contentMode]}
-                />
-                <div className="mt-2">
-                  <Link className="btn-link" href={href('transparency')} suppressHydrationWarning>Visit hub</Link>
-                </div>
-              </div>
-            </div>
-          </Card>
+          <div className="grid md:grid-cols-3 gap-6 md:gap-8">
+            <IconCard faIcon="fa-shield-halved" iconColorClass="text-emerald-600" title={pageCopy.pillars?.[0]?.title[contentMode] || ''}>
+              {pageCopy.pillars?.[0]?.body[contentMode] || ''}
+            </IconCard>
+            <IconCard faIcon="fa-gears" iconColorClass="text-sky-600" title={pageCopy.pillars?.[1]?.title[contentMode] || ''}>
+              {pageCopy.pillars?.[1]?.body[contentMode] || ''}
+            </IconCard>
+            <IconCard faIcon="fa-rocket" iconColorClass="text-amber-600" title={pageCopy.pillars?.[2]?.title[contentMode] || ''}>
+              {pageCopy.pillars?.[2]?.body[contentMode] || ''}
+            </IconCard>
+          </div>
+          <div className="mt-4 flex gap-4 justify-center">
+            <Link className="btn-link" href={href('whitepaper')} suppressHydrationWarning>How MXTK works</Link>
+            <Link className="btn-link" href={href('transparency')} suppressHydrationWarning>Visit hub</Link>
+          </div>
         </SectionWrapper>
 
         {/* Ecosystem Overview */}

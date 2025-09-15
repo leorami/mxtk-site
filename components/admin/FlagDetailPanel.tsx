@@ -1,4 +1,5 @@
 "use client";
+import { withBase } from '@/lib/basepath';
 import { useEffect, useState } from 'react';
 
 type Detail = {
@@ -25,7 +26,7 @@ export default function FlagDetailPanel({ id, onClose, onAction }: { id: string;
   useEffect(() => {
     let alive = true;
     (async () => {
-      const r = await fetch(`/api/ai/flags/${id}`, { headers: { 'cache-control': 'no-store' } });
+      const r = await fetch(withBase(`/api/ai/flags/${id}`), { headers: { 'cache-control': 'no-store' } });
       if (alive) setData(r.ok ? await r.json() : null);
     })();
     return () => {
@@ -50,7 +51,7 @@ export default function FlagDetailPanel({ id, onClose, onAction }: { id: string;
           <pre className="text-xs max-h-48 overflow-auto bg-transparent">{JSON.stringify(data.metadata || {}, null, 2)}</pre>
           <div className="text-xs opacity-70 mt-2">Links</div>
           <ul className="text-sm list-disc pl-4">
-            {data.journeyId && <li>Journey: <a className="underline" href={`/journey?id=${encodeURIComponent(data.journeyId)}`}>{data.journeyId}</a></li>}
+            {data.journeyId && <li>Journey: <a className="underline" href={withBase(`/journey?id=${encodeURIComponent(data.journeyId)}`)}>{data.journeyId}</a></li>}
             {data.messageId && <li>Message: <a className="underline" href={`#message-${encodeURIComponent(data.messageId)}`}>{data.messageId}</a></li>}
           </ul>
         </div>

@@ -13,6 +13,7 @@ import GuideHost from '@/components/ai/GuideHost';
 import GuideBootStyle from '@/components/chrome/GuideBootStyle';
 import JsonLd from '@/components/seo/JsonLd';
 import { getBasePathUrl } from '@/lib/basepath';
+import '@fortawesome/fontawesome-free/css/all.min.css';
 import type { Metadata } from 'next';
 import { Roboto, Space_Grotesk } from 'next/font/google';
 import { cookies } from 'next/headers';
@@ -30,6 +31,7 @@ const roboto = Roboto({
   weight: ['300', '400', '500', '700'],
   display: 'swap',
   variable: '--font-roboto',
+  preload: false, // Avoid preload warnings when not used within a few seconds
 });
 
 const grotesk = Space_Grotesk({
@@ -37,6 +39,7 @@ const grotesk = Space_Grotesk({
   weight: ['400', '500', '700'],
   display: 'swap',
   variable: '--font-display',
+  preload: false, // Avoid preload warnings for display font
 });
 
 export const metadata: Metadata = {
@@ -54,7 +57,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     <html lang="en" className={`${roboto.variable} ${roboto.className} ${grotesk.variable}`} suppressHydrationWarning>
       <head>
         <GuideBootStyle />
-        <Favicons />
+        <Favicons basePath={basePath} />
         {/* Ensure preloaded fonts carry crossorigin hints to satisfy Chrome */}
         <Script id="font-preload-cors" strategy="beforeInteractive">{`
           try {
