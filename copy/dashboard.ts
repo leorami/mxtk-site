@@ -10,7 +10,7 @@ export const dashboardCopy: PageCopy = {
 
     heroSub: {
         learn:
-            "Pin helpful widgets, follow guided suggestions, and learn as you go. Everything adapts to your experience level.",
+            "Pin helpful widgets, follow guided suggestions, and learn as you go. Everything adapts to your Journey Stage.",
         build:
             "Mode-aware panels group docs, examples, and live data so you can integrate quickly and prove flows end-to-end.",
         operate:
@@ -25,7 +25,7 @@ export const dashboardCopy: PageCopy = {
     },
     adaptSub: {
         learn:
-            "Choose your experience in the header—Learn, Build, or Operate—and the dashboard updates copy and suggestions.",
+            "Choose your Journey Stage in the header—Training, Preparing, or Conquer—and the dashboard updates copy and suggestions.",
         build:
             "Switch modes to change the suggestions and defaults. Your pinned widgets stay put.",
         operate:
@@ -89,7 +89,7 @@ export const dashboardCopy: PageCopy = {
             },
             paragraphs: {
                 learn: [
-                    "Choose your experience in the header—Learn, Build, or Operate—and the dashboard updates copy and suggestions.",
+                    "Choose your Journey Stage in the header—Training, Preparing, or Conquer—and the dashboard updates copy and suggestions.",
                     "As you interact, we keep what you use most and suggest what’s missing. You can always undo changes.",
                 ],
                 build: [

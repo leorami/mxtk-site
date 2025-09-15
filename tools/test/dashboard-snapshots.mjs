@@ -1,6 +1,6 @@
-import puppeteer from 'puppeteer'
 import fs from 'fs'
 import path from 'path'
+import puppeteer from 'puppeteer'
 
 async function main(){
   const baseUrl = process.env.BASE_URL || 'http://localhost:2000'

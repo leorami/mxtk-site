@@ -19,6 +19,66 @@
 /* Guard: never underline text inside actual buttons */
 button, .btn, [role="button"]{ text-decoration:none; }
 button a, .btn a{ text-decoration:none !important; border-bottom:0 !important; }
+
+/* Footer Dock (mobile) */
+.footer-dock {
+  position: fixed;
+  left: 0; right: 0; bottom: 0;
+  z-index: 60;
+  display: none; /* mobile-only */
+}
+
+@media (max-width: 640px){
+  .footer-dock { display: block; }
+}
+
+.footer-dock__inner{
+  margin: 0 auto;
+  max-width: 1100px;
+  padding: 8px 12px;
+  padding-bottom: calc(8px + env(safe-area-inset-bottom, 0px));
+}
+
+.footer-dock__inner > div{
+  display:flex; align-items:center; justify-content:space-between;
+  gap: 12px;
+}
+
+.footer-dock {
+  pointer-events: none; /* container ignores */
+}
+.footer-dock__inner {
+  pointer-events: auto; /* content interactive */
+}
+
+.footer-dock .footer-dock__left,
+.footer-dock .footer-dock__right{
+  background: var(--glass-bg, rgba(255,255,255,.72));
+  border: 1px solid var(--glass-border, rgba(0,0,0,.08));
+  border-radius: 16px;
+  box-shadow: var(--shadow-lift-sm);
+  backdrop-filter: blur(14px) saturate(1.08);
+  -webkit-backdrop-filter: blur(14px) saturate(1.08);
+}
+
+.footer-dock .footer-dock__left{ padding: 6px 8px; }
+.footer-dock .footer-dock__right{ padding: 4px; }
+
+.footer-dock.footer-dock--hidden { transform: translateY(120%); transition: transform .22s ease; }
+.footer-dock { transform: translateY(0); transition: transform .22s ease; }
+
+/* Ensure page content isn't obscured when dock present (only below md) */
+@media (max-width: 640px){
+  html.footer-dock-present body > main { padding-bottom: calc(64px + env(safe-area-inset-bottom, 0px)); }
+}
+
+/* Stacked tables on mobile without DOM duplication */
+@media (max-width: 640px){
+  .stacked-mobile table thead { display: none; }
+  .stacked-mobile table tbody tr.data-row { display: grid; grid-template-columns: 1fr; gap: 6px; padding: 10px 8px; border-bottom: 1px solid var(--border-soft); }
+  .stacked-mobile table tbody tr.data-row td { display: grid; grid-template-columns: 120px 1fr; align-items: center; gap: 8px; padding: 6px 4px; }
+  .stacked-mobile table tbody tr.data-row td::before { content: attr(data-label); color: var(--ink-muted); font-size: 12px; }
+}
 /* PageScaffold — shared content page template */
 .page-scaffold {
     min-height: calc(100dvh - var(--nav-height) - var(--footer-height));

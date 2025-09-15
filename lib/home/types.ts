@@ -32,6 +32,10 @@ export interface WidgetState {
   pos: { x: number; y: number };  // zero-based col/row
   pinned?: boolean;
   data?: Record<string, unknown>;
+  // Optional metadata for recommendations
+  stages?: ('training'|'preparing'|'conquer')[];
+  priority?: number;
+  mobileFriendly?: boolean;
 }
 
 /** Legacy V1 (no sections) */

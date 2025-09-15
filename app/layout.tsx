@@ -10,7 +10,9 @@ import ExperienceProvider from '@/components/experience/ExperienceProvider';
 import { getServerBasePath } from '@/lib/routing/serverBasePath';
 
 import GuideHost from '@/components/ai/GuideHost';
+import FooterDock from '@/components/chrome/FooterDock';
 import GuideBootStyle from '@/components/chrome/GuideBootStyle';
+import { ToastProvider } from '@/components/ui/Toast';
 import JsonLd from '@/components/seo/JsonLd';
 import { getBasePathUrl } from '@/lib/basepath';
 import '@fortawesome/fontawesome-free/css/all.min.css';
@@ -158,23 +160,27 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       <body className="page min-h-dvh flex flex-col" suppressHydrationWarning>
         <BasePathProvider value={basePath}>
         <ExperienceProvider>
-          <PageChromeVars />
-          <SiteHeader hasHome={hasHome} />
-          <main data-shiftable-root style={{ overflowX: "visible" }} className="relative z-10 flex-1 min-h-0">
-            <div className="site-container mx-auto w-full max-w-screen-xl px-4 sm:px-6 lg:px-8">
-              <BrandThemeProvider>
-                {children}
-              </BrandThemeProvider>
-
-            </div>
-          </main>
-          <SiteFooter />
-          {/* FooterChatBarMountEffect removed - chat moved to drawer */}
-          {/* Lift overlay behind content (driven by html[data-lift]) */}
-          <div aria-hidden className="page-lift" />
-          {/* Dev switcher moved to footer */}
-          {/* Wave 4/5: Drawer host only (top-right panel disabled) */}
-          <GuideHost />
+          <ToastProvider>
+            <PageChromeVars />
+            <SiteHeader hasHome={hasHome} />
+            <main data-shiftable-root style={{ overflowX: "visible" }} className="relative z-10 flex-1 min-h-0">
+              <div className="site-container mx-auto w-full max-w-screen-xl px-4 sm:px-6 lg:px-8">
+                <BrandThemeProvider>
+                  {children}
+                </BrandThemeProvider>
+            
+              </div>
+            </main>
+            <SiteFooter />
+            {/* FooterChatBarMountEffect removed - chat moved to drawer */}
+            {/* Lift overlay behind content (driven by html[data-lift]) */}
+            <div aria-hidden className="page-lift" />
+            {/* Dev switcher moved to footer */}
+            {/* Wave 4/5: Drawer host only (top-right panel disabled) */}
+            <GuideHost />
+            {/* Mobile footer dock */}
+            <FooterDock />
+          </ToastProvider>
         </ExperienceProvider>
         </BasePathProvider>
       </body>

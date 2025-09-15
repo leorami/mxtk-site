@@ -2,7 +2,7 @@
 import { promises as fs } from 'fs'
 import path from 'path'
 import type { HomeDoc, HomeSnapshot, HomeSnapshotMeta } from '../types'
-import { getHome, putHome } from './fileStore'
+import { putHome } from './fileStore'
 
 const ROOT = process.cwd()
 const SNAP_ROOT = path.join(ROOT, 'ai_store', 'homes', 'snapshots')

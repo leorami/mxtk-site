@@ -12,6 +12,7 @@ import WhatsNext from '@/components/home/widgets/WhatsNext';
 import { getApiPath } from '@/lib/basepath';
 import type { HomeDoc, WidgetState } from '@/lib/home/types';
 import * as React from 'react';
+import { useToast } from '@/components/ui/Toast';
 
 type GridProps = {
   doc: HomeDoc;                              // expects V2 with sections + widgets
@@ -46,6 +47,17 @@ function useGuideOpen(): boolean {
 export default function Grid({ doc, render, onPatch }: GridProps) {
   const guideOpen = useGuideOpen();
   const containerRef = React.useRef<HTMLDivElement | null>(null);
+  const { show } = useToast();
+  const [isMobile, setIsMobile] = React.useState<boolean>(false);
+
+  React.useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const mql = window.matchMedia('(max-width:640px)');
+    const update = () => setIsMobile(!!mql.matches);
+    update();
+    try { mql.addEventListener('change', update); } catch { mql.addListener(update); }
+    return () => { try { mql.removeEventListener('change', update); } catch { mql.removeListener(update); } };
+  }, []);
 
   // Local working copy so drag/resize updates re-render immediately
   const [widgets, setWidgets] = React.useState<WidgetState[]>(doc.widgets);
@@ -254,6 +266,13 @@ export default function Grid({ doc, render, onPatch }: GridProps) {
   }, [widgets, queuePatch]);
 
   function startDrag(e: React.PointerEvent, w: WidgetState) {
+    // Mobile lockout regardless of guide state
+    if (isMobile) {
+      e.preventDefault();
+      e.stopPropagation();
+      show('Edit layout on tablet/desktop.');
+      return;
+    }
     // Gate to Guide open and honor data-nodrag
     if (!guideOpen) return;
     const t = e.target as HTMLElement;
@@ -267,6 +286,12 @@ export default function Grid({ doc, render, onPatch }: GridProps) {
   }
 
   function startResize(e: React.PointerEvent, w: WidgetState, dir: 'br'|'tr'|'bl'|'tl' = 'br') {
+    if (isMobile) {
+      e.preventDefault();
+      e.stopPropagation();
+      show('Edit layout on tablet/desktop.');
+      return;
+    }
     if (!guideOpen) return;
     e.stopPropagation();
     const t = e.target as HTMLElement;

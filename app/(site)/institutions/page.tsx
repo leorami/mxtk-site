@@ -67,7 +67,7 @@ export default async function InstitutionsPage() {
               <h2 className="text-2xl font-semibold">Liquidity & On-chain Addresses</h2>
             </div>
             <div className="relative">
-              <DataTableGlass rows={data.data || []} updatedAt={updatedAt} ttl={ttl} />
+              <DataTableGlass rows={data.data || []} updatedAt={updatedAt} ttl={ttl} stackedMobile />
               <div className="absolute right-2 top-2 opacity-0 pointer-events-none [html.guide-open_&]:opacity-100 transition-opacity">
                 <form action={getBasePathUrl('/api/ai/home/pin')} method="post">
                   <input type="hidden" name="id" value="default" />

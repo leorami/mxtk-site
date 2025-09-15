@@ -293,6 +293,9 @@ html.guide-open .wframe-controls{ opacity:1 !important; visibility:visible !impo
 /* Limit grab cursor to the header (drag handle) only */
 html.guide-open .wf-head{ cursor: grab; }
 html.guide-open .wf-head:active{ cursor: grabbing; }
+@media (max-width: 640px){
+  .wf-head{ cursor: default !important; }
+}
 
 .iconbtn{ width:18px; height:18px; border-radius:999px; display:grid; place-items:center; border:1px solid rgba(255,255,255,0.35); background: rgba(0,0,0,0.25); color:#fff; font-size:12px; line-height:1; }
 html.light .iconbtn{ border-color: rgba(0,0,0,0.18); background: rgba(255,255,255,0.45); color:#222; }

@@ -1,4 +1,4 @@
-import { listSignals } from '@/lib/home/signals';
+import type { WidgetState } from './types';
 
 export type Recommendation = { title: string; href: string; reason: string; score: number }
 
@@ -27,6 +27,7 @@ const CANDIDATES: { title: string; href: string; key: string; reason: (counts: R
 
 export async function getRecommendations(docId: string, limit = 5): Promise<Recommendation[]> {
   const now = Date.now()
+  const { listSignals } = await import('./signals')
   const sigs = await listSignals({ sinceMs: now - 7 * 24 * 60 * 60 * 1000 })
   const relevant = sigs.filter(s => s.docId === docId)
 
@@ -49,5 +50,8 @@ export async function getRecommendations(docId: string, limit = 5): Promise<Reco
   items.sort((a, b) => b.score - a.score)
   return items.slice(0, Math.max(1, Math.min(limit, items.length)))
 }
+
+// Basic widget scoring helper for Overview selection
+// moved to overviewScore to avoid importing fs on client bundles
 
 

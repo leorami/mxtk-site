@@ -3,26 +3,30 @@ import AppImage from "@/components/ui/AppImage";
 import { useExperience } from "./ClientExperience";
 
 const modes = [
-  { value: "learn", label: "Train", src: "/icons/experience/icon-learn.svg" },
-  { value: "build", label: "Prepare", src: "/icons/experience/icon-build.svg" },
+  { value: "learn", label: "Training", src: "/icons/experience/icon-learn.svg" },
+  { value: "build", label: "Preparing", src: "/icons/experience/icon-build.svg" },
   { value: "operate", label: "Conquer", src: "/icons/experience/icon-operate.svg" },
 ] as const;
 
-export default function ExperienceToggle() {
+type ExperienceToggleProps = {
+  size?: 'default' | 'compact';
+};
+
+export default function ExperienceToggle({ size = 'default' }: ExperienceToggleProps) {
   const { mode, setMode } = useExperience();
   return (
     <div
-      className="experience-toggle"
       className={[
+        "experience-toggle",
         "flex items-center gap-1 rounded-full",
-        "px-1 py-1",
+        size === 'compact' ? 'px-0.5 py-0.5' : 'px-1 py-1',
         "glass",
         "bg-[var(--accent,#ffb84d)]/10",
         "border border-[var(--accent,#ffb84d)]/25",
         "shadow-sm"
       ].join(" ")}
       role="group"
-      aria-label="Experience mode"
+      aria-label="Journey Stage"
     >
       {modes.map((m) => {
         const selected = mode === m.value;
@@ -31,14 +35,16 @@ export default function ExperienceToggle() {
             key={m.value}
             onClick={() => setMode(m.value)}
             aria-pressed={selected}
+            aria-label={`Journey Stage: ${m.label}`}
             className={[
-              "px-3 rounded-full text-sm transition flex items-center justify-center",
+              (size === 'compact' ? 'px-2' : 'px-3'),
+              "rounded-full text-sm transition flex items-center justify-center",
               "focus:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--mxtk-orange)_60%,transparent)]",
               selected
                 ? "bg-[color-mix(in_srgb,var(--mxtk-orange)_80%,transparent)] dark:bg-[color-mix(in_srgb,var(--mxtk-orange)_80%,transparent)] shadow-sm"
                 : "opacity-85 hover:opacity-100"
             ].join(" ")}
-            title={m.label}
+            title={`Journey Stage: ${m.label}`}
           >
             <span className="inline-flex items-center justify-center w-7 h-7">
               <AppImage

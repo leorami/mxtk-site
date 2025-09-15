@@ -19,6 +19,17 @@ function uniqueIdFactory() {
 export function buildSeedDocFromPresets(id: string, mode: Mode): HomeDoc {
   const presets: PresetItem[] = PRESETS_V2[mode] || []
   const mkId = uniqueIdFactory()
+  const META: Record<string, Partial<WidgetState>> = {
+    'whats-next': { stages: ['training','preparing','conquer'], priority: 5, mobileFriendly: true } as any,
+    'recent-answers': { stages: ['training'], priority: 3, mobileFriendly: true } as any,
+    'resources': { stages: ['training','preparing','conquer'], priority: 4, mobileFriendly: true } as any,
+    'price-large': { stages: ['preparing','conquer'], priority: 3, mobileFriendly: true } as any,
+    'pools-table': { stages: ['preparing','conquer'], priority: 4, mobileFriendly: true } as any,
+    'pools-mini': { stages: ['preparing','conquer'], priority: 3, mobileFriendly: true } as any,
+    'price-mini': { stages: ['preparing','conquer'], priority: 2, mobileFriendly: true } as any,
+    'glossary-spotlight': { stages: ['training'], priority: 3, mobileFriendly: true } as any,
+    'note': { stages: ['training'], priority: 1, mobileFriendly: true } as any,
+  }
   const widgets: WidgetState[] = presets.map(p => ({
     id: mkId(`w-${p.type}-${p.section}`),
     type: p.type as any,
@@ -27,6 +38,7 @@ export function buildSeedDocFromPresets(id: string, mode: Mode): HomeDoc {
     pos: { ...p.pos },
     size: { ...p.size },
     data: p.data ? { ...p.data } : undefined,
+    ...(META[p.type] || {})
   })) as any
   const doc: HomeDoc = { id, layoutVersion: 2, sections: DEFAULT_SECTIONS, widgets }
   return doc

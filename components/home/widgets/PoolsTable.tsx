@@ -60,7 +60,7 @@ export default function PoolsTable({ id, data }: Props) {
 
   return (
     <div className="relative">
-      <DataTableGlass rows={rows} updatedAt={updatedAt} ttl={ttl} />
+      <DataTableGlass rows={rows} updatedAt={updatedAt} ttl={ttl} stackedMobile />
       {/* Guide-only settings */}
       <div className="absolute right-2 top-2 opacity-0 pointer-events-none [html.guide-open_&]:opacity-100 [html.guide-open_&]:pointer-events-auto transition-opacity" data-nodrag onMouseDown={(e)=>e.stopPropagation()}>
         <button className="iconbtn" title="Settings" onClick={() => setOpen(o => !o)}>⚙︎</button>

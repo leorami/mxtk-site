@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 
 export default function GuideDrawer() {
   const [open, setOpen] = useState(false);
+  const [mobile, setMobile] = useState(false);
   const [prefill, setPrefill] = useState<string>("");
 
   useEffect(() => {
@@ -62,19 +63,44 @@ export default function GuideDrawer() {
     };
   }, []);
 
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const mql = window.matchMedia('(max-width:640px)');
+    const update = () => setMobile(!!mql.matches);
+    update();
+    try { mql.addEventListener('change', update) } catch { mql.addListener(update) }
+    return () => { try { mql.removeEventListener('change', update) } catch { mql.removeListener(update) } };
+  }, []);
+
+  // One-time note for mobile
+  const [noted, setNoted] = useState<boolean>(() => {
+    try { return localStorage.getItem('mxtk_guide_mobile_note') === '1' } catch { return false }
+  })
+
+  useEffect(() => {
+    if (!mobile || noted) return
+    try { localStorage.setItem('mxtk_guide_mobile_note', '1'); setNoted(true) } catch {}
+  }, [mobile, noted])
+
   return (
     <aside
-      data-guide-panel className="guide-panel glass"
+      data-guide-panel
       data-open={open ? 'true' : 'false'}
       role="complementary"
       aria-label="Sherpa Drawer" tabIndex={open ? 0 : -1}
       aria-hidden={!open}
-
       className="guide-drawer fixed right-0 z-[120] glass glass--panel backdrop-blur-xl shadow-2xl flex flex-col"
-      style={{ top: 'var(--nav-height)', bottom: 'var(--footer-height)', height: 'auto', overflow: 'hidden' }}
+      style={mobile
+        ? ({ left: 0, right: 0, bottom: 0, top: 'auto', height: 'var(--guide-h)', maxHeight: 'calc(100dvh - 56px)', overflow: 'hidden', borderTopLeftRadius: 16, borderTopRightRadius: 16 } as any)
+        : ({ top: 'var(--nav-height)', bottom: 'var(--footer-height)', height: 'auto', overflow: 'hidden' } as any)}
     >
       <div className="min-h-0 flex-1 drawer-body">
         <GuidePanel embedded prefillPrompt={prefill} onClose={() => setOpen(false)} />
+        {mobile && !noted && (
+          <div className="text-xs opacity-75 px-3 py-2">
+            Layout edits apply on tablet/desktop.
+          </div>
+        )}
       </div>
     </aside>
   );

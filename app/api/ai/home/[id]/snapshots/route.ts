@@ -2,11 +2,11 @@
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
 
+import { migrateToV2 } from '@/lib/home/migrate'
+import { getHome } from '@/lib/home/store/fileStore'
+import { listSnapshots, saveSnapshot } from '@/lib/home/store/snapshotStore'
 import { NextResponse } from 'next/server'
 import { z } from 'zod'
-import { listSnapshots, saveSnapshot } from '@/lib/home/store/snapshotStore'
-import { getHome } from '@/lib/home/store/fileStore'
-import { migrateToV2 } from '@/lib/home/migrate'
 
 const NO_STORE = { 'Cache-Control': 'no-store' }
 

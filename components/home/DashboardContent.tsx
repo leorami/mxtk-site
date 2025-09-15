@@ -4,6 +4,8 @@ import { getApiUrl } from '@/lib/api'
 import type { HomeDoc, SectionState } from '@/lib/home/types'
 import * as React from 'react'
 import Grid from './Grid'
+import { scoreWidgetsForOverview } from '@/lib/home/overviewScore'
+import type { Mode as HomeMode } from '@/lib/home/types'
 
 type Props = { initialDocId?: string; initialDoc?: HomeDoc | null }
 
@@ -122,13 +124,14 @@ export default function DashboardContent({ initialDocId = 'default', initialDoc 
       if (res.status === 404) {
         // 2) Seed, then GET
         console.log('Dashboard: Home not found, seeding...')
+        const mappedMode: HomeMode = (mode === 'learn' || mode === 'build' || mode === 'operate') ? (mode as HomeMode) : 'build'
         const seeded = await fetch(getApiUrl(`/ai/home/seed`), {
           method: 'POST',
           headers: { 
             'content-type': 'application/json',
             'x-retry-count': retryCount.toString()
           },
-          body: JSON.stringify({ id: initialDocId, mode })
+          body: JSON.stringify({ id: initialDocId, mode: mappedMode })
         })
         
         if (!seeded.ok) {
@@ -136,16 +139,16 @@ export default function DashboardContent({ initialDocId = 'default', initialDoc 
           console.error('Dashboard: Seed failed', errorData)
           setError(`Failed to seed dashboard: ${errorData.error || 'Unknown error'}`)
           setLoading(false)
-          return
+          return null
         }
         
         // Get the seeded data directly from the seed response
         const seedData = await seeded.json().catch(() => null)
         if (seedData && !seedData.error) {
           console.log('Dashboard: Seed successful')
-          setDoc(seedData)
+          setDoc(seedData as any as import('@/lib/home/types').HomeDoc)
           setLoading(false)
-          return
+          return seedData as any
         }
         
         // If we couldn't get data from seed response, try GET again
@@ -168,9 +171,9 @@ export default function DashboardContent({ initialDocId = 'default', initialDoc 
         console.log('Dashboard: GET successful')
         // Ignore stale GET that started before a more recent user mutation
         if (startedAt >= lastMutationTs.current) {
-          setDoc(j)
+          setDoc(j as any)
         }
-        return j
+        return j as any
       } else {
         console.error('Dashboard: Invalid data', j)
         setError(`Invalid dashboard data: ${j?.error || 'Unknown format'}`)
@@ -272,15 +275,17 @@ export default function DashboardContent({ initialDocId = 'default', initialDoc 
       const base = doc ? { ...doc } : null
       if (!base) return
       // create a virtual merged document without persisting
-      const merged = adaptDocWithPresets(base, mode)
+      const mappedMode: HomeMode = (mode === 'learn' || mode === 'build' || mode === 'operate') ? (mode as HomeMode) : 'build'
+      const merged = adaptDocWithPresets(base as any, mappedMode as any)
       setPreviewDoc({ ...merged })
     } catch {}
   }, [doc, mode])
 
   const onApplyAdapt = React.useCallback(async () => {
     try {
-      await fetch(getApiUrl(`/ai/home/seed`), { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ id: initialDocId, mode, adapt: true }) })
-      window.dispatchEvent(new CustomEvent('mxtk-dashboard-refresh', { detail: { source: 'adapt-apply', mode } }))
+      const mappedMode: HomeMode = (mode === 'learn' || mode === 'build' || mode === 'operate') ? (mode as HomeMode) : 'build'
+      await fetch(getApiUrl(`/ai/home/seed`), { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ id: initialDocId, mode: mappedMode, adapt: true }) })
+      window.dispatchEvent(new CustomEvent('mxtk-dashboard-refresh', { detail: { source: 'adapt-apply', mode: mappedMode } }))
       setPreviewDoc(null)
       setShowAdaptCta(false)
     } catch {}
@@ -418,7 +423,13 @@ export default function DashboardContent({ initialDocId = 'default', initialDoc 
         </div>
       )}
       {(previewDoc || doc)?.sections.map((sec) => {
-        const widgets = (previewDoc || doc)!.widgets.filter(w => w.sectionId === sec.id)
+        let widgets = (previewDoc || doc)!.widgets.filter(w => w.sectionId === sec.id)
+        // If Overview missing widgets, prefill from recommendations (idempotent: computed only for render)
+        if (sec.key === 'overview' && widgets.length === 0 && doc) {
+          const mappedMode: HomeMode = (mode === 'learn' || mode === 'build' || mode === 'operate') ? (mode as HomeMode) : 'build'
+          const scored = scoreWidgetsForOverview(doc.widgets, mappedMode)
+          widgets = scored.slice(0, 8).map(s => s.w)
+        }
         return (
           <section id={sec.id} key={sec.id} className="glass glass--panel px-4 py-3 md:px-5 md:py-4 mb-5 rounded-xl">
             <header

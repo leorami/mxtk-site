@@ -5,7 +5,7 @@ import { useMemo, useState } from 'react';
 
 type SortKey = 'pool' | 'price' | 'vol24' | 'tvl' | 'fees24'
 
-export default function DataTableGlass({ rows, className, updatedAt, ttl }: { rows: PoolRow[]; className?: string; updatedAt?: number; ttl?: number }) {
+export default function DataTableGlass({ rows, className, updatedAt, ttl, stackedMobile }: { rows: PoolRow[]; className?: string; updatedAt?: number; ttl?: number; stackedMobile?: boolean }) {
   const [sort, setSort] = useState<{ key: SortKey; dir: 'asc' | 'desc' }>({ key: 'tvl', dir: 'desc' })
   const sorted = useMemo(() => sortRows(rows, sort.key, sort.dir), [rows, sort])
   const badge = useMemo(() => makeBadge(updatedAt, ttl), [updatedAt, ttl])
@@ -26,7 +26,7 @@ export default function DataTableGlass({ rows, className, updatedAt, ttl }: { ro
           <div className="text-xs opacity-80 mt-1">Data will appear once a supported source is live.</div>
         </div>
       ) : (
-      <div className="overflow-x-auto">
+      <div className={cn('overflow-x-auto', stackedMobile && 'stacked-mobile')}>
         <table data-testid="pools-table" className="min-w-full text-sm">
           <thead className="sticky top-0 bg-white/70 dark:bg-black/40 backdrop-blur supports-[backdrop-filter]:bg-white/60" style={{ position: 'sticky', top: 0 }}>
             <tr className="text-left text-ink-subtle select-none">
@@ -40,39 +40,20 @@ export default function DataTableGlass({ rows, className, updatedAt, ttl }: { ro
           </thead>
           <tbody>
             {sorted.map((r, i) => (
-              <tr key={r.address} className={cn(i % 2 === 0 ? 'bg-white/20 dark:bg-white/5' : 'bg-transparent')}>
-                <td className="px-4 py-3 whitespace-nowrap">
+              <tr key={r.address} className={cn('data-row', i % 2 === 0 ? 'bg-white/20 dark:bg-white/5' : 'bg-transparent')}>
+                <td className="px-4 py-3 whitespace-nowrap" data-label="Pool">
                   <div className="font-medium">{symbolPair(r)}</div>
                   <div className="text-ink-subtle text-xs">{short(r.address)}</div>
                 </td>
-                <td className="px-4 py-3">{r.fee ? `${(r.fee / 100).toFixed(2)}%` : '—'}</td>
-                <td className="px-4 py-3">{fmtUSD(r.approxMxtkUSD)}</td>
-                <td className="px-4 py-3">{fmtUSD(r.volume24hUSD)}</td>
-                <td className="px-4 py-3">{fmtUSD(r.fees24hUSD)}</td>
-                <td className="px-4 py-3">{fmtUSD(r.tvlUSD)}</td>
+                <td className="px-4 py-3" data-label="Fee">{r.fee ? `${(r.fee / 100).toFixed(2)}%` : '—'}</td>
+                <td className="px-4 py-3" data-label="Price">{fmtUSD(r.approxMxtkUSD)}</td>
+                <td className="px-4 py-3" data-label="Vol 24h">{fmtUSD(r.volume24hUSD)}</td>
+                <td className="px-4 py-3" data-label="Fees 24h">{fmtUSD(r.fees24hUSD)}</td>
+                <td className="px-4 py-3" data-label="TVL">{fmtUSD(r.tvlUSD)}</td>
               </tr>
             ))}
           </tbody>
         </table>
-      </div>
-      )}
-
-      {/* Mobile stacked view */}
-      {!isEmpty && (
-      <div className="sm:hidden divide-y divide-white/10">
-        {sorted.map((r) => (
-          <dl key={r.address} className="p-4 grid grid-cols-3 gap-2">
-            <div className="col-span-3">
-              <div className="font-medium">{symbolPair(r)}</div>
-              <div className="text-ink-subtle text-xs">{short(r.address)}</div>
-            </div>
-            <dt className="text-ink-subtle">Fee</dt><dd className="col-span-2">{r.fee ? `${(r.fee / 100).toFixed(2)}%` : '—'}</dd>
-            <dt className="text-ink-subtle">Price</dt><dd className="col-span-2">{fmtUSD(r.approxMxtkUSD)}</dd>
-            <dt className="text-ink-subtle">Vol 24h</dt><dd className="col-span-2">{fmtUSD(r.volume24hUSD)}</dd>
-            <dt className="text-ink-subtle">Fees 24h</dt><dd className="col-span-2">{fmtUSD(r.fees24hUSD)}</dd>
-            <dt className="text-ink-subtle">TVL</dt><dd className="col-span-2">{fmtUSD(r.tvlUSD)}</dd>
-          </dl>
-        ))}
       </div>
       )}
     </div>

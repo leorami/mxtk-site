@@ -9,7 +9,7 @@ export const dashboardCopy: PageCopy = {
   },
   heroSub: {
     learn:
-      "Pin helpful widgets, follow guided suggestions, and learn as you go. Everything adapts to your experience level.",
+      "Pin helpful widgets, follow guided suggestions, and learn as you go. Everything adapts to your Journey Stage.",
     build:
       "Drop in Recent Answers, Resources, and Glossary, wire settings, and let Sherpa propose the next best action.",
     operate:
@@ -25,7 +25,7 @@ export const dashboardCopy: PageCopy = {
       },
       paragraphs: {
         learn: [
-          "Choose your experience in the header—Learn, Build, or Operate—and the dashboard updates copy and suggestions.",
+          "Choose your Journey Stage in the header—Training, Preparing, or Conquer—and the dashboard updates copy and suggestions.",
         ],
         build: [
           "Widgets support light settings. Add, move, and resize them; everything persists automatically.",
