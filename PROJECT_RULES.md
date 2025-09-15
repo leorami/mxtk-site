@@ -185,3 +185,25 @@
 ---
 
 _These guidelines ensure software engineer and AI generated code aligns with our company's standards for quality, security, scalability, and design consistency. Any deviation should be explicitly flagged and remediated._
+
+## 6. MXTK Site Specific Rules
+
+1. **Routing & Subpath (Dev-only)**  
+   - Development may set `NEXT_PUBLIC_BASE_PATH=/mxtk` to run behind a proxy.  
+   - Links must use Next `<Link href="/…">`; never hardcode the basePath in hrefs.  
+   - API/public assets must use helpers: `getApiUrl`, `getApiPath`, `withBase`, `AppImage`.  
+   - Do not inject or preload `/_next/*` assets; Next manages internals.  
+   - Nginx must allow-list root `/_next/*` and HMR; no HTML `sub_filter` rewrites.
+
+2. **Widget Grid Persistency**  
+   - Move/resize operations must update local UI immediately and persist to `/api/ai/home/:id` with debounced PATCH.  
+   - Single-column mode (mobile) must restack and persist positions automatically.
+
+3. **E2E Requirements**  
+   - After changes to widgets/grid or Sherpa UI, run:
+     - `tools/test/dashboard-drag.mjs` (localhost and ngrok)  
+     - `tools/test/console-error-check.mjs` against `/mxtk` and `/mxtk/dashboard`  
+   - Provide auditor output with pass/fail for console and network errors.
+
+4. **AI/Sherpa Rendering**  
+   - Use `react-markdown` with `remark-gfm`; normalize assistant content to keep nested lists visually coherent.

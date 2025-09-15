@@ -367,3 +367,50 @@ This content previously lived in `docs/README.md` and is consolidated here.
 - `docs/SIMULTANEOUS_ACCESS_GUIDE.md` – using localhost and `/mxtk` simultaneously
 - `docs/ONCHAIN_SETUP.md` – RPC and pool discovery configuration
 - `docs/SHERPA_KNOWLEDGE_SAFEGUARDS.md` – AI knowledge management, content safeguards, and best practices
+
+## Subpath-aware development (localhost + ngrok)
+
+- Set base path for dev:
+  - Create `.env.development.local` with `NEXT_PUBLIC_BASE_PATH=/mxtk`
+- Use helpers (never hardcode "/mxtk"):
+  - Links: `<Link href="/route">` (Next applies basePath)
+  - API: `getApiUrl('/ai/home/…')` or `getApiPath('/api/…')`
+  - Assets: `withBase('/icons/…')` or `AppImage`
+- Proxy: allow root `/_next/*` and HMR; do not use HTML `sub_filter` rewrites. See `docs/NGINX_PROXY_SETUP_GUIDE.md`.
+
+## Testing quickstart
+
+Install Chrome for Puppeteer (host):
+
+```bash
+npx puppeteer browsers install chrome
+export PUPPETEER_EXECUTABLE_PATH="$HOME/.cache/puppeteer/chrome/…/Google Chrome for Testing"
+```
+
+Auditors:
+
+```bash
+# Console errors (localhost)
+PATHS='/mxtk,/mxtk/dashboard' node tools/test/console-error-check.mjs http://localhost:2000
+# Console errors (ngrok)
+PATHS='/mxtk,/mxtk/dashboard' node tools/test/console-error-check.mjs https://<ngrok>/
+# Grid drag/resize + persistence
+BASE_URL=http://localhost:2000/mxtk node tools/test/dashboard-drag.mjs
+BASE_URL=https://<ngrok>/mxtk node tools/test/dashboard-drag.mjs
+```
+
+See `docs/TESTING_GUIDE.md` for full details.
+
+## Widgets grid (move/resize)
+
+- Drag from widget header (`.wf-head`) with Sherpa open (`html.guide-open`).
+- Resize via corner handles; changes persist to `/api/ai/home/:id`.
+- Mobile forces one column; grid auto-stacks and persists positions.
+- Tests: `tools/test/dashboard-drag.mjs` validates server persistence and no overlaps.
+
+## Docs index (updated)
+
+- `docs/TESTING_GUIDE.md` – auditors and E2E usage
+- `docs/WIDGETS.md` – grid behavior and persistence
+- `docs/NGINX_PROXY_SETUP_GUIDE.md` – single authoritative config for /mxtk + /_next/*
+- `docs/SHERPA_KNOWLEDGE_SAFEGUARDS.md` – AI knowledge mgmt
