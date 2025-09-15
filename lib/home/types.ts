@@ -63,3 +63,17 @@ export interface HomeSignal {
   size?: { w: number; h: number };
   meta?: Record<string, unknown>;
 }
+
+// Snapshots (non-breaking additions)
+export interface HomeSnapshotMeta {
+  id: string;
+  docId: string;
+  createdAt: number;
+  mode?: 'learn' | 'build' | 'operate';
+  note?: string;
+}
+
+export interface HomeSnapshot {
+  meta: HomeSnapshotMeta;
+  doc: HomeDoc;
+}

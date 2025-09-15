@@ -286,6 +286,49 @@ export default function DashboardContent({ initialDocId = 'default', initialDoc 
     } catch {}
   }, [initialDocId, mode])
 
+  // --- Snapshots UI (Save / Restore / Manage) --------------------------------
+  const [snapshots, setSnapshots] = React.useState<import('@/lib/home/types').HomeSnapshotMeta[] | null>(null)
+  const [openPanel, setOpenPanel] = React.useState<null | 'restore' | 'manage'>(null)
+  const fetchingSnaps = React.useRef(false)
+  const lastAutoSnapKey = React.useMemo(() => `mxtk.home.autoSnapTs:${initialDocId}`, [initialDocId])
+
+  const fetchSnapshots = React.useCallback(async () => {
+    if (fetchingSnaps.current) return
+    fetchingSnaps.current = true
+    try {
+      const res = await fetch(getApiUrl(`/ai/home/${initialDocId}/snapshots`), { cache: 'no-store' })
+      if (res.ok) {
+        const j = await res.json().catch(() => null)
+        if (j && Array.isArray(j.items)) setSnapshots(j.items)
+      }
+    } finally { fetchingSnaps.current = false }
+  }, [initialDocId])
+
+  const saveSnapshotNow = React.useCallback(async (note?: string) => {
+    try {
+      const res = await fetch(getApiUrl(`/ai/home/${initialDocId}/snapshots`), {
+        method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ note: note || undefined })
+      })
+      if (res.ok) {
+        try { window.dispatchEvent(new CustomEvent('toast', { detail: { message: 'Snapshot saved' } })) } catch {}
+        await fetchSnapshots()
+        return true
+      }
+    } catch {}
+    return false
+  }, [initialDocId, fetchSnapshots])
+
+  const maybeAutoSnapshot = React.useCallback(async () => {
+    try {
+      const last = Number(localStorage.getItem(lastAutoSnapKey) || '0')
+      const now = Date.now()
+      if (!last || (now - last) > 30000) {
+        const ok = await saveSnapshotNow('auto')
+        if (ok) localStorage.setItem(lastAutoSnapKey, String(now))
+      }
+    } catch {}
+  }, [lastAutoSnapKey, saveSnapshotNow])
+
   // listen for global refresh event dispatched by Adapt CTA
   React.useEffect(() => {
     async function onRefresh() {
@@ -442,8 +485,75 @@ export default function DashboardContent({ initialDocId = 'default', initialDoc 
                   aria-expanded={!sec.collapsed}
                   onClick={(e) => { e.preventDefault(); toggleCollapse(sec.id); }}
                 >{sec.collapsed ? 'Expand' : 'Collapse'}</button>
+                {/* Snapshots control group: visible only when Guide is open */}
+                <div className="hidden snapshots-ctl-group" data-nodrag>
+                  <style jsx global>{`
+                    html.guide-open .snapshots-ctl-group { display: inline-flex !important; gap: 6px; }
+                    .snapshots-ctl-group button { cursor: pointer; }
+                  `}</style>
+                  <button
+                    className="btn btn-sm"
+                    onClick={(e) => { e.stopPropagation(); const note = window.prompt('Snapshot note (optional)') || undefined; void saveSnapshotNow(note); }}
+                    data-nodrag
+                  >Save</button>
+                  <button
+                    className="btn btn-sm"
+                    onClick={async (e) => { e.stopPropagation(); await fetchSnapshots(); setOpenPanel(p => p === 'restore' ? null : 'restore'); }}
+                    data-nodrag
+                  >Restore</button>
+                  <button
+                    className="btn btn-sm"
+                    onClick={async (e) => { e.stopPropagation(); await fetchSnapshots(); setOpenPanel(p => p === 'manage' ? null : 'manage'); }}
+                    data-nodrag
+                  >Manage</button>
+                </div>
               </div>
             </header>
+            {/* Minimal popover/list for Restore/Manage */}
+            {openPanel && guideOpen && (
+              <div className="mb-2 text-xs" data-nodrag onClick={(e) => e.stopPropagation()}>
+                <div className="rounded-lg border p-2 bg-[color:var(--surface-card)]/60">
+                  {!snapshots && <div className="opacity-70">Loading…</div>}
+                  {snapshots && snapshots.length === 0 && <div className="opacity-70">No snapshots</div>}
+                  {snapshots && snapshots.length > 0 && (
+                    <ul className="space-y-1">
+                      {snapshots.map(s => (
+                        <li key={s.id} className="flex items-center justify-between gap-2">
+                          <button
+                            className="text-left flex-1 underline hover:no-underline"
+                            onClick={async () => {
+                              if (openPanel === 'restore') {
+                                await maybeAutoSnapshot();
+                                const res = await fetch(getApiUrl(`/ai/home/${initialDocId}/snapshots/${s.id}`), { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ action: 'restore' }) })
+                                if (res.ok) {
+                                  const j = await res.json().catch(() => null)
+                                  if (j?.doc) setDoc(j.doc)
+                                  setOpenPanel(null)
+                                  try { window.dispatchEvent(new CustomEvent('toast', { detail: { message: 'Snapshot restored' } })) } catch {}
+                                }
+                              }
+                            }}
+                            data-nodrag
+                          >{new Date(s.createdAt).toLocaleString()} {s.note ? `— ${s.note}` : ''}</button>
+                          {openPanel === 'manage' && (
+                            <button
+                              className="opacity-70 hover:opacity-100"
+                              title="Delete snapshot"
+                              onClick={async () => {
+                                if (!confirm('Delete this snapshot?')) return
+                                await fetch(getApiUrl(`/ai/home/${initialDocId}/snapshots/${s.id}`), { method: 'DELETE' })
+                                await fetchSnapshots()
+                              }}
+                              data-nodrag
+                            >✕</button>
+                          )}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              </div>
+            )}
             {/* drop also works on header; no extra target needed */}
             {!sec.collapsed && (
               <div className="section-body">

@@ -1,0 +1,220 @@
+{
+  "meta": {
+    "id": "1757935583481__1raksp",
+    "docId": "default",
+    "createdAt": 1757935583481,
+    "note": "e2e"
+  },
+  "doc": {
+    "id": "default",
+    "sections": [
+      {
+        "id": "overview",
+        "key": "overview",
+        "title": "Overview",
+        "order": 0
+      },
+      {
+        "id": "learn",
+        "key": "learn",
+        "title": "Learn",
+        "order": 1
+      },
+      {
+        "id": "build",
+        "key": "build",
+        "title": "Build",
+        "order": 2
+      },
+      {
+        "id": "operate",
+        "key": "operate",
+        "title": "Operate",
+        "order": 3
+      },
+      {
+        "id": "library",
+        "key": "library",
+        "title": "Library",
+        "order": 4
+      }
+    ],
+    "widgets": [
+      {
+        "id": "w-whats-next-overview",
+        "type": "whats-next",
+        "title": "What's Next",
+        "sectionId": "overview",
+        "pos": {
+          "x": 8,
+          "y": 0
+        },
+        "size": {
+          "w": 4,
+          "h": 21
+        }
+      },
+      {
+        "id": "w-recent-answers-overview",
+        "type": "recent-answers",
+        "title": "Recent Answers",
+        "sectionId": "overview",
+        "pos": {
+          "x": 0,
+          "y": 0
+        },
+        "size": {
+          "w": 4,
+          "h": 21
+        }
+      },
+      {
+        "id": "w-note-overview",
+        "type": "note",
+        "title": "Note",
+        "sectionId": "overview",
+        "pos": {
+          "x": 4,
+          "y": 0
+        },
+        "size": {
+          "w": 4,
+          "h": 21
+        },
+        "data": {
+          "note": ""
+        }
+      },
+      {
+        "id": "w-price-large-overview",
+        "type": "price-large",
+        "title": "Price",
+        "sectionId": "overview",
+        "pos": {
+          "x": 0,
+          "y": 21
+        },
+        "size": {
+          "w": 12,
+          "h": 22
+        },
+        "data": {
+          "symbol": "MXTK",
+          "interval": "7d",
+          "density": "cozy"
+        }
+      },
+      {
+        "id": "w-pools-table-overview",
+        "type": "pools-table",
+        "title": "Top Pools",
+        "sectionId": "overview",
+        "pos": {
+          "x": 0,
+          "y": 43
+        },
+        "size": {
+          "w": 12,
+          "h": 16
+        },
+        "data": {
+          "token": "0x3e4Ffeb394B371AAaa0998488046Ca19d870d9Ba",
+          "limit": 5
+        }
+      },
+      {
+        "id": "w-resources-learn",
+        "type": "resources",
+        "title": "Learn Resources",
+        "sectionId": "learn",
+        "pos": {
+          "x": 0,
+          "y": 0
+        },
+        "size": {
+          "w": 6,
+          "h": 20
+        },
+        "data": {
+          "maxItems": 6,
+          "density": "compact"
+        }
+      },
+      {
+        "id": "w-glossary-spotlight-learn",
+        "type": "glossary-spotlight",
+        "title": "Glossary",
+        "sectionId": "learn",
+        "pos": {
+          "x": 6,
+          "y": 0
+        },
+        "size": {
+          "w": 6,
+          "h": 20
+        },
+        "data": {
+          "day": "20250915",
+          "index": 4,
+          "density": "cozy"
+        }
+      },
+      {
+        "id": "w-resources-library",
+        "type": "resources",
+        "title": "Documentation",
+        "sectionId": "library",
+        "pos": {
+          "x": 0,
+          "y": 0
+        },
+        "size": {
+          "w": 4,
+          "h": 15
+        },
+        "data": {
+          "maxItems": 10
+        }
+      },
+      {
+        "id": "w-resources-build",
+        "type": "resources",
+        "title": "Builder Resources",
+        "sectionId": "build",
+        "pos": {
+          "x": 0,
+          "y": 0
+        },
+        "size": {
+          "w": 6,
+          "h": 20
+        },
+        "data": {
+          "category": "dev",
+          "maxItems": 6
+        }
+      },
+      {
+        "id": "w-pools-mini-build",
+        "type": "pools-mini",
+        "title": "Pools",
+        "sectionId": "build",
+        "pos": {
+          "x": 6,
+          "y": 0
+        },
+        "size": {
+          "w": 6,
+          "h": 20
+        },
+        "data": {
+          "token": "0x3e4Ffeb394B371AAaa0998488046Ca19d870d9Ba"
+        }
+      }
+    ],
+    "layoutVersion": 2,
+    "meta": {
+      "lastAdaptMode": "build"
+    }
+  }
+}

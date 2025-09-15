@@ -81,6 +81,19 @@ export default function Grid({ doc, render, onPatch }: GridProps) {
   const debTimer = React.useRef<number | null>(null);
   const doPatch = React.useCallback(async (batch: Partial<WidgetState>[]) => {
     try {
+      // Before a batch that may move/resize, trigger a lightweight auto snapshot (debounced elsewhere)
+      try {
+        const key = `mxtk.home.autoSnapTs:${doc.id}`;
+        const last = Number(localStorage.getItem(key) || '0');
+        const now = Date.now();
+        if (!last || (now - last) > 30000) {
+          localStorage.setItem(key, String(now));
+          // Fire-and-forget; rely on server no-store
+          fetch(getApiPath(`/api/ai/home/${doc.id}/snapshots`), {
+            method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ note: 'auto' })
+          }).catch(() => {});
+        }
+      } catch {}
       if (onPatch) {
         await onPatch(doc.id, batch);
         return;
