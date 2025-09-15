@@ -1,6 +1,174 @@
 {
   "id": "default",
-  "version": 2,
-  "sections": [],
-  "widgets": []
+  "sections": [
+    {
+      "id": "overview",
+      "key": "overview",
+      "title": "Overview",
+      "order": 0
+    },
+    {
+      "id": "learn",
+      "key": "learn",
+      "title": "Learn",
+      "order": 1
+    },
+    {
+      "id": "build",
+      "key": "build",
+      "title": "Build",
+      "order": 2
+    },
+    {
+      "id": "operate",
+      "key": "operate",
+      "title": "Operate",
+      "order": 3
+    },
+    {
+      "id": "library",
+      "key": "library",
+      "title": "Library",
+      "order": 4
+    }
+  ],
+  "widgets": [
+    {
+      "id": "w-whats-next-overview",
+      "type": "whats-next",
+      "title": "What's Next",
+      "sectionId": "overview",
+      "pos": {
+        "x": 0,
+        "y": 0
+      },
+      "size": {
+        "w": 4,
+        "h": 24
+      }
+    },
+    {
+      "id": "w-recent-answers-overview",
+      "type": "recent-answers",
+      "title": "Recent Answers",
+      "sectionId": "overview",
+      "pos": {
+        "x": 4,
+        "y": 0
+      },
+      "size": {
+        "w": 4,
+        "h": 24
+      }
+    },
+    {
+      "id": "w-note-overview",
+      "type": "note",
+      "title": "Note",
+      "sectionId": "overview",
+      "pos": {
+        "x": 8,
+        "y": 0
+      },
+      "size": {
+        "w": 4,
+        "h": 24
+      },
+      "data": {
+        "note": ""
+      }
+    },
+    {
+      "id": "w-price-large-overview",
+      "type": "price-large",
+      "title": "Price",
+      "sectionId": "overview",
+      "pos": {
+        "x": 0,
+        "y": 24
+      },
+      "size": {
+        "w": 6,
+        "h": 24
+      },
+      "data": {
+        "symbol": "MXTK",
+        "interval": "7d"
+      }
+    },
+    {
+      "id": "w-pools-table-overview",
+      "type": "pools-table",
+      "title": "Top Pools",
+      "sectionId": "overview",
+      "pos": {
+        "x": 6,
+        "y": 24
+      },
+      "size": {
+        "w": 6,
+        "h": 24
+      },
+      "data": {
+        "token": "0x3e4Ffeb394B371AAaa0998488046Ca19d870d9Ba",
+        "limit": 5
+      }
+    },
+    {
+      "id": "w-resources-learn",
+      "type": "resources",
+      "title": "Learn Resources",
+      "sectionId": "learn",
+      "pos": {
+        "x": 0,
+        "y": 0
+      },
+      "size": {
+        "w": 6,
+        "h": 20
+      },
+      "data": {
+        "maxItems": 6
+      }
+    },
+    {
+      "id": "w-glossary-spotlight-learn",
+      "type": "glossary-spotlight",
+      "title": "Glossary",
+      "sectionId": "learn",
+      "pos": {
+        "x": 6,
+        "y": 0
+      },
+      "size": {
+        "w": 6,
+        "h": 20
+      },
+      "data": {
+        "day": "20250915",
+        "index": 4
+      }
+    },
+    {
+      "id": "w-resources-library",
+      "type": "resources",
+      "title": "Documentation",
+      "sectionId": "library",
+      "pos": {
+        "x": 0,
+        "y": 40
+      },
+      "size": {
+        "w": 12,
+        "h": 18
+      },
+      "data": {
+        "maxItems": 10
+      }
+    }
+  ],
+  "layoutVersion": 2,
+  "meta": {
+    "lastAdaptMode": "learn"
+  }
 }

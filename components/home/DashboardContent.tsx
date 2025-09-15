@@ -253,6 +253,26 @@ export default function DashboardContent({ initialDocId = 'default', initialDoc 
     return () => { alive = false }
   }, [loadData])
 
+  // Auto-seed on first visit when doc has zero widgets
+  React.useEffect(() => {
+    if (!doc) return
+    try {
+      const done = sessionStorage.getItem('mxtk_auto_seed_done') === '1'
+      const count = Array.isArray(doc.widgets) ? doc.widgets.length : 0
+      if (count === 0 && !done) {
+        const mappedMode: HomeMode = (mode === 'learn' || mode === 'build' || mode === 'operate') ? (mode as HomeMode) : 'build'
+        fetch(getApiUrl(`/ai/home/seed`), {
+          method: 'POST', headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ id: doc.id || 'default', mode: mappedMode, adapt: true })
+        }).then(() => {
+          try { sessionStorage.setItem('mxtk_auto_seed_done','1') } catch {}
+          // Re-fetch after seeding
+          void loadData(true)
+        }).catch(() => {})
+      }
+    } catch {}
+  }, [doc, mode, loadData])
+
   // Surface Adapt CTA when mode changes or when doc first loads
   React.useEffect(() => {
     if (!doc) return
