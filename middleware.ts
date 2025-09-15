@@ -15,6 +15,16 @@ export function middleware(req: NextRequest) {
     requestHeaders.delete('x-forwarded-prefix');
   }
   
+  // Serve '/mxtk/' without issuing a redirect to avoid proxy loop
+  if (pathname === '/mxtk/') {
+    const url = req.nextUrl.clone();
+    url.pathname = '/mxtk';
+    const res = NextResponse.rewrite(url, { request: { headers: requestHeaders } });
+    res.headers.set('ngrok-skip-browser-warning', 'true');
+    res.cookies.set('bp', '/mxtk', { path: '/', httpOnly: false });
+    return res;
+  }
+
   const res = NextResponse.next({ request: { headers: requestHeaders } });
   
   // Add ngrok skip header to prevent browser warning

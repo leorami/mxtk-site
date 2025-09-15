@@ -17,7 +17,7 @@ services:
       - NEXT_TELEMETRY_DISABLED=1
       - BASIC_AUTH_ENABLED=0
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:2000/api/health"]
+      test: ["CMD", "curl", "-f", "http://localhost:2000/mxtk/api/health"]
       interval: 30s
       timeout: 10s
       retries: 3

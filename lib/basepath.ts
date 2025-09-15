@@ -2,6 +2,15 @@
  * Dynamic base path detection for simultaneous local + proxy support
  */
 
+/** Public basePath for simple path building (SSR-safe). */
+export const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
+
+/** Minimal helper to prefix a path with the current basePath. */
+export const withBase = (p: string): string => {
+  const leaf = p.startsWith('/') ? p : `/${p}`;
+  return `${basePath}${leaf}`;
+};
+
 /**
  * Detect if we're running behind the /mxtk proxy
  * Uses environment variable on server-side, pathname on client-side

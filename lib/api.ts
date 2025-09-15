@@ -10,33 +10,53 @@
  * @returns API URL like '/api/health'
  */
 export function getApiUrl(path: string): string {
-  // Normalize the path - remove leading slashes and 'api/' prefix if present
-  let normalizedPath = path.replace(/^\/+/, '');
-  if (normalizedPath.startsWith('api/')) {
-    normalizedPath = normalizedPath.slice(4);
-  }
+  const raw = String(path || '').trim();
 
-  // Ensure we have a leading slash on the path part
-  if (normalizedPath && !normalizedPath.startsWith('/')) {
-    normalizedPath = `/${normalizedPath}`;
-  }
+  // 1) Absolute URLs are passed through
+  if (/^https?:\/\//i.test(raw)) return raw;
 
-  // Prefer runtime detection on the client; fall back to env on server
+  // 2) Determine current base path (client: detect; server: env)
   let basePath = '';
   try {
     if (typeof window !== 'undefined') {
       // Lazy import to avoid cyclic deps during build
       // eslint-disable-next-line @typescript-eslint/no-var-requires
       const { detectBasePath } = require('./basepath');
-      basePath = detectBasePath() || '';
+      basePath = (detectBasePath() || '').trim();
     } else {
-      basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
+      basePath = (process.env.NEXT_PUBLIC_BASE_PATH || '').trim();
     }
   } catch {
-    basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
+    basePath = (process.env.NEXT_PUBLIC_BASE_PATH || '').trim();
   }
 
-  return `${basePath}/api${normalizedPath}`;
+  // Normalize basePath to '/segment' or '' (no trailing slash)
+  if (basePath.endsWith('/')) basePath = basePath.replace(/\/+$/, '');
+
+  // 3) If already basePath + /api/*, return as-is (avoid double-prefix)
+  if (basePath && (raw === `${basePath}/api` || raw.startsWith(`${basePath}/api/`))) {
+    return raw;
+  }
+
+  // 4) If already starts with '/api', just prefix basePath
+  if (raw === '/api' || raw.startsWith('/api/')) {
+    return `${basePath}${raw}`;
+  }
+
+  // 5) Strip any accidental leading basePath from provided path
+  let working = raw;
+  if (basePath && working.startsWith(basePath + '/')) {
+    working = working.slice(basePath.length);
+  }
+
+  // 6) Normalize path by removing leading slashes and any 'api/' prefix
+  working = working.replace(/^\/+/, '');
+  if (working.startsWith('api/')) {
+    working = working.slice(4);
+  }
+
+  // 7) Build final URL: basePath + /api + /rest
+  return `${basePath}/api${working ? `/${working}` : ''}`;
 }
 
 /**
