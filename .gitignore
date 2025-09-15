@@ -22,15 +22,27 @@ coverage/
 .vscode/
 *.log
 
-# Debug/test artifacts
-tools/debug/output/
-tools/debug/screenshots/
-tools/debug/reports/
+# Debug/test artifacts (expanded)
 artifacts/
-ai_store/signals/*.jsonl
-ai_store/signals.jsonl
-ai_store/facts.test.*.json
-ai_store/journeys/*.json
+artifacts/**
+error-check--*.png
+.tools/**
+.tools
+.tools/*
+.tools/**
+.tools-debug/**
+# Puppeteer screenshots and reports
+**/screenshots/**
+**/reports/**
+**/output/**
+# Local Chrome cache for puppeteer (host)
+/Users/*/.cache/puppeteer/**
+# Temporary JSON/NDJSON test outputs
+**/*.ndjson
+**/*.jsonl
+# Generated reference snapshots
+/docs/reference/external/**/rendered/*.png
+/docs/reference/external/**/rendered/*.txt
 
 # Misc
 *.zip
