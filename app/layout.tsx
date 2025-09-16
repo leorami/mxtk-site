@@ -10,7 +10,7 @@ import ExperienceProvider from '@/components/experience/ExperienceProvider';
 import { getServerBasePath } from '@/lib/routing/serverBasePath';
 
 import GuideHost from '@/components/ai/GuideHost';
-import FooterDock from '@/components/chrome/FooterDock';
+import FooterDock from '@/components/layout/FooterDock';
 import GuideBootStyle from '@/components/chrome/GuideBootStyle';
 import { ToastProvider } from '@/components/ui/Toast';
 import JsonLd from '@/components/seo/JsonLd';
@@ -179,7 +179,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             {/* Wave 4/5: Drawer host only (top-right panel disabled) */}
             <GuideHost />
             {/* Mobile footer dock */}
-            <FooterDock />
+            <div className="md:hidden"><FooterDock /></div>
           </ToastProvider>
         </ExperienceProvider>
         </BasePathProvider>

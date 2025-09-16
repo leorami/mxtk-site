@@ -47,7 +47,7 @@ export default function PageScaffold({
   return (
     <PageTheme ink={ink} lift={lift} glass={glass}>
       <PageBackground page={backgroundVariant ?? copyKey} />      
-        <div className="relative container mx-auto px-4 pt-8 pb-8">
+        <div className="relative container mx-auto px-[var(--gutter-sm)] pt-4 pb-6 sm:px-6">
           <div className="glass glass--panel p-6 md:p-8">
             <div className="relative">
               <div className="space-y-0">

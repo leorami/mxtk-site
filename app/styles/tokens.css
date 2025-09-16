@@ -1,0 +1,10 @@
+:root{
+  --gutter-sm: 16px;
+  --gutter-xs: 12px;
+  --gap-widget: 12px;
+}
+@media (max-width: 360px){
+  :root{ --gutter-sm: var(--gutter-xs); }
+}
+
+

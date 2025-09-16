@@ -2,7 +2,7 @@ import SectionWrapper from '@/components/SectionWrapper';
 import StatTile from '@/components/StatTile';
 import DashboardContent from '@/components/home/DashboardContent';
 import PageScaffold from '@/components/layout/PageScaffold';
-import Link from 'next/link';
+import Button from '@/components/ui/Button';
 
 export const dynamic = 'force-dynamic';
 
@@ -17,8 +17,8 @@ export default function HomePage() {
       heroAlign="center"
       heroActions={(
         <div className="flex flex-wrap gap-3 justify-center">
-          <Link href="/resources" className="btn-soft">Explore resources</Link>
-          <Link href="/institutions" className="btn-outline">For institutions</Link>
+          <Button href="/owners" size="sm" variant="primary">Mineral Owners</Button>
+          <Button href="/transparency" size="sm" variant="outline">Trust & Transparency</Button>
         </div>
       )}
     >

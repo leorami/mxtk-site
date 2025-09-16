@@ -9,7 +9,7 @@ export const dashboardCopy: PageCopy = {
   },
   heroSub: {
     learn:
-      "Pin helpful widgets, follow guided suggestions, and learn as you go. Everything adapts to your Journey Stage.",
+      "Your Home adapts as you learn—pin what helps most.",
     build:
       "Drop in Recent Answers, Resources, and Glossary, wire settings, and let Sherpa propose the next best action.",
     operate:

@@ -2,6 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
+@import "./styles/tokens.css";
+
 @font-face {
   font-family: Geist;
   src: local("Inter"), local("system-ui"), local("Segoe UI"), local("Roboto");

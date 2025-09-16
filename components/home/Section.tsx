@@ -26,11 +26,15 @@ export default function Section({
 
     return (
         <section className="sc-section">
-            <header className="sc-section-head">
-                <h2 className="sc-section-title">{title}</h2>
-                <button className="sc-section-toggle" type="button" onClick={toggle} aria-expanded={!isCollapsed}>
-                    {isCollapsed ? 'Expand' : 'Collapse'}
-                </button>
+            <header className={clsx('relative mb-3')}>
+                <h2 className={clsx('text-xl font-semibold pr-10', !isCollapsed && 'sr-only')}>{title}</h2>
+                <button
+                    aria-label={isCollapsed ? 'Expand section' : 'Collapse section'}
+                    aria-expanded={!isCollapsed}
+                    onClick={toggle}
+                    className="absolute right-0 top-0 inline-flex items-center justify-center rounded-full px-2 h-6 text-sm bg-white/20 hover:bg-white/30 backdrop-blur border border-white/20"
+                    type="button"
+                >–</button>
             </header>
             <div className={clsx('sc-section-body', isCollapsed && 'is-collapsed')}>
                 {children}
