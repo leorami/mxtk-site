@@ -1,13 +1,1 @@
-{"id":"t1","ts":1757985950768,"kind":"move","docId":"d1","widgetId":"w1","pos":{"x":1,"y":2},"size":{"w":3,"h":4}}
-{"id":"sig_mflvl9g8_ktlu4j","ts":1757986194968,"kind":"move","docId":"default"}
-{"id":"sig_mflvla7v_ncl048","ts":1757986195963,"kind":"undo","docId":"default"}
-{"id":"sig_mflvlab5_1a8z90","ts":1757986196081,"kind":"redo","docId":"default"}
-{"id":"sig_mflvmve5_5hw5zh","ts":1757986270061,"kind":"move","docId":"default"}
-{"id":"sig_mflvmvma_2j8mg3","ts":1757986270354,"kind":"undo","docId":"default"}
-{"id":"sig_mflvmweg_api1e4","ts":1757986271368,"kind":"redo","docId":"default"}
-{"id":"sig_mflvmxws_vyle7m","ts":1757986273324,"kind":"settings","docId":"772b409b-63c5-4f9f-b1a5-1c2fcbdf3aab","widgetId":"w-pools-table-overview"}
-{"id":"sig_mflvmznz_e4ubzt","ts":1757986275599,"kind":"settings","docId":"772b409b-63c5-4f9f-b1a5-1c2fcbdf3aab","widgetId":"w-pools-table-overview"}
-{"id":"sig_mflvn0pi_bk2kjt","ts":1757986276950,"kind":"refresh","docId":"772b409b-63c5-4f9f-b1a5-1c2fcbdf3aab","widgetId":"w-pools-table-overview"}
-{"id":"sig_mflvoav7_y33gmm","ts":1757986336771,"kind":"move","docId":"default"}
-{"id":"sig_mflvob29_em6s88","ts":1757986337025,"kind":"undo","docId":"default"}
-{"id":"sig_mflvoc79_1f57vu","ts":1757986338501,"kind":"redo","docId":"default"}
+{"id":"t1","ts":1757991855311,"kind":"move","docId":"d1","widgetId":"w1","pos":{"x":1,"y":2},"size":{"w":3,"h":4}}

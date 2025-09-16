@@ -299,7 +299,28 @@ export default function DashboardContent({ initialDocId = 'default', initialDoc 
     return () => { alive = false }
   }, [loadData])
 
-  // Server now auto-seeds; client belt-and-suspenders removed
+  // Client belt-and-suspenders: if cookie missing OR no widgets, seed once and refetch
+  React.useEffect(() => {
+    if (typeof window === 'undefined') return;
+    try {
+      if (sessionStorage.getItem('mxtk_auto_seed_done') === '1') return;
+      const hasCookie = /(?:^|; )mxtk_home_id=([^;]+)/.test(document.cookie || '');
+      const widgetCount = Array.isArray(doc?.widgets) ? (doc!.widgets as any[]).length : 0;
+      if (hasCookie && widgetCount > 0) return;
+      (async () => {
+        try {
+          await fetch(getApiUrl('/ai/home/seed'), {
+            method: 'POST',
+            headers: { 'content-type': 'application/json' },
+            body: JSON.stringify({ id: doc?.id || 'default', mode, adapt: true }),
+            credentials: 'include'
+          });
+        } catch {}
+        try { sessionStorage.setItem('mxtk_auto_seed_done', '1'); } catch {}
+        loadData(true);
+      })();
+    } catch {}
+  }, [doc?.id, doc?.widgets, mode, loadData]);
 
   // Surface Adapt CTA when mode changes or when doc first loads
   React.useEffect(() => {

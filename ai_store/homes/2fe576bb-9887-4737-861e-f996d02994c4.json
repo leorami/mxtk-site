@@ -1,5 +1,6 @@
 {
-  "id": "default",
+  "id": "2fe576bb-9887-4737-861e-f996d02994c4",
+  "layoutVersion": 2,
   "sections": [
     {
       "id": "overview",
@@ -45,7 +46,14 @@
       "size": {
         "w": 4,
         "h": 24
-      }
+      },
+      "stages": [
+        "training",
+        "preparing",
+        "conquer"
+      ],
+      "priority": 5,
+      "mobileFriendly": true
     },
     {
       "id": "w-recent-answers-overview",
@@ -59,7 +67,12 @@
       "size": {
         "w": 4,
         "h": 24
-      }
+      },
+      "stages": [
+        "training"
+      ],
+      "priority": 3,
+      "mobileFriendly": true
     },
     {
       "id": "w-note-overview",
@@ -76,7 +89,12 @@
       },
       "data": {
         "note": ""
-      }
+      },
+      "stages": [
+        "training"
+      ],
+      "priority": 1,
+      "mobileFriendly": true
     },
     {
       "id": "w-price-large-overview",
@@ -94,7 +112,13 @@
       "data": {
         "symbol": "MXTK",
         "interval": "7d"
-      }
+      },
+      "stages": [
+        "preparing",
+        "conquer"
+      ],
+      "priority": 3,
+      "mobileFriendly": true
     },
     {
       "id": "w-pools-table-overview",
@@ -112,13 +136,19 @@
       "data": {
         "token": "0x3e4Ffeb394B371AAaa0998488046Ca19d870d9Ba",
         "limit": 5
-      }
+      },
+      "stages": [
+        "preparing",
+        "conquer"
+      ],
+      "priority": 4,
+      "mobileFriendly": true
     },
     {
-      "id": "w-resources-learn",
+      "id": "w-resources-build",
       "type": "resources",
-      "title": "Learn Resources",
-      "sectionId": "learn",
+      "title": "Builder Resources",
+      "sectionId": "build",
       "pos": {
         "x": 0,
         "y": 0
@@ -128,14 +158,22 @@
         "h": 20
       },
       "data": {
+        "category": "dev",
         "maxItems": 6
-      }
+      },
+      "stages": [
+        "training",
+        "preparing",
+        "conquer"
+      ],
+      "priority": 4,
+      "mobileFriendly": true
     },
     {
-      "id": "w-glossary-spotlight-learn",
-      "type": "glossary-spotlight",
-      "title": "Glossary",
-      "sectionId": "learn",
+      "id": "w-pools-mini-build",
+      "type": "pools-mini",
+      "title": "Pools",
+      "sectionId": "build",
       "pos": {
         "x": 6,
         "y": 0
@@ -145,9 +183,14 @@
         "h": 20
       },
       "data": {
-        "day": "20250915",
-        "index": 4
-      }
+        "token": "0x3e4Ffeb394B371AAaa0998488046Ca19d870d9Ba"
+      },
+      "stages": [
+        "preparing",
+        "conquer"
+      ],
+      "priority": 3,
+      "mobileFriendly": true
     },
     {
       "id": "w-resources-library",
@@ -164,11 +207,14 @@
       },
       "data": {
         "maxItems": 10
-      }
+      },
+      "stages": [
+        "training",
+        "preparing",
+        "conquer"
+      ],
+      "priority": 4,
+      "mobileFriendly": true
     }
-  ],
-  "layoutVersion": 2,
-  "meta": {
-    "lastAdaptMode": "learn"
-  }
+  ]
 }

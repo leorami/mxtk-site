@@ -16,7 +16,7 @@ type Item = { href: string; label: string }
 
 // Navigation groups for dropdown menus
 const NAVIGATION_GROUPS = {
-  "Who's it for": [
+  "Overview": [
     { href: 'owners', label: 'Owners' },
     { href: 'institutions', label: 'Institutions' },
   ],
@@ -108,14 +108,15 @@ export default function SiteHeader({ hasHome }: { hasHome?: boolean }) {
             {/* Add a Home link next to the logo (left cluster). */}
             <nav data-testid="nav-links" className="hidden nav:flex items-center justify-center gap-2 relative">
               <Link
-                href="/dashboard"
+                href="/home"
                 scroll={false}
                 className="nav-link nav-pill px-3 py-2 rounded-lg transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-400/35 ml-2 mr-1 border border-[var(--border-soft)] bg-[var(--surface-card)]/55 text-[var(--ink-strong)] dark:text-[var(--ink-strong)] shadow-[0_0_8px_rgba(0,0,0,0.06)] dark:shadow-[0_0_10px_rgba(255,255,255,0.14)] hover:bg-[var(--surface-card)]/75"
                 suppressHydrationWarning
-                title="Your adaptive Dashboard"
+                title="Your adaptive Home"
               >
-                Dashboard
+                Home
               </Link>
+              <Link href="/highlights" className="nav-link nav-pill px-3 py-2 rounded-lg hover:bg-[var(--surface-card)]/75 border border-[var(--border-soft)] bg-[var(--surface-card)]/55">Highlights</Link>
               {Object.entries(NAVIGATION_GROUPS).map(([groupName, groupItems]) => {
                 const isActive = isGroupActive(groupItems)
                 const isDropdownOpen = activeDropdown === groupName
@@ -203,15 +204,24 @@ export default function SiteHeader({ hasHome }: { hasHome?: boolean }) {
           <div className="mx-auto max-w-none px-3 py-2 space-y-0.5 overflow-y-auto max-h-[calc(100dvh-90px)]">
             {hasHome && (
               <Link
-                href="/dashboard"
+                href="/home"
                 scroll={false}
                 className="block px-0 py-3 rounded-lg hover:bg-[var(--hover-bg)] font-medium text-base text-[var(--ink-strong)] dark:text-[var(--ink-strong)]"
                 onClick={() => setOpen(false)}
                 suppressHydrationWarning
               >
-                <span className="px-3">Dashboard</span>
+                <span className="px-3">Home</span>
               </Link>
             )}
+            <Link
+              href="/highlights"
+              scroll={false}
+              className="block px-0 py-3 rounded-lg hover:bg-[var(--hover-bg)] font-medium text-base text-[var(--ink-strong)] dark:text-[var(--ink-strong)]"
+              onClick={() => setOpen(false)}
+              suppressHydrationWarning
+            >
+              <span className="px-3">Highlights</span>
+            </Link>
 
             {Object.entries(NAVIGATION_GROUPS).map(([groupName, groupItems]) => (
               <div key={groupName} className="py-2">

@@ -2,6 +2,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest'
 import React from 'react'
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import SnapshotManager from '@/components/home/SnapshotManager'
+import { ToastProvider } from '@/components/ui/Toast'
 
 describe('SnapshotManager UI', () => {
   const fetchMock = vi.fn()
@@ -31,10 +32,10 @@ describe('SnapshotManager UI', () => {
     })
 
     const onClose = vi.fn()
-    render(<SnapshotManager open={true} docId="d" onClose={onClose} />)
+    render(<ToastProvider><SnapshotManager open={true} docId="d" onClose={onClose} /></ToastProvider>)
     await waitFor(() => {
-      const n = screen.queryByText('Snapshots');
-      expect(Boolean(n)).toBe(true);
+      const n = screen.getAllByText('Snapshots');
+      expect(n.length).toBeGreaterThan(0);
     })
     expect(fetchMock).toHaveBeenCalled()
 
@@ -45,7 +46,13 @@ describe('SnapshotManager UI', () => {
     fireEvent.click(screen.getByText('Save'))
     await waitFor(() => expect(fetchMock).toHaveBeenCalled())
 
-    // Delete first (manage list is already shown)
+    // Since there are no items yet, create one by mocking load response with an item
+    fetchMock.mockImplementationOnce((url: string) => Promise.resolve(new Response(JSON.stringify({ items }), { status: 200 })))
+    // Re-open to trigger load
+    fireEvent.click(screen.getByText('Close'))
+    render(<ToastProvider><SnapshotManager open={true} docId="d" onClose={onClose} /></ToastProvider>)
+    await waitFor(() => expect(screen.getAllByText('Snapshots').length).toBeGreaterThan(0))
+    // Now delete
     const delBtn = await screen.findByText('Delete')
     fireEvent.click(delBtn)
     await waitFor(() => expect(fetchMock).toHaveBeenCalled())

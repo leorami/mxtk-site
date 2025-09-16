@@ -1,5 +1,6 @@
 {
-  "id": "default",
+  "id": "test_auto_2gt0z6ey3f2",
+  "layoutVersion": 2,
   "sections": [
     {
       "id": "overview",
@@ -115,10 +116,10 @@
       }
     },
     {
-      "id": "w-resources-learn",
+      "id": "w-resources-build",
       "type": "resources",
-      "title": "Learn Resources",
-      "sectionId": "learn",
+      "title": "Builder Resources",
+      "sectionId": "build",
       "pos": {
         "x": 0,
         "y": 0
@@ -128,14 +129,15 @@
         "h": 20
       },
       "data": {
+        "category": "dev",
         "maxItems": 6
       }
     },
     {
-      "id": "w-glossary-spotlight-learn",
-      "type": "glossary-spotlight",
-      "title": "Glossary",
-      "sectionId": "learn",
+      "id": "w-pools-mini-build",
+      "type": "pools-mini",
+      "title": "Pools",
+      "sectionId": "build",
       "pos": {
         "x": 6,
         "y": 0
@@ -145,8 +147,7 @@
         "h": 20
       },
       "data": {
-        "day": "20250915",
-        "index": 4
+        "token": "0x3e4Ffeb394B371AAaa0998488046Ca19d870d9Ba"
       }
     },
     {
@@ -167,8 +168,7 @@
       }
     }
   ],
-  "layoutVersion": 2,
   "meta": {
-    "lastAdaptMode": "learn"
+    "lastAdaptMode": "build"
   }
 }
