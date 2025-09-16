@@ -79,4 +79,12 @@ export default function RecentAnswers({ refreshToken = 0 }: { refreshToken?: num
   );
 }
 
+export const meta = {
+  id: 'recent-answers',
+  stages: ['training'],
+  priority: 0.6,
+  mobileFriendly: true,
+  categories: ['Resources'],
+} as const
+
 

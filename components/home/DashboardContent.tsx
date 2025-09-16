@@ -2,6 +2,11 @@
 import { useCopy } from '@/components/copy/Copy'
 import { getApiUrl } from '@/lib/api'
 import { scoreWidgetsForOverview } from '@/lib/home/overviewScore'
+import { selectWidgets } from '@/components/home/engine/selectWidgets'
+import { meta as priceLargeMeta } from '@/components/home/widgets/PriceLarge'
+import { meta as topPoolsMeta } from '@/components/home/widgets/TopPoolsList'
+import { meta as resourcesMeta } from '@/components/home/widgets/Resources'
+import { meta as recentMeta } from '@/components/home/widgets/RecentAnswers'
 import type { HomeDoc, Mode as HomeMode, HomePatch, SectionState, UndoFrame } from '@/lib/home/types'
 import UndoStack from '@/lib/home/undo'
 import * as React from 'react'
@@ -493,8 +498,17 @@ export default function DashboardContent({ initialDocId = 'default', initialDoc 
         // If Overview missing widgets, prefill from recommendations (idempotent: computed only for render)
         if (sec.key === 'overview' && widgets.length === 0 && doc) {
           const mappedMode: HomeMode = (mode === 'learn' || mode === 'build' || mode === 'operate') ? (mode as HomeMode) : 'build'
-          const scored = scoreWidgetsForOverview(doc.widgets, mappedMode)
-          widgets = scored.slice(0, 8).map(s => s.w)
+          const stage = mappedMode === 'learn' ? 'training' : mappedMode === 'build' ? 'preparing' : 'conquer'
+          const registry = [priceLargeMeta, topPoolsMeta, resourcesMeta, recentMeta]
+          const signals = { pins: [], recency: {}, dwell: {}, prompts: {} }
+          const best = selectWidgets({ stage, signals, registry })
+          // Map best-of meta into existing widgets by type if present
+          const byType = new Map(doc.widgets.map(w => [w.type, w]))
+          const mapped = best.map(m => {
+            const guess = m.id === 'top-pools' ? 'top-pools-list' : m.id
+            return byType.get(guess as any)
+          }).filter(Boolean) as typeof doc.widgets
+          widgets = mapped.length ? mapped.slice(0, 8) : doc.widgets.slice(0, 8)
         }
         return (
           <section id={sec.id} key={sec.id} className="glass glass--panel px-4 py-3 md:px-5 md:py-4 mb-5 rounded-xl">

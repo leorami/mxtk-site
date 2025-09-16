@@ -44,7 +44,7 @@
       },
       "size": {
         "w": 4,
-        "h": 21
+        "h": 24
       }
     },
     {
@@ -53,12 +53,12 @@
       "title": "Recent Answers",
       "sectionId": "overview",
       "pos": {
-        "x": 0,
-        "y": 21
+        "x": 4,
+        "y": 0
       },
       "size": {
         "w": 4,
-        "h": 21
+        "h": 24
       }
     },
     {
@@ -67,12 +67,12 @@
       "title": "Note",
       "sectionId": "overview",
       "pos": {
-        "x": 0,
-        "y": 42
+        "x": 8,
+        "y": 0
       },
       "size": {
         "w": 4,
-        "h": 21
+        "h": 24
       },
       "data": {
         "note": ""
@@ -85,16 +85,15 @@
       "sectionId": "overview",
       "pos": {
         "x": 0,
-        "y": 63
+        "y": 24
       },
       "size": {
-        "w": 12,
-        "h": 22
+        "w": 6,
+        "h": 24
       },
       "data": {
         "symbol": "MXTK",
-        "interval": "7d",
-        "density": "cozy"
+        "interval": "7d"
       }
     },
     {
@@ -103,12 +102,12 @@
       "title": "Top Pools",
       "sectionId": "overview",
       "pos": {
-        "x": 0,
-        "y": 85
+        "x": 6,
+        "y": 24
       },
       "size": {
-        "w": 12,
-        "h": 16
+        "w": 6,
+        "h": 24
       },
       "data": {
         "token": "0x3e4Ffeb394B371AAaa0998488046Ca19d870d9Ba",
@@ -129,8 +128,7 @@
         "h": 20
       },
       "data": {
-        "maxItems": 6,
-        "density": "compact"
+        "maxItems": 6
       }
     },
     {
@@ -148,8 +146,7 @@
       },
       "data": {
         "day": "20250915",
-        "index": 4,
-        "density": "cozy"
+        "index": 4
       }
     },
     {
@@ -162,17 +159,19 @@
         "y": 0
       },
       "size": {
-        "w": 4,
-        "h": 15
+        "w": 12,
+        "h": 18
       },
       "data": {
         "maxItems": 10
       }
-    },
-    {
-      "id": "w-resources-build",
-      "type": "resources",
-      "title": "Builder Resources",
+    }
+  ],
+  "layoutVersion": 2,
+  "meta": {
+    "lastAdaptMode": "learn"
+  }
+}"title": "Builder Resources",
       "sectionId": "build",
       "pos": {
         "x": 0,
@@ -193,8 +192,8 @@
       "title": "Pools",
       "sectionId": "build",
       "pos": {
-        "x": 0,
-        "y": 20
+        "x": 6,
+        "y": 0
       },
       "size": {
         "w": 6,
@@ -209,4 +208,4 @@
   "meta": {
     "lastAdaptMode": "build"
   }
-}}
+}

@@ -3,6 +3,7 @@
 import TimeSeries from '@/components/charts/TimeSeries'
 import { apiGet } from '@/lib/api'
 import { getApiPath } from '@/lib/basepath'
+import dynamic from 'next/dynamic'
 import React from 'react'
 
 type Interval = '24h' | '7d' | '30d'
@@ -95,6 +96,9 @@ export default function PriceLarge({ id, data, onPrefill }: Props) {
     setRefreshTick(t => t + 1)
   }
 
+  const [open, setOpen] = React.useState(false)
+  const TimeSeriesLazy = React.useMemo(() => dynamic(() => import('@/components/charts/TimeSeries'), { ssr: false }), [])
+
   return (
     <div className="space-y-3">
       {/* Compact header inside widget body */}
@@ -129,10 +133,41 @@ export default function PriceLarge({ id, data, onPrefill }: Props) {
       )}
 
       {/* Chart */}
-      <TimeSeries key={`${symbol}:${days}:${refreshTick}`} symbol={symbol} days={days} />
+      <div onClick={() => setOpen(true)}>
+        <TimeSeries key={`${symbol}:${days}:${refreshTick}`} symbol={symbol} days={days} />
+      </div>
       {error && <div className="text-xs text-ink-subtle">{error}</div>}
+
+      {open && (
+        <div role="dialog" aria-modal="true" className="fixed inset-0 z-[70] flex items-end sm:items-center justify-center p-2">
+          <div className="absolute inset-0 bg-black/30" aria-hidden onClick={() => setOpen(false)} />
+          <div className="relative z-10 w-full max-w-2xl glass glass--panel rounded-t-2xl sm:rounded-2xl border border-[color:var(--border-soft)] p-4">
+            <header className="flex items-center justify-between mb-3">
+              <h3 className="text-base font-semibold">Price</h3>
+              <div className="inline-flex gap-2">
+                {(['24h','7d','30d'] as Interval[]).map((iv) => (
+                  <button key={iv} className={["chip", iv===interval? 'chip--active': ''].join(' ')} onClick={() => setInterval(iv)}>{iv}</button>
+                ))}
+                <button className="btn btn-ghost btn-sm" onClick={() => setOpen(false)}>Close</button>
+              </div>
+            </header>
+            <div className="text-xs opacity-70 mb-2">Labeled axes and gridlines</div>
+            <div className="min-h-[220px]">
+              <TimeSeriesLazy key={`sheet:${symbol}:${days}:${refreshTick}`} symbol={symbol} days={days} />
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
+
+export const meta = {
+  id: 'price-large',
+  stages: ['preparing'],
+  priority: 0.65,
+  mobileFriendly: true,
+  categories: ['Markets'],
+} as const
 
 

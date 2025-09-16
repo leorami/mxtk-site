@@ -89,4 +89,12 @@ export default function Resources({ id, data }: { id?: string; data?: { maxItems
   );
 }
 
+export const meta = {
+  id: 'resources',
+  stages: ['training','preparing','conquer'],
+  priority: 0.7,
+  mobileFriendly: true,
+  categories: ['Resources'],
+} as const
+
 

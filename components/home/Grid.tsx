@@ -8,11 +8,12 @@ import PriceLarge from '@/components/home/widgets/PriceLarge';
 import PriceMini from '@/components/home/widgets/PriceMini';
 import RecentAnswers from '@/components/home/widgets/RecentAnswers';
 import Resources from '@/components/home/widgets/Resources';
+import TopPoolsList from '@/components/home/widgets/TopPoolsList';
 import WhatsNext from '@/components/home/widgets/WhatsNext';
+import { useToast } from '@/components/ui/Toast';
 import { getApiPath } from '@/lib/basepath';
 import type { HomeDoc, WidgetState } from '@/lib/home/types';
 import * as React from 'react';
-import { useToast } from '@/components/ui/Toast';
 
 type GridProps = {
   doc: HomeDoc;                              // expects V2 with sections + widgets
@@ -494,6 +495,8 @@ export default function Grid({ doc, render, onPatch }: GridProps) {
                       <PriceMini id={w.id} docId={doc.id} data={w.data as any} refreshKey={refreshTicks[w.id] || 0} />
                     ) : w.type === 'price-large' ? (
                       <PriceLarge key={`pl-${w.id}:${refreshTicks[w.id] || 0}`} id={w.id} data={w.data as any} />
+                    ) : w.type === 'top-pools-list' ? (
+                      <TopPoolsList id={w.id} data={w.data as any} />
                     ) : w.type === 'pools-table' ? (
                       <PoolsTable id={w.id} data={w.data as any} />
                     ) : (

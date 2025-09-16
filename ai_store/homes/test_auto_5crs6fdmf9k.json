@@ -1,5 +1,5 @@
 {
-  "id": "default",
+  "id": "test_auto_5crs6fdmf9k",
   "layoutVersion": 2,
   "sections": [
     {
@@ -46,14 +46,7 @@
       "size": {
         "w": 4,
         "h": 24
-      },
-      "stages": [
-        "training",
-        "preparing",
-        "conquer"
-      ],
-      "priority": 5,
-      "mobileFriendly": true
+      }
     },
     {
       "id": "w-recent-answers-overview",
@@ -61,18 +54,13 @@
       "title": "Recent Answers",
       "sectionId": "overview",
       "pos": {
-        "x": 0,
-        "y": 24
+        "x": 4,
+        "y": 0
       },
       "size": {
         "w": 4,
         "h": 24
-      },
-      "stages": [
-        "training"
-      ],
-      "priority": 3,
-      "mobileFriendly": true
+      }
     },
     {
       "id": "w-note-overview",
@@ -80,8 +68,8 @@
       "title": "Note",
       "sectionId": "overview",
       "pos": {
-        "x": 0,
-        "y": 48
+        "x": 8,
+        "y": 0
       },
       "size": {
         "w": 4,
@@ -89,12 +77,7 @@
       },
       "data": {
         "note": ""
-      },
-      "stages": [
-        "training"
-      ],
-      "priority": 1,
-      "mobileFriendly": true
+      }
     },
     {
       "id": "w-price-large-overview",
@@ -103,7 +86,7 @@
       "sectionId": "overview",
       "pos": {
         "x": 0,
-        "y": 72
+        "y": 24
       },
       "size": {
         "w": 6,
@@ -112,13 +95,7 @@
       "data": {
         "symbol": "MXTK",
         "interval": "7d"
-      },
-      "stages": [
-        "preparing",
-        "conquer"
-      ],
-      "priority": 3,
-      "mobileFriendly": true
+      }
     },
     {
       "id": "w-pools-table-overview",
@@ -126,8 +103,8 @@
       "title": "Top Pools",
       "sectionId": "overview",
       "pos": {
-        "x": 0,
-        "y": 96
+        "x": 6,
+        "y": 24
       },
       "size": {
         "w": 6,
@@ -136,13 +113,7 @@
       "data": {
         "token": "0x3e4Ffeb394B371AAaa0998488046Ca19d870d9Ba",
         "limit": 5
-      },
-      "stages": [
-        "preparing",
-        "conquer"
-      ],
-      "priority": 4,
-      "mobileFriendly": true
+      }
     },
     {
       "id": "w-resources-build",
@@ -160,14 +131,7 @@
       "data": {
         "category": "dev",
         "maxItems": 6
-      },
-      "stages": [
-        "training",
-        "preparing",
-        "conquer"
-      ],
-      "priority": 4,
-      "mobileFriendly": true
+      }
     },
     {
       "id": "w-pools-mini-build",
@@ -175,8 +139,8 @@
       "title": "Pools",
       "sectionId": "build",
       "pos": {
-        "x": 0,
-        "y": 20
+        "x": 6,
+        "y": 0
       },
       "size": {
         "w": 6,
@@ -184,13 +148,7 @@
       },
       "data": {
         "token": "0x3e4Ffeb394B371AAaa0998488046Ca19d870d9Ba"
-      },
-      "stages": [
-        "preparing",
-        "conquer"
-      ],
-      "priority": 3,
-      "mobileFriendly": true
+      }
     },
     {
       "id": "w-resources-library",
@@ -207,14 +165,7 @@
       },
       "data": {
         "maxItems": 10
-      },
-      "stages": [
-        "training",
-        "preparing",
-        "conquer"
-      ],
-      "priority": 4,
-      "mobileFriendly": true
+      }
     }
   ],
   "meta": {

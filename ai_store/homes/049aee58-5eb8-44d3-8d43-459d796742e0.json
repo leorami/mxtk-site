@@ -1,5 +1,5 @@
 {
-  "id": "default",
+  "id": "049aee58-5eb8-44d3-8d43-459d796742e0",
   "layoutVersion": 2,
   "sections": [
     {
@@ -61,8 +61,8 @@
       "title": "Recent Answers",
       "sectionId": "overview",
       "pos": {
-        "x": 0,
-        "y": 24
+        "x": 4,
+        "y": 0
       },
       "size": {
         "w": 4,
@@ -80,8 +80,8 @@
       "title": "Note",
       "sectionId": "overview",
       "pos": {
-        "x": 0,
-        "y": 48
+        "x": 8,
+        "y": 0
       },
       "size": {
         "w": 4,
@@ -103,7 +103,7 @@
       "sectionId": "overview",
       "pos": {
         "x": 0,
-        "y": 72
+        "y": 24
       },
       "size": {
         "w": 6,
@@ -126,8 +126,8 @@
       "title": "Top Pools",
       "sectionId": "overview",
       "pos": {
-        "x": 0,
-        "y": 96
+        "x": 6,
+        "y": 24
       },
       "size": {
         "w": 6,
@@ -175,8 +175,8 @@
       "title": "Pools",
       "sectionId": "build",
       "pos": {
-        "x": 0,
-        "y": 20
+        "x": 6,
+        "y": 0
       },
       "size": {
         "w": 6,
@@ -216,8 +216,5 @@
       "priority": 4,
       "mobileFriendly": true
     }
-  ],
-  "meta": {
-    "lastAdaptMode": "build"
-  }
+  ]
 }
