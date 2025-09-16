@@ -36,8 +36,15 @@ export function selectWidgets({ stage, signals, registry, alpha = 0.6, beta = 0.
     const signalScore = scoreForSignals(w.id, signals)
     const base = Math.max(0, Math.min(1, w.priority))
     const score = stageFit * alpha + signalScore * beta + base * gamma
-    return { w, score }
-  }).sort((a, b) => b.score - a.score || (stableHash(a.w.id) - stableHash(b.w.id)))
+    const pinned = Array.isArray(signals.pins) ? signals.pins.includes(w.id) : false
+    const dwell = Math.max(0, Math.min(1, signals.dwell[w.id] ?? 0))
+    return { w, score, pinned, dwell }
+  }).sort((a, b) => {
+    // Strongly prefer pinned items first; then dwell; then composite score
+    if (a.pinned !== b.pinned) return a.pinned ? -1 : 1
+    if (b.dwell !== a.dwell) return b.dwell - a.dwell
+    return (b.score - a.score) || (stableHash(a.w.id) - stableHash(b.w.id))
+  })
 
   // Pick top N
   let out = scored.slice(0, Math.min(max, scored.length)).map(s => s.w)

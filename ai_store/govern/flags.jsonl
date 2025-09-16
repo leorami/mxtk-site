@@ -271,3 +271,13 @@
 {"source":"chat","reason":"spam content","category":"spam","severity":3,"id":"e425d525-bc36-4f52-96f7-8811e0e39b21","createdAt":1757995740380,"status":"open","notes":[],"labels":[]}
 {"source":"ingest","reason":"policy hit","category":"policy","severity":1,"id":"8062a47a-56fc-495f-b5b3-0bbac24c787b","createdAt":1757995740370,"status":"resolved","notes":[],"labels":[],"updatedAt":1757995740479}
 {"source":"system","reason":"check","category":"other","id":"4e9e76d0-01b7-4527-b2c4-947435c1ce0b","createdAt":1757995740498,"status":"open","notes":[],"labels":[]}
+{"source":"system","reason":"pii","category":"pii","id":"48f566ed-7808-46c2-9a2e-a33d6aa94f3a","createdAt":1757997028395,"status":"open","notes":[],"labels":[]}
+{"source":"ingest","reason":"policy hit","category":"policy","severity":1,"id":"57007446-e822-421e-8d91-4a109f33d414","createdAt":1757997028409,"status":"open","notes":[],"labels":[]}
+{"source":"chat","reason":"spam content","category":"spam","severity":3,"id":"28872283-716b-48d5-9e77-de795149c88d","createdAt":1757997028548,"status":"open","notes":[],"labels":[]}
+{"source":"ingest","reason":"policy hit","category":"policy","severity":1,"id":"57007446-e822-421e-8d91-4a109f33d414","createdAt":1757997028409,"status":"resolved","notes":[],"labels":[],"updatedAt":1757997028718}
+{"source":"system","reason":"check","category":"other","id":"231c0d20-5ccd-4d2b-b9d6-23872ddd9b01","createdAt":1757997028741,"status":"open","notes":[],"labels":[]}
+{"source":"system","reason":"pii","category":"pii","id":"95a584bb-6268-43d4-9715-5392406a4261","createdAt":1757998930642,"status":"open","notes":[],"labels":[]}
+{"source":"ingest","reason":"policy hit","category":"policy","severity":1,"id":"6277dae9-2161-4457-9309-d4878194ec9c","createdAt":1757998930654,"status":"open","notes":[],"labels":[]}
+{"source":"chat","reason":"spam content","category":"spam","severity":3,"id":"b39d62ed-70b9-4ed6-a18b-50527bff09e9","createdAt":1757998930660,"status":"open","notes":[],"labels":[]}
+{"source":"ingest","reason":"policy hit","category":"policy","severity":1,"id":"6277dae9-2161-4457-9309-d4878194ec9c","createdAt":1757998930654,"status":"resolved","notes":[],"labels":[],"updatedAt":1757998930685}
+{"source":"system","reason":"check","category":"other","id":"a72360fd-b236-45ba-8ceb-d3cf653722e5","createdAt":1757998930766,"status":"open","notes":[],"labels":[]}

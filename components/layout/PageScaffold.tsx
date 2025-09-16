@@ -19,6 +19,7 @@ export type PageScaffoldProps = {
   glass?: Glass
   heroAlign?: 'center' | 'left'
   heroTitleAs?: keyof JSX.IntrinsicElements
+  heroTitle?: React.ReactNode
   heroTitleClassName?: string
   heroSubClassName?: string
   heroActions?: React.ReactNode
@@ -34,6 +35,7 @@ export default function PageScaffold({
   glass = 'soft',
   heroAlign = 'center',
   heroTitleAs = 'h1',
+  heroTitle,
   heroTitleClassName,
   heroSubClassName,
   heroActions,
@@ -56,15 +58,19 @@ export default function PageScaffold({
                   index={0}
                   className={heroAlign === 'center' ? 'text-center' : ''}
                 >
-                  <ModeTextSwap
-                    as={TitleTag as any}
-                    depKey={`${copyKey}-hero-title-${mode}`}
-                    className={
-                      heroTitleClassName ??
-                      'text-4xl md:text-6xl font-bold tracking-tight copy-fade-in'
-                    }
-                    content={pageCopy.heroTitle[contentMode]}
-                  />
+                  {heroTitle ? (
+                    heroTitle
+                  ) : (
+                    <ModeTextSwap
+                      as={TitleTag as any}
+                      depKey={`${copyKey}-hero-title-${mode}`}
+                      className={
+                        heroTitleClassName ??
+                        'text-4xl md:text-6xl font-bold tracking-tight copy-fade-in'
+                      }
+                      content={pageCopy.heroTitle[contentMode]}
+                    />
+                  )}
                   <ModeTextSwap
                     as="p"
                     depKey={`${copyKey}-hero-sub-${mode}`}

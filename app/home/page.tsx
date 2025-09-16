@@ -3,10 +3,12 @@ import StatTile from '@/components/StatTile';
 import DashboardContent from '@/components/home/DashboardContent';
 import PageScaffold from '@/components/layout/PageScaffold';
 import Button from '@/components/ui/Button';
+import { getCurrentStage, helpers, hero } from '@/copy/home';
 
 export const dynamic = 'force-dynamic';
 
 export default function HomePage() {
+  const stage = getCurrentStage();
   return (
     <PageScaffold
       copyKey="dashboard"
@@ -15,6 +17,11 @@ export default function HomePage() {
       lift="H"
       glass="soft"
       heroAlign="center"
+      heroTitle={(
+        <h1 data-testid="home-hero-title" className="text-4xl md:text-6xl font-bold tracking-tight">
+          {hero[stage].title}
+        </h1>
+      )}
       heroActions={(
         <div className="flex flex-wrap gap-3 justify-center">
           <Button href="/owners" size="sm" variant="primary">Mineral Owners</Button>
@@ -22,6 +29,7 @@ export default function HomePage() {
         </div>
       )}
     >
+      <p data-testid="home-hero-helper" className="mt-2 text-sm opacity-80">{helpers[stage].underHero}</p>
       <SectionWrapper index={1}>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           <StatTile label="$33B+" value="Mineral Assets Committed" faIcon="fa-gem" iconColorClass="text-amber-600" />

@@ -1,17 +1,17 @@
 'use client'
 import { useCopy } from '@/components/copy/Copy'
-import { getApiUrl } from '@/lib/api'
-import { scoreWidgetsForOverview } from '@/lib/home/overviewScore'
 import { selectWidgets } from '@/components/home/engine/selectWidgets'
 import { meta as priceLargeMeta } from '@/components/home/widgets/PriceLarge'
-import { meta as topPoolsMeta } from '@/components/home/widgets/TopPoolsList'
-import { meta as resourcesMeta } from '@/components/home/widgets/Resources'
 import { meta as recentMeta } from '@/components/home/widgets/RecentAnswers'
+import { meta as resourcesMeta } from '@/components/home/widgets/Resources'
+import { meta as topPoolsMeta } from '@/components/home/widgets/TopPoolsList'
+import { getApiUrl } from '@/lib/api'
 import type { HomeDoc, Mode as HomeMode, HomePatch, SectionState, UndoFrame } from '@/lib/home/types'
 import UndoStack from '@/lib/home/undo'
 import * as React from 'react'
 import Grid from './Grid'
 import SnapshotManager from './SnapshotManager'
+import { sendJourney } from './useJourneySignals'
 
 type Props = { initialDocId?: string; initialDoc?: HomeDoc | null }
 
@@ -304,6 +304,11 @@ export default function DashboardContent({ initialDocId = 'default', initialDoc 
     return () => { alive = false }
   }, [loadData])
 
+  // Pageview signal
+  React.useEffect(() => {
+    try { sendJourney({ t:'pageview', path:'/home', ref: (typeof document!=='undefined' ? (document.referrer || '') : '') }) } catch {}
+  }, [])
+
   // Client belt-and-suspenders: if cookie missing OR no widgets, seed once and refetch
   React.useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -317,7 +322,7 @@ export default function DashboardContent({ initialDocId = 'default', initialDoc 
           await fetch(getApiUrl('/ai/home/seed'), {
             method: 'POST',
             headers: { 'content-type': 'application/json' },
-            body: JSON.stringify({ id: doc?.id || 'default', mode, adapt: true }),
+            body: JSON.stringify({ id: doc?.id || null, stage: mode, adapt: true }),
             credentials: 'include'
           });
         } catch {}

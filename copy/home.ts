@@ -1,5 +1,32 @@
 import type { PageCopy } from "./types";
 
+// Stage-aware Home copy (Wave 6)
+export type Stage = "training" | "preparing" | "conquer";
+
+export const hero: Record<Stage, { title:string; body:string; cta:string; tertiary:string }> = {
+  training:  { title:"Start your MXTK journey", body:"Learn the basics with plain-language guides and Sherpa at your side.", cta:"Explore", tertiary:"How MXTK works" },
+  preparing: { title:"Wire it up and test",     body:"Connect wallets, verify data, and dry-run your first positions.",    cta:"Get ready", tertiary:"See transparency tools" },
+  conquer:   { title:"Operate with confidence",  body:"Monitor markets, verify proofs, and scale with discipline.",       cta:"Open dashboard", tertiary:"View reports" },
+};
+
+export const statusRow: Record<Stage, Array<{ label:string; value:string; icon:string }>> = {
+  training:  [{label:"Guides", value:"Getting started", icon:"book"}],
+  preparing: [{label:"Checklist", value:"Integration ready", icon:"check"}],
+  conquer:   [{label:"Ops", value:"Live monitoring", icon:"activity"}],
+};
+
+export const helpers: Record<Stage, { underHero:string }> = {
+  training:  { underHero:"Your Home adapts as you learn—pin what helps most." },
+  preparing: { underHero:"Refine your plan and verify key assumptions as you go." },
+  conquer:   { underHero:"Operate with confidence—monitor risk, verify proofs, and act fast." },
+};
+
+// Replace with your actual source of truth for Journey Stage (store, cookie, query, etc.)
+export function getCurrentStage(): Stage {
+  if (typeof window === "undefined") return "training";
+  return (window.sessionStorage.getItem("mxtk_stage") as Stage) || "training";
+}
+
 export const homeCopy: PageCopy = {
   heroTitle: {
     learn:   "Gold in the ground, value in your hands.",

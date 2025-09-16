@@ -167,7 +167,7 @@ export const meta = {
   stages: ['preparing'],
   priority: 0.65,
   mobileFriendly: true,
-  categories: ['Markets'],
+  categories: ['Owners','Markets'],
 } as const
 
 
