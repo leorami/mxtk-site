@@ -25,8 +25,9 @@ export default function ExperienceToggle({ size = 'default' }: ExperienceToggleP
         "border border-[var(--accent,#ffb84d)]/25",
         "shadow-sm"
       ].join(" ")}
-      role="group"
+      role="radiogroup"
       aria-label="Journey Stage"
+      data-testid="xp-toggle-group"
     >
       {modes.map((m) => {
         const selected = mode === m.value;
@@ -34,16 +35,18 @@ export default function ExperienceToggle({ size = 'default' }: ExperienceToggleP
           <button
             key={m.value}
             onClick={() => setMode(m.value)}
-            aria-pressed={selected}
+            role="radio"
+            aria-checked={selected}
             aria-label={`Journey Stage: ${m.label}`}
             className={[
               (size === 'compact' ? 'px-2' : 'px-3'),
-              "rounded-full text-sm transition flex items-center justify-center",
+              "touch-target focus-ring rounded-full text-sm transition flex items-center justify-center",
               "focus:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--mxtk-orange)_60%,transparent)]",
               selected
                 ? "bg-[color-mix(in_srgb,var(--mxtk-orange)_80%,transparent)] dark:bg-[color-mix(in_srgb,var(--mxtk-orange)_80%,transparent)] shadow-sm"
                 : "opacity-85 hover:opacity-100"
             ].join(" ")}
+            data-testid={selected ? 'journey-pill' : undefined}
             title={`Journey Stage: ${m.label}`}
           >
             <span className="inline-flex items-center justify-center w-7 h-7">

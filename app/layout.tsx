@@ -10,6 +10,8 @@ import ExperienceProvider from '@/components/experience/ExperienceProvider';
 import { getServerBasePath } from '@/lib/routing/serverBasePath';
 
 import GuideHost from '@/components/ai/GuideHost';
+import SkipLink from '@/components/a11y/SkipLink';
+import ReducedMotionProvider from '@/components/a11y/ReducedMotionProvider';
 import FooterDock from '@/components/layout/FooterDock';
 import GuideBootStyle from '@/components/chrome/GuideBootStyle';
 import { ToastProvider } from '@/components/ui/Toast';
@@ -158,12 +160,14 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         />
       </head>
       <body className="page min-h-dvh flex flex-col" suppressHydrationWarning>
+        <SkipLink />
         <BasePathProvider value={basePath}>
         <ExperienceProvider>
           <ToastProvider>
+            <ReducedMotionProvider>
             <PageChromeVars />
             <SiteHeader hasHome={hasHome} />
-            <main data-shiftable-root style={{ overflowX: "visible" }} className="relative z-10 flex-1 min-h-0">
+            <main id="main-content" role="main" tabIndex={-1} data-shiftable-root style={{ overflowX: "visible" }} className="relative z-10 flex-1 min-h-0">
               <div className="site-container mx-auto w-full max-w-screen-xl px-4 sm:px-6 lg:px-8">
                 <BrandThemeProvider>
                   {children}
@@ -180,6 +184,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             <GuideHost />
             {/* Mobile footer dock */}
             <div className="md:hidden"><FooterDock /></div>
+            </ReducedMotionProvider>
           </ToastProvider>
         </ExperienceProvider>
         </BasePathProvider>

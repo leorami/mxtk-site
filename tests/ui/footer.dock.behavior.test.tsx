@@ -6,7 +6,7 @@ vi.mock("@/components/ThemeToggle", () => ({ default: () => <button data-testid=
 
 test("footer dock mounts and has contentinfo role", () => {
   const { container } = render(<FooterDock />);
-  const root = container.querySelector("div[role='contentinfo']");
+  const root = container.querySelector("div[role='region']");
   expect(root).toBeTruthy();
 });
 

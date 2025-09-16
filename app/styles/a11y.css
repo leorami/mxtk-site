@@ -1,0 +1,5 @@
+:focus-visible { outline: none; }
+.focus-ring { outline: 2px solid transparent; outline-offset: 2px; }
+.touch-target { min-height: 44px; min-width: 44px; }
+.skeleton { background-color: rgba(125,125,125,0.15); }
+

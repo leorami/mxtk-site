@@ -97,7 +97,7 @@ export default function PriceLarge({ id, data, onPrefill }: Props) {
   }
 
   const [open, setOpen] = React.useState(false)
-  const TimeSeriesLazy = React.useMemo(() => dynamic(() => import('@/components/charts/TimeSeries'), { ssr: false }), [])
+  const TimeSeriesLazy = React.useMemo(() => dynamic(() => import('@/components/charts/TimeSeries'), { ssr: false, loading: () => <div aria-busy="true" className="h-[220px] w-full skeleton" /> }), [])
 
   return (
     <div className="space-y-3">

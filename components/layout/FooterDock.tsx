@@ -20,7 +20,8 @@ export default function FooterDock(){
 
   return (
     <div
-      role="contentinfo"
+      role="region"
+      aria-label="App controls"
       className={clsx(
         "fixed inset-x-0 bottom-0 z-40 transition-transform duration-200",
         hidden ? "translate-y-full" : "translate-y-0"

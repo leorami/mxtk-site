@@ -281,3 +281,23 @@
 {"source":"chat","reason":"spam content","category":"spam","severity":3,"id":"b39d62ed-70b9-4ed6-a18b-50527bff09e9","createdAt":1757998930660,"status":"open","notes":[],"labels":[]}
 {"source":"ingest","reason":"policy hit","category":"policy","severity":1,"id":"6277dae9-2161-4457-9309-d4878194ec9c","createdAt":1757998930654,"status":"resolved","notes":[],"labels":[],"updatedAt":1757998930685}
 {"source":"system","reason":"check","category":"other","id":"a72360fd-b236-45ba-8ceb-d3cf653722e5","createdAt":1757998930766,"status":"open","notes":[],"labels":[]}
+{"source":"system","reason":"pii","category":"pii","id":"53139225-b755-46b9-bcca-c161757b8b95","createdAt":1758000636616,"status":"open","notes":[],"labels":[]}
+{"source":"ingest","reason":"policy hit","category":"policy","severity":1,"id":"609f7db8-3d51-4668-b6f5-4395160db7e4","createdAt":1758000636781,"status":"open","notes":[],"labels":[]}
+{"source":"chat","reason":"spam content","category":"spam","severity":3,"id":"3b565c8f-b78c-43a4-b827-367b9dd28cef","createdAt":1758000636820,"status":"open","notes":[],"labels":[]}
+{"source":"ingest","reason":"policy hit","category":"policy","severity":1,"id":"609f7db8-3d51-4668-b6f5-4395160db7e4","createdAt":1758000636781,"status":"resolved","notes":[],"labels":[],"updatedAt":1758000637378}
+{"source":"system","reason":"check","category":"other","id":"29d39b2f-01e2-4168-8ab0-b03ee4b978ad","createdAt":1758000637636,"status":"open","notes":[],"labels":[]}
+{"source":"system","reason":"pii","category":"pii","id":"39f2bd29-fe9e-4f48-8163-bb5d1b74d050","createdAt":1758000903682,"status":"open","notes":[],"labels":[]}
+{"source":"ingest","reason":"policy hit","category":"policy","severity":1,"id":"13d7c202-5da1-4d7b-bd42-0131f50e14ac","createdAt":1758000903757,"status":"open","notes":[],"labels":[]}
+{"source":"chat","reason":"spam content","category":"spam","severity":3,"id":"f7a8cdf2-ce35-4069-a72c-3ede7403e204","createdAt":1758000903771,"status":"open","notes":[],"labels":[]}
+{"source":"ingest","reason":"policy hit","category":"policy","severity":1,"id":"13d7c202-5da1-4d7b-bd42-0131f50e14ac","createdAt":1758000903757,"status":"resolved","notes":[],"labels":[],"updatedAt":1758000903945}
+{"source":"system","reason":"check","category":"other","id":"d28eba2f-11a9-4cdb-a3f9-5fa41614a889","createdAt":1758000904373,"status":"open","notes":[],"labels":[]}
+{"source":"system","reason":"pii","category":"pii","id":"9ba526df-c05d-4311-a98f-c2792d03daf2","createdAt":1758001159314,"status":"open","notes":[],"labels":[]}
+{"source":"ingest","reason":"policy hit","category":"policy","severity":1,"id":"7cab206e-f32b-4a95-b5d0-d92d4cea5dae","createdAt":1758001159333,"status":"open","notes":[],"labels":[]}
+{"source":"chat","reason":"spam content","category":"spam","severity":3,"id":"bfa6e91e-6f89-4fb6-bed9-007c76fce408","createdAt":1758001159344,"status":"open","notes":[],"labels":[]}
+{"source":"ingest","reason":"policy hit","category":"policy","severity":1,"id":"7cab206e-f32b-4a95-b5d0-d92d4cea5dae","createdAt":1758001159333,"status":"resolved","notes":[],"labels":[],"updatedAt":1758001159414}
+{"source":"system","reason":"check","category":"other","id":"6821c087-83c0-4cda-95d5-895dc9128a5c","createdAt":1758001159472,"status":"open","notes":[],"labels":[]}
+{"source":"system","reason":"pii","category":"pii","id":"19e850e2-9521-424b-ae93-76e14b78613b","createdAt":1758001377984,"status":"open","notes":[],"labels":[]}
+{"source":"ingest","reason":"policy hit","category":"policy","severity":1,"id":"7dc18185-10b8-4ae9-9c38-08c46988882a","createdAt":1758001377999,"status":"open","notes":[],"labels":[]}
+{"source":"chat","reason":"spam content","category":"spam","severity":3,"id":"f8a5ccb6-aa9c-4008-9899-07f916df2033","createdAt":1758001378024,"status":"open","notes":[],"labels":[]}
+{"source":"ingest","reason":"policy hit","category":"policy","severity":1,"id":"7dc18185-10b8-4ae9-9c38-08c46988882a","createdAt":1758001377999,"status":"resolved","notes":[],"labels":[],"updatedAt":1758001378048}
+{"source":"system","reason":"check","category":"other","id":"17db89c9-98a9-49a0-b250-5a5d8f2bbc8d","createdAt":1758001378556,"status":"open","notes":[],"labels":[]}

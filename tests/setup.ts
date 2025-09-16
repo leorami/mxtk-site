@@ -1,5 +1,6 @@
 // Minimal React shim for tests so components using the new JSX transform work without explicit import
 import * as React from 'react';
+import '@testing-library/jest-dom';
 // @ts-ignore
 (globalThis as any).React = React;
 
@@ -35,5 +36,13 @@ vi.mock('@/lib/basepath', async (importOriginal) => {
   return {
     ...actual,
     useBasePath: () => '',
+  };
+});
+
+// Mock next/font/google for component tests rendering RootLayout
+vi.mock('next/font/google', () => {
+  return {
+    Roboto: (opts: any) => ({ className: 'font-roboto', variable: '--font-roboto' }),
+    Space_Grotesk: (opts: any) => ({ className: 'font-grotesk', variable: '--font-display' }),
   };
 });
