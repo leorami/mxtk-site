@@ -1,11 +1,12 @@
 'use client'
 import { useCopy } from '@/components/copy/Copy'
 import { getApiUrl } from '@/lib/api'
-import type { HomeDoc, SectionState } from '@/lib/home/types'
+import { scoreWidgetsForOverview } from '@/lib/home/overviewScore'
+import type { HomeDoc, Mode as HomeMode, HomePatch, SectionState, UndoFrame } from '@/lib/home/types'
+import UndoStack from '@/lib/home/undo'
 import * as React from 'react'
 import Grid from './Grid'
-import { scoreWidgetsForOverview } from '@/lib/home/overviewScore'
-import type { Mode as HomeMode } from '@/lib/home/types'
+import SnapshotManager from './SnapshotManager'
 
 type Props = { initialDocId?: string; initialDoc?: HomeDoc | null }
 
@@ -71,20 +72,25 @@ export default function DashboardContent({ initialDocId = 'default', initialDoc 
     e.preventDefault()
     if (!dragSec || dragSec === targetId) { setDragSec(null); return }
     // compute new order indices
+    let beforeOrders: { id: string; order: number }[] = []
+    let afterOrders: { id: string; order: number }[] = []
     setDoc(d => {
       if (!d) return d
       const cur = [...d.sections].sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
       const movingIdx = cur.findIndex(s => s.id === dragSec)
       const targetIdx = cur.findIndex(s => s.id === targetId)
       if (movingIdx < 0 || targetIdx < 0) return d
-      const before = cur.map((s, i) => ({ id: s.id, order: i }))
+      beforeOrders = cur.map((s, i) => ({ id: s.id, order: i }))
       const [moving] = cur.splice(movingIdx, 1)
       cur.splice(targetIdx, 0, moving)
       const reindexed = cur.map((s, i) => ({ ...s, order: i }))
-      scheduleUndo({ kind: 'reorder', payload: before })
-      persistSectionOrders(reindexed)
+      afterOrders = reindexed.map(s => ({ id: s.id, order: s.order }))
       return { ...d, sections: reindexed } as HomeDoc
     })
+    try {
+      await persistSectionOrders(afterOrders.map(o => ({ id: o.id, order: o.order })) as any)
+      pushUndoFrame({ sections: afterOrders as any }, { sections: beforeOrders as any })
+    } catch {}
     setDragSec(null)
   }, [dragSec, persistSectionOrders, guideOpen])
 
@@ -188,59 +194,99 @@ export default function DashboardContent({ initialDocId = 'default', initialDoc 
     return null
   }, [initialDocId, mode, retryCount])
 
-  // --- Undo (last op within 10s) -------------------------------------------
-  type InverseOp = { kind: 'move' | 'resize' | 'reorder' | 'adapt-adds'; payload: any };
-  const lastOp = React.useRef<{ op: InverseOp; timer: number | null } | null>(null)
-  const [undoVisible, setUndoVisible] = React.useState(false)
+  // --- Undo/Redo ring buffer (persisted per-doc) ----------------------------
+  const undoKey = React.useMemo(() => `mxtk:undo:${initialDocId}`, [initialDocId])
+  const undoRef = React.useRef<UndoStack | null>(null)
+  const [undoState, setUndoState] = React.useState<{ canUndo: boolean; canRedo: boolean }>({ canUndo: false, canRedo: false })
 
-  const scheduleUndo = React.useCallback((op: InverseOp) => {
-    if (lastOp.current?.timer) window.clearTimeout(lastOp.current.timer)
-    const timer = window.setTimeout(() => { lastOp.current = null; setUndoVisible(false) }, 10000)
-    lastOp.current = { op, timer }
-    setUndoVisible(true)
+  const postSignal = React.useCallback((payload: any) => {
     try {
-      const payload = { op, expiresAt: Date.now() + 10000, docId: initialDocId }
-      sessionStorage.setItem('mxtk.home.undo', JSON.stringify(payload))
+      fetch(getApiUrl(`/ai/signals`).replace(/\/api\//, '/api/'), {
+        method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ id: `sig_${Date.now().toString(36)}_${Math.random().toString(36).slice(2,8)}`, ts: Date.now(), ...payload }), cache: 'no-store'
+      }).catch(() => {})
     } catch {}
   }, [])
 
-  async function applyInverse(op: InverseOp) {
-    try {
-      if (op.kind === 'move') {
-        await fetch(getApiUrl(`/ai/home/${initialDocId}`), { method: 'PATCH', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ widgets: op.payload }) })
-      } else if (op.kind === 'resize') {
-        await fetch(getApiUrl(`/ai/home/${initialDocId}`), { method: 'PATCH', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ widgets: op.payload }) })
-      } else if (op.kind === 'reorder') {
-        await fetch(getApiUrl(`/ai/home/${initialDocId}`), { method: 'PATCH', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ sections: op.payload }) })
-      } else if (op.kind === 'adapt-adds') {
-        await fetch(getApiUrl(`/ai/home/${initialDocId}`), { method: 'PATCH', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ widgets: op.payload }) })
-      }
-      setUndoVisible(false)
-      lastOp.current && lastOp.current.timer && window.clearTimeout(lastOp.current.timer)
-      lastOp.current = null
-      try { sessionStorage.removeItem('mxtk.home.undo') } catch {}
-      await loadData(true)
-    } catch {}
-  }
+  const saveUndo = React.useCallback(() => {
+    try { if (undoRef.current) localStorage.setItem(undoKey, JSON.stringify(undoRef.current.toJSON())) } catch {}
+    if (undoRef.current) setUndoState({ canUndo: undoRef.current.canUndo(), canRedo: undoRef.current.canRedo() })
+  }, [undoKey])
 
-  // Restore pending undo across reloads within window
   React.useEffect(() => {
     try {
-      const raw = sessionStorage.getItem('mxtk.home.undo')
-      if (!raw) return
-      const parsed = JSON.parse(raw)
-      if (parsed?.docId !== initialDocId) { sessionStorage.removeItem('mxtk.home.undo'); return }
-      if (typeof parsed.expiresAt === 'number' && parsed.expiresAt > Date.now()) {
-        lastOp.current = { op: parsed.op, timer: null }
-        setUndoVisible(true)
-        const ms = parsed.expiresAt - Date.now()
-        const t = window.setTimeout(() => { lastOp.current = null; setUndoVisible(false); try{sessionStorage.removeItem('mxtk.home.undo')}catch{} }, Math.max(0, ms))
-        lastOp.current.timer = t as any
+      const raw = localStorage.getItem(undoKey)
+      if (raw) {
+        const parsed = JSON.parse(raw)
+        undoRef.current = UndoStack.fromJSON(parsed)
       } else {
-        sessionStorage.removeItem('mxtk.home.undo')
+        undoRef.current = new UndoStack(50)
       }
-    } catch {}
-  }, [initialDocId])
+    } catch { undoRef.current = new UndoStack(50) }
+    saveUndo()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [undoKey])
+
+  function computeWidgetsDiff(before: HomeDoc, after: HomeDoc) {
+    const mapBefore = new Map(before.widgets.map(w => [w.id, w]))
+    const out: any[] = []
+    for (const w of after.widgets) {
+      const prev = mapBefore.get(w.id)
+      if (!prev) continue
+      const changedPos = prev.pos.x !== w.pos.x || prev.pos.y !== w.pos.y
+      const changedSize = prev.size.w !== w.size.w || prev.size.h !== w.size.h
+      const changedTitle = prev.title !== w.title
+      const changedSection = prev.sectionId !== w.sectionId
+      const changed = changedPos || changedSize || changedTitle || changedSection
+      if (changed) {
+        out.push({ id: w.id, pos: changedPos ? { ...w.pos } : undefined, size: changedSize ? { ...w.size } : undefined, title: changedTitle ? w.title : undefined, sectionId: changedSection ? w.sectionId : undefined })
+      }
+    }
+    return out
+  }
+
+  function applyPatchLocally(base: HomeDoc, patch: HomePatch): HomeDoc {
+    let next = { ...base }
+    if (Array.isArray(patch.widgets) && patch.widgets.length) {
+      const widgets = next.widgets.map(w => ({ ...w }))
+      for (const u of patch.widgets as any[]) {
+        if (!u?.id) continue
+        if ((u as any).remove) {
+          const idx = widgets.findIndex(x => x.id === u.id)
+          if (idx >= 0) widgets.splice(idx, 1)
+          continue
+        }
+        const idx = widgets.findIndex(x => x.id === u.id)
+        if (idx >= 0) {
+          const cur = widgets[idx]
+          widgets[idx] = {
+            ...cur,
+            pos: u.pos ? { ...cur.pos, ...u.pos } : cur.pos,
+            size: u.size ? { ...cur.size, ...u.size } : cur.size,
+            title: typeof u.title !== 'undefined' ? u.title : cur.title,
+            sectionId: typeof u.sectionId !== 'undefined' ? String(u.sectionId) : cur.sectionId,
+            data: u.data && typeof u.data === 'object' ? { ...(cur.data || {}), ...u.data } : cur.data,
+          } as any
+        }
+      }
+      next = { ...next, widgets }
+    }
+    if (Array.isArray(patch.sections) && patch.sections.length) {
+      const sections = next.sections.map(s => ({ ...s }))
+      for (const u of patch.sections as any[]) {
+        const idx = sections.findIndex(x => x.id === u.id)
+        if (idx >= 0) sections[idx] = { ...sections[idx], ...(Object.prototype.hasOwnProperty.call(u, 'collapsed') ? { collapsed: !!(u as any).collapsed } : {}), ...(Object.prototype.hasOwnProperty.call(u, 'order') ? { order: (u as any).order } : {}) }
+      }
+      next = { ...next, sections }
+    }
+    return next
+  }
+
+  const pushUndoFrame = React.useCallback((patch: HomePatch, inverse: HomePatch) => {
+    if (!undoRef.current) return
+    const frame: UndoFrame = { id: `uf_${Date.now().toString(36)}_${Math.random().toString(36).slice(2,8)}`, ts: Date.now(), patch, inverse }
+    undoRef.current.push(frame)
+    saveUndo()
+  }, [saveUndo])
 
   React.useEffect(() => {
     let alive = true
@@ -253,32 +299,14 @@ export default function DashboardContent({ initialDocId = 'default', initialDoc 
     return () => { alive = false }
   }, [loadData])
 
-  // Auto-seed on first visit when doc has zero widgets
-  React.useEffect(() => {
-    if (!doc) return
-    try {
-      const done = sessionStorage.getItem('mxtk_auto_seed_done') === '1'
-      const count = Array.isArray(doc.widgets) ? doc.widgets.length : 0
-      if (count === 0 && !done) {
-        const mappedMode: HomeMode = (mode === 'learn' || mode === 'build' || mode === 'operate') ? (mode as HomeMode) : 'build'
-        fetch(getApiUrl(`/ai/home/seed`), {
-          method: 'POST', headers: { 'content-type': 'application/json' },
-          body: JSON.stringify({ id: doc.id || 'default', mode: mappedMode, adapt: true })
-        }).then(() => {
-          try { sessionStorage.setItem('mxtk_auto_seed_done','1') } catch {}
-          // Re-fetch after seeding
-          void loadData(true)
-        }).catch(() => {})
-      }
-    } catch {}
-  }, [doc, mode, loadData])
+  // Server now auto-seeds; client belt-and-suspenders removed
 
   // Surface Adapt CTA when mode changes or when doc first loads
   React.useEffect(() => {
     if (!doc) return
     const modeChanged = prevModeRef.current !== mode
     if (modeChanged || !ctaShownOnce.current) {
-      setShowAdaptCta(true)
+      setShowAdaptCta(false)
       ctaShownOnce.current = true
       prevModeRef.current = mode
     }
@@ -314,6 +342,7 @@ export default function DashboardContent({ initialDocId = 'default', initialDoc 
   // --- Snapshots UI (Save / Restore / Manage) --------------------------------
   const [snapshots, setSnapshots] = React.useState<import('@/lib/home/types').HomeSnapshotMeta[] | null>(null)
   const [openPanel, setOpenPanel] = React.useState<null | 'restore' | 'manage'>(null)
+  const [snapModalOpen, setSnapModalOpen] = React.useState(false)
   const fetchingSnaps = React.useRef(false)
   const lastAutoSnapKey = React.useMemo(() => `mxtk.home.autoSnapTs:${initialDocId}`, [initialDocId])
 
@@ -364,13 +393,13 @@ export default function DashboardContent({ initialDocId = 'default', initialDoc 
         const added = next.widgets.filter(w => !beforeIds.has(w.id))
         if (added.length) {
           const inverse = added.map(w => ({ id: w.id, remove: true }))
-          scheduleUndo({ kind: 'adapt-adds', payload: inverse })
+          pushUndoFrame({ widgets: inverse.map(x => ({ id: x.id, remove: true })) as any }, { widgets: added.map(w => ({ id: w.id })) as any })
         }
       }
     }
     window.addEventListener('mxtk-dashboard-refresh', onRefresh as any)
     return () => window.removeEventListener('mxtk-dashboard-refresh', onRefresh as any)
-  }, [doc, loadData, scheduleUndo])
+  }, [doc, loadData, pushUndoFrame])
 
   // Loading state
   if (loading) {
@@ -437,11 +466,7 @@ export default function DashboardContent({ initialDocId = 'default', initialDoc 
           </div>
         </div>
       )}
-      {undoVisible && (
-        <div className="mb-3 text-sm opacity-80">
-          <button className="btn btn-ghost px-2 py-1" onClick={() => { if (lastOp.current) applyInverse(lastOp.current.op) }}>Undo</button>
-        </div>
-      )}
+      {/* Undo banner removed; controls live in section header tool row when Guide open */}
       {(previewDoc || doc)?.sections.map((sec) => {
         let widgets = (previewDoc || doc)!.widgets.filter(w => w.sectionId === sec.id)
         // If Overview missing widgets, prefill from recommendations (idempotent: computed only for render)
@@ -453,7 +478,7 @@ export default function DashboardContent({ initialDocId = 'default', initialDoc 
         return (
           <section id={sec.id} key={sec.id} className="glass glass--panel px-4 py-3 md:px-5 md:py-4 mb-5 rounded-xl">
             <header
-              className="wf-head flex items-center justify-between mb-3"
+              className={`wf-head ${sec.collapsed ? 'flex' : 'sr-only md:flex md:opacity-70 md:h-8'} items-center justify-between mb-3`}
               onDragOver={(e) => onSectionDragOver(e, sec.id)}
               onDrop={(e) => onSectionDrop(e, sec.id)}
             >
@@ -481,8 +506,8 @@ export default function DashboardContent({ initialDocId = 'default', initialDoc 
                       const [mv] = cur.splice(idx, 1)
                       cur.splice(ni, 0, mv)
                       const re = cur.map((s, i) => ({ ...s, order: i }))
-                      scheduleUndo({ kind: 'reorder', payload: before })
                       persistSectionOrders(re)
+                        .then(() => { pushUndoFrame({ sections: re.map(s => ({ id: s.id, order: s.order })) as any }, { sections: before as any }) })
                       return { ...d, sections: re } as HomeDoc
                     })
                   }}
@@ -512,16 +537,79 @@ export default function DashboardContent({ initialDocId = 'default', initialDoc 
               </h2>
               <div className="wf-actions flex items-center gap-2" data-nodrag>
                 <button
-                  className="text-sm opacity-80 hover:opacity-100"
+                  className="chip inline-flex px-2 py-0.5 rounded-full border text-xs"
+                  aria-label={sec.collapsed ? 'Expand section' : 'Collapse section'}
                   aria-expanded={!sec.collapsed}
                   onClick={(e) => { e.preventDefault(); toggleCollapse(sec.id); }}
-                >{sec.collapsed ? 'Expand' : 'Collapse'}</button>
+                >{sec.collapsed ? '+' : '−'}</button>
                 {/* Snapshots control group: visible only when Guide is open */}
                 <div className="hidden snapshots-ctl-group" data-nodrag>
                   <style jsx global>{`
                     html.guide-open .snapshots-ctl-group { display: inline-flex !important; gap: 6px; }
+                    html.guide-open .undo-ctl-group { display: inline-flex !important; gap: 6px; }
                     .snapshots-ctl-group button { cursor: pointer; }
                   `}</style>
+                  <span className="undo-ctl-group">
+                    <button
+                      className="btn btn-sm"
+                      disabled={!undoState.canUndo}
+                      onClick={async (e) => {
+                        e.stopPropagation()
+                        if (!undoRef.current || !doc) return
+                        const state = undoRef.current.toJSON()
+                        const curIdx = state.pointer
+                        if (curIdx < 0) return
+                        const frame = state.frames[curIdx]
+                        const before = doc
+                        const locally = applyPatchLocally(before, frame.inverse)
+                        setDoc(locally)
+                        try {
+                          // Persist inverse
+                          const body: any = {}
+                          if (frame.inverse.widgets?.length) body.widgets = frame.inverse.widgets
+                          if (frame.inverse.sections?.length) body.sections = frame.inverse.sections
+                          const res = await fetch(getApiUrl(`/ai/home/${initialDocId}`), { method: 'PATCH', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) })
+                          if (!res.ok) throw new Error('PATCH failed')
+                          // Advance pointer only on success
+                          undoRef.current.undo()
+                          saveUndo()
+                          postSignal({ kind: 'undo', docId: initialDocId })
+                        } catch {
+                          // Revert local UI if persist failed
+                          setDoc(before)
+                        }
+                      }}
+                      data-nodrag
+                    >Undo</button>
+                    <button
+                      className="btn btn-sm"
+                      disabled={!undoState.canRedo}
+                      onClick={async (e) => {
+                        e.stopPropagation()
+                        if (!undoRef.current || !doc) return
+                        const state = undoRef.current.toJSON()
+                        const nextIdx = state.pointer + 1
+                        const frame = state.frames[nextIdx]
+                        if (!frame) return
+                        const before = doc
+                        const locally = applyPatchLocally(before, frame.patch)
+                        setDoc(locally)
+                        try {
+                          const body: any = {}
+                          if (frame.patch.widgets?.length) body.widgets = frame.patch.widgets
+                          if (frame.patch.sections?.length) body.sections = frame.patch.sections
+                          const res = await fetch(getApiUrl(`/ai/home/${initialDocId}`), { method: 'PATCH', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) })
+                          if (!res.ok) throw new Error('PATCH failed')
+                          undoRef.current.redo()
+                          saveUndo()
+                          postSignal({ kind: 'redo', docId: initialDocId })
+                        } catch {
+                          setDoc(before)
+                        }
+                      }}
+                      data-nodrag
+                    >Redo</button>
+                  </span>
                   <button
                     className="btn btn-sm"
                     onClick={(e) => { e.stopPropagation(); const note = window.prompt('Snapshot note (optional)') || undefined; void saveSnapshotNow(note); }}
@@ -534,7 +622,7 @@ export default function DashboardContent({ initialDocId = 'default', initialDoc 
                   >Restore</button>
                   <button
                     className="btn btn-sm"
-                    onClick={async (e) => { e.stopPropagation(); await fetchSnapshots(); setOpenPanel(p => p === 'manage' ? null : 'manage'); }}
+                    onClick={async (e) => { e.stopPropagation(); setSnapModalOpen(true); }}
                     data-nodrag
                   >Manage</button>
                 </div>
@@ -589,39 +677,47 @@ export default function DashboardContent({ initialDocId = 'default', initialDoc 
             {!sec.collapsed && (
               <div className="section-body">
                 <Grid doc={{ ...(previewDoc || doc)!, widgets }} onPatch={async (_id, updates) => {
-                  try {
-                    // compute inverse before send
-                    const inv = updates.map(u => {
-                      const cur = (previewDoc || doc)!.widgets.find(w => w.id === u.id)
-                      return cur ? { id: cur.id, pos: u.pos ? { ...cur.pos } : undefined, size: u.size ? { ...cur.size } : undefined } : u
-                    })
-                    const kind = updates.some(u => u.size) ? 'resize' : 'move' as const
-                    scheduleUndo({ kind, payload: inv })
-                  } catch {}
-                  // Optimistically merge into in-memory doc immediately to prevent visual revert
+                  const beforeDoc = doc!
+                  // Optimistic local apply
                   setDoc(d => {
                     if (!d) return d
-                    const nextWidgets = d.widgets.map(w => {
-                      const u = updates.find(x => x.id === w.id)
-                      if (!u) return w
-                      return {
-                        ...w,
-                        pos: u.pos ? { ...(w.pos as any), ...u.pos as any } : w.pos,
-                        size: u.size ? { ...(w.size as any), ...u.size as any } : w.size,
-                      } as any
-                    })
-                    return { ...d, widgets: nextWidgets }
+                    return applyPatchLocally(d, { widgets: updates as any })
                   })
                   lastMutationTs.current = Date.now()
-                  await fetch(getApiUrl(`/ai/home/${initialDocId}`), {
-                    method: 'PATCH', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ widgets: updates })
-                  })
+                  try {
+                    const res = await fetch(getApiUrl(`/ai/home/${initialDocId}`), { method: 'PATCH', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ widgets: updates }) })
+                    if (!res.ok) throw new Error('PATCH failed')
+                    // Build inverse from captured before, and patch from updates
+                    const inverse = updates.map(u => {
+                      const cur = beforeDoc.widgets.find(w => w.id === u.id)
+                      return cur ? { id: cur.id, pos: u.pos ? { ...cur.pos } : undefined, size: u.size ? { ...cur.size } : undefined } : { id: u.id }
+                    }) as any
+                    pushUndoFrame({ widgets: updates as any }, { widgets: inverse as any })
+                    postSignal({ kind: updates.some(u => u.size) ? 'resize' : 'move', docId: initialDocId })
+                  } catch (e) {
+                    // Revert local state on failure
+                    setDoc(beforeDoc)
+                  }
                 }} />
               </div>
             )}
           </section>
         )
       })}
+      <SnapshotManager
+        open={snapModalOpen}
+        docId={initialDocId}
+        onClose={() => setSnapModalOpen(false)}
+        onRestored={(d) => {
+          const before = doc
+          setDoc(d)
+          if (before) {
+            const inv: HomePatch = { widgets: before.widgets.map(w => ({ id: w.id, pos: { ...w.pos }, size: { ...w.size }, title: w.title, sectionId: w.sectionId })) as any, sections: before.sections.map(s => ({ id: s.id, order: s.order, collapsed: s.collapsed })) as any }
+            const patch: HomePatch = { widgets: d.widgets.map(w => ({ id: w.id, pos: { ...w.pos }, size: { ...w.size }, title: w.title, sectionId: w.sectionId })) as any, sections: d.sections.map(s => ({ id: s.id, order: s.order, collapsed: s.collapsed })) as any }
+            pushUndoFrame(patch, inv)
+          }
+        }}
+      />
     </div>
   )
 }

@@ -3,12 +3,14 @@ export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
 import { env } from '@/lib/env';
+import { readHomeIdCookie, writeHomeIdCookie } from '@/lib/home/cookies';
 import { migrateToV2 } from '@/lib/home/migrate';
 import { zHomePatch } from '@/lib/home/schema';
-import { getHome, putHome } from '@/lib/home/store/fileStore';
+import { adaptDocWithPresets, buildSeedDocFromPresets } from '@/lib/home/seedUtil';
+import { getHome as readHome, putHome as writeHome } from '@/lib/home/store/fileStore';
 import type { HomeDoc, WidgetState } from '@/lib/home/types';
-import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
+import { randomUUID } from 'node:crypto';
 
 const NO_STORE = { 'Cache-Control': 'no-store' };
 
@@ -20,17 +22,50 @@ function clampWidget(w: WidgetState): WidgetState {
   return { ...w, size: { w: wW, h: wH }, pos: { x: pX, y: pY } };
 }
 
-export async function GET(_req: Request, ctx: { params: Promise<{ id: string }> }) {
+export async function GET(req: Request, ctx: { params: Promise<{ id: string }> }) {
   const { id: rawId } = await ctx.params;
-  const id = rawId || 'default';
+  const url = new URL(req.url)
+  const qSeed = url.searchParams.get('autoSeed') === '1'
+  const requestedId = rawId || 'default'
   try {
-    const raw = await getHome(id);
-    if (!raw) {
-      return NextResponse.json({ error: 'not-found' }, { status: 404, headers: NO_STORE });
+    // Cookie-based personal doc provisioning
+    const cookieId = await readHomeIdCookie()
+
+    if (!cookieId || requestedId === 'default') {
+      const newId = randomUUID()
+      const base: HomeDoc = { id: newId, layoutVersion: 2, sections: [
+        { id: 'overview', key: 'overview', title: 'Overview', order: 0 },
+        { id: 'learn',    key: 'learn',    title: 'Learn',    order: 1 },
+        { id: 'build',    key: 'build',    title: 'Build',    order: 2 },
+        { id: 'operate',  key: 'operate',  title: 'Operate',  order: 3 },
+        { id: 'library',  key: 'library',  title: 'Library',  order: 4 },
+      ], widgets: [] }
+      await writeHome(base)
+      const seeded = buildSeedDocFromPresets(newId, 'build')
+      await writeHome(seeded)
+      await writeHomeIdCookie(newId)
+      return NextResponse.json({ id: newId, ...seeded }, { headers: NO_STORE })
     }
-    const { doc, migrated } = migrateToV2(raw);
-    // Fill defaults for minis if missing to avoid empty widgets
-    let changed = false;
+
+    // Load cookie's doc; recreate if missing
+    const existing = await readHome(cookieId)
+    if (!existing) {
+      const base: HomeDoc = { id: cookieId, layoutVersion: 2, sections: [
+        { id: 'overview', key: 'overview', title: 'Overview', order: 0 },
+        { id: 'learn',    key: 'learn',    title: 'Learn',    order: 1 },
+        { id: 'build',    key: 'build',    title: 'Build',    order: 2 },
+        { id: 'operate',  key: 'operate',  title: 'Operate',  order: 3 },
+        { id: 'library',  key: 'library',  title: 'Library',  order: 4 },
+      ], widgets: [] }
+      await writeHome(base)
+      const seeded = buildSeedDocFromPresets(cookieId, 'build')
+      await writeHome(seeded)
+      return NextResponse.json(seeded, { headers: NO_STORE })
+    }
+
+    // migrate and defaults
+    const { doc, migrated } = migrateToV2(existing)
+    let changed = false
     const widgets = (doc.widgets || []).map(w => {
       if (w.type === 'pools-mini') {
         const token = (w.data as any)?.token
@@ -41,18 +76,26 @@ export async function GET(_req: Request, ctx: { params: Promise<{ id: string }> 
         if (!symbol) { changed = true; return { ...w, data: { ...(w.data || {}), symbol: 'MXTK' } as any } }
       }
       return w
-    });
-    if (changed) (doc as any).widgets = widgets;
-    if (migrated || changed) await putHome(doc);
-    const cookieStore = await cookies();
-    cookieStore.set('mxtk_home_id', id, { path: '/', httpOnly: false, sameSite: 'lax' });
-    return NextResponse.json(doc, { headers: NO_STORE });
+    })
+    if (changed) (doc as any).widgets = widgets
+
+    // Empty or explicit autoSeed -> adapt seed idempotently
+    const isEmpty = (Array.isArray(doc.widgets) ? doc.widgets.length : 0) === 0
+    if (isEmpty || qSeed) {
+      const out = adaptDocWithPresets(doc, 'build')
+      await writeHome(out)
+      return NextResponse.json(out, { headers: NO_STORE })
+    }
+
+    if (migrated || changed) await writeHome(doc)
+    return NextResponse.json(doc, { headers: NO_STORE })
   } catch (e: any) {
     const detail = e?.stack || e?.message || String(e);
     console.error('GET /api/ai/home/[id] failed:', detail);
     return NextResponse.json({ error: 'home-get-failed', detail }, { status: 500, headers: NO_STORE });
   }
 }
+ 
 
 export async function PUT(req: Request, ctx: { params: Promise<{ id: string }> }) {
   const { id: rawId } = await ctx.params;
@@ -64,7 +107,7 @@ export async function PUT(req: Request, ctx: { params: Promise<{ id: string }> }
     }
     const { doc } = migrateToV2(body);
     doc.id = id;
-    await putHome(doc);
+    await writeHome(doc);
     return NextResponse.json({ ok: true, doc }, { headers: NO_STORE });
   } catch (e: any) {
     const detail = e?.stack || e?.message || String(e);
@@ -87,14 +130,14 @@ export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }>
     }
     const valid = parsed.data as any;
 
-    const base = await getHome(id);
+    const base = await readHome(id);
     let doc: HomeDoc;
     if (!base) {
       doc = { id, version: 2, sections: [], widgets: [] } as HomeDoc;
     } else {
       const mig = migrateToV2(base);
       doc = mig.doc;
-      if (mig.migrated) await putHome(doc);
+      if (mig.migrated) await writeHome(doc);
     }
 
     const updates: Partial<WidgetState>[] = Array.isArray(valid.widgets)
@@ -144,7 +187,7 @@ export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }>
     }
 
     const out: HomeDoc = { ...doc, widgets };
-    await putHome(out);
+    await writeHome(out);
     return NextResponse.json({ ok: true, doc: out }, { headers: NO_STORE });
   } catch (e: any) {
     const detail = e?.stack || e?.message || String(e);

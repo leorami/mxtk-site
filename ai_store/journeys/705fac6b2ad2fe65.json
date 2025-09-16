@@ -1,7 +1,7 @@
 {
   "id": "705fac6b2ad2fe65",
   "createdAt": "2025-09-08T06:54:43.337Z",
-  "updatedAt": "2025-09-12T07:06:57.727Z",
+  "updatedAt": "2025-09-15T19:40:14.996Z",
   "blocks": [
     {
       "id": "cedaf597-10f9-4066-8faa-69166526fc92",
@@ -32,6 +32,19 @@
       "title": "MXTK transparency proofs are designed to build trust and ensure accountability. ",
       "body": "MXTK transparency proofs are designed to build trust and ensure accountability. Here's how they work: - **Transparency Page**: This page will be posted to provide clear and accessible information about MXTK's operations and financials.\n- **Verified Contract**: The MXTK contract will be verified to ensure it operates as intended and is secure.\n- **Multisig with Timelock**: Admin control will be moved to a multisig (multiple signature) wallet with a timelock. This means decisions require multiple approvals and can't be executed immediately, adding security.\n- **Oracle Methodology**: The methodology for how price data is gathered and used will be published. This ensures that the data driving MXTK's value is reliable and transparent.\n- **Liquidity Pool (LP) Depth**: Initial liquidity of $5–10M will be locked on Uniswap v3 to provide stability and trust in the market. In plain words: MXTK uses clear rules and checks to show it's trustworthy and safe.",
       "citations": [
+        "admin"
+      ],
+      "confidence": 0.8
+    },
+    {
+      "id": "5f9c22b0-7c1b-4d2d-8486-adbe72c2a683",
+      "topicKey": "certainly-mxtk-tokenomics-revolves-around-the-concept-of-asset-backed-cryptocur",
+      "section": "tokenomics",
+      "title": "Certainly! MXTK tokenomics revolves around the concept of asset-backed cryptocur",
+      "body": "Certainly! MXTK tokenomics revolves around the concept of asset-backed cryptocurrency, which means each MXTK token is backed by real-world mineral assets. - **1:1 Asset-Backed Ratio**: Each MXTK token is directly tied to a verified mineral asset, ensuring full transparency and stability.\n- **Global Liquidity**: MXTK allows trading of mineral wealth on crypto exchanges worldwide, making it easier to access and invest in these assets.\n- **Pre-Extraction Value**: MXTK unlocks the value of mineral assets even before they are extracted, which is a new approach in the market. In plain words, MXTK tokens are like digital certificates that represent real minerals, making it easier to trade and invest in these resources globally.",
+      "citations": [
+        "mineral-token.com-raw-index",
+        "mineral-token.com-rendered-index",
         "admin"
       ],
       "confidence": 0.8

@@ -90,14 +90,18 @@ async function main(){
     await new Promise(r => setTimeout(r, 500))
     const changedStyle = await page.evaluate(el => ({ col: el.style.gridColumn, row: el.style.gridRow }), firstWidget)
 
-    // Restore first snapshot from list
+    // Open Manage modal and restore the most recent by clicking first row restore
     await page.evaluate(() => {
       const nodes = Array.from(document.querySelectorAll('button'))
-      const el = nodes.find(n => (n.textContent || '').trim() === 'Restore')
+      const el = nodes.find(n => (n.textContent || '').trim() === 'Manage')
       if (el) el.click()
     })
-    await page.waitForFunction(() => document.querySelectorAll('ul li button').length > 0, { timeout: 7000 })
-    await page.evaluate(() => { const b = document.querySelector('ul li button'); if (b) b.click() })
+    await page.waitForSelector('div[role="dialog"] table tbody tr', { timeout: 8000 })
+    await page.evaluate(() => {
+      const row = document.querySelector('div[role="dialog"] table tbody tr')
+      const btn = row ? row.querySelector('button') : null
+      if (btn) btn.click()
+    })
     await new Promise(r => setTimeout(r, 800))
 
     const restoredStyle = await page.evaluate(el => ({ col: el.style.gridColumn, row: el.style.gridRow }), firstWidget)

@@ -1,0 +1,23 @@
+{
+  "id": "1e3c2e27-a9d4-4c9c-9171-76ce22238539",
+  "widgets": [
+    {
+      "id": "mflj3lsy_1",
+      "type": "summary",
+      "title": "MXTK Overview",
+      "sectionId": "overview",
+      "size": {
+        "w": 4,
+        "h": 3
+      },
+      "pos": {
+        "x": 0,
+        "y": 0
+      },
+      "data": {
+        "text": "Certainly! MXTK tokenomics revolves around the concept of asset-backed cryptocurrency, which means each MXTK token is backed by real-world mineral assets. - **1:1 Asset-Backed Ratio**: Each MXTK token is directly tied to a verified mineral asset, ensuring full transparency and stability.\n- **Global Liquidity**: MXTK allows trading of mineral wealth on crypto exchanges worldwide, making it easier t"
+      }
+    }
+  ],
+  "layoutVersion": 1
+}

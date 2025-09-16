@@ -1311,6 +1311,10 @@ h3 {
   }
 }
 
+/* Utilities */
+.chip { @apply inline-flex items-center rounded-full border text-xs; }
+.line-clamp-5 { display: -webkit-box; -webkit-line-clamp: 5; -webkit-box-orient: vertical; overflow: hidden; }
+
 /* Enhanced Glass Effects for Cutting-Edge Impression */
 
 /* Universal glass effect for ALL interactive elements */

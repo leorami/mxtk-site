@@ -1,6 +1,7 @@
 "use client";
 import IconCard from '@/components/ui/IconCard';
 import { getApiPath } from '@/lib/basepath';
+import { stripMarkdown } from '@/lib/utils/text';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
 type Item = { id: string; title: string; body: string };
@@ -63,21 +64,12 @@ export default function RecentAnswers({ refreshToken = 0 }: { refreshToken?: num
           <ul className="space-y-2">
             {items.map(m => (
               <li key={m.id} className="answer-card">
-                <div className="m-0 font-medium text-sm">
-                  <button
-                    className="btn-link text-sm"
-                    onClick={() => {
-                      try {
-                        fetch(getApiPath('/api/ai/signals'), {
-                          method: 'POST', headers: { 'content-type': 'application/json' },
-                          body: JSON.stringify({ id: `sig_${Date.now().toString(36)}_${Math.random().toString(36).slice(2,8)}`, ts: Date.now(), kind: 'open', docId: 'default', meta: { target: 'guide', intent: 'prefill', source: 'recent-answers' } }), cache: 'no-store'
-                        }).catch(() => {})
-                        window.dispatchEvent(new CustomEvent('mxtk:guide:prefill', { detail: { prompt: m.title || m.body?.slice(0, 120) } }));
-                      } catch {}
-                    }}
-                  >{m.title}</button>
+                <div className="rounded-lg px-3 py-2 bg-amber-300/20 text-amber-900 dark:text-amber-200 line-clamp-5">
+                  {m.title || (m.body?.slice(0, 180) || '')}
                 </div>
-                <div className="text-xs opacity-80">{m.body?.length > 160 ? m.body.slice(0, 160) + '…' : m.body}</div>
+                <p className="text-sm whitespace-pre-wrap">
+                  {stripMarkdown(m.body)}
+                </p>
               </li>
             ))}
           </ul>

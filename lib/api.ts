@@ -20,7 +20,6 @@ export function getApiUrl(path: string): string {
   try {
     if (typeof window !== 'undefined') {
       // Lazy import to avoid cyclic deps during build
-      // eslint-disable-next-line @typescript-eslint/no-var-requires
       const { detectBasePath } = require('./basepath');
       basePath = (detectBasePath() || '').trim();
     } else {

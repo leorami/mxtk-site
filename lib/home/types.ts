@@ -53,8 +53,22 @@ export interface HomeDoc {
   widgets: WidgetState[];
 }
 
-// Signals V0
-export type HomeSignalKind = 'pin' | 'unpin' | 'move' | 'resize' | 'refresh' | 'settings' | 'open' | 'collapse' | 'expand';
+// Signals V0 (+undo/redo/snapshot events)
+export type HomeSignalKind =
+  | 'pin'
+  | 'unpin'
+  | 'move'
+  | 'resize'
+  | 'refresh'
+  | 'settings'
+  | 'open'
+  | 'collapse'
+  | 'expand'
+  | 'undo'
+  | 'redo'
+  | 'snapshot.save'
+  | 'snapshot.restore'
+  | 'snapshot.delete';
 
 export interface HomeSignal {
   id: string;
@@ -80,4 +94,18 @@ export interface HomeSnapshotMeta {
 export interface HomeSnapshot {
   meta: HomeSnapshotMeta;
   doc: HomeDoc;
+}
+
+// Undo/Redo domain
+export interface HomePatch {
+  // Provide only changed entities; consumers should merge into current doc
+  widgets?: WidgetState[];
+  sections?: SectionState[];
+}
+
+export interface UndoFrame {
+  id: string;
+  ts: number;
+  patch: HomePatch;
+  inverse: HomePatch;
 }

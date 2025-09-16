@@ -14,6 +14,7 @@ type Props = {
   onRefresh?: () => void;
   onInfo?: () => void;
   onRemove?: () => void;
+  showHeader?: boolean;
 };
 
 function getHomeIdFallback(): string {
@@ -23,7 +24,7 @@ function getHomeIdFallback(): string {
   } catch { return 'default'; }
 }
 
-export default function WidgetFrame({ id, docId, data, title, children, onRefresh, onInfo, onRemove }: Props) {
+export default function WidgetFrame({ id, docId, data, title, children, onRefresh, onInfo, onRemove, showHeader = false }: Props) {
   const guideOpen = React.useMemo(() => {
     if (typeof document === 'undefined') return false
     try { return document.documentElement.classList.contains('guide-open') } catch { return false }
@@ -71,10 +72,11 @@ export default function WidgetFrame({ id, docId, data, title, children, onRefres
 
   // Removed decorative scroll fades to prevent visual clipping of shadows
 
+  const shouldShowHead = showHeader || guideState
   return (
     <div className="relative h-full wframe" data-testid="wframe">
       {/* Header row: title + actions; actions marked no-drag */}
-      <header className="wf-head flex items-center justify-between">
+      <header className={`wf-head ${shouldShowHead ? 'flex' : 'hidden'} items-center justify-between`}>
         <div className="wf-title truncate">{localTitle}</div>
         <div className="wf-actions wframe-controls widget-controls inline-flex items-center gap-1 opacity-0 pointer-events-none [html.guide-open_&]:opacity-100 [html.guide-open_&]:pointer-events-auto transition-opacity" data-nodrag>
             {onRefresh && (

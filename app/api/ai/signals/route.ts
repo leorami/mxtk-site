@@ -9,7 +9,7 @@ export const revalidate = 0
 const zSignal = z.object({
   id: z.string().min(1),
   ts: z.number().int().positive(),
-  kind: z.enum(['pin','unpin','move','resize','refresh','settings','open','collapse','expand']),
+  kind: z.enum(['pin','unpin','move','resize','refresh','settings','open','collapse','expand','undo','redo','snapshot.save','snapshot.restore','snapshot.delete']),
   docId: z.string().min(1),
   sectionId: z.string().min(1).optional(),
   widgetId: z.string().min(1).optional(),

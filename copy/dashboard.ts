@@ -3,18 +3,18 @@ import type { PageCopy } from "./types";
 
 export const dashboardCopy: PageCopy = {
     heroTitle: {
-        learn: "Start here—your MXTK dashboard.",
-        build: "Your MXTK dashboard—wire, test, ship.",
-        operate: "Operate confidently—your MXTK control room.",
+        learn: "Gold in the ground, value in your hands.",
+        build: "Gold in the ground, value in your hands.",
+        operate: "Gold in the ground, value in your hands.",
     },
 
     heroSub: {
         learn:
-            "Pin helpful widgets, follow guided suggestions, and learn as you go. Everything adapts to your Journey Stage.",
+            "MXTK turns independently-verified mineral reserves into 1:1-backed digital tokens you can hold and use—guided by clear, AI-powered explanations of how it all works.",
         build:
-            "Mode-aware panels group docs, examples, and live data so you can integrate quickly and prove flows end-to-end.",
+            "MXTK turns independently-verified mineral reserves into 1:1-backed digital tokens you can hold and use—guided by clear, AI-powered explanations of how it all works.",
         operate:
-            "A concise view of attestations, custody, and activity—tuned for oversight, with links to evidence you can verify.",
+            "MXTK turns independently-verified mineral reserves into 1:1-backed digital tokens you can hold and use—guided by clear, AI-powered explanations of how it all works.",
     },
 
     // These two keys are what your page expects:
