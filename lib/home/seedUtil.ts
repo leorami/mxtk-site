@@ -29,6 +29,7 @@ export function buildSeedDocFromPresets(id: string, mode: Mode): HomeDoc {
     'price-mini': { stages: ['preparing','conquer'], priority: 2, mobileFriendly: true } as any,
     'glossary-spotlight': { stages: ['training'], priority: 3, mobileFriendly: true } as any,
     'note': { stages: ['training'], priority: 1, mobileFriendly: true } as any,
+    'content-widget': { stages: ['training','preparing','conquer'], priority: 3, mobileFriendly: true } as any,
   }
   const widgets: WidgetState[] = presets.map(p => ({
     id: mkId(`w-${p.type}-${p.section}`),

@@ -1,9 +1,10 @@
 import { meta as priceLarge } from "@/components/home/widgets/PriceLarge";
 import { meta as recentAnswers } from "@/components/home/widgets/RecentAnswers";
 import { meta as resources } from "@/components/home/widgets/Resources";
+import { meta as content } from "@/components/home/widgets/ContentWidget";
 import { meta as topPools } from "@/components/home/widgets/TopPoolsList";
 
-export const registry = [priceLarge, recentAnswers, resources, topPools] as const;
+export const registry = [priceLarge, recentAnswers, resources, topPools, content] as const;
 export type RegistryItem = typeof registry[number];
 
 // NOTE: Category coverage expectations in tests include 'Owners', 'Transparency', and 'Resources'.

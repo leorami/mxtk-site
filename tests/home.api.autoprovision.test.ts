@@ -11,6 +11,7 @@ describe('Home API autoprovision (contract expectations)', () => {
     const types = new Set(overview.map(w => w.type))
     expect(types.has('price-large')).toBe(true)
     expect(types.has('pools-table')).toBe(true)
+    expect(types.has('content-widget')).toBe(true)
   })
 })
 

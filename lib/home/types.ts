@@ -21,7 +21,8 @@ export type WidgetType =
   | 'pools-mini'
   | 'price-mini'
   | 'price-large'
-  | 'pools-table';
+  | 'pools-table'
+  | 'content-widget';
 
 export interface WidgetState {
   id: string;

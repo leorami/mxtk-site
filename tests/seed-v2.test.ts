@@ -19,7 +19,7 @@ async function seed(id: string, mode: 'learn'|'build'|'operate', adapt = false) 
 describe('Seed Presets V2', () => {
   it('creates a V2 doc with widgets across sections (learn)', async () => {
     const id = 'seedv2_learn'
-    const out = await seed(id, 'learn')
+    const out = await seed(id, 'learn', true)
     expect(out).toBeTruthy()
     const { doc } = migrateToV2(out)
     expect(doc.layoutVersion).toBe(2)
@@ -28,6 +28,8 @@ describe('Seed Presets V2', () => {
     expect(sections.has('learn')).toBe(true)
     expect(sections.has('library')).toBe(true)
     expect(doc.widgets.length).toBeGreaterThanOrEqual(5)
+    const wtypes = new Set(doc.widgets.map(w => w.type))
+    expect(wtypes.has('content-widget')).toBe(true)
     // Ensure no empty widgets for minis
     for (const w of doc.widgets) {
       if (w.type === 'pools-mini') {

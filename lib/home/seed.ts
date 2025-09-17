@@ -37,15 +37,17 @@ type Seed = { section: SectionKey; type: string; size: { w: number; h: number };
 
 // Base set for all modes (Overview/Learn/Build/Operate panes will differ slightly)
 const BASE: Seed[] = [
+    // Row 1: recent answers + price will later be arranged by the layout task
     { section: 'overview', type: 'recent-answers', size: { w: 6, h: 4 }, pos: { x: 0, y: 0 } },
-    { section: 'overview', type: 'resources', size: { w: 6, h: 4 }, pos: { x: 6, y: 0 } },
-    { section: 'overview', type: 'glossary-spotlight', size: { w: 4, h: 3 }, pos: { x: 0, y: 4 } },
+    // Row 2 (between status and learn): content widget styled like highlights
+    { section: 'overview', type: 'content-widget', size: { w: 12, h: 4 }, pos: { x: 0, y: 4 }, title: 'What exactly is MXTK?' },
+    { section: 'overview', type: 'glossary-spotlight', size: { w: 4, h: 3 }, pos: { x: 0, y: 8 } },
 ]
 
 const PER_MODE: Record<Experience, Seed[]> = {
     learn: [
         { section: 'learn', type: 'resources', size: { w: 6, h: 4 }, pos: { x: 0, y: 0 } },
-        { section: 'learn', type: 'what-next', size: { w: 6, h: 2 }, pos: { x: 6, y: 0 } },
+        // remove what-next from default for now (blank widget removal task)
     ],
     build: [
         { section: 'build', type: 'resources', size: { w: 6, h: 4 }, pos: { x: 0, y: 0 } },

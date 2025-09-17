@@ -7,6 +7,7 @@ import PoolsTable from '@/components/home/widgets/PoolsTable';
 import PriceLarge from '@/components/home/widgets/PriceLarge';
 import PriceMini from '@/components/home/widgets/PriceMini';
 import RecentAnswers from '@/components/home/widgets/RecentAnswers';
+import ContentWidget from '@/components/home/widgets/ContentWidget';
 import Resources from '@/components/home/widgets/Resources';
 import TopPoolsList from '@/components/home/widgets/TopPoolsList';
 import WhatsNext from '@/components/home/widgets/WhatsNext';
@@ -410,6 +411,8 @@ export default function Grid({ doc, render, onPatch }: GridProps) {
                       <PriceLarge key={`pl-${w.id}:${refreshTicks[w.id] || 0}`} id={w.id} data={w.data as any} />
                     ) : w.type === 'pools-table' ? (
                       <PoolsTable id={w.id} data={w.data as any} />
+                    ) : w.type === 'content-widget' ? (
+                      <ContentWidget id={w.id} data={w.data as any} />
                     ) : w.type === 'whats-next' ? (
                       <WhatsNext />
                     ) : (
@@ -510,6 +513,8 @@ export default function Grid({ doc, render, onPatch }: GridProps) {
                       <TopPoolsList id={w.id} data={w.data as any} />
                     ) : w.type === 'pools-table' ? (
                       <PoolsTable id={w.id} data={w.data as any} />
+                    ) : w.type === 'content-widget' ? (
+                      <ContentWidget id={w.id} data={w.data as any} />
                     ) : (
                       <div className="p-3 text-sm opacity-70">Widget <code>{w.type}</code></div>
                     )
