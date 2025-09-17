@@ -500,6 +500,10 @@ export default function DashboardContent({ initialDocId = 'default', initialDoc 
       {/* Undo banner removed; controls live in section header tool row when Guide open */}
       {(previewDoc || doc)?.sections.map((sec) => {
         let widgets = (previewDoc || doc)!.widgets.filter(w => w.sectionId === sec.id)
+        // Hide section entirely if there are no widgets
+        if (!widgets || widgets.length === 0) {
+          return null
+        }
         // If Overview missing widgets, prefill from recommendations (idempotent: computed only for render)
         if (sec.key === 'overview' && widgets.length === 0 && doc) {
           const mappedMode: HomeMode = (mode === 'learn' || mode === 'build' || mode === 'operate') ? (mode as HomeMode) : 'build'
