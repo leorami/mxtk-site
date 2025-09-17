@@ -1,5 +1,4 @@
 "use client";
-import * as React from 'react'
 
 type ContentWidgetData = {
   title?: string
@@ -16,7 +15,7 @@ export default function ContentWidget({ id, data }: { id?: string; data?: Conten
       ]
 
   return (
-    <div className="space-y-3 text-[color:var(--ink-strong)]">
+    <div className="space-y-3 text-[color:var(--ink-strong)] wframe-frameless">
       <h3 className="text-xl md:text-2xl font-semibold opacity-95 mb-1">{title}</h3>
       <div className="space-y-3 text-sm leading-relaxed opacity-95">
         {paragraphs.map((p, i) => (

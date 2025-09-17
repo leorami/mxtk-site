@@ -5,19 +5,25 @@ This board tracks the current Home UX wave and only preserves older items still 
 ## Workstream: Home UX Wave 1 (from annotated screenshots)
 
 1) Recent Answers question accuracy and widget borders
-- [ ] Fix question button label to always show the user’s actual question (storage/mapping fix)
-- [ ] Lighten container borders inside widgets in dark mode to match glass UI
-- [ ] Tests: unit for question mapping; visual/DOM tests for dark-mode border classes; update snapshots
-- [ ] Verify in Docker (smart-dev-build apply), run tests, capture screenshots
+- [x] Fix question button label to always show the user’s actual question (storage/mapping fix)
+- [x] Lighten container borders inside widgets in dark mode to match glass UI
+- [x] Tests: unit for question mapping; visual/DOM tests for dark-mode border classes; update snapshots
+- [x] Verify in Docker (smart-dev-build apply), run tests, capture screenshots
 
 2) Insert Info ContentWidget between Status cards and Learn section
-- [ ] Build reusable `ContentWidget` with exact title/copy styling as highlights info section
-- [ ] Inject into `Home` between Status cards and first Learn section; content-driven and easily swappable
-- [ ] Tests: component render and accessibility; content injection integration on Home
-- [ ] Verify visually in both themes
+- [x] Build reusable `ContentWidget` with exact title/copy styling as highlights info section
+- [x] Inject into `Home` between Status cards and the first "Training" section; content-driven and easily swappable
+- [x] Tests: component render and accessibility; content injection integration on Home
+- [x] Verify visually in both themes
+
+2.a) ContentWidget and placement fixes
+- [x] Hide empty sections in `DashboardContent` (tested)
+- [ ] Auto-place new widgets within their section without overlap
+- [ ] ContentWidget frameless (no borders/shadows) to flow within section
+- [ ] Add MXTK-Info-1/2/3 and MXTK-Footer sections; move ContentWidget to MXTK-Info-1; seed/order; tests
 
 3) Price chart placeholder and multi-asset support
-- [ ] When no historical data, render labeled mock flat series at last known price
+- [ ] When no historical data for a specific token, mineral, stock, etc., render labeled mock flat series at last known price
 - [ ] Show token chip in red when data unavailable (API/data issue)
 - [ ] Add additional series for BTC, ETH, USDC, DAI; use relative/log-friendly scale for comparison
 - [ ] Tests: deterministic mocked datasource for series composition and chip state logic
@@ -33,9 +39,10 @@ This board tracks the current Home UX wave and only preserves older items still 
 - [ ] Optional: list prices for extra tokens and add commodities section (gold, copper, lithium, oil)
 - [ ] Tests: DOM order and grid sizing; accessibility of table and chips
 
-6) Add Journey cards between section 1 and 2 (from highlights page)
+6) Add Journey cards in the new MXTK-Info-2 section between section 1 and 2 (from highlights page)
 - [ ] Port cards (icons/title/copy) and make content journey-phase aware
-- [ ] Tests: card presence, ordering, ARIA roles, contrast
+- [ ] Improve sections so that they can be rendered as "Ghost" (outlined [no border, shadow] and transparent) so content appears like it's on the main content container (like the title & description at the top of the page). Make MXTK-Info-2 a ghost section.
+- [ ] Tests: card presence within the MXTK-Info-2 section, ordering, ARIA roles, contrast
 
 7) Pool table dark-mode polish
 - [ ] Improve header/row text colors and alternating row backgrounds in dark mode
@@ -50,6 +57,7 @@ This board tracks the current Home UX wave and only preserves older items still 
 - [ ] Commit work in themed, verified increments; branch per major improvement
 - [ ] Run tests locally (or in Docker) per change; keep debug tools BASE_PATH-free
 - [ ] Update this TaskBoard with progress; attach evidence when applicable
+- [ ] Don't push anything. Commits only.
 
 ## Preserved items relevant to this wave
 

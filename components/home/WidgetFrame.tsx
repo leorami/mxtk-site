@@ -15,6 +15,7 @@ type Props = {
   onInfo?: () => void;
   onRemove?: () => void;
   showHeader?: boolean;
+  frameless?: boolean;
 };
 
 function getHomeIdFallback(): string {
@@ -24,7 +25,7 @@ function getHomeIdFallback(): string {
   } catch { return 'default'; }
 }
 
-export default function WidgetFrame({ id, docId, data, title, children, onRefresh, onInfo, onRemove, showHeader = false }: Props) {
+export default function WidgetFrame({ id, docId, data, title, children, onRefresh, onInfo, onRemove, showHeader = false, frameless = false }: Props) {
   const guideOpen = React.useMemo(() => {
     if (typeof document === 'undefined') return false
     try { return document.documentElement.classList.contains('guide-open') } catch { return false }
@@ -74,7 +75,7 @@ export default function WidgetFrame({ id, docId, data, title, children, onRefres
 
   const shouldShowHead = !!showHeader || guideState
   return (
-    <div className="hidden relative h-full wframe" data-testid="wframe">
+    <div className={`hidden relative h-full wframe ${frameless ? 'wframe--frameless' : ''}`} data-testid="wframe">
       {/* Header row: title + actions; actions marked no-drag */}
       <header className={`wf-head ${shouldShowHead ? 'flex' : 'hidden'} items-center justify-between`} aria-hidden={shouldShowHead ? 'false' : 'true'}>
         <div className="wf-title truncate">{localTitle}</div>

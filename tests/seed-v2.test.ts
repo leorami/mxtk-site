@@ -27,6 +27,8 @@ describe('Seed Presets V2', () => {
     expect(sections.has('overview')).toBe(true)
     expect(sections.has('learn')).toBe(true)
     expect(sections.has('library')).toBe(true)
+    expect(sections.has('mxtk-info-1')).toBe(true)
+    expect(sections.has('mxtk-footer')).toBe(true)
     expect(doc.widgets.length).toBeGreaterThanOrEqual(5)
     const wtypes = new Set(doc.widgets.map(w => w.type))
     expect(wtypes.has('content-widget')).toBe(true)

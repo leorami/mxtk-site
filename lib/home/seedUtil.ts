@@ -4,11 +4,15 @@ import type { HomeDoc, SectionState, WidgetState } from '@/lib/home/types'
 export type Mode = 'learn' | 'build' | 'operate'
 
 export const DEFAULT_SECTIONS: SectionState[] = [
-  { id: 'overview', key: 'overview', title: 'Overview', order: 0 },
-  { id: 'learn',    key: 'learn',    title: 'Learn',    order: 1 },
-  { id: 'build',    key: 'build',    title: 'Build',    order: 2 },
-  { id: 'operate',  key: 'operate',  title: 'Operate',  order: 3 },
-  { id: 'library',  key: 'library',  title: 'Library',  order: 4 },
+  { id: 'overview',      key: 'overview',      title: 'Overview',    order: 0 },
+  { id: 'mxtk-info-1',   key: 'mxtk-info-1',   title: 'MXTK-Info-1', order: 1 },
+  { id: 'learn',         key: 'learn',         title: 'Training',    order: 2 },
+  { id: 'mxtk-info-2',   key: 'mxtk-info-2',   title: 'MXTK-Info-2', order: 3 },
+  { id: 'build',         key: 'build',         title: 'Preparing',   order: 4 },
+  { id: 'mxtk-info-3',   key: 'mxtk-info-3',   title: 'MXTK-Info-3', order: 5 },
+  { id: 'operate',       key: 'operate',       title: 'Conquering',  order: 6 },
+  { id: 'library',       key: 'library',       title: 'Library',     order: 7 },
+  { id: 'mxtk-footer',   key: 'mxtk-footer',   title: 'MXTK-Footer', order: 8 },
 ]
 
 function uniqueIdFactory() {

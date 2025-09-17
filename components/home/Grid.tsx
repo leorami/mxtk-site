@@ -1,13 +1,13 @@
 'use client';
 
 import WidgetFrame from '@/components/home/WidgetFrame';
+import ContentWidget from '@/components/home/widgets/ContentWidget';
 import GlossarySpotlight from '@/components/home/widgets/GlossarySpotlight';
 import PoolsMini from '@/components/home/widgets/PoolsMini';
 import PoolsTable from '@/components/home/widgets/PoolsTable';
 import PriceLarge from '@/components/home/widgets/PriceLarge';
 import PriceMini from '@/components/home/widgets/PriceMini';
 import RecentAnswers from '@/components/home/widgets/RecentAnswers';
-import ContentWidget from '@/components/home/widgets/ContentWidget';
 import Resources from '@/components/home/widgets/Resources';
 import TopPoolsList from '@/components/home/widgets/TopPoolsList';
 import WhatsNext from '@/components/home/widgets/WhatsNext';
@@ -387,6 +387,7 @@ export default function Grid({ doc, render, onPatch }: GridProps) {
                   title={w.title}
                   data={w.data as any}
                   showHeader={Boolean((w.data as any)?.showHeader)}
+                  frameless={w.type === 'content-widget'}
                   onRefresh={() => setRefreshTicks(prev => ({ ...prev, [w.id]: (prev[w.id] || 0) + 1 }))}
                   onRemove={() => {
                     // Optimistically remove from local state and persist
@@ -488,6 +489,7 @@ export default function Grid({ doc, render, onPatch }: GridProps) {
                   title={w.title}
                   data={w.data as any}
                   showHeader={Boolean((w.data as any)?.showHeader)}
+                  frameless={w.type === 'content-widget'}
                   onRefresh={() => setRefreshTicks(prev => ({ ...prev, [w.id]: (prev[w.id] || 0) + 1 }))}
                   onRemove={() => {
                     setWidgets(prev => prev.filter(x => x.id !== w.id));

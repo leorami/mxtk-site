@@ -2,7 +2,7 @@
 export type HomeId = string;
 export type Mode = 'learn' | 'build' | 'operate';
 
-export type SectionKey = 'overview' | 'learn' | 'build' | 'operate' | 'library';
+export type SectionKey = 'overview' | 'mxtk-info-1' | 'learn' | 'mxtk-info-2' | 'build' | 'mxtk-info-3' | 'operate' | 'library' | 'mxtk-footer';
 
 export interface SectionState {
   id: string;

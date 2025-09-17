@@ -106,11 +106,14 @@ function placeNewWidget(existing: WidgetState[], desired: { w: number; h: number
   return { x: 0, y: 0 }
 }
 
-export function addWidget(doc: HomeDoc, payload: { type: WidgetState['type']; title?: string; size: WidgetSize }): HomeDoc {
+export function addWidget(doc: HomeDoc, payload: { type: WidgetState['type']; title?: string; size: WidgetSize; sectionId?: string }): HomeDoc {
   const base = { ...doc, widgets: [...doc.widgets] }
   const size: WidgetSize = { w: Math.max(1, payload.size.w), h: Math.max(1, payload.size.h) }
-  const pos = placeNewWidget(base.widgets as any, size)
-  const w: WidgetState = { id: genId(), type: payload.type as any, title: payload.title, size, pos }
+  // Auto-place within the target section (default to first section)
+  const sectionId = (payload.sectionId as any) || (doc.sections?.[0]?.id || 'overview')
+  const inSection = (base.widgets as any as WidgetState[]).filter(w => (w.sectionId || (doc.sections?.[0]?.id || 'overview')) === sectionId)
+  const pos = placeNewWidget(inSection as any, size)
+  const w: WidgetState = { id: genId(), type: payload.type as any, title: payload.title, sectionId: sectionId as any, size, pos }
   base.widgets.push(w)
   return base
 }
@@ -184,7 +187,9 @@ export function ensureWidget(doc: HomeDoc, opts: { type: WidgetState['type']; se
     return { ...doc, widgets }
   }
   const size: WidgetSize = opts.size ? { w: Math.max(1, opts.size.w), h: Math.max(1, opts.size.h) } : { w: 4, h: 12 }
-  const pos = placeNewWidget(doc.widgets as any, size)
+  // Auto-place within the same section to avoid overlap/occlusion
+  const existingInSection = (doc.widgets as any as WidgetState[]).filter(w => (w.sectionId || (doc.sections?.[0]?.id || 'overview')) === sectionId)
+  const pos = placeNewWidget(existingInSection as any, size)
   const next: WidgetState = {
     id: genId(),
     type,

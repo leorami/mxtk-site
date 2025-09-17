@@ -24,6 +24,18 @@
     height: 100%;
 }
 
+/* Frameless mode for content widgets: no borders or shadows */
+.wframe-frameless, .wframe-frameless * {
+  box-shadow: none !important;
+}
+.widget-tile .wframe-frameless .widget-body,
+.widget-tile .wframe-frameless,
+.widget-tile .wframe-frameless .wframe-shell,
+.widget-tile .wframe-frameless .widget-chrome {
+  background: transparent !important;
+  border: none !important;
+}
+
 /* Body keeps your card look (glass/lift handled by surrounding Card if you render it) */
 .widget-body {
     height: 100%;
@@ -376,6 +388,9 @@ html[data-ink="warm"] .wframe-body{ background: transparent; }
 
 /* Outer shell: owns border and indicators so inner can be clean */
 .wframe-shell{ position:relative; border-radius:18px; height:100%; z-index:1; }
+/* Disable hover/outer shadows when frameless */
+.wframe--frameless, .wframe--frameless * { box-shadow: none !important; }
+.wframe--frameless .wframe-shell, .wframe--frameless .widget-chrome { border: none !important; background: transparent !important; }
 /* Additional content scroll indicators (top/bottom) */
 /* Indicators now attach to the outermost widget container */
 .widget-tile > .scroll-indicator{ position:absolute; left:0; right:0; height:18px; pointer-events:none; z-index:4; opacity:0; transition:opacity .18s ease; }
