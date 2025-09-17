@@ -174,7 +174,17 @@ Guidelines:
     if (/validate|validator|attest/i.test(parsed.message)) section = 'validation';
     if (/glossary|define|term/i.test(parsed.message)) section = 'glossary';
 
-    const block = blockFromAnswer(answer, sources.map(s => s.source), { section, confidence: 0.8 });
+    // Store the user's question as the journey block title so RecentAnswers shows
+    // the actual prompt rather than a summary of the answer.
+    const block = blockFromAnswer(
+      answer,
+      sources.map(s => s.source),
+      {
+        section,
+        confidence: 0.8,
+        title: summarizeSimple(parsed.message),
+      }
+    );
 
     const autoAppend = /^(explain|define|teach\s+me)/i.test(parsed.message || '');
     const homeWidget = autoAppend ? { type: 'summary', title: 'MXTK Overview', data: { text: answer.slice(0, 400) } } : null;

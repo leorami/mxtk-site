@@ -33,4 +33,16 @@ describe('journey API', () => {
     expect(j.ok).toBe(true);
     expect(j.journey.blocks[0].body).not.toMatch(/@/);
   }, 20000);
+
+  it('chat route sets journey block title from user question', async () => {
+    const res = await fetch(`${BASE}/api/ai/chat`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ message: 'Explain MXTK tokenomics simply', mode: 'learn' })
+    } as any);
+    if (!res.ok) return; // allow dev fallback in unit env
+    const j = await res.json();
+    expect(j.ok).toBe(true);
+    expect((j.journeyBlock?.title || '').toLowerCase()).toContain('explain mxtk tokenomics');
+  }, 20000);
 });

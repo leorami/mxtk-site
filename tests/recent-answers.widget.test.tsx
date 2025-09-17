@@ -3,7 +3,7 @@ import { render, screen } from '@testing-library/react'
 
 // Mock fetch to return a journey with blocks
 const blocks = [
-  { id:'1', title:'In plain words: Explain MXTK tokenomics simply', body:'Answer body 1' },
+  { id:'1', title:'Explain MXTK tokenomics simply', body:'Answer body 1' },
   { id:'2', title:'What are MXTK transparency proofs?', body:'Answer body 2' },
 ]
 

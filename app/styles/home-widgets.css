@@ -82,7 +82,7 @@
 /* Wave 12.2 recent answers styling */
 .widget-recent-answers .answer-card {
     padding: .6rem .75rem;
-    border: 1px solid var(--border-soft);
+    border: 1px solid color-mix(in srgb, var(--border-soft), transparent 55%);
     border-radius: 12px;
     background: var(--surface-elev-1);
     margin-block: .5rem;
@@ -96,7 +96,7 @@
     display: grid;
     gap: .75rem;
     padding: 1rem;
-    border: 1px solid var(--border-soft);
+    border: 1px solid color-mix(in srgb, var(--border-soft), transparent 55%);
     border-radius: var(--radius-2xl);
     background: var(--surface-elev-1);
     box-shadow: var(--shadow-lift-sm);
@@ -121,7 +121,7 @@
 .chip {
     padding: .4rem .75rem;
     border-radius: 999px;
-    border: 1px solid var(--border-soft);
+    border: 1px solid color-mix(in srgb, var(--border-soft), transparent 55%);
     background: var(--glass-70);
     box-shadow: var(--shadow-inner-top);
     font-weight: 600;
