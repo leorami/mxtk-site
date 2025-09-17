@@ -1,0 +1,49 @@
+name: Ingest User Docs (Nightly)
+
+on:
+  schedule:
+    - cron: "0 7 * * *" # 7:00 UTC daily
+  workflow_dispatch: {}
+
+jobs:
+  ingest:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "pnpm"
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Install deps
+        run: pnpm install --frozen-lockfile
+
+      - name: Build (if needed)
+        run: pnpm -s -w -r run build || echo 'skip build'
+
+      - name: Ingest user docs into Sherpa vector store
+        run: pnpm -s ai:ingest:docs
+        env:
+          NODE_ENV: production
+
+      - name: Commit vector store updates
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add ai_store/chunks.json ai_store/embeddings.json || true
+          git diff --cached --quiet && echo "No changes" || git commit -m "chore(ai): nightly ingest of user docs"
+
+      - name: Push changes
+        if: ${{ success() }}
+        run: |
+          git push
