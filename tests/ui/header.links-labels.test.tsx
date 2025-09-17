@@ -3,15 +3,14 @@ import '@testing-library/jest-dom'
 import { render } from '@testing-library/react'
 
 describe('SiteHeader labels and links', () => {
-  it('shows Home pill linking to /home and Highlights link', () => {
+  it('shows Home pill linking to /home (Highlights hidden)', () => {
     const { container } = render(<SiteHeader hasHome />)
     const home = container.querySelector('a[href="/home"]')
     expect(home).toBeTruthy()
     expect(home?.textContent).toMatch(/Home/)
 
     const highlights = container.querySelector('a[href="/highlights"]')
-    expect(highlights).toBeTruthy()
-    expect(highlights?.textContent).toMatch(/Highlights/)
+    expect(highlights).toBeNull()
   })
 
   it('navigation group label updated to Overview', () => {
