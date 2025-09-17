@@ -40,7 +40,6 @@ const BASE: Seed[] = [
     { section: 'overview', type: 'recent-answers', size: { w: 6, h: 4 }, pos: { x: 0, y: 0 } },
     { section: 'overview', type: 'resources', size: { w: 6, h: 4 }, pos: { x: 6, y: 0 } },
     { section: 'overview', type: 'glossary-spotlight', size: { w: 4, h: 3 }, pos: { x: 0, y: 4 } },
-    { section: 'overview', type: 'custom-note', size: { w: 8, h: 3 }, pos: { x: 4, y: 4 }, title: 'Notes' },
 ]
 
 const PER_MODE: Record<Experience, Seed[]> = {

@@ -320,28 +320,28 @@ html.dark .mxtk-bg-mineral {
 }
 
 /* Links on glass panels: meet contrast + focus visibility - exclude buttons */
-.glass a:not(.btn):not([class*="btn"]):not(button) {
+.glass a:not(.btn):not([class*="btn"]):not(.button):not(.cta):not([role="button"]):not(button) {
     color: rgba(255, 255, 255, .96);
     text-decoration: underline;
     text-underline-offset: 2px
 }
 
-.glass a:not(.btn):not([class*="btn"]):not(button):hover {
+.glass a:not(.btn):not([class*="btn"]):not(.button):not(.cta):not([role="button"]):not(button):hover {
     opacity: .9
 }
 
-.glass a:not(.btn):not([class*="btn"]):not(button):focus-visible {
+.glass a:not(.btn):not([class*="btn"]):not(.button):not(.cta):not([role="button"]):not(button):focus-visible {
     outline: 2px solid rgba(255, 255, 255, .9);
     outline-offset: 2px;
     border-radius: .25rem
 }
 
 /* Dark-ink variant on light glass - exclude buttons */
-.glass--panel a:not(.btn):not([class*="btn"]):not(button) {
+.glass--panel a:not(.btn):not([class*="btn"]):not(.button):not(.cta):not([role="button"]):not(button) {
     color: var(--mxtk-accent, var(--mxtk-orange))
 }
 
-.glass--panel a:not(.btn):not([class*="btn"]):not(button):focus-visible {
+.glass--panel a:not(.btn):not([class*="btn"]):not(.button):not(.cta):not([role="button"]):not(button):focus-visible {
     outline: 2px solid var(--mxtk-accent, var(--mxtk-orange))
 }
 
@@ -369,8 +369,8 @@ padding: 1.25rem
   }
   
   html.guide-open [data-shiftable-root] {
-    /* desktop: shift content to make room on the right */
-    padding-right: calc(var(--guide-w) + 16px);
+    /* no content shift; guide overlays content */
+    padding-right: 0;
   }
   
   /* The drawer panel element must have [data-guide-panel] */
@@ -384,24 +384,23 @@ padding: 1.25rem
     z-index: 50;
   }
   
-  /* Tablet & below: dock to bottom, give content its width back */
+  /* Bottom overlay at all sizes; center and cap width */
+  [data-guide-panel] {
+    bottom: 0;
+    top: auto;
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
+    width: min(720px, calc(100% - 2rem));
+    height: 33vh;
+    max-height: 33vh;
+    border-top-left-radius: 16px;
+    border-top-right-radius: 16px;
+  }
+
+  /* Ensure the content container itself does not retain desktop max-width when guide is bottom-sheet */
   @media (max-width: 1024px) {
-    html.guide-open [data-shiftable-root] {
-      padding-right: 0;
-      padding-bottom: calc(var(--guide-h) + 16px); /* push page up above the sheet */
-    }
-  
-    [data-guide-panel] {
-      left: 0;
-      right: 0;
-      bottom: 0;
-      top: auto;
-      width: 100%;
-      height: var(--guide-h);
-      max-height: calc(100dvh - 56px); /* avoid covering header on very short viewports */
-      border-top-left-radius: 16px;
-      border-top-right-radius: 16px;
-    }
+    html.guide-open .site-container { max-width: 100% !important; margin-inline: 0 !important; }
   }
 
 /* === Button-like anchors must never look like links === */
@@ -411,8 +410,8 @@ a.btn, a[role="button"], .btn, .chip {
 }
 
 /* Keep WCAG underlines on links inside glass panels — but not on buttons */
-.glass a:not(.btn):not([role="button"]),
-.glass--panel a:not(.btn):not([role="button"]) {
+.glass a:not(.btn):not([class*="btn"]):not(.button):not(.cta):not([role="button"]),
+.glass--panel a:not(.btn):not([class*="btn"]):not(.button):not(.cta):not([role="button"]) {
   text-decoration: underline;
   text-underline-offset: 2px;
   font-weight: 500;
@@ -429,7 +428,7 @@ a.btn, a[role="button"], .btn, .chip {
 }
 
 /* Align wf-title and wf-actions in one row */
-.wf-head{ display:flex; align-items:center; justify-content:space-between; }
+.wf-head{ align-items:center; justify-content:space-between; }
 .wf-title{ flex: 1 1 auto; min-width: 0; }
 .wf-actions{ flex: 0 0 auto; }
 

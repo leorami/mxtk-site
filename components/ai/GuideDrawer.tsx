@@ -2,7 +2,7 @@
 import { GuidePanel } from '@/components/ai/GuidePanel';
 import { useEffect, useState } from 'react';
 
-export default function GuideDrawer() {
+export default function GuideDrawer({ insideContainer = false }: { insideContainer?: boolean } = {}) {
   const [open, setOpen] = useState(false);
   const [mobile, setMobile] = useState(false);
   const [prefill, setPrefill] = useState<string>("");
@@ -28,7 +28,7 @@ export default function GuideDrawer() {
     return () => { try { root.classList.remove('guide-open'); } catch { } };
   }, [open]);
 
-  // Wave 12.2: Support 'mxtk:guide:prefill' to open drawer and seed input
+  // Support 'mxtk:guide:prefill' to open drawer and seed input
   useEffect(() => {
     const handler = (e: Event) => {
       try {
@@ -65,7 +65,8 @@ export default function GuideDrawer() {
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
-    const mql = window.matchMedia('(max-width:640px)');
+    // Align JS breakpoint with CSS (@media max-width: 1024px)
+    const mql = window.matchMedia('(max-width:1024px)');
     const update = () => setMobile(!!mql.matches);
     update();
     try { mql.addEventListener('change', update) } catch { mql.addListener(update) }
@@ -89,10 +90,10 @@ export default function GuideDrawer() {
       role="complementary"
       aria-label="Sherpa Drawer" tabIndex={open ? 0 : -1}
       aria-hidden={!open}
-      className="guide-drawer fixed right-0 z-[120] glass glass--panel backdrop-blur-xl shadow-2xl flex flex-col"
-      style={mobile
-        ? ({ left: 0, right: 0, bottom: 0, top: 'auto', height: 'var(--guide-h)', maxHeight: 'calc(100dvh - 56px)', overflow: 'hidden', borderTopLeftRadius: 16, borderTopRightRadius: 16 } as any)
-        : ({ top: 'var(--nav-height)', bottom: 'var(--footer-height)', height: 'auto', overflow: 'hidden' } as any)}
+      className={`guide-drawer ${insideContainer ? 'absolute' : 'fixed'} z-[120] glass glass--panel backdrop-blur-xl shadow-2xl flex flex-col`}
+      style={insideContainer
+        ? ({ left: 0, right: 0, margin: '0 auto', bottom: 'calc(var(--footer-height, 64px) + env(safe-area-inset-bottom, 0px))', top: 'auto', width: 'clamp(min(var(--sherpa-min-w,360px), calc(100% - var(--sherpa-gutter,2rem))), var(--sherpa-viewport-w,85vw), max(var(--sherpa-max-w,1024px), calc(100% - var(--sherpa-gutter,2rem))))', height: 'min(33vh, 420px)', maxHeight: '33vh', overflow: 'hidden', borderTopLeftRadius: 16, borderTopRightRadius: 16, transform: 'translate(0,0)' } as any)
+        : ({ left: 0, right: 0, margin: '0 auto', bottom: 'calc(var(--footer-height, 64px) + env(safe-area-inset-bottom, 0px))', top: 'auto', width: 'clamp(min(var(--sherpa-min-w,360px), calc(100% - var(--sherpa-gutter,2rem))), var(--sherpa-viewport-w,85vw), max(var(--sherpa-max-w,1024px), calc(100% - var(--sherpa-gutter,2rem))))', height: 'min(33vh, 420px)', maxHeight: '33vh', overflow: 'hidden', borderTopLeftRadius: 16, borderTopRightRadius: 16, transform: 'translate(0,0)' } as any)}
     >
       <div className="min-h-0 flex-1 drawer-body">
         <GuidePanel embedded prefillPrompt={prefill} onClose={() => setOpen(false)} />

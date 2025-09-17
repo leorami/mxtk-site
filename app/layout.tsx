@@ -9,13 +9,12 @@ import PageChromeVars from '@/components/chrome/PageChromeVars';
 import ExperienceProvider from '@/components/experience/ExperienceProvider';
 import { getServerBasePath } from '@/lib/routing/serverBasePath';
 
-import GuideHost from '@/components/ai/GuideHost';
-import SkipLink from '@/components/a11y/SkipLink';
 import ReducedMotionProvider from '@/components/a11y/ReducedMotionProvider';
-import FooterDock from '@/components/layout/FooterDock';
+import SkipLink from '@/components/a11y/SkipLink';
+import GuideHost from '@/components/ai/GuideHost';
 import GuideBootStyle from '@/components/chrome/GuideBootStyle';
-import { ToastProvider } from '@/components/ui/Toast';
 import JsonLd from '@/components/seo/JsonLd';
+import { ToastProvider } from '@/components/ui/Toast';
 import { getBasePathUrl } from '@/lib/basepath';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import type { Metadata } from 'next';
@@ -168,11 +167,12 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             <PageChromeVars />
             <SiteHeader hasHome={hasHome} />
             <main id="main-content" role="main" tabIndex={-1} data-shiftable-root style={{ overflowX: "visible" }} className="relative z-10 flex-1 min-h-0">
-              <div className="site-container mx-auto w-full max-w-screen-xl px-4 sm:px-6 lg:px-8">
+              <div className="site-container mx-auto w-full max-w-screen-xl px-4 sm:px-6 lg:px-8 relative space-y-0">
                 <BrandThemeProvider>
                   {children}
                 </BrandThemeProvider>
-            
+                {/* Guide drawer mounts inside container so width matches content */}
+                <GuideHost />
               </div>
             </main>
             <SiteFooter />
@@ -180,10 +180,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             {/* Lift overlay behind content (driven by html[data-lift]) */}
             <div aria-hidden className="page-lift" />
             {/* Dev switcher moved to footer */}
-            {/* Wave 4/5: Drawer host only (top-right panel disabled) */}
-            <GuideHost />
             {/* Mobile footer dock */}
-            <div className="md:hidden"><FooterDock /></div>
             </ReducedMotionProvider>
           </ToastProvider>
         </ExperienceProvider>

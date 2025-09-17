@@ -116,7 +116,7 @@ export default function SiteHeader({ hasHome }: { hasHome?: boolean }) {
               >
                 Home
               </Link>
-              <Link href="/highlights" className="nav-link nav-pill px-3 py-2 rounded-lg hover:bg-[var(--surface-card)]/75 border border-[var(--border-soft)] bg-[var(--surface-card)]/55">Highlights</Link>
+              {/* Highlights hidden per request; route remains accessible */}
               {Object.entries(NAVIGATION_GROUPS).map(([groupName, groupItems]) => {
                 const isActive = isGroupActive(groupItems)
                 const isDropdownOpen = activeDropdown === groupName
@@ -180,7 +180,6 @@ export default function SiteHeader({ hasHome }: { hasHome?: boolean }) {
               <div data-testid="experience-icons" className={`mr-1 ${iconClass}`}><ExperienceToggle /></div>
               <HeaderSherpa />
             </div>
-            {/* ThemeSwitch moved to footer */}
           </div>
 
           <div data-testid="experience-controls-mobile" className="nav:hidden flex items-center gap-2">
@@ -213,41 +212,36 @@ export default function SiteHeader({ hasHome }: { hasHome?: boolean }) {
                 <span className="px-3">Home</span>
               </Link>
             )}
-            <Link
-              href="/highlights"
-              scroll={false}
-              className="block px-0 py-3 rounded-lg hover:bg-[var(--hover-bg)] font-medium text-base text-[var(--ink-strong)] dark:text-[var(--ink-strong)]"
-              onClick={() => setOpen(false)}
-              suppressHydrationWarning
-            >
-              <span className="px-3">Highlights</span>
-            </Link>
+            {/* Highlights hidden on mobile/tablet per request; keep route available */}
 
-            {Object.entries(NAVIGATION_GROUPS).map(([groupName, groupItems]) => (
-              <div key={groupName} className="py-2">
-                <div className="text-sm font-semibold text-[var(--ink-muted)] dark:text-[var(--ink-muted)] mb-2 px-3">{groupName}</div>
-                <div className="space-y-1">
-                  {groupItems.map(({ href, label }) => {
-                    const isActive = getActiveState(href)
-                    const navHref = `/${href}`
-                    return (
-                      <Link
-                        key={href}
-                        href={navHref}
-                        scroll={false}
-                        className={`block px-0 py-3 text-base rounded-lg hover:bg-[var(--hover-bg)] transition-colors text-[var(--ink-strong)] dark:text-[var(--ink-strong)] ${isActive ? 'font-semibold bg-[var(--hover-bg)]' : ''}`}
-                        style={{ ['--hover-bg' as any]: themeForRoute(href).hoverBg } as CSSProperties}
-                        onClick={() => setOpen(false)}
-                        aria-current={isActive ? 'page' : undefined}
-                        suppressHydrationWarning
-                      >
-                        <span className="px-3">{label}</span>
-                      </Link>
-                    )
-                  })}
+            {/* Mobile menu with tighter spacing */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2">
+              {Object.entries(NAVIGATION_GROUPS).map(([groupName, groupItems]) => (
+                <div key={groupName} className="py-1">
+                  <div className="text-sm text-[var(--mxtk-orange)] mb-1 px-3">{groupName}</div>
+                  <div className="space-y-0.5">
+                    {groupItems.map(({ href, label }) => {
+                      const isActive = getActiveState(href)
+                      const navHref = `/${href}`
+                      return (
+                        <Link
+                          key={href}
+                          href={navHref}
+                          scroll={false}
+                          className={`block pl-6 pr-0 py-3 text-base rounded-lg hover:bg-[var(--hover-bg)] transition-colors text-[var(--mxtk-orange)] ${isActive ? 'bg-[var(--hover-bg)]' : ''}`}
+                          style={{ ['--hover-bg' as any]: themeForRoute(href).hoverBg } as CSSProperties}
+                          onClick={() => setOpen(false)}
+                          aria-current={isActive ? 'page' : undefined}
+                          suppressHydrationWarning
+                        >
+                          <span className="px-3">{label}</span>
+                        </Link>
+                      )
+                    })}
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
 
             {/* Legal Links Section */}
             <div className="pt-4 border-t border-[var(--border-soft)]/30">

@@ -49,8 +49,8 @@ export default function PageScaffold({
   return (
     <PageTheme ink={ink} lift={lift} glass={glass}>
       <PageBackground page={backgroundVariant ?? copyKey} />      
-        <div className="relative container mx-auto px-[var(--gutter-sm)] pt-4 pb-6 sm:px-6">
-          <div className="glass glass--panel p-6 md:p-8">
+        <div className="relative container mx-auto px-[var(--gutter-sm)] pt-4 pb-6 sm:px-6" id="main-content">
+        <div className="glass glass--panel p-6 md:p-8">
             <div className="relative">
               <div className="space-y-0">
                 {/* Hero Section */}
@@ -58,33 +58,37 @@ export default function PageScaffold({
                   index={0}
                   className={heroAlign === 'center' ? 'text-center' : ''}
                 >
-                  {heroTitle ? (
-                    heroTitle
-                  ) : (
+                  <div className="space-y-4 md:space-y-6">
+                    {heroTitle ? (
+                      heroTitle
+                    ) : (
+                      <ModeTextSwap
+                        as={TitleTag as any}
+                        depKey={`${copyKey}-hero-title-${mode}`}
+                        className={
+                          heroTitleClassName ??
+                          'text-4xl md:text-6xl font-bold tracking-tight'
+                        }
+                        data-testid={`${copyKey}-hero-title`}
+                        content={pageCopy.heroTitle[contentMode]}
+                      />
+                    )}
                     <ModeTextSwap
-                      as={TitleTag as any}
-                      depKey={`${copyKey}-hero-title-${mode}`}
-                      className={
-                        heroTitleClassName ??
-                        'text-4xl md:text-6xl font-bold tracking-tight copy-fade-in'
-                      }
-                      content={pageCopy.heroTitle[contentMode]}
+                      as="p"
+                      depKey={`${copyKey}-hero-sub-${mode}`}
+                      className={[
+                        (heroSubClassName ?? 'text-xl max-w-3xl'),
+                        heroAlign === 'center' ? 'mx-auto' : ''
+                      ].join(' ')}
+                      data-testid={`${copyKey}-hero-helper`}
+                      content={pageCopy.heroSub[contentMode]}
                     />
-                  )}
-                  <ModeTextSwap
-                    as="p"
-                    depKey={`${copyKey}-hero-sub-${mode}`}
-                    className={[
-                      (heroSubClassName ?? 'text-xl max-w-3xl copy-fade-in'),
-                      heroAlign === 'center' ? 'mx-auto' : ''
-                    ].join(' ')}
-                    content={pageCopy.heroSub[contentMode]}
-                  />
-                  {heroActions ? (
-                    <div className={`flex flex-col sm:flex-row gap-4 ${heroAlign === 'center' ? 'justify-center' : ''}`}>
-                      {heroActions}
-                    </div>
-                  ) : null}
+                    {heroActions ? (
+                      <div className={`flex flex-col sm:flex-row gap-4 ${heroAlign === 'center' ? 'justify-center' : ''} mt-2 md:mt-4`}>
+                        {heroActions}
+                      </div>
+                    ) : null}
+                  </div>
                 </SectionWrapper>
 
                 {/* Content Sections */}

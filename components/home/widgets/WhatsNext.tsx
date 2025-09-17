@@ -95,7 +95,7 @@ export default function WhatsNext() {
                 try {
                   const r = await fetch(getApiPath('/api/ai/home/pin'), {
                     method: 'POST', headers: { 'content-type': 'application/json' },
-                    body: JSON.stringify({ id: docId, widget: { type: 'whats-next', title: 'What\'s Next', size: { w: 4, h: 12 } } })
+                    body: JSON.stringify({ id: docId, widget: { type: 'whats-next', title: '', size: { w: 4, h: 12 } } })
                   })
                   if (r.ok) {
                     await fetch(getApiPath('/api/ai/signals'), { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ id: `${Date.now().toString(36)}_${Math.random().toString(36).slice(2,6)}`, ts: Date.now(), kind: 'pin', docId }) })

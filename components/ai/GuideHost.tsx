@@ -2,7 +2,6 @@
 import GuideDrawer from '@/components/ai/GuideDrawer';
 import { usePathname } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
-import { createPortal } from 'react-dom';
 
 export default function GuideHost() {
   const [mounted, setMounted] = useState(false);
@@ -47,14 +46,11 @@ export default function GuideHost() {
     window.dispatchEvent(new CustomEvent('mxtk:guide:open', { detail: { prompt } }));
   };
 
-  const bubble = null;
-
   if (!mounted) return null;
   return (
-    <>
-      {createPortal(bubble, document.body)}
-      <GuideDrawer />
-    </>
+    <div className="site-container mx-auto w-full max-w-screen-xl px-4 sm:px-6 lg:px-8 relative space-y-0">
+      <GuideDrawer insideContainer />
+    </div>
   );
 }
 

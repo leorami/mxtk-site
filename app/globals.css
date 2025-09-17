@@ -1018,6 +1018,7 @@ html body [data-mineral] h3 {
   padding: .6rem 1rem;
   font-weight: 600;
   transition: transform .15s, box-shadow .15s, background-color .15s, color .15s;
+  text-decoration: none !important;
 }
 
 .btn-base:hover {
@@ -1964,8 +1965,6 @@ button { color: var(--ink-strong); }
   color: rgba(255, 255, 255, 0.7) !important;
 }
 
-/* Wave 9: glass tokens consolidated into .glass above */
-
 /* === INK SYSTEM REMOVED TO PREVENT THEME CONFLICTS ===
    The PageTheme ink system was overriding the main theme toggle system.
    Pages that need custom text colors should use CSS classes directly. */
@@ -1985,11 +1984,6 @@ button { color: var(--ink-strong); }
   .page .glass {
     margin-left: 0.5rem;
     margin-right: 0.5rem;
-  }
-
-  /* Card padding improvements */
-  .glass {
-    padding: 1.5rem !important;
   }
 
   /* Text spacing from borders */
@@ -2154,7 +2148,7 @@ html[data-lift="H"] {
   box-shadow: 0 6px 16px rgba(0, 0, 0, .18);
 }
 
-/* === COMPREHENSIVE BUTTON UNDERLINE REMOVAL === */
+/* === COMPREHENSIVE BUTTON UNDERLINE REMOVAL — HARDENED === */
 /* ALL button-like elements should NEVER have underlines */
 .btn, .btn:link, .btn:visited, .btn:hover, .btn:active,
 .btn-primary, .btn-primary:link, .btn-primary:visited, .btn-primary:hover, .btn-primary:active,

@@ -1,7 +1,8 @@
 import { z } from "zod";
 
 export const EventSchema = z.discriminatedUnion("t", [
-  z.object({ t:z.literal("stage_change"), from:z.enum(["training","preparing","conquer"]), to:z.enum(["training","preparing","conquer"]) }),
+  // Accept both legacy and current stage names to avoid 500s from clients
+  z.object({ t:z.literal("stage_change"), from:z.enum(["training","preparing","conquer","learn","build","operate"]), to:z.enum(["training","preparing","conquer","learn","build","operate"]) }),
   z.object({ t:z.enum(["widget_open","widget_pin"]), id:z.string().min(1) }),
   z.object({ t:z.literal("dwell"), id:z.string().min(1), ms:z.number().min(0) }),
   z.object({ t:z.literal("sherpa_prompt"), q:z.string().min(1), topic:z.string().optional() }),

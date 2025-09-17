@@ -1,4 +1,4 @@
-/* Drawer + layout shift (right rail) — minimal, class-driven, SSR-safe */
+/* Drawer overlay (bottom, container-scoped) — no layout shift */
 
 :root {
   --guide-width: 420px;
@@ -9,64 +9,26 @@
 }
 
 /* 0) Smooth shift for the content wrapper */
-[data-shiftable-root] {
-  padding-right: 0;
-  transition: padding-right .32s cubic-bezier(.22, .61, .36, 1);
-  box-sizing: border-box;
-}
+[data-shiftable-root] { padding-right: 0 !important; box-sizing: border-box; }
 
 /* 1) Drawer is inert unless html.guide-open */
-html:not(.guide-open) .guide-drawer {
-  transform: translateX(100%) !important;
-  opacity: 0 !important;
-  pointer-events: none !important;
-}
+html:not(.guide-open) .guide-drawer { transform: translateY(20px); opacity: 0; pointer-events: none; }
 
 /* 2) When open, reserve space on the right for the drawer */
-html.guide-open [data-shiftable-root] {
-  padding-right: calc(var(--guide-width, 420px) + 2rem);
-  will-change: padding-right;
-}
+html.guide-open [data-shiftable-root] { padding-right: 0 !important; }
 
 /* 3) Tablet: slightly narrower drawer */
-@media (max-width: 1024px) {
-  :root {
-    --guide-width: 360px;
-  }
-
-  html.guide-open [data-shiftable-root] {
-    padding-right: calc(var(--guide-width, 360px) + 1rem);
-  }
-}
+@media (max-width: 1024px) { html.guide-open [data-shiftable-root] { padding-right: 0 !important; } }
 
 /* 4) Drawer occupies the vertical strip between header and footer */
-.guide-drawer {
-  position: fixed;
-  inset-inline-end: 0;
-  top: var(--nav-height);
-  bottom: var(--footer-height);
-  width: var(--guide-width);
-  height: auto;
-  display: flex;
-  flex-direction: column;
-  padding-inline: 10px;
-  /* add small left/right padding so bubbles don’t touch edges */
-}
+.guide-drawer { transition: transform .22s ease, opacity .22s ease; }
 
 /* === fix-left-shift: footer pad only when drawer open + no horizontal scroll === */
-html:not(.guide-open) .footer-container {
-  padding-right: 0 !important;
-}
+html:not(.guide-open) .footer-container { padding-right: 0 !important; }
 
-html.guide-open .footer-container {
-  padding-right: calc(var(--guide-width, 420px) + 2rem);
-}
+html.guide-open .footer-container { padding-right: 0 !important; }
 
-@media (max-width: 1024px) {
-  html.guide-open .footer-container {
-    padding-right: calc(var(--guide-width, 360px) + 1rem);
-  }
-}
+@media (max-width: 1024px) { html.guide-open .footer-container { padding-right: 0 !important; } }
 
 /* kill accidental horizontal gutters on first paint */
 html,
@@ -74,27 +36,7 @@ body {
   overflow-x: hidden;
 }
 
-:root {
-  --drawer-w: 0px;
-}
-
-html.guide-open {
-  --drawer-w: var(--guide-width, 420px);
-}
-
-.guide-drawer {
-  width: var(--drawer-w);
-  transform: none !important;
-  transition: width .28s ease;
-  overflow: hidden;
-}
-
-[data-shiftable-root] {
-  box-sizing: border-box !important;
-  inline-size: 100%;
-  max-inline-size: 100%;
-  padding-right: calc(var(--drawer-w) + 2rem) !important;
-}
+/* No reserved gutter; drawer overlays content, width controlled inline */
 
 /* Subtle highlight for new assistant answers */
 .conversation .new-answer {

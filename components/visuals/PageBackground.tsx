@@ -34,7 +34,7 @@ export default function PageBackground({ page }: { page: PageKey }) {
   useEffect(() => { setMounted(true) }, [])
   if (!mounted || typeof document === 'undefined') return null
   return createPortal(
-    <div aria-hidden className="pointer-events-none fixed inset-0 -z-10" inert>
+    <div aria-hidden="true" className="pointer-events-none fixed inset-0 -z-10" data-inert="true">
       <AppImage src={src} alt="" fill className="object-cover" />
     </div>,
     document.body

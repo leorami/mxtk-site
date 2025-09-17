@@ -1,3 +1,5 @@
+"use client";
+import type React from 'react';
 export default function SkipLink(){
   function onClick(e: React.MouseEvent<HTMLAnchorElement>){
     try {

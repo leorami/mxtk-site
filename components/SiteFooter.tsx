@@ -8,14 +8,14 @@ import Link from 'next/link'
 export default function SiteFooter() {
 
   return (
-    <footer className="brand-footer relative z-10 footer-container site-footer" style={{ minHeight: '64px' }}>
-      <div className="mx-auto max-w-none px-4 py-3 relative">
+  <footer className="brand-footer relative z-10 footer-container site-footer" style={{ minHeight: 'var(--footer-height,64px)' }}>
+      <div className="mx-auto max-w-none px-2 py-2 relative style={{ minHeight: 'calc(56px + env(safe-area-inset-bottom, 0px))', paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}">
         {/* Footer Sherpa chat removed; header dropdown is primary */}
 
         <div className="hidden md:flex items-center justify-between gap-4 w-full ">
           {/* Left: Footer cluster with status and theme controls */}
           <div className="footer-left">
-            <div className="footer-brand text-sm">© 2025 Mineral Token (MXTK).</div>
+            <div className="footer-brand text-sm">© 2025 Mineral Token (MXTK)</div>
             <ThemeSwitch aria-label="Toggle theme" />
             {process.env.NODE_ENV !== "production" && (
               <DevThemeSwitcher />
@@ -34,13 +34,11 @@ export default function SiteFooter() {
           </nav>
         </div>
 
-        {/* Mobile layout: Light/dark mode on left, Experience toggle on right */}
-        <div className="md:hidden w-full" style={{ minHeight: 'calc(56px + env(safe-area-inset-bottom, 0px))', paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}>
+        {/* Mobile+Tablet: theme toggle left, journey selector right; no extra wrappers */}
+        <div className="md:hidden w-full" >
           <div className="flex justify-between items-center">
-            <div className="mobile-theme-toggle">
-              <ThemeSwitch aria-label="Toggle theme" />
-            </div>
-            <div className="mobile-experience-toggle" data-testid="mobile-experience-toggle">
+            <ThemeSwitch aria-label="Toggle theme" />
+            <div className="experience-toggle" data-testid="mobile-experience-toggle">
               <ExperienceToggle />
             </div>
           </div>

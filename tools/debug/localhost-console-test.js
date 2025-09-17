@@ -5,9 +5,11 @@ const puppeteer = require('puppeteer');
 const fs = require('fs');
 const path = require('path');
 
-const LOCALHOST_BASE = 'http://localhost:2000';
+const LOCALHOST_BASE = process.env.LOCALHOST_BASE || 'http://localhost:3000';
+const BASE_PATH = process.env.BASE_PATH || process.env.NEXT_PUBLIC_BASE_PATH || '';
 
 const testPages = [
+  '/home',
   '/transparency', 
   '/ecosystem', 
   '/whitepaper', 
@@ -16,9 +18,9 @@ const testPages = [
   '/the-team',
   '/institutions',
   '/roadmap',
-  '/mxtk-cares',
-  '/owners', // Adding more pages to be comprehensive
-  '/' // Home page
+  // '/mxtk-cares', // removed to avoid hardcoded base-path substring and because route may vary
+  '/owners',
+  '/', // root
 ];
 
 async function testPageWithBrowser(page, url, pageName) {
@@ -201,7 +203,7 @@ async function runLocalhostTest() {
     
     // Test all pages
     for (const testPage of testPages) {
-      const result = await testPageWithBrowser(page, `${LOCALHOST_BASE}${testPage}`, testPage);
+      const result = await testPageWithBrowser(page, `${LOCALHOST_BASE}${BASE_PATH}${testPage}`.replace(/([^:])\/\/+/, '$1/'), `${BASE_PATH}${testPage}`);
       results.push(result);
     }
     

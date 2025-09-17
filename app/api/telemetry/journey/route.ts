@@ -9,4 +9,8 @@ export async function POST(req:Request){
   return NextResponse.json({ ok:true });
 }
 
+export async function GET(){
+  return NextResponse.json({ ok:false, error:'Method not allowed' }, { status: 405 });
+}
+
 

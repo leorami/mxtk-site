@@ -1,29 +1,24 @@
+/* Footer Dock adjustments for mobile safe area and sizes */
+.footer-dock, .footer-dock__inner { pointer-events: none; }
+.footer-dock__inner > * { pointer-events: auto; }
+
+/* Ensure buttons and pills stay within 44px touch target and fit dock */
+.footer-dock button, .footer-dock [role="radiogroup"] [role="radio"], .footer-dock .touch-target {
+  min-height: 44px;
+}
+
+/* Respect iOS bottom safe area */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+  .footer-dock__inner { padding-bottom: calc(.25rem + env(safe-area-inset-bottom, 0px)); }
+}
 /* Mobile footer experience toggle styling */
 .mobile-experience-toggle {
-    position: fixed;
-    bottom: 1rem;
-    right: 1rem;
-    z-index: 50;
-    padding: 0.5rem;
-    background-color: rgba(30, 41, 59, 0.85);
-    border-radius: 9999px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    transition: all 0.3s ease;
+    display: flex;
 }
 
 .mobile-experience-toggle:hover {
     transform: translateY(-2px);
     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
-}
-
-/* Safe area inset bottom padding for iOS devices */
-@supports (padding-bottom: env(safe-area-inset-bottom)) {
-    .mobile-experience-toggle {
-        bottom: calc(1rem + env(safe-area-inset-bottom, 0px));
-    }
 }
 
 /* Hide the mobile toggle on larger screens */

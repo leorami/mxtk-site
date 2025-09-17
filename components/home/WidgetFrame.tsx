@@ -54,7 +54,7 @@ export default function WidgetFrame({ id, docId, data, title, children, onRefres
   const [density, setDensity] = React.useState<Density>(() => (data as any)?.density === 'compact' ? 'compact' : 'cozy');
   React.useEffect(() => { setLocalTitle(title); }, [title]);
 
-  // Visibility is CSS-driven via html.guide-open; no inline gating to avoid SSR timing
+  // Header visibility: default hidden unless explicitly enabled via prop
 
   const save = React.useCallback(async () => {
     if (!id) return;
@@ -72,11 +72,11 @@ export default function WidgetFrame({ id, docId, data, title, children, onRefres
 
   // Removed decorative scroll fades to prevent visual clipping of shadows
 
-  const shouldShowHead = showHeader || guideState
+  const shouldShowHead = !!showHeader || guideState
   return (
-    <div className="relative h-full wframe" data-testid="wframe">
+    <div className="hidden relative h-full wframe" data-testid="wframe">
       {/* Header row: title + actions; actions marked no-drag */}
-      <header className={`wf-head ${shouldShowHead ? 'flex' : 'hidden'} items-center justify-between`}>
+      <header className={`wf-head ${shouldShowHead ? 'flex' : 'hidden'} items-center justify-between`} aria-hidden={shouldShowHead ? 'false' : 'true'}>
         <div className="wf-title truncate">{localTitle}</div>
         <div className="wf-actions wframe-controls widget-controls inline-flex items-center gap-1 opacity-0 pointer-events-none [html.guide-open_&]:opacity-100 [html.guide-open_&]:pointer-events-auto transition-opacity" data-nodrag>
             {onRefresh && (
@@ -89,7 +89,9 @@ export default function WidgetFrame({ id, docId, data, title, children, onRefres
               <button type="button" className="iconbtn" title="Info" data-nodrag onMouseDown={(e) => e.stopPropagation()} onClick={(e) => { e.stopPropagation(); onInfo?.(); }}>i</button>
             )}
             {onRemove && (
-              <button type="button" className="iconbtn" title="Remove" data-nodrag onMouseDown={(e) => e.stopPropagation()} onClick={(e) => { e.stopPropagation(); onRemove?.(); }}>✕</button>
+              <button type="button" className="iconbtn" title="Remove" aria-label="Remove widget" data-nodrag onMouseDown={(e) => e.stopPropagation()} onClick={(e) => { e.stopPropagation(); onRemove?.(); }}>
+                <i className="fa-solid fa-recycle" aria-hidden="true"></i>
+              </button>
             )}
         </div>
       </header>
@@ -101,27 +103,29 @@ export default function WidgetFrame({ id, docId, data, title, children, onRefres
       {/* No extra overlays */}
 
       {open && (
-        <div className="absolute top-8 right-2 z-10 rounded-xl border border-[color:var(--border-soft)] bg-[color:var(--surface-card-emb)] shadow p-3 min-w-[220px]">
-          <div className="field mb-2">
-            <label className="label">Title</label>
-            <input className="input" value={localTitle || ''} onChange={e => setLocalTitle(e.currentTarget.value)} placeholder="Widget title" />
-          </div>
-          <div className="field mb-3">
-            <label className="label">Density</label>
-            <div className="inline-flex gap-2">
-              <label className="inline-flex items-center gap-1 text-sm">
-                <input type="radio" name={`density-${id}`} checked={density === 'compact'} onChange={() => setDensity('compact')} />
-                Compact
-              </label>
-              <label className="inline-flex items-center gap-1 text-sm">
-                <input type="radio" name={`density-${id}`} checked={density === 'cozy'} onChange={() => setDensity('cozy')} />
-                Cozy
-              </label>
+        <div className="absolute top-8 right-2 z-10 rounded-2xl border border-[color:var(--border-soft)] bg-[color:var(--surface-card)] shadow-lg p-3 min-w-[240px]">
+          <div className="flex flex-col gap-3">
+            <div className="field">
+              <label className="label text-sm font-medium opacity-80 mb-1">Title</label>
+              <input className="input rounded-xl px-3 py-2 border border-[color:var(--border-soft)] bg-[color:var(--surface-elev-1)] w-full" value={localTitle || ''} onChange={e => setLocalTitle(e.currentTarget.value)} placeholder="Widget title" />
             </div>
-          </div>
-          <div className="flex justify-end gap-2">
-            <button className="btn btn-ghost" onClick={() => setOpen(false)}>Close</button>
-            <button className="btn btn-primary" onClick={() => { save(); setOpen(false); }}>Save</button>
+            <div className="field">
+              <label className="label text-sm font-medium opacity-80 mb-1">Density</label>
+              <div className="inline-flex items-center gap-4 text-sm">
+                <label className="inline-flex items-center gap-2">
+                  <input type="radio" name={`density-${id}`} checked={density === 'compact'} onChange={() => setDensity('compact')} />
+                  Compact
+                </label>
+                <label className="inline-flex items-center gap-2">
+                  <input type="radio" name={`density-${id}`} checked={density === 'cozy'} onChange={() => setDensity('cozy')} />
+                  Cozy
+                </label>
+              </div>
+            </div>
+            <div className="flex justify-end gap-2">
+              <button className="btn btn-outline h-9 px-4" onClick={() => setOpen(false)}>Close</button>
+              <button className="btn btn-primary h-9 px-4" autoFocus onClick={() => { save(); setOpen(false); }}>Save</button>
+            </div>
           </div>
         </div>
       )}

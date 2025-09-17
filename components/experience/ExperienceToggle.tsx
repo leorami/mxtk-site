@@ -1,4 +1,5 @@
 "use client";
+import { sendJourney } from "@/components/home/useJourneySignals";
 import AppImage from "@/components/ui/AppImage";
 import { useExperience } from "./ClientExperience";
 
@@ -34,7 +35,7 @@ export default function ExperienceToggle({ size = 'default' }: ExperienceToggleP
         return (
           <button
             key={m.value}
-            onClick={() => setMode(m.value)}
+            onClick={() => { const prev = mode; setMode(m.value); try { if (prev !== m.value) sendJourney({ t:'stage_change', from: prev, to: m.value }); } catch {} }}
             role="radio"
             aria-checked={selected}
             aria-label={`Journey Stage: ${m.label}`}

@@ -21,7 +21,8 @@
     "test:full": "ENABLE_EXTERNAL_TESTS=1 node tools/debug/navigation-regression.js",
     "test:int": "BASE_URL=http://localhost:2000 tools/test_runner.sh home",
     "make:org-logos": "ts-node scripts/make-org-placeholders.ts || node -e \"require('esbuild-register'); require('./scripts/make-org-placeholders.ts')\" || node -e \"import('./scripts/make-org-placeholders.ts')\"",
-    "ai:ingest": "tsx scripts/ai.ingest.ts"
+    "ai:ingest": "tsx scripts/ai.ingest.ts",
+    "ai:ingest:docs": "tsx scripts/ai.ingest.docs.ts"
   },
   "dependencies": {
     "@types/recharts": "^1.8.29",

@@ -2,6 +2,14 @@
   --gutter-sm: 16px;
   --gutter-xs: 12px;
   --gap-widget: 12px;
+  /* Footer/nav heights */
+  --footer-height: 64px;
+  --nav-height: 76px;
+  /* Sherpa design tokens */
+  --sherpa-min-w: 360px;
+  --sherpa-max-w: 1024px;
+  --sherpa-viewport-w: 85vw;
+  --sherpa-gutter: 2rem;
 }
 @media (max-width: 360px){
   :root{ --gutter-sm: var(--gutter-xs); }

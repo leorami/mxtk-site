@@ -385,7 +385,13 @@ export default function Grid({ doc, render, onPatch }: GridProps) {
                   docId={doc.id}
                   title={w.title}
                   data={w.data as any}
+                  showHeader={Boolean((w.data as any)?.showHeader)}
                   onRefresh={() => setRefreshTicks(prev => ({ ...prev, [w.id]: (prev[w.id] || 0) + 1 }))}
+                  onRemove={() => {
+                    // Optimistically remove from local state and persist
+                    setWidgets(prev => prev.filter(x => x.id !== w.id));
+                    void doPatch([{ id: w.id, remove: true }]);
+                  }}
                 >
                 {render
                   ? render(w)
@@ -478,7 +484,12 @@ export default function Grid({ doc, render, onPatch }: GridProps) {
                   docId={doc.id}
                   title={w.title}
                   data={w.data as any}
+                  showHeader={Boolean((w.data as any)?.showHeader)}
                   onRefresh={() => setRefreshTicks(prev => ({ ...prev, [w.id]: (prev[w.id] || 0) + 1 }))}
+                  onRemove={() => {
+                    setWidgets(prev => prev.filter(x => x.id !== w.id));
+                    void doPatch([{ id: w.id, remove: true }]);
+                  }}
                 >
                 {render
                   ? render(w)
