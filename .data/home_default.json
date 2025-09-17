@@ -10,23 +10,23 @@
       "collapsed": false
     },
     {
-      "id": "sec_learn",
-      "key": "learn",
-      "title": "Learn",
+      "id": "sec_train",
+      "key": "train",
+      "title": "Train",
       "order": 1,
       "collapsed": false
     },
     {
-      "id": "sec_build",
-      "key": "build",
-      "title": "Build",
+      "id": "sec_prepare",
+      "key": "prepare",
+      "title": "Prepare",
       "order": 2,
       "collapsed": false
     },
     {
-      "id": "sec_operate",
-      "key": "operate",
-      "title": "Operate",
+      "id": "sec_conquer",
+      "key": "conquer",
+      "title": "Conquer",
       "order": 3,
       "collapsed": false
     },
@@ -85,7 +85,7 @@
       "id": "w_note",
       "type": "note",
       "title": "Notes",
-      "sectionId": "sec_learn",
+      "sectionId": "sec_train",
       "size": {
         "w": 4,
         "h": 6
@@ -99,7 +99,7 @@
       "id": "w_next",
       "type": "whats-next",
       "title": "What's Next",
-      "sectionId": "sec_learn",
+      "sectionId": "sec_train",
       "size": {
         "w": 4,
         "h": 6

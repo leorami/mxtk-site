@@ -1,0 +1,220 @@
+{
+  "id": "0ac429e1-8dd5-4276-9e46-359a16cc57f5",
+  "layoutVersion": 2,
+  "sections": [
+    {
+      "id": "overview",
+      "key": "overview",
+      "title": "Overview",
+      "order": 0
+    },
+    {
+      "id": "learn",
+      "key": "learn",
+      "title": "Learn",
+      "order": 1
+    },
+    {
+      "id": "build",
+      "key": "build",
+      "title": "Build",
+      "order": 2
+    },
+    {
+      "id": "operate",
+      "key": "operate",
+      "title": "Operate",
+      "order": 3
+    },
+    {
+      "id": "library",
+      "key": "library",
+      "title": "Library",
+      "order": 4
+    }
+  ],
+  "widgets": [
+    {
+      "id": "w-whats-next-overview",
+      "type": "whats-next",
+      "title": "What's Next",
+      "sectionId": "overview",
+      "pos": {
+        "x": 0,
+        "y": 0
+      },
+      "size": {
+        "w": 4,
+        "h": 24
+      },
+      "stages": [
+        "training",
+        "preparing",
+        "conquer"
+      ],
+      "priority": 5,
+      "mobileFriendly": true
+    },
+    {
+      "id": "w-recent-answers-overview",
+      "type": "recent-answers",
+      "title": "Recent Answers",
+      "sectionId": "overview",
+      "pos": {
+        "x": 4,
+        "y": 0
+      },
+      "size": {
+        "w": 4,
+        "h": 24
+      },
+      "stages": [
+        "training"
+      ],
+      "priority": 3,
+      "mobileFriendly": true
+    },
+    {
+      "id": "w-note-overview",
+      "type": "note",
+      "title": "Note",
+      "sectionId": "overview",
+      "pos": {
+        "x": 8,
+        "y": 0
+      },
+      "size": {
+        "w": 4,
+        "h": 24
+      },
+      "data": {
+        "note": ""
+      },
+      "stages": [
+        "training"
+      ],
+      "priority": 1,
+      "mobileFriendly": true
+    },
+    {
+      "id": "w-price-large-overview",
+      "type": "price-large",
+      "title": "Price",
+      "sectionId": "overview",
+      "pos": {
+        "x": 0,
+        "y": 24
+      },
+      "size": {
+        "w": 6,
+        "h": 24
+      },
+      "data": {
+        "symbol": "MXTK",
+        "interval": "7d"
+      },
+      "stages": [
+        "preparing",
+        "conquer"
+      ],
+      "priority": 3,
+      "mobileFriendly": true
+    },
+    {
+      "id": "w-pools-table-overview",
+      "type": "pools-table",
+      "title": "Top Pools",
+      "sectionId": "overview",
+      "pos": {
+        "x": 6,
+        "y": 24
+      },
+      "size": {
+        "w": 6,
+        "h": 24
+      },
+      "data": {
+        "token": "0x3e4Ffeb394B371AAaa0998488046Ca19d870d9Ba",
+        "limit": 5
+      },
+      "stages": [
+        "preparing",
+        "conquer"
+      ],
+      "priority": 4,
+      "mobileFriendly": true
+    },
+    {
+      "id": "w-resources-build",
+      "type": "resources",
+      "title": "Builder Resources",
+      "sectionId": "build",
+      "pos": {
+        "x": 0,
+        "y": 0
+      },
+      "size": {
+        "w": 6,
+        "h": 20
+      },
+      "data": {
+        "category": "dev",
+        "maxItems": 6
+      },
+      "stages": [
+        "training",
+        "preparing",
+        "conquer"
+      ],
+      "priority": 4,
+      "mobileFriendly": true
+    },
+    {
+      "id": "w-pools-mini-build",
+      "type": "pools-mini",
+      "title": "Pools",
+      "sectionId": "build",
+      "pos": {
+        "x": 6,
+        "y": 0
+      },
+      "size": {
+        "w": 6,
+        "h": 20
+      },
+      "data": {
+        "token": "0x3e4Ffeb394B371AAaa0998488046Ca19d870d9Ba"
+      },
+      "stages": [
+        "preparing",
+        "conquer"
+      ],
+      "priority": 3,
+      "mobileFriendly": true
+    },
+    {
+      "id": "w-resources-library",
+      "type": "resources",
+      "title": "Documentation",
+      "sectionId": "library",
+      "pos": {
+        "x": 0,
+        "y": 0
+      },
+      "size": {
+        "w": 12,
+        "h": 18
+      },
+      "data": {
+        "maxItems": 10
+      },
+      "stages": [
+        "training",
+        "preparing",
+        "conquer"
+      ],
+      "priority": 4,
+      "mobileFriendly": true
+    }
+  ]
+}

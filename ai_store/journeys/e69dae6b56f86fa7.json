@@ -1,0 +1,20 @@
+{
+  "id": "e69dae6b56f86fa7",
+  "createdAt": "2025-09-16T20:48:26.953Z",
+  "updatedAt": "2025-09-16T20:48:26.961Z",
+  "blocks": [
+    {
+      "id": "10681cab-9e9c-4956-9ac9-52342b0bb09f",
+      "topicKey": "sure-here-s-a-simple-breakdown-of-mxtk-tokenomics-asset-backed-tokens-e",
+      "section": "tokenomics",
+      "title": "Sure! Here's a simple breakdown of MXTK tokenomics: - **Asset-Backed Tokens**: E",
+      "body": "Sure! Here's a simple breakdown of MXTK tokenomics: - **Asset-Backed Tokens**: Each MXTK token is backed 1:1 by verified mineral assets. This means for every token, there's an equivalent value in minerals. - **Global Liquidity**: MXTK allows you to trade mineral wealth on crypto exchanges worldwide, making it easier to access and invest in these assets. - **Pre-Extraction Value**: You can unlock the value of mineral assets even before they are extracted, which is a revolutionary approach in the market. - **Transparency**: The tokenization process is fully transparent, ensuring trust and security for investors. In plain words, MXTK tokens represent real mineral assets, making them stable and easy to trade globally.",
+      "citations": [
+        "mineral-token.com-raw-index",
+        "mineral-token.com-rendered-index",
+        "admin"
+      ],
+      "confidence": 0.8
+    }
+  ]
+}

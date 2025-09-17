@@ -267,5 +267,37 @@
       "source": "SITE_ALIGNMENT_AUDIT.md",
       "section": "Site Alignment Audit — mineral-token.com parity (2025-09-14)"
     }
+  },
+  {
+    "id": "docs:docs/user/WIDGETS_USER_GUIDE.md-0",
+    "text": "# Managing Your Home Widgets\n\nThis guide explains how to add, remove, move, and configure widgets on your Home dashboard.\n\n## Overview\n\n- **What are widgets?** Widgets are modular cards (e.g., Recent Answers, Resources, What's Next) you can arrange on your Home.\n- **Where is Home?** Go to the Home dashboard from the main navigation; your layout is saved to your profile.\n\n## Add Widgets\n\n- Open the Sherpa Guide (the “Sherpa” button in the header).\n- In the Guide, look for sections labeled “Add to Home”.\n- Click “Add to Home” on any widget to pin it to your dashboard.\n\n## Remove Widgets\n\n- Hover over a widget’s header to reveal actions.\n- Click the remove “×” button. The widget disappears and your layout is saved.\n\n## Move & Resize\n\n- Drag the widget from its header to reposition.\n- Use the corner handles to resize.\n- Changes save automatically after a brief moment.\n\n## Mobile Behavior\n\n- On small screens, widgets stack in a single column.\n- The system preserves your order and sizes when you return to desktop.\n\n## Common Widgets\n\n- Recent Answers: Shows your latest Sherpa Q&A.\n- Resources: Quick links curated by the team.\n- Glossary Spotlight: Rotating definitions for key terms.\n- What’s Next: Suggested next steps for your journey.\n\n## Troubleshooting\n\n- If changes don’t stick, refresh the page and try again.\n- If your Home is empty, open the Sherpa Guide and add widgets from suggested sections.\n\n\n",
+    "meta": {
+      "source": "docs:docs/user/WIDGETS_USER_GUIDE.md",
+      "section": "Managing Your Home Widgets"
+    }
+  },
+  {
+    "id": "docs:docs/WIDGETS.md-0",
+    "text": "# Widgets Grid\n\n## Move & Resize\n- Drag from header (`.wf-head`) with Sherpa open (`html.guide-open`)\n- Resize using corner handles (`.wframe-resize`)\n- Client optimistically updates local state, then PATCHes `/api/ai/home/:id`\n\n## Mobile stacking\n- One-column layout below 640px; Grid recomputes sequential rows and persists positions\n\n## Persistence\n- Debounced PATCH batches: `{ widgets: [{ id, pos }, { id, size }] }`\n- Server-side validation clamps grid bounds\n\n## Testing\n- `tools/test/dashboard-drag.mjs` validates: visual change, server persistence, no mobile overlap\n- Add `data-testid=\"wframe\"` to widget frame container for targeting\n",
+    "meta": {
+      "source": "docs:docs/WIDGETS.md",
+      "section": "Widgets Grid"
+    }
+  },
+  {
+    "id": "docs:docs/user/WIDGETS_USER_GUIDE.md-0",
+    "text": "# Managing Your Home Widgets\n\nThis guide explains how to add, remove, move, and configure widgets on your Home dashboard.\n\n## Overview\n\n- **What are widgets?** Widgets are modular cards (e.g., Recent Answers, Resources, What's Next) you can arrange on your Home.\n- **Where is Home?** Go to the Home dashboard from the main navigation; your layout is saved to your profile.\n\n## Add Widgets\n\n- Open the Sherpa Guide (the “Sherpa” button in the header).\n- In the Guide, look for sections labeled “Add to Home”.\n- Click “Add to Home” on any widget to pin it to your dashboard.\n\n## Remove Widgets\n\n- Hover over a widget’s header to reveal actions.\n- Click the remove “×” button. The widget disappears and your layout is saved.\n\n## Move & Resize\n\n- Drag the widget from its header to reposition.\n- Use the corner handles to resize.\n- Changes save automatically after a brief moment.\n\n## Mobile Behavior\n\n- On small screens, widgets stack in a single column.\n- The system preserves your order and sizes when you return to desktop.\n\n## Common Widgets\n\n- Recent Answers: Shows your latest Sherpa Q&A.\n- Resources: Quick links curated by the team.\n- Glossary Spotlight: Rotating definitions for key terms.\n- What’s Next: Suggested next steps for your journey.\n\n## Troubleshooting\n\n- If changes don’t stick, refresh the page and try again.\n- If your Home is empty, open the Sherpa Guide and add widgets from suggested sections.\n\n\n",
+    "meta": {
+      "source": "docs:docs/user/WIDGETS_USER_GUIDE.md",
+      "section": "Managing Your Home Widgets"
+    }
+  },
+  {
+    "id": "docs:docs/WIDGETS.md-0",
+    "text": "# Widgets Grid\n\n## Move & Resize\n- Drag from header (`.wf-head`) with Sherpa open (`html.guide-open`)\n- Resize using corner handles (`.wframe-resize`)\n- Client optimistically updates local state, then PATCHes `/api/ai/home/:id`\n\n## Mobile stacking\n- One-column layout below 640px; Grid recomputes sequential rows and persists positions\n\n## Persistence\n- Debounced PATCH batches: `{ widgets: [{ id, pos }, { id, size }] }`\n- Server-side validation clamps grid bounds\n\n## Testing\n- `tools/test/dashboard-drag.mjs` validates: visual change, server persistence, no mobile overlap\n- Add `data-testid=\"wframe\"` to widget frame container for targeting\n",
+    "meta": {
+      "source": "docs:docs/WIDGETS.md",
+      "section": "Widgets Grid"
+    }
   }
 ]
