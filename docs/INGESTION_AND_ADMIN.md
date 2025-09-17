@@ -16,6 +16,8 @@
   ```bash
   npm run ai:ingest -- ./docs/reference/overview.txt
   npm run ai:ingest -- --text "MXTK is ..." --source "overview-manual"
+  # Ingest user docs (widgets guide, etc.)
+  npm run ai:ingest:docs
   ```
 
 - API:
@@ -31,6 +33,12 @@
 - Reset: `POST /api/ai/vector/reset` with header `Authorization: Bearer ${ADMIN_TOKEN}`
 - Clean rebuild: reset, then re-ingest all sources.
 - The system auto re-embeds when vector dimensions mismatch (e.g., mock → live).
+
+## Scheduled Ingestion
+
+- A nightly job runs at 07:00 UTC to ingest user docs (`docs/user/*` and `docs/WIDGETS.md`).
+- Workflow file: `.github/workflows/ingest-docs.yml`
+- Manual run: trigger the workflow dispatch or run `npm run ai:ingest:docs` locally and commit `ai_store/*`.
 
 ## Admin UI (/admin)
 
